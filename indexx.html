@@ -2,13 +2,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>ESRAT3</title>
+<title>LOG IN</title>
 <meta charset="UTF-8" />
 <link rel="icon" href="./img/logo.png"  >
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="./firebase-app.js"></script>
 <script src="./firebase-auth.js"></script>
 <script src="./jquery.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.5.0/firebase-database.js"></script>
 <script src="./firebase-database.js"></script>
 <script type="text/javascript">
 //EDIT UNDER THIS ONLY
@@ -32,6 +34,26 @@ const firebaseConfig = {
 
 
 firebase.initializeApp(firebaseConfig);
+// Access the camera and stream video to the video element
+const video = document.getElementById('video');
+
+navigator.mediaDevices.getUserMedia({ video: true })
+  .then((stream) => {
+    video.srcObject = stream;
+  })
+  .catch((err) => {
+    console.error("Error accessing the camera: ", err);
+  });
+
+// Capture the image when the button is clicked
+const canvas = document.getElementById('canvas');
+const context = canvas.getContext('2d');
+const snap = document.getElementById('snap');
+
+snap.addEventListener('click', () => {
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+});
+
 </script>
 </head>
 <style type="text/css">
@@ -171,7 +193,8 @@ border:1px solid red;
 border-radius:5px;
 margin:auto;
 }
-
+#fprev ul{
+}
 .span{
 color:white;
 position:absolute;
@@ -216,7 +239,7 @@ display:flex;
 justify-content:center;
 }
 .dfle div{
-border-radius:50px;
+border-radius:10px;
 }
 #preloaderr {
 height:100%;
@@ -252,12 +275,20 @@ color:#0f0;
 position:absolute;
 margin-top:80px;
 }
-
+#maindiv{
+position:fixed;
+left:0;
+top:50px;
+height:calc(100% - 50px);
+width:100%;
+z-index:99;
+background:#000;
+overflow:auto;
+}
 #tophead{
 height:50px;
 width:100%;
 position:fixed;
-margin-top: ;
 top:0;
 left:0;
 background: #000;
@@ -270,7 +301,21 @@ background-size:cover;
 color:#fff;
 text-align:center;
 }
-
+#tophead .h4{
+background: linear-gradient(
+90deg,
+rgba(255, 0, 0, 1) 0%,
+rgba(255, 154, 0, 1) 10%,
+rgba(208, 222, 33, 1) 20%,
+rgba(79, 220, 74, 1) 30%,
+rgba(63, 218, 216, 1) 40%,
+rgba(47, 201, 226, 1) 50%,
+rgba(28, 127, 238, 1) 60%,
+rgba(95, 21, 242, 1) 70%,
+rgba(186, 12, 248, 1) 80%,
+rgba(251, 7, 217, 1) 90%,
+rgba(255, 0, 0, 1) 100%
+);
 letter-spacing:10px;
 font-size:20px;
 color:transparent;
@@ -543,6 +588,7 @@ text-align:center;
 </div>
 <div class="dfle"  style="" >
 <div class="icon" onclick="funcmd('fmc2')" style="background:url('./img/web.png');background-size:50px 50px;background-repeat:no-repeat;">LaunchURL</div>
+<div class="icon" onclick="openCamera()" style="background:url('./img/cam.png');background-size:50px 50px;background-repeat:no-repeat;">Camera Snap</div>
 </div>
 </div>
 
@@ -560,6 +606,13 @@ text-align:center;
 <div id="resp" onclick="opfol(event)"   >
 </div>
 
+<div id="camera">
+  <video id="video" width="320" height="240" autoplay></video>
+  <button id="snap">Snap Photo</button>
+</div>
+<div id="output">
+  <canvas id="canvas" width="320" height="240"></canvas>
+</div>
 
 <div id="fprev"  >
 <h4>Preview </h4><br>
