@@ -20,12 +20,11 @@ Customizable Payloads: Tailor the RAT to fit your specific needs and requirement
 
 Robust Security: End-to-end encryption to protect your connection and data.
 
-User-Friendly Interface: Intuitive control panel for seamless management (GUI Admin Panel)
-Contact handles are below: 
+User-Friendly Interface: Intuitive control panel for seamless management (GUI Admin Panel).
 
 To learn more about our cutting-edge RAT solutions and how they can empower your operations, please reach out to us directly.
 
-Contact:
+Contact: Go through our em@il, we'll provide you direct contant number if needed.
 Email: esplaysbgmi@gmail.com
 Telegram: https://t.me/jrram3000
 
