@@ -1,1 +1,434 @@
+#canvas-container {
+    position: relative;
+  }
+  .navbar a:hover,
+.navbar a.active {
+    color: #00abf0;
+}
+  .navbar {
+    margin-right: 2%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .navbar .logo {
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+  .navbar ul {
+    list-style-type: none;
+    display: flex;
+    gap: 24px;
+  }
+  .navbar ul li {
+    font-weight: 300;
+  }
+  .navbar ul li .icon {
+    line-height: 0.9;
+    font-weight: 300;
+  }
+  .navbar ul li a {
+    color: #ffffff;
+    transition: color 0.3s ease-in-out;
+    text-decoration: none;
+  }
+  #header {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: rgb(53, 126, 211);
+    text-shadow: 2px 2px 5px #91446e;
+  }
+html {
+    scroll-behavior: smooth;
+}
+body {
+    font-family: 'Roboto Condensed', sans-serif;
+    margin: 30;
+    background-color: burlywood;
+    height: auto;
+}
+body {
+  background-color: #000000;
+  overflow: hidden;
+}
+.container {
+  background-color: rgba(157, 198, 236, 0.2);
+  padding: 1.4em 3.75em;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  border-radius: 0.7em;
+  animation: shadowAnimation 4s ease infinite alternate;
+}
+.BACK {
+    background-color: aqua;
+    filter: blur(15px);
+    position: relative;
+}
+.BACK2 {
+    background-color: rgb(170, 192, 207);
+    filter: blur(15px);
+    position: relative;
+}
+.nothing {
+    justify-content: center;
+    justify-items: auto;
+    position: relative;
+    background-color: #007df1;
+    filter: blur(15px);
+}
+.buttons {
+    color: white;
+}
 
+input,
+  #submit {
+    border: none;
+    outline: none;
+    display: block;
+  }
+  input {
+    width: 100%;
+    background-color: transparent;
+    margin-bottom: 2em;
+    font-size: 20px;
+    padding: 1em 0 0.5em 0.5em;
+    border-bottom: 2px solid #202020;
+  }
+  #submit {
+    position: relative;
+    left: 0;
+    font-size: 1.1em;
+    width: 7em;
+    background: linear-gradient(45deg, #d6dbe0, #0b597e, #000203);
+    background-size: 200% auto;
+    color: white;
+    padding: 0.8em 0;
+    margin-top: 2em;
+    border-radius: 0.3em;
+    border: none;
+    cursor: pointer;
+    animation: gradientAnimation 6s ease infinite;
+}
+
+#submit:hover {
+    transform: scale(1.1);
+}
+  #message-ref {
+    font-size: 0.9em;
+    margin-top: 1.5em;
+    color: #34bd34;
+    visibility: hidden;
+  }
+p {
+  text-align: justify;
+  color: rgb(141, 66, 16);
+}
+p1 {
+  color: rgb(7, 24, 39);
+}
+p2 {
+  color: #ffffff;
+}
+p3 {
+  color: #ffffff;
+}
+p4 {
+  color: #ffffff;
+}
+h1 {
+  color: black;
+  text-shadow: 2px 2px 5px #ec8525;
+}
+.shit {
+  color: #ffffff;
+  margin-top: 32%;
+  margin-left: 63%;
+}
+.home-content {
+    margin-top: 60px;
+}
+.home-content .btn-box {
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+    height: 25px;
+    margin-bottom: 10px;
+}
+.btn-box a {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 100%;
+    background: #00abf0;
+    border: 2px solid #00abf0;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #081b29;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 1px;
+    z-index: 1;
+    overflow: hidden;
+    transition: .5s;
+}
+.btn-box a:hover {
+    color: #00abf0;
+}
+.btn-box a:nth-child(2) {
+    background: transparent;
+    color: #00abf0;
+}
+.btn-box a:nth-child(2):hover {
+    color: #081b29;
+}
+.btn-box a:nth-child(2)::before {
+    background: #00abf0;
+}
+.btn-box a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background: #081b29;
+    z-index: -1;
+    transition: .5s;
+}
+.btn-box a:hover::before {
+    width: 100%;
+}
+.home-content .btn-box2 {
+    display: flex;
+    justify-content: space-between;
+    width: 345px;
+    height: 50px;
+}
+.btn-box2 a {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 100%;
+    background: #ffffff;
+    border: 2px solid #00abf0;
+    border-radius: 8px;
+    font-size: 19px;
+    color: #081b29;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 1px;
+    z-index: 1;
+    overflow: hidden;
+    transition: .5s;
+}
+.btn-box2 a:hover {
+    color: #00abf0;
+}
+.btn-box2 a:nth-child(2) {
+    background: transparent;
+    color: #00abf0;
+}
+.btn-box2 a:nth-child(2):hover {
+    color: #081b29;
+}
+.btn-box2 a:nth-child(2)::before {
+    background: #00abf0;
+}
+.btn-box2 a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background: #081b29;
+    z-index: -1;
+    transition: .5s;
+}
+.btn-box2 a:hover::before {
+    width: 100%;
+}
+.description {
+  font: bold;
+  color: #ffffff;
+  position: absolute;
+  left: 50%;
+  top: 60%;
+  transform: translate(-50%, 800%);
+  text-align: center;
+  animation: blink 1.5s infinite;
+}
+.info {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: #ffffff;
+  position: absolute;
+  text-align: center;
+  margin-top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.home-sci {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 170px;
+    display: flex;
+    justify-content: space-between;
+}
+.home-sci a {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: 2px solid #00abf0;
+    border-radius: 40%;
+    font-size: 20px;
+    color: #00abf0;
+    text-decoration: none;
+    z-index: 1;
+    overflow: hidden;
+    transition: .5s;
+}
+.home-sci a:hover{
+    color: #081b29;
+}
+.home-sci a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background: #00abf0;
+    z-index: -1;
+    transition: .5s;
+}
+.home-sci a:hover::before {
+    width: 100%;
+}
+@media screen and (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .navbar ul {
+    margin: 0;
+  }
+  #header {
+    text-align: center;
+  }
+}
+@media screen and (max-width: 480px) {
+  
+}
+@keyframes blink {
+  0%, 50%, 100% {
+      opacity: 1;
+  }
+  25%, 75% {
+      opacity: 0;
+  }
+}
+@keyframes gradientAnimation {
+  0% {
+      background-position: 0% 50%;
+  }
+  50% {
+      background-position: 100% 50%;
+  }
+  100% {
+      background-position: 0% 50%;
+  }
+}
+@keyframes shadowAnimation {
+  0% {
+      box-shadow: 0 1em 4em rgba(51, 121, 185, 0.2);
+  }
+  50% {
+      box-shadow: 0 1em 4em rgba(26, 190, 149, 0.5);
+  }
+  100% {
+      box-shadow: 0 1em 4em rgba(157, 198, 236, 0.2);
+  }
+}
+@keyframes ashAnimation {
+  0% {
+      transform: translateY(-200vh) rotateZ(0deg);
+      opacity: 0;
+  }
+  50% {
+      transform: translateY(100vh) rotateZ(180deg);
+      opacity: 1;
+  }
+  100% {
+      transform: translateY(200vh) rotateZ(360deg);
+      opacity: 0;
+  }
+}
+
+/* Styling for the ash particles */
+.ash-particle {
+  position: absolute;
+  width: 1px; /* Adjust particle size as needed */
+  height: 10px; /* Adjust particle size as needed */
+  background-color: #888; /* Color of the ash particles */
+  opacity: 0; /* Start with zero opacity */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Optional: Add a shadow effect */
+  animation: ashAnimation 8s linear infinite; /* Adjust animation duration as needed */
+}
+
+/* Generating particles randomly */
+@keyframes generateAsh {
+  0% {
+      transform: translateY(-100%);
+  }
+  100% {
+      transform: translateY(100%);
+  }
+}
+
+/* Animation for particle generation */
+.ash-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+  animation: generateAsh 10s infinite linear;
+}
+
+.ash-container:before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 10%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.2) 90%);
+  z-index: 0;
+}
+
+/* Optional: Adjust the opacity of the particles to control their visibility */
+.ash-container .ash-particle {
+  opacity: 0.8;
+}
