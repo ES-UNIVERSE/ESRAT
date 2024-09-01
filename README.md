@@ -27,7 +27,5 @@ To learn more about our cutting-edge RAT solutions and how they can empower your
 Contact: Go through our em@il, we'll provide you direct contant number if needed.
 Email: esplaysbgmi@gmail.com
 Telegram: https://t.me/jrram3000
-
-Temporary Website: ➡️ https://esrat-v4.000webhostapp.com/index.html (Go to website and contact me using Whatsapp or other handles)
-
+Insta: will add later
 Transform your digital capabilities with our Super Advanced God Mode RATs – because true control is in the details.
