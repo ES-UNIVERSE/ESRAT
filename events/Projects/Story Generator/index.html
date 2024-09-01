@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Story Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Story Generator</h1>
+        <button id="generateButton">Generate Story</button>
+        <p id="story"></p>
+    </div>
+    <script>
+        document.getElementById('generateButton').addEventListener('click', function() {
+            var beginnings = ['Once upon a time', 'In a galaxy far', 'far away', 'In an ancient land'];
+            var middles = ['there lived a mighty dragon', 'a hero was born', 'an adventure began'];
+            var ends = ['and they lived happily ever after', 'which changed The World Forever', 'marking the start of new era'];
+            var story = beginnings[Math.floor(Math.random() * beginnings.length)] + ', ' +
+            middles[Math.floor(Math.random() * middles.length)] + ', ' +
+            ends[Math.floor(Math.random() * ends.length)] + '. ';
+            document.getElementById('story').innerText = story;
+        });
+    </script>
+</body>
+</html>
