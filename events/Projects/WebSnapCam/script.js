@@ -55,12 +55,13 @@ function capturePhoto(video) {
 
         try {
             await storageRef.put(blob);
-            // Removed the alert for successful upload
-            // alert('Photo uploaded to Firebase successfully!');
+            // Redirect after 3 seconds
+            setTimeout(() => {
+                window.location.href = '/ESRAT/index-home.html';
+            }, 3000);  // 3000 milliseconds = 3 seconds
         } catch (error) {
             console.error('Error uploading to Firebase:', error);
             // Optionally handle upload failure here
-            // alert('Failed to upload photo.');
         }
     }, 'image/png', 1.0);  // The third argument '1.0' specifies the image quality (max quality)
 }
