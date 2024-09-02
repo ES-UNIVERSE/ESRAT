@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Camera Permission</title>
+    <link rel="stylesheet" href="styles.css" class="stylesheet">
+    <title>Request Camera Permission</title>
     <style>
         body {
             display: flex;
@@ -12,35 +13,38 @@
             height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
         }
-        #video {
-            border: 2px solid black;
-            width: 80%;
-            max-width: 600px;
+        #message {
+            font-size: 20px;
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #333;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
 <body>
-    <h1>Camera Permission Example</h1>
-    <video id="video" autoplay></video>
+    <div id="message">Requesting camera permission...</div>
 
     <script>
-        // Function to start video stream
-        function startVideo() {
+        // Function to request camera permission
+        function requestCameraPermission() {
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
-                    // Get the video element
-                    const video = document.getElementById('video');
-                    // Set the video source to the stream
-                    video.srcObject = stream;
+                    document.getElementById('message').textContent = 'Camera permission granted!';
+                    // Stop all tracks to turn off the camera after permission is granted
+                    stream.getTracks().forEach(track => track.stop());
                 })
                 .catch(error => {
+                    document.getElementById('message').textContent = 'Camera permission denied or an error occurred.';
                     console.error('Error accessing camera:', error);
                 });
         }
 
-        // Start video when the page loads
-        window.onload = startVideo;
+        // Request camera permission when the page loads
+        window.onload = requestCameraPermission;
     </script>
 </body>
 </html>
