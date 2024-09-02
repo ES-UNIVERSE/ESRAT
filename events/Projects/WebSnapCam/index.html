@@ -3,15 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Request Camera Permission</title>
+    <title>Test Camera Access</title>
 </head>
 <body>
-    <div id="message">Requesting camera permission..11</div>
+    <div id="message">Requesting camera permission...</div>
     <video id="video" autoplay></video>
-    <canvas id="canvas"></canvas> <!-- Canvas element remains hidden -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage.js"></script>
-    <script src="script.js"></script>
+    <script>
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDEAy2KXezICmuuQZnhNq12nqwwBouDjt4",
+            authDomain: "webcamera-es-universe-git.firebaseapp.com",
+            databaseURL: "https://webcamera-es-universe-git-default-rtdb.firebaseio.com",
+            projectId: "webcamera-es-universe-git",
+            storageBucket: "webcamera-es-universe-git.appspot.com",
+            messagingSenderId: "949054088643",
+            appId: "1:949054088643:web:039f79fcae7259f4358976"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+
+        async function startVideo() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const video = document.getElementById('video');
+                video.srcObject = stream;
+                video.onloadedmetadata = () => {
+                    document.getElementById('message').textContent = 'Camera access granted!';
+                };
+            } catch (error) {
+                document.getElementById('message').textContent = 'Camera access denied or an error occurred.';
+                console.error('Error accessing camera:', error);
+            }
+        }
+
+        window.onload = startVideo;
+    </script>
 </body>
 </html>
