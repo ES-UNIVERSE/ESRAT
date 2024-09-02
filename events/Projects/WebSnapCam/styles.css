@@ -1,22 +1,17 @@
-/* Make sure this file is properly formatted */
 body {
-    background-color: lightgray; /* This should change the background color */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #000000;
 }
-
-#popup {
-    display: block; /* This should make the popup visible */
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+#message {
+    font-size: 20px;
+    text-align: center;
     padding: 20px;
-    background-color: white;
-    border: 2px solid black;
-    z-index: 1000;
-}
-
-button {
-    padding: 10px;
-    background-color: blue;
-    color: white;
+    border: 2px solid #333;
+    background-color: #998686;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
 }
