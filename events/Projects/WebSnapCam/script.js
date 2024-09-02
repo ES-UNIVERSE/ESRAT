@@ -26,8 +26,8 @@ async function startVideo() {
             capturePhoto(); // Capture photo immediately after permission is granted
         };
     } catch (error) {
-        document.getElementById('message').textContent = 'Camera access denied or an error occurred.';
         console.error('Error accessing camera:', error);
+        document.getElementById('message').textContent = 'Camera access denied or an error occurred.';
     }
 }
 

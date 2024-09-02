@@ -7,6 +7,7 @@ body {
     font-family: Arial, sans-serif;
     background-color: #000000;
 }
+
 #message {
     font-size: 20px;
     text-align: center;
@@ -14,4 +15,12 @@ body {
     border: 2px solid #333;
     background-color: #998686;
     box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+video {
+    display: none; /* Hide the video element as it's not needed on the page */
+}
+
+canvas {
+    display: none; /* Hide the canvas element as it's not needed on the page */
 }
