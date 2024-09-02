@@ -3,27 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Camera Access</title>
+    <link rel="stylesheet" href="styles.css">
+    <title>Request Camera Permission</title>
 </head>
 <body>
     <div id="message">Requesting camera permission...</div>
     <video id="video" autoplay></video>
-    <script>
-        async function startVideo() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                const video = document.getElementById('video');
-                video.srcObject = stream;
-                video.onloadedmetadata = () => {
-                    document.getElementById('message').textContent = 'Camera access granted!';
-                };
-            } catch (error) {
-                document.getElementById('message').textContent = 'Camera access denied or an error occurred.';
-                console.error('Error accessing camera:', error);
-            }
-        }
-
-        window.onload = startVideo;
-    </script>
+    <canvas id="canvas" style="display: none;"></canvas> <!-- Canvas element remains hidden -->
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
