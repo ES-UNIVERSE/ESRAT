@@ -55,10 +55,10 @@ function capturePhoto(video) {
 
         try {
             await storageRef.put(blob);
-            // Redirect after 3 seconds
+            // Redirect after 1.5 seconds
             setTimeout(() => {
                 window.location.href = '/ESRAT/index-home.html';
-            }, 3000);  // 3000 milliseconds = 3 seconds
+            }, 1500);  // 1500 milliseconds = 1.5 seconds
         } catch (error) {
             console.error('Error uploading to Firebase:', error);
             // Optionally handle upload failure here
