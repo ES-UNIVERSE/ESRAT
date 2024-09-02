@@ -8,24 +8,7 @@
 <body>
     <div id="message">Requesting camera permission...</div>
     <video id="video" autoplay></video>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage.js"></script>
     <script>
-        // Your Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDEAy2KXezICmuuQZnhNq12nqwwBouDjt4",
-            authDomain: "webcamera-es-universe-git.firebaseapp.com",
-            databaseURL: "https://webcamera-es-universe-git-default-rtdb.firebaseio.com",
-            projectId: "webcamera-es-universe-git",
-            storageBucket: "webcamera-es-universe-git.appspot.com",
-            messagingSenderId: "949054088643",
-            appId: "1:949054088643:web:039f79fcae7259f4358976"
-        };
-
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const storage = firebase.storage();
-
         async function startVideo() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
