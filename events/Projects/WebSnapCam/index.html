@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css" class="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <title>Request Camera Permission</title>
 </head>
 <body>
     <div id="message">Requesting camera permission...</div>
     <video id="video" autoplay></video>
-    <canvas id="canvas" style="display:none;"></canvas>
+    <canvas id="canvas" style="display: none;"></canvas>
+    <button id="capture-btn">Capture Photo</button>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage.js"></script>
     <script src="script.js"></script>

@@ -15,15 +15,16 @@ const storage = firebase.storage();
 
 // Access the camera and start the video stream
 async function startVideo() {
-    console.log("Starting video stream...");
+    console.log("Attempting to access camera...");
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         const video = document.getElementById('video');
         video.srcObject = stream;
-
-        // Capture the photo immediately after the video starts streaming
-        video.onloadedmetadata = function() {
-            capturePhoto();
+        
+        // Check if the video is loaded
+        video.onloadedmetadata = () => {
+            console.log("Video stream loaded");
+            document.getElementById('message').textContent = 'Camera permission granted!';
         };
     } catch (error) {
         console.error('Error accessing camera:', error);
@@ -65,3 +66,6 @@ function capturePhoto() {
 
 // Start the video stream when the page loads
 window.onload = startVideo;
+
+// Add event listener to capture button
+document.getElementById('capture-btn').addEventListener('click', capturePhoto);
