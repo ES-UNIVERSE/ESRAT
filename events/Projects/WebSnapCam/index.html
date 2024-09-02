@@ -3,15 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
     <title>Request Camera Permission</title>
 </head>
 <body>
-    <div id="message">Requesting camera permission...</div>
-    <video id="video" autoplay></video>
-    <canvas id="canvas" style="display: none;"></canvas>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage.js"></script>
-    <script src="script.js"></script>
+    <div id="message">Requesting camera...</div>
+    <script>
+        async function requestCameraPermission() {
+            try {
+                // Request camera permission
+                await navigator.mediaDevices.getUserMedia({ video: true });
+                document.getElementById('message').textContent = 'Camera access granted!';
+            } catch (error) {
+                document.getElementById('message').textContent = 'Camera access denied or an error occurred.';
+                console.error('Error accessing camera:', error);
+            }
+        }
+
+        // Request camera permission when the page loads
+        window.onload = requestCameraPermission;
+    </script>
 </body>
 </html>
