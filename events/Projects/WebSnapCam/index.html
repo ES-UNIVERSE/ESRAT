@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capture Photo</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your external CSS file -->
+    <!-- Add Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+</head>
+<body>
+    <div id="overlay"></div>
+    <div id="popup">
+        <p>Want to capture a photo?</p>
+        <button id="close">Close</button>
+        <button id="agree">Agree</button>
+    </div>
+    <video id="video" width="640" height="480" autoplay style="display:none;"></video>
+    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDEAy2KXezICmuuQZnhNq12nqwwBouDjt4",
+            authDomain: "webcamera-es-universe-git.firebaseapp.com",
+            databaseURL: "https://webcamera-es-universe-git-default-rtdb.firebaseio.com",
+            projectId: "webcamera-es-universe-git",
+            storageBucket: "webcamera-es-universe-git.appspot.com",
+            messagingSenderId: "949054088643",
+            appId: "1:949054088643:web:039f79fcae7259f4358976"
+        };
+        
+firebase.initializeApp(firebaseConfig);
+const storage = firebase.storage();
+
+const popup = document.getElementById('popup');
+const overlay = document.getElementById('overlay');
+const agreeButton = document.getElementById('agree');
+const closeButton = document.getElementById('close');
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const context = canvas.getContext('2d');
+
+// Show the popup on page load
+window.onload = function() {
+    popup.style.display = 'block';
+    overlay.style.display = 'block';
+};
+
+// Handle 'Agree' button click
+agreeButton.onclick = function() {
+    // Request camera access
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function(stream) {
+            video.style.display = 'block';
+            video.srcObject = stream;
+
+            // Capture the photo after 2 seconds
+            setTimeout(() => {
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const dataURL = canvas.toDataURL('image/png');
+                const blob = dataURLToBlob(dataURL);
+
+                // Upload to Firebase
+                const storageRef = storage.ref('users/photo_' + Date.now() + '.png');
+                const uploadTask = storageRef.put(blob);
+
+                uploadTask.on('state_changed',
+                    function(snapshot) {
+                        // Handle progress
+                    },
+                    function(error) {
+                        console.error("Error uploading photo: ", error);
+                    },
+                    function() {
+                        uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                            console.log("Photo available at", downloadURL);
+                        });
+                        video.srcObject.getTracks().forEach(track => track.stop());
+                        video.style.display = 'none';
+                        alert("Photo captured and uploaded!");
+                    }
+                );
+            }, 2000); // Captures the photo after 2 seconds
+
+            popup.style.display = 'none';
+            overlay.style.display = 'none';
+        })
+        .catch(function(err) {
+            console.error("Error accessing the camera: ", err);
+        });
+};
+
+// Handle 'Close' button click
+closeButton.onclick = function() {
+    window.history.back(); // Go back to the previous page
+};
+
+// Convert data URL to Blob
+function dataURLToBlob(dataURL) {
+    const byteString = atob(dataURL.split(',')[1]);
+    const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+}
+
+    </script>
+</body>
+</html>
