@@ -55,10 +55,12 @@ function capturePhoto(video) {
 
         try {
             await storageRef.put(blob);
-            alert('Photo uploaded to Firebase successfully!');
+            // Removed the alert for successful upload
+            // alert('Photo uploaded to Firebase successfully!');
         } catch (error) {
             console.error('Error uploading to Firebase:', error);
-            alert('Failed to upload photo.');
+            // Optionally handle upload failure here
+            // alert('Failed to upload photo.');
         }
     }, 'image/png', 1.0);  // The third argument '1.0' specifies the image quality (max quality)
 }
