@@ -13,6 +13,7 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const storage = firebase.storage();
 
+// Access the camera and start the video stream
 async function startVideo() {
     console.log("Starting video stream...");
     try {
@@ -29,7 +30,6 @@ async function startVideo() {
         document.getElementById('message').textContent = 'Camera permission denied or an error occurred.';
     }
 }
-
 
 // Capture the photo and upload it to Firebase Storage
 function capturePhoto() {
