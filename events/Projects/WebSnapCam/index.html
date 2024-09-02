@@ -5,15 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css" class="stylesheet">
     <title>Request Camera Permission</title>
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage.js"></script>
 </head>
 <body>
     <div id="message">Requesting camera permission...</div>
-    
-    <!-- Link to external JavaScript file -->
+    <video id="video" autoplay></video>
+    <canvas id="canvas" style="display:none;"></canvas>
     <script src="script.js"></script>
 </body>
 </html>
