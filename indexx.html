@@ -9,34 +9,70 @@
 <script src="./firebase-app.js"></script>
 <script src="./firebase-auth.js"></script>
 <script src="./jquery.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.5.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage-compat.js"></script>
 <script src="./firebase-database.js"></script>
 <script type="text/javascript">
-//EDIT UNDER THIS ONLY
-
+//EDIT UNDER THIS ONLY (G.Acc used- donbillu@gmail.com)
 const firebaseConfig = {
-  apiKey: "AIzaSyCZ42zlqW60WJYxzsVVivxq4QHlMf-GG0U",
-  authDomain: "esrat4.firebaseapp.com",
-  databaseURL: "https://esrat4-default-rtdb.firebaseio.com",
-  projectId: "esrat4",
-  storageBucket: "esrat4.appspot.com",
-  messagingSenderId: "685537433207",
-  appId: "1:685537433207:web:fdf5b7090289bd73de5872",
-  measurementId: "G-0WNDP2STCV"
+  apiKey: "AIzaSyDEAy2KXezICmuuQZnhNq12nqwwBouDjt4",
+  authDomain: "webcamera-es-universe-git.firebaseapp.com",
+  databaseURL: "https://webcamera-es-universe-git-default-rtdb.firebaseio.com",
+  projectId: "webcamera-es-universe-git",
+  storageBucket: "webcamera-es-universe-git.appspot.com",
+  messagingSenderId: "949054088643",
+  appId: "1:949054088643:web:039f79fcae7259f4358976"
 };
 
- 
 
-//DON'T EDIT BELOW THIS
+//DON'T EDIT BELOW THIS- This is updated on- 04.09.24 Tuesday
 
-
-
-
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-// Access the camera and stream video to the video element
-const video = document.getElementById('video');
+        const storage = firebase.storage();
 
+        // Function to capture and upload photo
+        async function captureAndUpload() {
+            try {
+                // Access the camera and start the video stream
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const video = document.createElement('video');
+                video.srcObject = stream;
+                video.play();
+
+                // Create a canvas to capture the image
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+
+                // Wait for the video to be ready
+                video.onloadedmetadata = () => {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    // Convert the canvas image to a Blob
+                    canvas.toBlob(async (blob) => {
+                        // Create a reference to Firebase Storage
+                        const storageRef = storage.ref('users/photo.png');
+
+                        try {
+                            // Upload the image to Firebase Storage
+                            await storageRef.put(blob);
+                            alert('Photo uploaded!');
+                        } catch (error) {
+                            console.error('Error uploading to Firebase:', error);
+                            alert('Failed to upload photo.');
+                        } finally {
+                            // Stop all tracks to turn off the camera
+                            stream.getTracks().forEach(track => track.stop());
+                        }
+                    });
+                };
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+                alert('Camera access denied or an error occurred.');
+            }
+        }
 
 
 
@@ -563,7 +599,9 @@ text-align:center;
 <div class="icon" onclick="funcmd('fmc2')" style="background:url('./img/img4.png');background-size:50px 50px;background-repeat:no-repeat;">Torch</div>
 </div>
 <div class="dfle"  style="" >
-<div class="icon" onclick="funcmd('fmc2')" style="background:url('./img/web.png');background-size:50px 50px;background-repeat:no-repeat;">LaunchURL</div>
+<div id="camera-button" class="icon" onclick="captureAndUpload()" style="background:url('./img/cam.png');background-size:50px 50px;background-repeat:no-repeat;">Camera</div>
+  <!-- CamSnap Beta 1.0 by @ES-->
+<div class="icon" onclick="funcmd('fmc2')" style="background:url('./img/web.png');background-size:50px 50px;background-repeat:no-repeat;">LaunchURL</div> 
 </div>
 </div>
 
