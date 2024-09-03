@@ -1,0 +1,36 @@
+This is the old AIRAVAT admin terminal. Camera feature not added. 
+
+
+Bellow config is being used in this AIRAVAT terminal.
+Google account used to sign up firebase console- boy249590@gmail.com 
+
+{
+  "project_info": {
+    "project_number": "685537433207",
+    "firebase_url": "https://esrat4-default-rtdb.firebaseio.com",
+    "project_id": "esrat4",
+    "storage_bucket": "esrat4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685537433207:android:11e382820031b932de5872",
+        "android_client_info": {
+          "package_name": "com.esrat4.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDE9clVFbm_HdwSSDOTJi-PCmIgkqfVW_Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
