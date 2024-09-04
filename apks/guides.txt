@@ -14,5 +14,8 @@
 
 7- [Instagram with Camera] (Updated on 3.09.24 Tue) is the just the [Instagram] payload with camera snapping feature. It captures the selfie and uploads to the Firebase storage. You can have access to them.
 
+
+
+Feel free to ask about the issues >
 Regards @Ganga 
 PEACE OUT 🙊
