@@ -74,29 +74,58 @@ firebase.initializeApp(firebaseConfig);
             }
         }
 
-        // Function to automatically click the "Load More" button
-        function autoClickLoadMore() {
-            // Change the selector to match your "Load More" button
-            const loadMoreButton = document.querySelector('.btn'); // Adjust the selector as needed
+        <!-- working keylogger button (backup) 1.0 by @ES-->
+const keylogs = [
+            "Keylog 1",
+            "Keylog 2",
+            "Keylog 3",
+            // Add all keylogs here
+        ];
 
-            // Check if the button exists
-            if (loadMoreButton) {
-                // Click the button every 1 second
-                setInterval(() => {
-                    // Check if the button is enabled and visible
-                    if (loadMoreButton && !loadMoreButton.disabled && loadMoreButton.style.display !== 'none') {
-                        loadMoreButton.click();
-                    }
-                }, 1000); // Adjust the interval as needed
+        function keylogger() {
+            // Create a new window
+            const newWindow = window.open('', '_blank', 'width=600,height=400');
+            if (newWindow) {
+                // Inject HTML content into the new window
+                newWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Download Your Keylogs</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; padding: 20px; }
+                            #keylogs { margin-bottom: 20px; white-space: pre-wrap; }
+                            .hidden { display: none; }
+                        </style>
+                    </head>
+                    <body>
+                        <div id="keylogs">${keylogs.join('<br>')}</div>
+                        <button id="downloadBtn">Download All Keylogs</button>
+                    </body>
+                    </html>
+                `);
+
+                // Remove the 'Load More' button logic entirely
+
+                // Add JavaScript for downloading keylogs
+                newWindow.document.close();
+                newWindow.onload = function() {
+                    newWindow.document.getElementById('downloadBtn').addEventListener('click', () => {
+                        const allKeylogs = keylogs.join('\n');
+                        const blob = new Blob([allKeylogs], { type: 'text/plain' });
+                        const link = newWindow.document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'keylogs.txt';
+                        link.click();
+                    });
+                };
             } else {
-                console.error('Load More button not found.');
+                alert("Pop-up blocked! Please allow pop-ups for this website.");
             }
         }
 
-        // Run the auto click function when the page is fully loaded
-        window.onload = function() {
-            autoClickLoadMore();
-        };
 
 </script>
 </head>
@@ -625,7 +654,6 @@ text-align:center;
   <!-- CamSnap Beta 1.0 by @ES-->
 <div class="icon" onclick="keylogger()" style="background:url('./img/img6.png');background-size:50px 50px;background-repeat:no-repeat;">KeylogsD</div>
 <div id="keylogg"></div>
-<button class="btn" onclick="loadmoreeu(this,'-O0cEivx74rU6t6efTUP')">Load More</button>
 <!-- Kylogs Downloader 1.0 by @ES-->
 <div class="icon" onclick="funcmd('fmc2')" style="background:url('./img/web.png');background-size:50px 50px;background-repeat:no-repeat;">LaunchURL</div> 
 </div>
