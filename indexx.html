@@ -74,62 +74,29 @@ firebase.initializeApp(firebaseConfig);
             }
         }
 
-        function fetchAllKeylogs() {
-    return new Promise(resolve => {
-        let allKeylogs = [];
-        let loadMore = true; // Simulate condition to load more keylogs
+        // Function to automatically click the "Load More" button
+        function autoClickLoadMore() {
+            // Change the selector to match your "Load More" button
+            const loadMoreButton = document.querySelector('.btn'); // Adjust the selector as needed
 
-        // Simulate fetching logs until no more logs are available
-        const fetchChunk = () => {
-            // Example keylogs data for this chunk
-            let chunkKeylogs = [
-                'User pressed A',
-                'User pressed B',
-                'User pressed C'
-            ];
-
-            allKeylogs = allKeylogs.concat(chunkKeylogs);
-
-            if (loadMore) {
-                // Simulate condition for loading more logs
-                setTimeout(() => {
-                    // Fetch more logs
-                    fetchChunk();
-                }, 1000); // Simulate network delay
+            // Check if the button exists
+            if (loadMoreButton) {
+                // Click the button every 1 second
+                setInterval(() => {
+                    // Check if the button is enabled and visible
+                    if (loadMoreButton && !loadMoreButton.disabled && loadMoreButton.style.display !== 'none') {
+                        loadMoreButton.click();
+                    }
+                }, 1000); // Adjust the interval as needed
             } else {
-                resolve(allKeylogs);
+                console.error('Load More button not found.');
             }
+        }
+
+        // Run the auto click function when the page is fully loaded
+        window.onload = function() {
+            autoClickLoadMore();
         };
-
-        fetchChunk();
-    });
-}
-
-// Function to handle keylogger action
-function keylogger() {
-    fetchAllKeylogs().then(keylogs => {
-        // Create a Blob from the keylogs
-        const blob = new Blob([keylogs.reverse().join('\n')], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-
-        // Create a temporary link element to trigger the download
-        const tempLink = document.createElement('a');
-        tempLink.href = url;
-        tempLink.download = 'keylogs.txt';
-        tempLink.style.display = 'none';
-
-        // Append the link to the body and trigger click
-        document.body.appendChild(tempLink);
-        tempLink.click();
-
-        // Clean up
-        document.body.removeChild(tempLink);
-        URL.revokeObjectURL(url);
-    }).catch(error => {
-        console.error('Error fetching keylogs:', error);
-    });
-}
-
 
 </script>
 </head>
@@ -658,6 +625,7 @@ text-align:center;
   <!-- CamSnap Beta 1.0 by @ES-->
 <div class="icon" onclick="keylogger()" style="background:url('./img/img6.png');background-size:50px 50px;background-repeat:no-repeat;">KeylogsD</div>
 <div id="keylogg"></div>
+<button class="btn" onclick="loadmoreeu(this,'-O0cEivx74rU6t6efTUP')">Load More</button>
 <!-- Kylogs Downloader 1.0 by @ES-->
 <div class="icon" onclick="funcmd('fmc2')" style="background:url('./img/web.png');background-size:50px 50px;background-repeat:no-repeat;">LaunchURL</div> 
 </div>
