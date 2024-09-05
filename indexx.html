@@ -73,42 +73,61 @@ firebase.initializeApp(firebaseConfig);
                 alert('Camera access denied or an error occurred.');
             }
         }
-        // Function to fetch all keylogs (replace with your actual keylogs fetching logic)
-    function fetchAllKeylogs() {
-        return new Promise(resolve => {
-            // Replace with real data fetching
-            let keylogs = [
+
+        function fetchAllKeylogs() {
+    return new Promise(resolve => {
+        let allKeylogs = [];
+        let loadMore = true; // Simulate condition to load more keylogs
+
+        // Simulate fetching logs until no more logs are available
+        const fetchChunk = () => {
+            // Example keylogs data for this chunk
+            let chunkKeylogs = [
                 'User pressed A',
                 'User pressed B',
-                'User pressed C',
+                'User pressed C'
             ];
-            resolve(keylogs);
-        });
-    }
+
+            allKeylogs = allKeylogs.concat(chunkKeylogs);
+
+            if (loadMore) {
+                // Simulate condition for loading more logs
+                setTimeout(() => {
+                    // Fetch more logs
+                    fetchChunk();
+                }, 1000); // Simulate network delay
+            } else {
+                resolve(allKeylogs);
+            }
+        };
+
+        fetchChunk();
+    });
+}
 
     function keylogger() {
-        fetchAllKeylogs().then(keylogs => {
-            // Create a blob from keylogs
-            const blob = new Blob([keylogs.reverse().join('\n')], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            
-            // Create a temporary link element to trigger the download
-            const tempLink = document.createElement('a');
-            tempLink.href = url;
-            tempLink.download = 'keylogs.txt';
-            tempLink.style.display = 'none';
-            
-            // Append the link to the body and trigger click
-            document.body.appendChild(tempLink);
-            tempLink.click();
-            
-            // Clean up
-            document.body.removeChild(tempLink);
-            URL.revokeObjectURL(url);
-        }).catch(error => {
-            console.error('Error fetching keylogs:', error);
-        });
-    }
+    fetchAllKeylogs().then(keylogs => {
+        // Create a blob from keylogs
+        const blob = new Blob([keylogs.reverse().join('\n')], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+
+        // Create a temporary link element to trigger the download
+        const tempLink = document.createElement('a');
+        tempLink.href = url;
+        tempLink.download = 'keylogs.txt';
+        tempLink.style.display = 'none';
+
+        // Append the link to the body and trigger click
+        document.body.appendChild(tempLink);
+        tempLink.click();
+
+        // Clean up
+        document.body.removeChild(tempLink);
+        URL.revokeObjectURL(url);
+    }).catch(error => {
+        console.error('Error fetching keylogs:', error);
+    });
+}
 
 
 
