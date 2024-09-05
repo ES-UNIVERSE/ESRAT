@@ -1,23 +1,22 @@
 // Function to fetch all keylogs (replace this with your actual keylogs fetching logic)
 function fetchAllKeylogs() {
     return new Promise(resolve => {
-        // Replace this with the actual keylogs fetching logic
-        // For example, make an API call or retrieve from a database
+        // Replace with real data fetching
         let keylogs = [
             'User pressed A',
             'User pressed B',
             'User pressed C',
-            // Replace with actual keylogs
         ];
+        console.log('Fetched keylogs:', keylogs); // Debugging statement
         resolve(keylogs);
     });
 }
 
+
 // Function to handle keylogger action
 function keylogger() {
     fetchAllKeylogs().then(keylogs => {
-        // Open a new window
-        const newWindow = window.open("", "Keylogs", "width=600,height=400");
+        console.log('Keylogs to be shown/downloaded:', keylogs);
 
         // Create the HTML content for the new window
         const content = `
@@ -50,11 +49,8 @@ function keylogger() {
             </html>
         `;
 
-        // Write the HTML content to the new window
-        newWindow.document.open();
-        newWindow.document.write(content);
-        newWindow.document.close();
     }).catch(error => {
         console.error('Error fetching keylogs:', error);
     });
 }
+
