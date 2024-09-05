@@ -1,12 +1,13 @@
-// Function to fetch all keylogs (replace with your actual keylogs fetching logic)
+// Function to fetch all keylogs (replace this with your actual keylogs fetching logic)
 function fetchAllKeylogs() {
     return new Promise(resolve => {
-        // Example keylogs data, replace this with actual fetching logic
+        // Replace this with the actual keylogs fetching logic
+        // For example, make an API call or retrieve from a database
         let keylogs = [
             'User pressed A',
             'User pressed B',
             'User pressed C',
-            // Add more keylogs here or fetch from Firebase
+            // Replace with actual keylogs
         ];
         resolve(keylogs);
     });
