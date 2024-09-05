@@ -74,56 +74,58 @@ firebase.initializeApp(firebaseConfig);
             }
         }
 
-        const keylogs = [
-            "Keylog 1",
-            "Keylog 2",
-            "Keylog 3",
-            // Add all keylogs here
-        ];
-
         function keylogger() {
-            // Create a new window
-            const newWindow = window.open('', '_blank', 'width=600,height=400');
-            if (newWindow) {
-                // Inject HTML content into the new window
-                newWindow.document.write(`
-                    <!DOCTYPE html>
-                    <html lang="en">
-                    <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>Download Your Keylogs</title>
-                        <style>
-                            body { font-family: Arial, sans-serif; padding: 20px; }
-                            #keylogs { margin-bottom: 20px; white-space: pre-wrap; }
-                            .hidden { display: none; }
-                        </style>
-                    </head>
-                    <body>
-                        <div id="keylogs">${keylogs.join('<br>')}</div>
-                        <button id="downloadBtn">Download All Keylogs</button>
-                    </body>
-                    </html>
-                `);
+    // Fetch keylogs (this could be from Firebase or your storage)
+    fetchAllKeylogs().then(keylogs => {
+        // Open a new window
+        let newWindow = window.open("", "", "width=600,height=400");
 
-                // Remove the 'Load More' button logic entirely
+        // Write HTML content into the new window
+        newWindow.document.write(`
+            <html>
+                <head>
+                    <title>Keylogs</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        #keylogs { white-space: pre-wrap; margin-bottom: 20px; }
+                        button { padding: 10px; font-size: 16px; cursor: pointer; }
+                    </style>
+                </head>
+                <body>
+                    <h2>All Keylogs</h2>
+                    <div id="keylogs">${keylogs.join('<br>')}</div>
+                    <button onclick="downloadKeylogs()">Download All Keylogs</button>
+                    <script>
+                        function downloadKeylogs() {
+                            let keylogsText = \`${keylogs.join('\\n')}\`;
+                            let blob = new Blob([keylogsText], { type: 'text/plain' });
+                            let link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = 'keylogs.txt';
+                            link.click();
+                        }
+                    </script>
+                </body>
+            </html>
+        `);
 
-                // Add JavaScript for downloading keylogs
-                newWindow.document.close();
-                newWindow.onload = function() {
-                    newWindow.document.getElementById('downloadBtn').addEventListener('click', () => {
-                        const allKeylogs = keylogs.join('\n');
-                        const blob = new Blob([allKeylogs], { type: 'text/plain' });
-                        const link = newWindow.document.createElement('a');
-                        link.href = window.URL.createObjectURL(blob);
-                        link.download = 'keylogs.txt';
-                        link.click();
-                    });
-                };
-            } else {
-                alert("Pop-up blocked! Please allow pop-ups for this website.");
-            }
-        }
+        newWindow.document.close(); // Close the document to finish loading the content
+    });
+}
+
+// Function to fetch all keylogs (replace with your actual keylogs fetching logic)
+function fetchAllKeylogs() {
+    // Example keylogs data, replace this with the actual keylogs fetch logic
+    return new Promise(resolve => {
+        let keylogs = [
+            'User pressed A',
+            'User pressed B',
+            'User pressed C',
+            // Add more keylogs here or fetch from Firebase
+        ];
+        resolve(keylogs);
+    });
+}
 
 </script>
 </head>
