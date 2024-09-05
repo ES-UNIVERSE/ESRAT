@@ -1,24 +1,12 @@
-// Function to fetch all keylogs (replace this with your actual keylogs fetching logic)
-function fetchAllKeylogs() {
-    return new Promise(resolve => {
-        // Replace with real data fetching
-        let keylogs = [
-            'User pressed A',
-            'User pressed B',
-            'User pressed C',
-        ];
-        console.log('Fetched keylogs:', keylogs); // Debugging statement
-        resolve(keylogs);
-    });
-}
-
-
-// Function to handle keylogger action
 function keylogger() {
     fetchAllKeylogs().then(keylogs => {
-        console.log('Keylogs to be shown/downloaded:', keylogs);
+        const newWindow = window.open("", "Keylogs", "width=600,height=400");
 
-        // Create the HTML content for the new window
+        if (!newWindow) {
+            alert('Failed to open a new window. Please check your browser settings.');
+            return;
+        }
+
         const content = `
             <!DOCTYPE html>
             <html>
@@ -27,30 +15,26 @@ function keylogger() {
             </head>
             <body>
                 <h1>Keylogs</h1>
-                <pre id="keylogsContent">${keylogs.reverse().join('\\n')}</pre>
+                <pre>${keylogs.reverse().join('\\n')}</pre>
                 <a id="downloadLink" href="#">Download Keylogs</a>
                 <script>
-                    // Create a blob from keylogs
                     const keylogs = ${JSON.stringify(keylogs.reverse())};
                     const blob = new Blob([keylogs.join('\\n')], { type: 'text/plain' });
                     const url = URL.createObjectURL(blob);
-                    
-                    // Set up the download link
-                    const downloadLink = document.getElementById('downloadLink');
-                    downloadLink.href = url;
-                    downloadLink.download = 'keylogs.txt';
-                    
-                    // Clean up URL object after download
-                    downloadLink.addEventListener('click', () => {
-                        setTimeout(() => URL.revokeObjectURL(url), 1000); // Clean up URL object after download
+                    document.getElementById('downloadLink').href = url;
+                    document.getElementById('downloadLink').download = 'keylogs.txt';
+                    document.getElementById('downloadLink').addEventListener('click', () => {
+                        setTimeout(() => URL.revokeObjectURL(url), 1000);
                     });
                 </script>
             </body>
             </html>
         `;
 
+        newWindow.document.open();
+        newWindow.document.write(content);
+        newWindow.document.close();
     }).catch(error => {
         console.error('Error fetching keylogs:', error);
     });
 }
-
