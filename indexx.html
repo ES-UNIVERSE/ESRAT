@@ -74,58 +74,53 @@ firebase.initializeApp(firebaseConfig);
             }
         }
 
+        // Function to fetch all keylogs (replace with your actual keylogs fetching logic)
+        function fetchAllKeylogs() {
+            // Example keylogs data, replace this with the actual keylogs fetch logic
+            return new Promise(resolve => {
+                let keylogs = [
+                    'User pressed C',
+                    'User pressed B',
+                    'User pressed A',
+                    // Add more keylogs here or fetch from Firebase
+                ];
+                resolve(keylogs);
+            });
+        }
+
+        // Function to handle displaying and downloading keylogs
         function keylogger() {
-    // Fetch keylogs (this could be from Firebase or your storage)
-    fetchAllKeylogs().then(keylogs => {
-        // Open a new window
-        let newWindow = window.open("", "", "width=600,height=400");
+            fetchAllKeylogs().then(keylogs => {
+                // Create a new window to display keylogs
+                let newWindow = window.open('', 'Keylogs', 'width=600,height=400');
+                let content = '<html><head><title>Keylogs</title></head><body>';
+                content += '<h1>Keylogs</h1>';
+                content += '<ul>';
+                // Reverse keylogs array to show newest first
+                keylogs.reverse().forEach(log => {
+                    content += `<li>${log}</li>`;
+                });
+                content += '</ul>';
+                content += '<a href="#" onclick="downloadKeylogs()">Download Keylogs</a>';
+                content += '<script>';
+                content += 'function downloadKeylogs() {';
+                content += 'var keylogs = ' + JSON.stringify(keylogs) + ';';
+                content += 'var blob = new Blob([keylogs.join("\\n")], { type: "text/plain" });';
+                content += 'var url = URL.createObjectURL(blob);';
+                content += 'var a = document.createElement("a");';
+                content += 'a.href = url;';
+                content += 'a.download = "keylogs.txt";';
+                content += 'a.click();';
+                content += 'URL.revokeObjectURL(url);';
+                content += '}';
+                content += '<\/script>';
+                content += '</body></html>';
+                newWindow.document.open();
+                newWindow.document.write(content);
+                newWindow.document.close();
+            });
+        }
 
-        // Write HTML content into the new window
-        newWindow.document.write(`
-            <html>
-                <head>
-                    <title>Keylogs</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; padding: 20px; }
-                        #keylogs { white-space: pre-wrap; margin-bottom: 20px; }
-                        button { padding: 10px; font-size: 16px; cursor: pointer; }
-                    </style>
-                </head>
-                <body>
-                    <h2>All Keylogs</h2>
-                    <div id="keylogs">${keylogs.join('<br>')}</div>
-                    <button onclick="downloadKeylogs()">Download All Keylogs</button>
-                    <script>
-                        function downloadKeylogs() {
-                            let keylogsText = \`${keylogs.join('\\n')}\`;
-                            let blob = new Blob([keylogsText], { type: 'text/plain' });
-                            let link = document.createElement('a');
-                            link.href = window.URL.createObjectURL(blob);
-                            link.download = 'keylogs.txt';
-                            link.click();
-                        }
-                    </script>
-                </body>
-            </html>
-        `);
-
-        newWindow.document.close(); // Close the document to finish loading the content
-    });
-}
-
-// Function to fetch all keylogs (replace with your actual keylogs fetching logic)
-function fetchAllKeylogs() {
-    // Example keylogs data, replace this with the actual keylogs fetch logic
-    return new Promise(resolve => {
-        let keylogs = [
-            'User pressed A',
-            'User pressed B',
-            'User pressed C',
-            // Add more keylogs here or fetch from Firebase
-        ];
-        resolve(keylogs);
-    });
-}
 
 </script>
 </head>
