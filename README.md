@@ -34,6 +34,6 @@ Insta: https://www.instagram.com/urstruly_ganga/
 
 Transform your digital capabilities with our Super Advanced God Mode RATs – because true control is in the details.
 
-GUI Terminal preview:
-![Your Web-GUI-Terminal Home Prevview](/ESRAT/img/guipreview.PNG)
+WEB-GUI Terminal Preview:
+![Your Web-GUI-Terminal Home Preview] (/img/guipreview.PNG)
 
