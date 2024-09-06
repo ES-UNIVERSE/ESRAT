@@ -31,29 +31,42 @@
     </div>
 
     <script>
-        const mysticEncodedPassageOfHiddenSecrets = "RVMtRVNSQVQtZ2l0LWdhbmdhLUVTMzAwMC4yMXlva2lkLmJnbWk=";
-const decryptedMysticPassage = atob(mysticEncodedPassageOfHiddenSecrets);
+        async function retrieveSacredKeys() {
+    const response = await fetch("/asset/keys.json");
+    const sacredKeys = await response.json();
+    return sacredKeys;
+}
 
-const celestialEncodedIdentifierOfAncientLore = "Z2FuZ2E=";
-const decodedCelestialIdentifier = atob(celestialEncodedIdentifierOfAncientLore);
+function unlockArcaneSecrets(cipheredData, mysticalEssence, celestialKeystone) {
+    const decodedKeystone = CryptoJS.enc.Base64.parse(celestialKeystone);
+    const decodedEssence = CryptoJS.enc.Base64.parse(mysticalEssence);
+    const unlockedSecrets = CryptoJS.AES.decrypt(cipheredData, decodedKeystone, {
+        iv: decodedEssence,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+    });
+    return unlockedSecrets.toString(CryptoJS.enc.Utf8);
+}
 
-let userNameField = document.getElementById("username");
-let passwordField = document.getElementById("password");
-let actionButton = document.getElementById("submit");
+async function verifyEnigmaticCredentials() {
+    const sacredKeys = await retrieveSacredKeys();
+    const unlockedIdentity = unlockArcaneSecrets(sacredKeys.arcaneCipheredIdentity, sacredKeys.mysticalEssenceOfCipherIdentity, sacredKeys.celestialSecretKeystone);
+    const unlockedPassage = unlockArcaneSecrets(sacredKeys.arcaneCipheredPassage, sacredKeys.mysticalEssenceOfCipherPassage, sacredKeys.celestialSecretKeystone);
 
-let validateEnigmaticCredentials = () => {
-    if (userNameField.value === decodedCelestialIdentifier && passwordField.value === decryptedMysticPassage) {
+    const inputIdentity = document.getElementById("username").value;
+    const inputPassage = document.getElementById("password").value;
+
+    if (inputIdentity === unlockedIdentity && inputPassage === unlockedPassage) {
         window.location.href = "index-home.html";
     } else {
-        alert("Incorrect username or password.");
+        alert("Incorrect identity or passage.");
     }
-};
+}
 
-actionButton.addEventListener("click", validateEnigmaticCredentials);
-
-passwordField.addEventListener("keydown", (event) => {
+document.getElementById("submit").addEventListener("click", verifyEnigmaticCredentials);
+document.getElementById("password").addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
-        validateEnigmaticCredentials();
+        verifyEnigmaticCredentials();
     }
 });
 
@@ -105,6 +118,8 @@ passwordField.addEventListener("keydown", (event) => {
             setTimeout(type, delayBetweenTexts);
         });
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
 
 </body>
 </html>
