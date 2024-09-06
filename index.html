@@ -32,7 +32,7 @@
 
     <script>
         async function retrieveSacredKeys() {
-    const response = await fetch("/asset/keys.json");
+    const response = await fetch("/ESRAT/asset/keys.json");
     const sacredKeys = await response.json();
     return sacredKeys;
 }
