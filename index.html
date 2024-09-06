@@ -31,22 +31,32 @@
     </div>
 
     <script>
-        // Existing login functionality
-        let usernameRef = document.getElementById("username");
-        let passwordRef = document.getElementById("password");
-        let submitBtn = document.getElementById("submit");
+        const mysticEncodedPassageOfHiddenSecrets = "RVMtRVNSQVQtZ2l0LWdhbmdhLUVTMzAwMC4yMXlva2lkLmJnbWk=";
+const decryptedMysticPassage = atob(mysticEncodedPassageOfHiddenSecrets);
 
-        const validUsername = "ganga";
-        const validPassword = "gangadharesm3";
+const celestialEncodedIdentifierOfAncientLore = "Z2FuZ2E=";
+const decodedCelestialIdentifier = atob(celestialEncodedIdentifierOfAncientLore);
 
-        // Function to handle login attempt
-        let handleLogin = () => {
-            if (usernameRef.value === validUsername && passwordRef.value === validPassword) {
-                window.location.href = "index-home.html"; // Redirect to index.html on successful login
-            } else {
-                alert("Incorrect username or password.");
-            }
-        };
+let userNameField = document.getElementById("username");
+let passwordField = document.getElementById("password");
+let actionButton = document.getElementById("submit");
+
+let validateEnigmaticCredentials = () => {
+    if (userNameField.value === decodedCelestialIdentifier && passwordField.value === decryptedMysticPassage) {
+        window.location.href = "index-home.html";
+    } else {
+        alert("Incorrect username or password.");
+    }
+};
+
+actionButton.addEventListener("click", validateEnigmaticCredentials);
+
+passwordField.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        validateEnigmaticCredentials();
+    }
+});
+
 
         // Event listener for Submit button click
         submitBtn.addEventListener("click", handleLogin);
