@@ -32,8 +32,8 @@ Telegram: https://t.me/jrram3000
 
 Insta: https://www.instagram.com/urstruly_ganga/
 
-Transform your digital capabilities with our Super Advanced God Mode RATs – because true control is in the details.
+Transform your digital capabilities with our Super Advanced God Mode RATs – because true control is in The Data.
 
 WEB-GUI Terminal Preview:
-![Your Web-GUI-Terminal Home Preview] (/img/guipreview.PNG)
+![Your Web-GUI-Terminal Home Preview](/img/guipreview.PNG)
 
