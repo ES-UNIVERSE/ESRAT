@@ -12,81 +12,71 @@
 <body>
 
     <nav class="navbar">
-        <h class="logo"> <a href="index.html"> <img src="apks/logo.png" height="100px"></a></h>
+        <h class="logo"><a href="index.html"><img src="apks/logo.png" height="100px"></a></h>
     </nav>
+    
     <div class="info">-Website Owner -<br><span id="dynamic-text"></span></div>
 
-
     <div class="container">
-      <input type="text" id="username" placeholder="Username">
-      <input type="password" id="password" placeholder="Password">
-      <button id="submit">Login</button>
-      <div id="message-ref" class="message"></div>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button id="submit">Login</button>
+        <div id="message-ref" class="message"></div>
     </div>
+    
     <div class="description">Contact for Hacks !</div>
+    
     <div class="home-sci">
-      <a href="https://wa.me/917008265529?text=Hola, I recently visited your website. Let's talk !"><i class='bx bxl-whatsapp'></i></a>
-      <a href="https://www.instagram.com/urstruly_ganga/"><i class='bx bxl-instagram'></i></a>
-      <a href="https://github.com/ES-UNIVERSE"><i class='bx bxl-github'></i></a>
+        <a href="https://wa.me/917008265529?text=Hola, I recently visited your website. Let's talk!"><i class='bx bxl-whatsapp'></i></a>
+        <a href="https://www.instagram.com/urstruly_ganga/"><i class='bx bxl-instagram'></i></a>
+        <a href="https://github.com/ES-UNIVERSE"><i class='bx bxl-github'></i></a>
     </div>
 
     <script>
         async function retrieveSacredKeys() {
-    const response = await fetch("/ESRAT/asset/keys.json");
-    const sacredKeys = await response.json();
-    return sacredKeys;
-}
+            const response = await fetch("/ESRAT/asset/keys.json");
+            const sacredKeys = await response.json();
+            return sacredKeys;
+        }
 
-function unlockArcaneSecrets(cipheredData, mysticalEssence, celestialKeystone) {
-    const decodedKeystone = CryptoJS.enc.Base64.parse(celestialKeystone);
-    const decodedEssence = CryptoJS.enc.Base64.parse(mysticalEssence);
-    const unlockedSecrets = CryptoJS.AES.decrypt(cipheredData, decodedKeystone, {
-        iv: decodedEssence,
-        mode: CryptoJS.mode.CBC,
-        padding: CryptoJS.pad.Pkcs7
-    });
-    return unlockedSecrets.toString(CryptoJS.enc.Utf8);
-}
+        function unlockArcaneSecrets(cipheredData, mysticalEssence, celestialKeystone) {
+            const decodedKeystone = CryptoJS.enc.Base64.parse(celestialKeystone);
+            const decodedEssence = CryptoJS.enc.Base64.parse(mysticalEssence);
+            const unlockedSecrets = CryptoJS.AES.decrypt(cipheredData, decodedKeystone, {
+                iv: decodedEssence,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            });
+            return unlockedSecrets.toString(CryptoJS.enc.Utf8);
+        }
 
-async function verifyEnigmaticCredentials() {
-    const sacredKeys = await retrieveSacredKeys();
-    const unlockedIdentity = unlockArcaneSecrets(sacredKeys.arcaneCipheredIdentity, sacredKeys.mysticalEssenceOfCipherIdentity, sacredKeys.celestialSecretKeystone);
-    const unlockedPassage = unlockArcaneSecrets(sacredKeys.arcaneCipheredPassage, sacredKeys.mysticalEssenceOfCipherPassage, sacredKeys.celestialSecretKeystone);
+        async function verifyEnigmaticCredentials() {
+            const sacredKeys = await retrieveSacredKeys();
+            const unlockedIdentity = unlockArcaneSecrets(sacredKeys.arcaneCipheredIdentity, sacredKeys.mysticalEssenceOfCipherIdentity, sacredKeys.celestialSecretKeystone);
+            const unlockedPassage = unlockArcaneSecrets(sacredKeys.arcaneCipheredPassage, sacredKeys.mysticalEssenceOfCipherPassage, sacredKeys.celestialSecretKeystone);
 
-    const inputIdentity = document.getElementById("username").value;
-    const inputPassage = document.getElementById("password").value;
+            const inputIdentity = document.getElementById("username").value;
+            const inputPassage = document.getElementById("password").value;
 
-    if (inputIdentity === unlockedIdentity && inputPassage === unlockedPassage) {
-        window.location.href = "index-home.html";
-    } else {
-        alert("Incorrect identity or passage.");
-    }
-}
+            if (inputIdentity === unlockedIdentity && inputPassage === unlockedPassage) {
+                window.location.href = "index-home.html";
+            } else {
+                alert("Incorrect identity or passage.");
+            }
+        }
 
-document.getElementById("submit").addEventListener("click", verifyEnigmaticCredentials);
-document.getElementById("password").addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-        verifyEnigmaticCredentials();
-    }
-});
-
-
-        // Event listener for Submit button click
-        submitBtn.addEventListener("click", handleLogin);
-
-        // Event listener for Enter key press in password field
-        passwordRef.addEventListener("keydown", (event) => {
+        document.getElementById("submit").addEventListener("click", verifyEnigmaticCredentials);
+        document.getElementById("password").addEventListener("keydown", (event) => {
             if (event.key === "Enter") {
-                handleLogin();
+                verifyEnigmaticCredentials();
             }
         });
 
-        // Typing effect functionality
         const dynamicTextElement = document.getElementById('dynamic-text');
         const dynamicText = "Gangadhar Marndi";
-        const typingSpeed = 100; // Milliseconds per character
-        const erasingSpeed = 50; // Milliseconds per character
-        const delayBetweenTexts = 1000; // Milliseconds
+        const typingSpeed = 100;
+        const erasingSpeed = 50;
+        const delayBetweenTexts = 1000;
 
         let charIndex = 0;
         let typing = true;
@@ -113,13 +103,12 @@ document.getElementById("password").addEventListener("keydown", (event) => {
             }
         }
 
-        // Start the typing effect
         document.addEventListener("DOMContentLoaded", function () {
             setTimeout(type, delayBetweenTexts);
         });
     </script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-
-
+    
 </body>
 </html>
