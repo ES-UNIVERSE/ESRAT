@@ -10,12 +10,14 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    z-index: 2;
   }
   .navbar .logo {
     font-size: 28px;
     font-weight: 300;
     letter-spacing: 4px;
     text-transform: uppercase;
+    z-index: 2;
   }
   .navbar ul {
     list-style-type: none;
@@ -55,6 +57,17 @@ body {
 body {
   background-color: #000000;
   overflow: hidden;
+}
+.glow-effect {
+  position: fixed;
+  width: 80px; /* Smaller size to prevent overflow */
+  height: 80px; /* Smaller size to prevent overflow */
+  background: radial-gradient(circle, rgba(255,255,255,0.2), rgba(255,0,255,0.15), rgba(0,255,255,0.1));
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999; /* Keeps the glow effect on top */
+  transform: translate(-50%, -50%);
+  filter: blur(20px);
 }
 .container {
   background-color: rgba(157, 198, 236, 0.2);
