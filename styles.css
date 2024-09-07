@@ -55,20 +55,42 @@ body {
     height: auto;
 }
 body {
+  margin: 0;
   background-color: #000000;
   overflow: hidden;
 }
-.glow-effect {
+.cursor-shadow {
   position: fixed;
-  width: 80px; /* Smaller size to prevent overflow */
-  height: 80px; /* Smaller size to prevent overflow */
-  background: radial-gradient(circle, rgba(255,255,255,0.2), rgba(255,0,255,0.15), rgba(0,255,255,0.1));
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9999; /* Keeps the glow effect on top */
+  z-index: 9999;
   transform: translate(-50%, -50%);
-  filter: blur(20px);
+  filter: blur(50px);
+  background: rgba(255, 182, 193, 0.5); /* Initial light pink background */
+  animation: colorChange 10s infinite linear;
 }
+
+/* Animation for fading color transitions */
+@keyframes colorChange {
+  0% {
+    background: rgba(255, 182, 193, 0.5); /* Light pink */
+  }
+  25% {
+    background: rgba(255, 255, 224, 0.5); /* Light yellow */
+  }
+  50% {
+    background: rgba(173, 216, 230, 0.5); /* Light blue */
+  }
+  75% {
+    background: rgba(255, 240, 245, 0.5); /* Light lavender */
+  }
+  100% {
+    background: rgba(255, 182, 193, 0.5); /* Light pink */
+  }
+}
+
 .container {
   background-color: rgba(157, 198, 236, 0.2);
   padding: 1.4em 3.75em;

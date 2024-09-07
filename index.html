@@ -30,7 +30,7 @@
         <a href="https://www.instagram.com/urstruly_ganga/"><i class='bx bxl-instagram'></i></a>
         <a href="https://github.com/ES-UNIVERSE"><i class='bx bxl-github'></i></a>
     </div>
-    <div class="glow-effect"></div>
+    <div class="cursor-shadow"></div>
 
     <script>
         async function retrieveSacredKeys() {
@@ -71,24 +71,11 @@
                 verifyEnigmaticCredentials();
             }
         });
-        document.addEventListener('mousemove', function (e) {
-  const glowEffect = document.querySelector('.glow-effect');
-  const glowSize = 80; // Size of the glow effect
-  
-  // Calculate position but keep the effect within the viewport
-  let left = e.pageX;
-  let top = e.pageY;
+        const cursorShadow = document.querySelector('.cursor-shadow');
 
-  const maxX = window.innerWidth - glowSize / 2;
-  const maxY = window.innerHeight - glowSize / 2;
-
-  if (left > maxX) left = maxX;
-  if (top > maxY) top = maxY;
-  if (left < glowSize / 2) left = glowSize / 2;
-  if (top < glowSize / 2) top = glowSize / 2;
-
-  glowEffect.style.left = `${left}px`;
-  glowEffect.style.top = `${top}px`;
+document.addEventListener('mousemove', (event) => {
+    cursorShadow.style.left = event.clientX + 'px';
+    cursorShadow.style.top = event.clientY + 'px';
 });
     </script>
     
