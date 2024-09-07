@@ -15,7 +15,7 @@
         <h class="logo"><a href="index.html"><img src="apks/logo.png" height="100px"></a></h>
     </nav>
     
-    <div class="info">-Website Owner -<br><span id="dynamic-text"></span></div>
+    <div class="info" id="dynamic-text"><span id="dynamic-text">GANGA</span></div>
 
     <div class="container">
         <input type="text" id="username" placeholder="Username">
@@ -24,7 +24,6 @@
         <div id="message-ref" class="message"></div>
     </div>
     
-    <div class="description">Contact for Hacks !</div>
     
     <div class="home-sci">
         <a href="https://wa.me/917008265529?text=Hola, I recently visited your website. Let's talk!"><i class='bx bxl-whatsapp'></i></a>
@@ -70,41 +69,6 @@
             if (event.key === "Enter") {
                 verifyEnigmaticCredentials();
             }
-        });
-
-        const dynamicTextElement = document.getElementById('dynamic-text');
-        const dynamicText = "Gangadhar Marndi";
-        const typingSpeed = 100;
-        const erasingSpeed = 50;
-        const delayBetweenTexts = 1000;
-
-        let charIndex = 0;
-        let typing = true;
-
-        function type() {
-            if (typing) {
-                if (charIndex < dynamicText.length) {
-                    dynamicTextElement.textContent = dynamicText.substring(0, charIndex + 1);
-                    charIndex++;
-                    setTimeout(type, typingSpeed);
-                } else {
-                    typing = false;
-                    setTimeout(type, delayBetweenTexts);
-                }
-            } else {
-                if (charIndex > 0) {
-                    dynamicTextElement.textContent = dynamicText.substring(0, charIndex - 1);
-                    charIndex--;
-                    setTimeout(type, erasingSpeed);
-                } else {
-                    typing = true;
-                    setTimeout(type, typingSpeed);
-                }
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", function () {
-            setTimeout(type, delayBetweenTexts);
         });
     </script>
     

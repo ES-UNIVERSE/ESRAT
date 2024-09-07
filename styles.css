@@ -61,7 +61,7 @@ body {
   padding: 1.4em 3.75em;
   position: absolute;
   transform: translate(-50%, -50%);
-  top: 50%;
+  top: 62%;
   left: 50%;
   border-radius: 0.7em;
   animation: shadowAnimation 4s ease infinite alternate;
@@ -259,16 +259,6 @@ h1 {
 .btn-box2 a:hover::before {
     width: 100%;
 }
-.description {
-  font: bold;
-  color: #ffffff;
-  position: absolute;
-  left: 50%;
-  top: 60%;
-  transform: translate(-50%, 800%);
-  text-align: center;
-  animation: blink 1.5s infinite;
-}
 .info {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   color: #ffffff;
@@ -278,6 +268,32 @@ h1 {
   left: 50%;
   transform: translateX(-50%);
 }
+
+#dynamic-text {
+  font-size: 4rem; /* Increased font size */
+  font-weight: bold;
+  color: #333;
+  margin-top: 63px;
+}
+
+@media (max-width: 768px) {
+  .info {
+    margin-top: 8px;
+  }
+
+  #dynamic-text {
+    font-size: 3rem; /* Increased font size for tablets and smaller screens */
+    margin-top: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  #dynamic-text {
+    font-size: 4rem; /* Adjusted font size for very small screens */
+    margin-top: 100px;
+  }
+}
+
 .home-sci {
     position: absolute;
     bottom: 40px;
@@ -367,68 +383,4 @@ h1 {
   100% {
       box-shadow: 0 1em 4em rgba(157, 198, 236, 0.2);
   }
-}
-@keyframes ashAnimation {
-  0% {
-      transform: translateY(-200vh) rotateZ(0deg);
-      opacity: 0;
-  }
-  50% {
-      transform: translateY(100vh) rotateZ(180deg);
-      opacity: 1;
-  }
-  100% {
-      transform: translateY(200vh) rotateZ(360deg);
-      opacity: 0;
-  }
-}
-
-/* Styling for the ash particles */
-.ash-particle {
-  position: absolute;
-  width: 1px; /* Adjust particle size as needed */
-  height: 10px; /* Adjust particle size as needed */
-  background-color: #888; /* Color of the ash particles */
-  opacity: 0; /* Start with zero opacity */
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Optional: Add a shadow effect */
-  animation: ashAnimation 8s linear infinite; /* Adjust animation duration as needed */
-}
-
-/* Generating particles randomly */
-@keyframes generateAsh {
-  0% {
-      transform: translateY(-100%);
-  }
-  100% {
-      transform: translateY(100%);
-  }
-}
-
-/* Animation for particle generation */
-.ash-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 0;
-  animation: generateAsh 10s infinite linear;
-}
-
-.ash-container:before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 10%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.2) 90%);
-  z-index: 0;
-}
-
-/* Optional: Adjust the opacity of the particles to control their visibility */
-.ash-container .ash-particle {
-  opacity: 0.8;
-}
+  
