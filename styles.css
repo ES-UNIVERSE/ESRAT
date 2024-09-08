@@ -49,13 +49,13 @@ html {
     scroll-behavior: smooth;
 }
 body {
-  min-height: 100vh;
+  min-height: 200vh;
   margin: 0;
   padding: 0;
+  flex-direction: column;
   font-family: Arial, sans-serif; /* Set font family */
   background-color: #000000; /* Set background color */
 }
-
 .cursor-shadow {
   position: fixed;
   width: 100px;
@@ -344,7 +344,7 @@ h1 {
 }
 .home-sci {
   position: absolute;
-  bottom: 20px;
+  bottom: -730px;
   left: 50%;
   transform: translateX(-50%);
   width: 170px;
