@@ -27,5 +27,13 @@
     <a href="https://www.instagram.com/urstruly_ganga/"><i class='bx bxl-instagram'></i></a>
     <a href="https://t.me/jrram3000"><i class='bx bxl-telegram'></i></a>
   </div>
+  <script>
+    const cursorShadow = document.querySelector('.cursor-shadow');
+
+document.addEventListener('mousemove', (event) => {
+    cursorShadow.style.left = event.clientX + 'px';
+    cursorShadow.style.top = event.clientY + 'px';
+});
+  </script>
 </body>
 </html>

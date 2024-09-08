@@ -61,8 +61,8 @@ body {
 }
 .cursor-shadow {
   position: fixed;
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
@@ -75,19 +75,19 @@ body {
 /* Animation for fading color transitions */
 @keyframes colorChange {
   0% {
-    background: rgba(255, 182, 193, 0.5); /* Light pink */
+    background: rgba(233, 37, 67, 0.5); /* Light pink */
   }
   25% {
-    background: rgba(255, 255, 224, 0.5); /* Light yellow */
+    background: rgba(255, 255, 0, 0.5); /* Light yellow */
   }
   50% {
-    background: rgba(173, 216, 230, 0.5); /* Light blue */
+    background: rgba(0, 121, 161, 0.5); /* Light blue */
   }
   75% {
-    background: rgba(255, 240, 245, 0.5); /* Light lavender */
+    background: rgba(126, 0, 42, 0.5); /* Light lavender */
   }
   100% {
-    background: rgba(255, 182, 193, 0.5); /* Light pink */
+    background: rgba(255, 28, 62, 0.5); /* Light pink */
   }
 }
 
@@ -307,8 +307,25 @@ h1 {
 #dynamic-text {
   font-size: 4rem; /* Increased font size */
   font-weight: bold;
-  color: #333;
   margin-top: 63px;
+  background: linear-gradient(90deg, white, grey, black);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: colorTravel 8s ease-in-out infinite;
+  opacity: 0.4; /* Lower the opacity of the text */
+}
+
+@keyframes colorTravel {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @media (max-width: 768px) {
