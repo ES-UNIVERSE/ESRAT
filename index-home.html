@@ -17,7 +17,7 @@
             <li><a href="index-apk.html">H@ACKS</a></li>
             <li><a href="/ESRAT/gallery/index.gallery.html">GALLERY</a></li>
             <li><a href="index.html">ADMIN</a></li>
-          </ul>
+        </ul>
     </nav>
     <div class="container"><p4>UNDER DEVELOPMENT</p4></div>
     <div id="model-container" style="width: 100vw; height: 100vh; overflow: hidden;"></div>
@@ -40,13 +40,21 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById('model-container').appendChild(renderer.domElement);
 
+        // Add lighting
+        const ambientLight = new THREE.AmbientLight(0x404040); // Soft white light
+        scene.add(ambientLight);
+        
+        const pointLight = new THREE.PointLight(0xffffff, 1, 100);
+        pointLight.position.set(10, 10, 10);
+        scene.add(pointLight);
+
         // Load the 3D model
         const loader = new GLTFLoader();
         loader.load('space1.glb', function (gltf) {
             const model = gltf.scene;
             scene.add(model);
-            model.position.set(0, 0, 0);
-            model.scale.set(1, 1, 1); // Adjust scale if needed
+            model.position.set(0, 0, 0); // Adjust as needed
+            model.scale.set(1, 1, 1); // Adjust as needed
 
             // Animation loop
             function animate() {
@@ -58,7 +66,7 @@
             }
             animate();
         }, undefined, function (error) {
-            console.error('An error happened:', error);
+            console.error('An error happened while loading the model:', error);
         });
 
         // Set the camera position
