@@ -8,36 +8,46 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="icon" href="apks/favicon.ico" type="image/x-icon">
     <title>HOME PAGE</title>
+    <style>
+        /* Ensure the 3D model container takes full screen */
+        #model-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            z-index: -1; /* Place behind other content */
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar"> 
         <h class="logo"> <a href="/ESRAT/events/CameraModule/index.html"> <img src="apks/logo.png" height="100px"></a></h>
-
         <ul>
             <li><a href="events/index.events.html" class="active">EVENTS</a></li>
             <li><a href="index-apk.html">H@ACKS</a></li>
             <li><a href="/ESRAT/gallery/index.gallery.html">GALLERY</a></li>
             <li><a href="index.html">ADMIN</a></li>
-          </ul>
+        </ul>
     </nav>
-        <div class="container"><p4>UNDER DEVELOPMENT</p4></div>
-        <!-- <div class="description">Connect with me:</div> -->
-          <div class="home-sci">
-            <a href="https://wa.me/917008265529?text=Hello"><i class='bx bxl-whatsapp'></i></a>
-            <a href="https://www.instagram.com/urstruly_ganga/"><i class='bx bxl-instagram'></i></a>
-            <a href="https://t.me/jrram3000"><i class='bx bxl-telegram'></i></a>
-          </div>
-        </div>
-      </section>
-    
-      <script>
+    <div class="container"><p4>UNDER DEVELOPMENT</p4></div>
+    <!-- Add the model container here -->
+    <div id="model-container"></div>
+    <div class="home-sci">
+        <a href="https://wa.me/917008265529?text=Hello"><i class='bx bxl-whatsapp'></i></a>
+        <a href="https://www.instagram.com/urstruly_ganga/"><i class='bx bxl-instagram'></i></a>
+        <a href="https://t.me/jrram3000"><i class='bx bxl-telegram'></i></a>
+    </div>
+    <script>
         const menuToggle = document.querySelector('.menu-toggle');
         const navbar = document.querySelector('.navbar');
     
         menuToggle.addEventListener('click', () => {
           navbar.classList.toggle('hidden');
         });
-      </script>
-
+    </script>
+    <!-- Make sure your Three.js script is correctly linked -->
+    <script type="module" src="obstracts.js"></script>
 </body>
 </html>
