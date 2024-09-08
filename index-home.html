@@ -8,18 +8,6 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="icon" href="apks/favicon.ico" type="image/x-icon">
     <title>HOME PAGE</title>
-    <style>
-        /* Ensure the 3D model container takes full screen */
-        #model-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            z-index: -1; /* Place behind other content */
-        }
-    </style>
 </head>
 <body>
     <nav class="navbar"> 
@@ -29,25 +17,59 @@
             <li><a href="index-apk.html">H@ACKS</a></li>
             <li><a href="/ESRAT/gallery/index.gallery.html">GALLERY</a></li>
             <li><a href="index.html">ADMIN</a></li>
-        </ul>
+          </ul>
     </nav>
     <div class="container"><p4>UNDER DEVELOPMENT</p4></div>
-    <!-- Add the model container here -->
-    <div id="model-container"></div>
+    <div id="model-container" style="width: 100vw; height: 100vh; overflow: hidden;"></div>
     <div class="home-sci">
         <a href="https://wa.me/917008265529?text=Hello"><i class='bx bxl-whatsapp'></i></a>
         <a href="https://www.instagram.com/urstruly_ganga/"><i class='bx bxl-instagram'></i></a>
         <a href="https://t.me/jrram3000"><i class='bx bxl-telegram'></i></a>
     </div>
-    <script>
-        const menuToggle = document.querySelector('.menu-toggle');
-        const navbar = document.querySelector('.navbar');
     
-        menuToggle.addEventListener('click', () => {
-          navbar.classList.toggle('hidden');
+    <!-- Include Three.js and GLTFLoader from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.141.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.141.0/examples/jsm/loaders/GLTFLoader.js"></script>
+
+    <!-- Your custom script -->
+    <script>
+        // Create the scene, camera, and renderer
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('model-container').appendChild(renderer.domElement);
+
+        // Load the 3D model
+        const loader = new GLTFLoader();
+        loader.load('space1.glb', function (gltf) {
+            const model = gltf.scene;
+            scene.add(model);
+            model.position.set(0, 0, 0);
+            model.scale.set(1, 1, 1); // Adjust scale if needed
+
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                if (model) {
+                    model.rotation.y += 0.01;
+                }
+                renderer.render(scene, camera);
+            }
+            animate();
+        }, undefined, function (error) {
+            console.error('An error happened:', error);
+        });
+
+        // Set the camera position
+        camera.position.z = 5;
+
+        // Handle window resizing
+        window.addEventListener('resize', function () {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
         });
     </script>
-    <!-- Make sure your Three.js script is correctly linked -->
-    <script type="module" src="obstracts.js"></script>
 </body>
 </html>
