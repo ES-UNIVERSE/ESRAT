@@ -294,49 +294,119 @@ h1 {
   margin-top: 12px;
   left: 50%;
   transform: translateX(-50%);
+  white-space: nowrap; /* Prevent text from breaking into multiple lines */
 }
 
 #dynamic-text {
-  font-size: 4rem; /* Increased font size */
+  font-size: 4rem;
   font-weight: bold;
-  margin-top: 63px;
-  background: linear-gradient(90deg, white, grey, black);
-  background-size: 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: colorTravel 8s ease-in-out infinite;
-  opacity: 0.4; /* Lower the opacity of the text */
+  margin-top: 70px;
+  text-align: center;
+  position: relative; /* Required for the text-shadow effect */
+  animation: glowingShadow 3s infinite; /* Animation for the shadow effect */
 }
 
-@keyframes colorTravel {
+/* Keyframes for the glowing shadow effect */
+@keyframes glowingShadow {
   0% {
-    background-position: 0% 50%;
+    text-shadow: 
+      0 0 5px rgba(255, 255, 255, 0.5),
+      0 0 10px rgba(255, 255, 255, 0.5),
+      0 0 15px rgba(255, 255, 255, 0.5),
+      0 0 20px rgba(255, 255, 255, 0.5);
+  }
+  25% {
+    text-shadow: 
+      0 0 10px rgba(255, 255, 255, 0.8),
+      0 0 20px rgba(255, 255, 255, 0.8),
+      0 0 30px rgba(255, 255, 255, 0.8),
+      0 0 40px rgba(255, 255, 255, 0.8);
   }
   50% {
-    background-position: 100% 50%;
+    text-shadow: 
+      0 0 5px rgba(255, 255, 255, 0.5),
+      0 0 10px rgba(255, 255, 255, 0.5),
+      0 0 15px rgba(255, 255, 255, 0.5),
+      0 0 20px rgba(255, 255, 255, 0.5);
+  }
+  75% {
+    text-shadow: 
+      0 0 10px rgba(255, 255, 255, 0.8),
+      0 0 20px rgba(255, 255, 255, 0.8),
+      0 0 30px rgba(255, 255, 255, 0.8),
+      0 0 40px rgba(255, 255, 255, 0.8);
   }
   100% {
-    background-position: 0% 50%;
+    text-shadow: 
+      0 0 5px rgba(255, 255, 255, 0.5),
+      0 0 10px rgba(255, 255, 255, 0.5),
+      0 0 15px rgba(255, 255, 255, 0.5),
+      0 0 20px rgba(255, 255, 255, 0.5);
   }
+}
+
+.letter {
+  display: inline-block;
+  opacity: 0;
+  transform: translate3d(0px, 50px, 0px) rotate(-30deg) scale(0.5);
+  animation: animateText 1s forwards, glowingShadow 3s infinite;
+}
+
+/* Keyframes for animating each letter sequentially */
+@keyframes animateText {
+  0% {
+    opacity: 0;
+    transform: translate3d(0px, 50px, 0px) rotate(-30deg) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0px, 0px, 0px) rotate(0deg) scale(1);
+  }
+}
+
+/* Create delays for each letter to glow one by one */
+.letter:nth-child(1) {
+  animation-delay: 0s, 0s;
+}
+
+.letter:nth-child(2) {
+  animation-delay: 0.5s, 0.5s;
+}
+
+.letter:nth-child(3) {
+  animation-delay: 1s, 1s;
+}
+
+.letter:nth-child(4) {
+  animation-delay: 1.5s, 1.5s;
+}
+
+.letter:nth-child(5) {
+  animation-delay: 2s, 2s;
 }
 
 @media (max-width: 768px) {
   .info {
-    margin-top: 8px;
+    margin-top: 20px; /* Adjust margin-top for tablets */
   }
 
   #dynamic-text {
-    font-size: 3rem; /* Increased font size for tablets and smaller screens */
-    margin-top: 40px;
+    font-size: 3rem;
+    margin-top: 90px; /* Increased margin-top for better positioning on tablets */
   }
 }
 
 @media (max-width: 480px) {
   #dynamic-text {
-    font-size: 4rem; /* Adjusted font size for very small screens */
-    margin-top: 100px;
+    font-size: 2.5rem; /* Adjust font size for small screens */
+    margin-top: 120px; /* Further increased margin-top for very small screens */
+  }
+
+  .letter {
+    font-size: 3rem; /* Ensure the letters fit on one line */
   }
 }
+
 .container {
   background-color: rgba(157, 198, 236, 0.2);
   padding: 1.4em 3.75em;
