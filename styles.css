@@ -49,12 +49,17 @@ html {
     scroll-behavior: smooth;
 }
 body {
-  min-height: 200vh;
   margin: 0;
   padding: 0;
   flex-direction: column;
   font-family: Arial, sans-serif; /* Set font family */
   background-color: #000000; /* Set background color */
+}
+.home-page {
+  min-height: 200vh;
+}
+.login-page{
+  min-height: 100vh;
 }
 .cursor-shadow {
   position: fixed;
@@ -431,4 +436,47 @@ h1 {
   100% {
       box-shadow: 0 1em 4em rgba(157, 198, 236, 0.2);
   }
-  
+}
+  .home-sci2 {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 170px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .home-sci2 a {
+      position: relative;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      background: transparent;
+      border: 2px solid #00abf0;
+      border-radius: 40%;
+      font-size: 20px;
+      color: #00abf0;
+      text-decoration: none;
+      z-index: 1;
+      overflow: hidden;
+      transition: .5s;
+  }
+  .home-sci2 a:hover{
+      color: #081b29;
+  }
+  .home-sci2 a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 100%;
+      background: #00abf0;
+      z-index: -1;
+      transition: .5s;
+  }
+  .home-sci2 a:hover::before {
+      width: 100%;
+  }
