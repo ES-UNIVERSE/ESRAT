@@ -550,3 +550,68 @@ h1 {
   .home-sci2 a:hover::before {
       width: 100%;
   }
+
+  .scroll-text-container {
+    overflow-x: hidden; /* Prevent horizontal overflow */
+  }
+  
+  .scroll-text {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    margin-top: 100px;
+  }
+
+  /* Large text for the HACKING word */
+  .scroll-text.large {
+    font-size: 10vw; /* Responsive size based on viewport width */
+    font-weight: bold;
+    text-align: center;
+    animation: hoverAnimation 2s ease-in-out infinite
+  }
+  @keyframes hoverAnimation {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px); /* Adjust the vertical movement */
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+  /* Smaller left-aligned text for the other paragraphs */
+  .scroll-text.small {
+    font-size: 1.3rem;
+    margin-top: 50px;
+    text-align: justify; /* Align the text to the left */
+    line-height: 1.6; /* Increase line height for readability */
+    max-width: 90%; /* Control line length */
+    margin-left: auto; /* Center the paragraph */
+    margin-right: auto; /* Center the paragraph */
+  }
+
+  .scroll-text.small2 {
+    font-size: 1.5rem;
+    margin-top: 50px;
+    text-align: left; /* Align the text to the left */
+    line-height: 1.6; /* Increase line height for readability */
+    max-width: 90%; /* Control line length */
+    margin-left: auto; /* Center the paragraph */
+    margin-right: auto; /* Center the paragraph */
+  }
+  
+  /* Show effect */
+  .scroll-text.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* No glow */
+  .scroll-text.no-glow {
+    text-shadow: none;
+    background: none;
+    color: white;
+  }
+  
