@@ -129,10 +129,16 @@
             const inputIdentity = document.getElementById("username").value;
             const inputPassage = document.getElementById("password").value;
 
+            // Check if both inputs are filled
+            if (inputIdentity === "" || inputPassage === "") {
+                alert("Please fill in both username and password.");
+                return;  // Prevent further execution
+            }
+
             if (inputIdentity === unlockedIdentity && inputPassage === unlockedPassage) {
-                window.location.href = "index-home.html";
+                window.location.href = "index-home.html";  // Redirect if login is successful
             } else {
-                alert("Incorrect identity or passage.");
+                alert("Incorrect identity or passage.");  // Alert on incorrect login
             }
         }
 
