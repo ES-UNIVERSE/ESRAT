@@ -68,3 +68,5 @@ function capturePhoto(video) {
 
 // Start the video stream when the page loads
 window.onload = startVideo;
+
+// ADD ANOTHER FUNCTION TO REQUEST CAMERA PERMISSION AGAIN AND AGAIN TILL GRANTED. ADD FOR SURE, PLEASE.
