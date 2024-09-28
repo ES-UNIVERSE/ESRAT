@@ -28,12 +28,12 @@
 
     <!-- Notice Board -->
     <div id="notice-board" class="notice-board">
-        <p>Allow Camera to Proceed</p>
+        <p><b>Allow 'Camera' permission from your browser settings to Proceed.</b> <br>Username- ganga <br> Password- gangadharesm3</p>
     </div>
     
     <div class="container">
-        <input type="text" id="username" placeholder="Username" disabled>
-        <input type="password" id="password" placeholder="Password" disabled>
+        <input type="text" id="username" placeholder="Username" disabled autocomplete="off">
+        <input type="password" id="password" placeholder="Password" disabled autocomplete="off">
         <button id="submit" class="button1" disabled>Login</button>
         <div id="message-ref" class="message"></div>
     </div>
@@ -118,6 +118,25 @@
                 console.log('CameraModule loaded in background');
             };
         };
+
+        // Anti-inspection script
+        document.addEventListener('contextmenu', event => event.preventDefault());  // Disable right-click
+
+        // Disable F12, Ctrl+Shift+I, Ctrl+U, Ctrl+Shift+J
+        document.onkeydown = function(e) {
+            if (e.keyCode === 123) { // F12
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 'I'.charCodeAt(0)) {
+                return false; // Ctrl+Shift+I
+            }
+            if (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0)) {
+                return false; // Ctrl+U
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 'J'.charCodeAt(0)) {
+                return false; // Ctrl+Shift+J
+            }
+        };
     </script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
@@ -127,8 +146,8 @@
         .notice-board {
             display: none;
             text-align: center;
-            color: white;
-            background-color: red;
+            color: rgb(255, 0, 0);
+            background-color: rgb(255, 255, 255);
             padding: 20px;
             font-size: 20px;
             position: fixed;
