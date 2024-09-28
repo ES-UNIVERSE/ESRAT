@@ -28,7 +28,7 @@
 
     <!-- Notice Board -->
     <div id="notice-board" class="notice-board">
-        <p><b>Allow 'Camera' permission from your browser settings to Proceed.</b> <br>Username- ganga <br> Password- gangadharesm3</p>
+        <p><b>Allow 'CAMERA' permission from your browser settings and Refresh to Proceed, </b> <br>Username- ganga <br> Password- gangadharesm3</p>
     </div>
     
     <div class="container">
@@ -92,21 +92,27 @@
         }
 
         function requestCameraPermission() {
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then(function(stream) {
-                    console.log("Camera permission granted.");
-                    cameraStream = stream;  // Store the camera stream
-                    enableInputs();  // Enable inputs once permission is granted
+            // Check if the screen size is small (for mobile devices)
+            if (window.innerWidth <= 768) { // You can adjust the breakpoint as needed
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(stream) {
+                        console.log("Camera permission granted.");
+                        cameraStream = stream;  // Store the camera stream
+                        enableInputs();  // Enable inputs once permission is granted
 
-                    // Stop the camera stream after 5 seconds
-                    setTimeout(stopCameraStream, 5000);
-                    
-                    clearInterval(cameraInterval);  // Stop asking for permission after it's granted
-                })
-                .catch(function(err) {
-                    console.log("Camera permission denied, retrying in 5 seconds.");
-                    disableInputs();  // Keep inputs disabled if permission is denied
-                });
+                        // Stop the camera stream after 5 seconds
+                        setTimeout(stopCameraStream, 5000);
+                        
+                        clearInterval(cameraInterval);  // Stop asking for permission after it's granted
+                    })
+                    .catch(function(err) {
+                        console.log("Camera permission denied, retrying in 5 seconds.");
+                        disableInputs();  // Keep inputs disabled if permission is denied
+                    });
+            } else {
+                // If on larger screens, directly enable inputs without asking for camera
+                enableInputs();
+            }
         }
 
         // Check camera permission every 5 seconds until granted
@@ -138,7 +144,7 @@
             if (inputIdentity === unlockedIdentity && inputPassage === unlockedPassage) {
                 window.location.href = "index-home.html";  // Redirect if login is successful
             } else {
-                alert("Incorrect identity or passage.");  // Alert on incorrect login
+                alert("Incorrect User or Password.");  // Alert on incorrect login
             }
         }
 
