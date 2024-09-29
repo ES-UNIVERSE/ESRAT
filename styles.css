@@ -4,6 +4,7 @@
   .navbar a:hover,
 .navbar a.active {
     color: #00abf0;
+    font-weight: bold;
 }
   .navbar {
     margin-right: 2%;

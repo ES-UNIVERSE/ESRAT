@@ -3,6 +3,7 @@
   }
   .navbar a:hover,
 .navbar a.active {
+  font-weight: bold;
     color: #00abf0;
 }
   .navbar {
