@@ -426,7 +426,7 @@ h1 {
 .input-container {
     display: flex;
     align-items: center; /* Align items vertically centered */
-    margin-top: 70px; /* Increased margin for more spacing */
+    margin-top: 20px; /* Increased margin for more spacing */
     flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
 
