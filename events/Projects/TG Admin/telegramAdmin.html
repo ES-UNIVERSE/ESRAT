@@ -28,7 +28,7 @@
         <label class="file-icon" for="fileInput">➕ Files</label>
         <input type="file" id="fileInput" accept="*/*" multiple /> <!-- Added multiple attribute -->
         <div id="fileListContainer"></div> <!-- Container for displaying multiple files -->
-        <input type="text" id="messageInput" placeholder="🖋️ Write your messages . . . " />
+        <input type="text" id="messageInput" placeholder="Write your messages . . . " />
         <button id="sendMessageButton" class="button1">Send</button>
     </div>
     
@@ -85,7 +85,19 @@
             });
         });
 
+        // Add event listener to listen for Enter key on message input
+        document.getElementById('messageInput').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent the default action (like line break)
+                sendMessage(); // Call the function to send the message
+            }
+        });
+
         document.getElementById('sendMessageButton').addEventListener('click', function() {
+            sendMessage(); // Call the function to send the message when the button is clicked
+        });
+
+        function sendMessage() {
             const message = document.getElementById('messageInput').value;
 
             console.log('Message:', message); // Log the message input
@@ -140,7 +152,10 @@
             } else {
                 alert('Please enter a message or select a file to send.');
             }
-        });
+
+            // Clear the message input after sending
+            document.getElementById('messageInput').value = '';
+        }
     </script>
 </body>
 </html>
