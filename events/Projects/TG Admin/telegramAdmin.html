@@ -46,8 +46,8 @@
         fileInput.addEventListener('change', function() {
             const files = Array.from(fileInput.files);
 
-            selectedFiles = []; // Clear previously selected files
-            fileListContainer.innerHTML = ''; // Clear previous file display
+            selectedFiles = [];
+            fileListContainer.innerHTML = '';
 
             files.forEach((file, index) => {
                 if (file.size > maxFileSize) {
