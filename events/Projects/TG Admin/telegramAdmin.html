@@ -8,6 +8,34 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="icon" href="apks/favicon.ico" type="image/x-icon">
     <title>TG Admin</title>
+    <style>
+        /* Added styles for better visibility and the remove button */
+        .file-display-container {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            background-color: #f0f0f0;
+            padding: 5px;
+            border-radius: 5px;
+            max-width: 400px;
+        }
+
+        .file-name {
+            color: #333;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        .remove-file {
+            color: red;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .remove-file:hover {
+            color: darkred;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar"> 
@@ -26,7 +54,8 @@
 
     <div class="input-container">
         <label class="file-icon" for="fileInput">➕ Files</label>
-        <input type="file" id="fileInput" accept="*/*" />
+        <input type="file" id="fileInput" accept="*/*" multiple /> <!-- Added multiple attribute -->
+        <div id="fileListContainer"></div> <!-- Container for displaying multiple files -->
         <input type="text" id="messageInput" placeholder="🖋️ Write your messages . . . " />
         <button id="sendMessageButton" class="button1">Send</button>
     </div>
@@ -36,36 +65,89 @@
         const botToken = '7054740470:AAGZKSbCVt5BD-qHro1XyYpP7oJOKWH-VuA'; // Your bot token
         const chatId = '6302429987';  // Your chat ID
 
+        const fileInput = document.getElementById('fileInput');
+        const fileListContainer = document.getElementById('fileListContainer');
+        let selectedFiles = [];  // Array to keep track of selected files
+        
+        const maxFileSize = 7 * 1024 * 1024 * 1024; // 7 GB in bytes
+
+        fileInput.addEventListener('change', function() {
+            const files = Array.from(fileInput.files);
+
+            selectedFiles = []; // Clear previously selected files
+            fileListContainer.innerHTML = ''; // Clear previous file display
+
+            files.forEach((file, index) => {
+                if (file.size > maxFileSize) {
+                    alert(`The file "${file.name}" exceeds the 7 GB size limit and will not be uploaded.`);
+                    return; // Skip files larger than 7 GB
+                }
+
+                // Add valid file to selectedFiles array
+                selectedFiles.push(file);
+
+                // Create a div to display the file and the remove button
+                const fileDisplayContainer = document.createElement('div');
+                fileDisplayContainer.classList.add('file-display-container');
+
+                const fileNameSpan = document.createElement('span');
+                fileNameSpan.classList.add('file-name');
+                fileNameSpan.textContent = file.name;
+
+                const removeButton = document.createElement('span');
+                removeButton.classList.add('remove-file');
+                removeButton.textContent = '✖'; // Cross icon
+
+                // Remove individual file logic
+                removeButton.addEventListener('click', function() {
+                    selectedFiles.splice(index, 1);  // Remove the file from the array
+                    fileDisplayContainer.remove();  // Remove the display element
+                });
+
+                // Append file name and remove button to the display container
+                fileDisplayContainer.appendChild(fileNameSpan);
+                fileDisplayContainer.appendChild(removeButton);
+
+                // Append the display container to the file list container
+                fileListContainer.appendChild(fileDisplayContainer);
+            });
+        });
+
         document.getElementById('sendMessageButton').addEventListener('click', function() {
             const message = document.getElementById('messageInput').value;
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
 
             console.log('Message:', message); // Log the message input
-            console.log('File:', file); // Log the file input
+            console.log('Files:', selectedFiles); // Log the file inputs
 
-            if (file) {
-                // If a file is selected, send the file
-                const formData = new FormData();
-                formData.append('chat_id', chatId);
-                formData.append('document', file);
+            if (selectedFiles.length > 0) {
+                // If files are selected, send each file
+                selectedFiles.forEach(file => {
+                    const formData = new FormData();
+                    formData.append('chat_id', chatId);
+                    formData.append('document', file);
 
-                console.log('Sending file to Telegram...'); // Log when sending file
+                    console.log('Sending file to Telegram...', file.name); // Log when sending each file
 
-                fetch(`https://api.telegram.org/bot${botToken}/sendDocument`, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('File send response:', data); // Log the response
-                    if(data.ok) {
-                        alert('File sent successfully!');
-                    } else {
-                        alert('Error sending file: ' + data.description);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
+                    fetch(`https://api.telegram.org/bot${botToken}/sendDocument`, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('File send response:', data); // Log the response
+                        if (data.ok) {
+                            alert(`${file.name} sent successfully!`);
+                        } else {
+                            alert(`Error sending ${file.name}: ` + data.description);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+
+                // Clear the file display after sending
+                fileListContainer.innerHTML = '';
+                selectedFiles = []; // Clear selected files array
+
             } else if (message) {
                 // If no file is selected, send a text message
                 const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
@@ -76,7 +158,7 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log('Message send response:', data); // Log the response
-                    if(data.ok) {
+                    if (data.ok) {
                         alert('Message sent successfully!');
                     } else {
                         alert('Error sending message: ' + data.description);
