@@ -441,6 +441,7 @@ h1 {
 }
 
 #messageInput {
+    color: rgb(161, 161, 161);
     flex-grow: 1; /* Allow the input to take remaining space */
     padding: 10px; /* Add padding for better touch */
     border: 1px solid #ccc; /* Border for input field */
