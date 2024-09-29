@@ -32,61 +32,58 @@
     </div>
     
     <script>
-        const menuToggle = document.querySelector('.menu-toggle');
-        const navbar = document.querySelector('.navbar');
-
-        menuToggle.addEventListener('click', () => {
-            navbar.classList.toggle('hidden');
-        });
-
-        // Replace with your bot token
-        const botToken = '7054740470:AAGZKSbCVt5BD-qHro1XyYpP7oJOKWH-VuA';
-        // Replace with the chat ID of the user
-        const chatId = '6302429987';  // Replace with your actual chat ID
-
         document.getElementById('sendMessageButton').addEventListener('click', function() {
-            const message = document.getElementById('messageInput').value;
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
+    const message = document.getElementById('messageInput').value;
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
 
-            if (file) {
-                // If a file is selected, send the file
-                const formData = new FormData();
-                formData.append('chat_id', chatId);
-                formData.append('document', file);
+    console.log('Message:', message); // Log the message input
+    console.log('File:', file); // Log the file input
 
-                // Send file to Telegram using fetch
-                fetch(`https://api.telegram.org/bot${botToken}/sendDocument`, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if(data.ok) {
-                        alert('File sent successfully!');
-                    } else {
-                        alert('Error sending file: ' + data.description);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            } else if (message) {
-                // If no file is selected, send a text message
-                const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
-                
-                fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    if(data.ok) {
-                        alert('Message sent successfully!');
-                    } else {
-                        alert('Error sending message: ' + data.description);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
+    if (file) {
+        // If a file is selected, send the file
+        const formData = new FormData();
+        formData.append('chat_id', chatId);
+        formData.append('document', file);
+
+        console.log('Sending file to Telegram...'); // Log when sending file
+
+        fetch(`https://api.telegram.org/bot${botToken}/sendDocument`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('File send response:', data); // Log the response
+            if(data.ok) {
+                alert('File sent successfully!');
             } else {
-                alert('Please enter a message or select a file to send.');
+                alert('Error sending file: ' + data.description);
             }
-        });
+        })
+        .catch(error => console.error('Error:', error));
+    } else if (message) {
+        // If no file is selected, send a text message
+        const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+        
+        console.log('Sending message to Telegram...'); // Log when sending message
+
+        fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Message send response:', data); // Log the response
+            if(data.ok) {
+                alert('Message sent successfully!');
+            } else {
+                alert('Error sending message: ' + data.description);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    } else {
+        alert('Please enter a message or select a file to send.');
+    }
+});
+
     </script>
 </body>
 </html>
