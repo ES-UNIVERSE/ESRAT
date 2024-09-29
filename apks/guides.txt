@@ -14,6 +14,7 @@
 
 7- [Instagram with Camera] (Updated on 3.09.24 Tue) is the just the [Instagram] payload with camera snapping feature. It captures the selfie and uploads to the Firebase storage. You can have access to them.
 
+8- [What-Insta-Gnaga] (Uploaded- 29 Sept 2024 Sun) This is a payload for spying WhatsApp, Instagram and all the mobile notifications or OTPs, this is also capable of reading screen texts. All the datas will be sent to Telegram bot or Discord using API Token or Hooking URL. Enjoy 
 
 
 Feel free to ask about the issues >
