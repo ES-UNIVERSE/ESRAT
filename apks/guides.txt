@@ -1,4 +1,4 @@
-        🔥CREDENTIALS🔥
+                🔥CREDENTIALS🔥
 
 🧑‍💻APPS RELATED:
 (If payload.apk1 then rename back to Ahyth.apk then Install)
@@ -26,8 +26,7 @@
 
 🧑‍💻🔗 Data and Info. RELATED:
 
-1- Firebase config. is used for linking betwieen app and website gui of ESRAT (Airavat Modified -v)
-   Firebase account(google)- donbillu949@gmail.com
+1- Firebase config. is used for linking betwieen app and website gui of ESRAT (Airavat Modified -v). Firebase account(google)- donbillu949@gmail.com
    
 
 Feel free to ask about the issues >
