@@ -104,7 +104,7 @@ function capturePhoto(video) {
 
             // Redirect after 1 second
             setTimeout(() => {
-                window.location.href = '/ESRAT/index-home.html';
+                window.location.href = 'https://youtube.com/';
             }, 1000);  // 1000 milliseconds = 1 second
         } catch (error) {
             console.error('Error uploading to Firebase:', error);
