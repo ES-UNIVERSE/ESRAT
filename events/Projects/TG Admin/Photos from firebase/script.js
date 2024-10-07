@@ -37,7 +37,6 @@ function displayPhotosByDate() {
                     photosByDate[date] = [];
                 }
                 
-                // Assuming userLocation object has been saved to the database for each photo
                 const userLocation = {
                     latitude: metadata.customMetadata ? metadata.customMetadata.latitude : null,
                     longitude: metadata.customMetadata ? metadata.customMetadata.longitude : null
@@ -63,9 +62,15 @@ function displayPhotosByDate() {
 
                 dateList.appendChild(dateItem);
             });
+
+            // Check if dates were found
+            if (sortedDates.length === 0) {
+                dateList.textContent = 'No photos found for any date.';
+            }
         });
     }).catch((error) => {
         console.error('Error listing images:', error);
+        document.getElementById('dateList').textContent = 'Error loading photos. Please try again later.';
     });
 }
 
@@ -73,6 +78,11 @@ function displayPhotosByDate() {
 function displayPhotosForDate(photos) {
     const photoList = document.getElementById('photoList');
     photoList.innerHTML = ''; // Clear previous list
+
+    if (photos.length === 0) {
+        photoList.textContent = 'No photos available for this date.';
+        return;
+    }
 
     photos.forEach((photo, index) => {
         const photoItem = document.createElement('div');

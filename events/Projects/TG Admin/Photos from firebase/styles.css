@@ -5,76 +5,160 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Clean and modern font */
+    background-color: #f4f6f8; /* Soft light background for a calm feel */
+    color: #333; /* Dark text for contrast */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
 header {
-    background-color: #6a11cb;
+    background: linear-gradient(135deg, #ff6f61, #ff7b25); /* Warm gradient colors */
     color: white;
-    padding: 15px;
+    padding: 20px;
     text-align: center;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 2.5em; /* Responsive font size */
+    font-weight: bold;
+    margin: 0; 
+    letter-spacing: 1px; 
+    text-transform: uppercase; 
+    padding: 10px;
 }
 
 main {
     flex: 1;
-    padding: 20px;
+    padding: 20px; 
+    display: flex;
+    justify-content: center; 
 }
 
+.container {
+    display: flex; 
+    gap: 30px; 
+    flex-wrap: wrap; 
+    justify-content: center; /* Centering the container items */
+}
+
+/* Date List Styling */
 .date-list {
-    margin-bottom: 20px;
+    width: 100%;
+    max-width: 350px; 
+    background-color: #ffffff; 
+    padding: 20px; 
+    border-radius: 15px; 
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15); 
+    transition: transform 0.2s; 
+}
+
+.date-list:hover {
+    transform: scale(1.02); 
 }
 
 .date-item {
-    cursor: pointer;
-    color: #6a11cb;
-    text-decoration: underline;
-    font-weight: 700;
-    margin: 5px 0;
-    transition: color 0.3s;
-    padding: 5px;
-    border-radius: 5px;
-    background-color: #f0f4f8; /* Light background */
+    cursor: pointer; 
+    color: #ff6f61; 
+    font-weight: 600; 
+    margin: 10px 0; 
+    padding: 12px; 
+    border-radius: 10px; 
+    background-color: #f9f9f9; 
+    transition: background-color 0.3s; 
 }
 
 .date-item:hover {
-    color: #2575fc;
-    background-color: rgba(106, 17, 203, 0.1); /* Light hover effect */
+    background-color: rgba(255, 111, 97, 0.1); 
 }
 
+/* Photo List Styling */
 .photo-list {
-    margin-bottom: 20px;
+    flex: 1; 
+    padding: 20px; 
+    border-radius: 15px; 
+    background-color: #ffffff; 
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15); 
 }
 
 .photo-item {
-    cursor: pointer;
-    color: #6a11cb;
-    text-decoration: underline;
-    font-weight: 700;
-    margin: 5px 0;
-    transition: color 0.3s;
-    padding: 5px;
-    border-radius: 5px;
-    background-color: #f0f4f8; /* Light background */
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 15px; 
+    background-color: #f0f4f8; 
+    border: 1px solid #ddd; 
+    border-radius: 10px; 
+    margin: 10px 0; 
+    transition: background-color 0.3s; 
 }
 
 .photo-item:hover {
-    color: #2575fc;
-    background-color: rgba(106, 17, 203, 0.1); /* Light hover effect */
+    background-color: rgba(255, 111, 97, 0.1); 
+}
+
+.view-button {
+    background-color: #ff7b25; 
+    color: white; 
+    border: none; 
+    padding: 10px 15px; 
+    border-radius: 10px; 
+    cursor: pointer; 
+    transition: background-color 0.3s, transform 0.2s; 
+}
+
+.view-button:hover {
+    background-color: #ff6f61; 
+    transform: translateY(-2px); 
+}
+
+img {
+    max-width: 100%; 
+    height: auto; 
+    border-radius: 10px; 
+    margin-top: 10px; 
 }
 
 footer {
-    background-color: #6a11cb;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-    position: relative;
+    background-color: #ff6f61; 
+    color: white; 
+    text-align: center; 
+    padding: 15px 0; 
+    box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1); 
 }
 
 footer p {
-    margin: 0;
+    margin: 0; 
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+    header, footer {
+        padding: 15px; 
+    }
+
+    h1 {
+        font-size: 2em; /* Responsive h1 size */
+    }
+
+    main {
+        padding: 15px; 
+        flex-direction: column; 
+        align-items: center; 
+    }
+
+    .date-list {
+        width: 100%; 
+        max-width: none; 
+    }
+
+    .container {
+        flex-direction: column; 
+    }
+
+    .date-item, .photo-item {
+        font-size: 0.9em; /* Slightly smaller text on small devices */
+    }
 }

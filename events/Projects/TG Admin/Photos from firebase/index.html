@@ -3,32 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photos Gallery</title>
+    <title>Photo Gallery</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap">
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage-compat.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Photo Gallery</h1>
-        <p>Your memories, beautifully captured.</p>
-    </header>
+    <h1>Photo Gallery</h1>
+    <h2>Dates</h2>
+    <div id="dateList"></div> <!-- List of dates will be shown here -->
     
-    <main>
-        <div class="date-list" id="dateList">
-            <!-- Date list will be dynamically populated here -->
-        </div>
+    <h2>Photos</h2>
+    <div id="photoList"></div> <!-- List of photos for the selected date will be shown here -->
 
-        <div class="photo-list" id="photoList">
-            <!-- Photo list will be dynamically populated here when a date is clicked -->
-        </div>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 Photo Gallery. All rights reserved.</p>
-    </footer>
-
-    <script src="script.js"></script>
+    <script src="script.js"></script> <!-- Include your script file -->
 </body>
 </html>
