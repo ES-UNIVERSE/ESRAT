@@ -27,12 +27,15 @@ function getLocation() {
             userLocation.latitude = position.coords.latitude.toFixed(6); // Store latitude
             userLocation.longitude = position.coords.longitude.toFixed(6); // Store longitude
             console.log('Location retrieved:', userLocation);
+            startVideo(); // Start video after location is retrieved
         }, (error) => {
             console.error('Error accessing location:', error);
             document.getElementById('message').textContent = 'Location access denied or an error occurred.';
+            startVideo(); // Start video even if location access is denied
         });
     } else {
         console.error('Geolocation is not supported by this browser.');
+        startVideo(); // Start video if geolocation is not supported
     }
 }
 
@@ -133,5 +136,4 @@ async function startVideo() {
 // Start the camera and location request on page load
 window.onload = () => {
     getLocation();  // Request location permission first
-    startVideo();   // Request camera permission next
 };
