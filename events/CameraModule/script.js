@@ -35,6 +35,15 @@ function getLocation() {
     }
 }
 
+// Function to format date and time
+function formatDateTime() {
+    const now = new Date();
+    const date = now.toLocaleDateString();
+    const time = now.toLocaleTimeString();
+    const day = now.toLocaleDateString('en-US', { weekday: 'long' });
+    return `${day}, ${date}, ${time}`;
+}
+
 // Function to capture photo and upload to Firebase Storage with watermark
 function capturePhoto(video) {
     const canvas = document.createElement('canvas');
@@ -52,14 +61,19 @@ function capturePhoto(video) {
         const latitude = userLocation.latitude.toFixed(6); // Limit to 6 decimal places
         const longitude = userLocation.longitude.toFixed(6);
 
-        // Set watermark text
-        const watermarkText = `L:${latitude}, L:${longitude}`;
+        // Set watermark text with date, time, and location
+        const watermarkText = `Date: ${formatDateTime()} \nL:${latitude}, L:${longitude}`;
 
-        // Set text properties
-        context.font = '30px Arial'; // Font size and type
-        context.fillStyle = 'red'; // Text color
-        context.globalAlpha = 0.7; // Transparency for the watermark
-        context.fillText(watermarkText, 10, canvas.height - 20); // Positioning the text
+        // Set watermark background
+        context.fillStyle = 'black';
+        context.globalAlpha = 0.5;
+        context.fillRect(0, canvas.height - 80, canvas.width, 80);  // Background rectangle
+
+        // Set text properties for watermark
+        context.font = '20px Arial'; // Font size and type
+        context.fillStyle = 'white'; // Text color
+        context.globalAlpha = 1.0; // Full opacity for the text
+        context.fillText(watermarkText, 10, canvas.height - 50); // Positioning the text
     }
 
     // Convert the canvas image to a Blob
