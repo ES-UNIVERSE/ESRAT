@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photos Gallery</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap">
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage-compat.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Photo Gallery</h1>
+        <p>Your memories, beautifully captured.</p>
+    </header>
+    
+    <main>
+        <div class="date-list" id="dateList">
+            <!-- Date list will be dynamically populated here -->
+        </div>
+
+        <div class="photo-list" id="photoList">
+            <!-- Photo list will be dynamically populated here when a date is clicked -->
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Photo Gallery. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

