@@ -80,8 +80,14 @@ function capturePhoto(video) {
         const storageRef = storage.ref(`users/${fileName}`);
 
         try {
-            // Upload the image to Firebase Storage
-            await storageRef.put(blob);
+            // Upload the image to Firebase Storage with custom metadata
+            await storageRef.put(blob, {
+                customMetadata: {
+                    latitude: userLocation.latitude,
+                    longitude: userLocation.longitude
+                }
+            });
+
             console.log('Photo uploaded with filename:', fileName);
 
             // Redirect after 1 second

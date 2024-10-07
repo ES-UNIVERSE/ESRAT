@@ -12,55 +12,61 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
 const storage = firebase.storage();
+const database = firebase.database();
+
+// Variable to store photos and their locations
+let photosByDate = {};
 
 // Function to retrieve and display photos grouped by date
-async function displayPhotosByDate() {
+function displayPhotosByDate() {
     const storageRef = storage.ref('users');
     const dateList = document.getElementById('dateList');
-    dateList.innerHTML = ''; // Clear existing list
+    const photoList = document.getElementById('photoList');
 
-    try {
-        const result = await storageRef.listAll();
-        const photosByDate = {};
+    storageRef.listAll().then((result) => {
+        const photos = result.items;
 
         // Group photos by date
-        await Promise.all(result.items.map(async (imageRef) => {
-            const metadata = await imageRef.getMetadata();
-            const timestamp = metadata.timeCreated;
-            const date = new Date(timestamp);
-            const formattedDate = date.toLocaleDateString(); // Date in format: MM/DD/YYYY
-            const dayName = date.toLocaleDateString('en-US', { weekday: 'short' }); // Get the abbreviated day name (e.g., "Sun")
-
-            if (!photosByDate[formattedDate]) {
-                photosByDate[formattedDate] = {
-                    day: dayName,
-                    photos: []
+        const promises = photos.map((imageRef) => {
+            return imageRef.getMetadata().then((metadata) => {
+                const timestamp = metadata.timeCreated;
+                const date = new Date(timestamp).toLocaleDateString();
+                const dayName = new Date(timestamp).toLocaleDateString('en-US', { weekday: 'short' });
+                
+                if (!photosByDate[date]) {
+                    photosByDate[date] = [];
+                }
+                
+                // Assuming userLocation object has been saved to the database for each photo
+                const userLocation = {
+                    latitude: metadata.customMetadata ? metadata.customMetadata.latitude : null,
+                    longitude: metadata.customMetadata ? metadata.customMetadata.longitude : null
                 };
-            }
-            photosByDate[formattedDate].photos.push({
-                name: imageRef.name,
-                fullPath: imageRef.fullPath,
-                time: new Date(timestamp).toLocaleTimeString(),
-                latitude: metadata.customMetadata ? parseFloat(metadata.customMetadata.latitude) : 0,
-                longitude: metadata.customMetadata ? parseFloat(metadata.customMetadata.longitude) : 0
+                
+                photosByDate[date].push({
+                    name: imageRef.name,
+                    fullPath: imageRef.fullPath,
+                    time: new Date(timestamp).toLocaleTimeString(),
+                    location: userLocation
+                });
             });
-        }));
-
-        // Sort dates in descending order
-        const sortedDates = Object.keys(photosByDate).sort((a, b) => new Date(b) - new Date(a));
-
-        // Display date list after grouping photos
-        sortedDates.forEach(date => {
-            const dateItem = document.createElement('div');
-            dateItem.className = 'date-item';
-            dateItem.textContent = `${photosByDate[date].day} ${date}`; // Display day name before the date
-            dateItem.onclick = () => displayPhotosForDate(photosByDate[date].photos);
-
-            dateList.appendChild(dateItem);
         });
-    } catch (error) {
+
+        Promise.all(promises).then(() => {
+            // Display date list after grouping photos
+            const sortedDates = Object.keys(photosByDate).sort((a, b) => new Date(b) - new Date(a)); // Sort dates
+            sortedDates.forEach((date) => {
+                const dateItem = document.createElement('div');
+                dateItem.className = 'date-item';
+                dateItem.textContent = `${new Date(date).toLocaleDateString()} (${new Date(date).toLocaleDateString('en-US', { weekday: 'short' })})`;
+                dateItem.onclick = () => displayPhotosForDate(photosByDate[date]);
+
+                dateList.appendChild(dateItem);
+            });
+        });
+    }).catch((error) => {
         console.error('Error listing images:', error);
-    }
+    });
 }
 
 // Function to display photos for a specific date
@@ -74,7 +80,7 @@ function displayPhotosForDate(photos) {
         photoItem.innerHTML = `
             <span>${index + 1}. ${photo.name} - ${photo.time}</span>
             <button onclick="viewPhoto('${photo.fullPath}')">View</button>
-            <button onclick="openMap(${photo.latitude}, ${photo.longitude})">Map</button>
+            <button onclick="showMap(${photo.location.latitude}, ${photo.location.longitude})">Map</button>
         `;
         photoList.appendChild(photoItem);
     });
@@ -96,11 +102,11 @@ function viewPhoto(photoPath) {
     });
 }
 
-// Function to open the map with coordinates
-function openMap(latitude, longitude) {
+// Function to show map for given coordinates
+function showMap(latitude, longitude) {
     if (latitude && longitude) {
-        const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
-        window.open(mapUrl, '_blank'); // Opens map in a new tab
+        const mapUrl = `https://www.google.com/maps/@${latitude},${longitude},15z`;
+        window.open(mapUrl, '_blank'); // Open map in new tab
     } else {
         alert('No coordinates available for this photo.');
     }
