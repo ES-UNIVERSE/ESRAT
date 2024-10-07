@@ -132,8 +132,6 @@ function displayPhotosByDate() {
                             latitude: data.latitude,
                             longitude: data.longitude
                         });
-                    } else {
-                        console.error('No metadata found for', imageRef.name);
                     }
                 }).catch((error) => {
                     console.error('Error retrieving metadata:', error);
@@ -170,7 +168,7 @@ function displayPhotosForDate(photos) {
         photoItem.innerHTML = `
             <span>${index + 1}. ${photo.name} - ${photo.time}</span>
             <button onclick="viewPhoto('${photo.fullPath}')">View</button>
-            <button onclick="showMap('${photo.latitude}', '${photo.longitude}')">Map</button>
+            <button onclick="showMap(${photo.latitude}, ${photo.longitude})">Map</button>
         `;
         photoList.appendChild(photoItem);
     });
@@ -202,8 +200,5 @@ function showMap(latitude, longitude) {
     }
 }
 
-// Start displaying photos by date on page load
-window.onload = () => {
-    getLocation(); // Request location permission first
-    displayPhotosByDate(); // Display photos by date
-};
+// Call the display function on page load
+window.onload = displayPhotosByDate;
