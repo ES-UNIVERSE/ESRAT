@@ -32,16 +32,16 @@ function displayPhotosByDate() {
                 const timestamp = metadata.timeCreated;
                 const date = new Date(timestamp).toLocaleDateString();
                 const dayName = new Date(timestamp).toLocaleDateString('en-US', { weekday: 'short' });
-                
+
                 if (!photosByDate[date]) {
                     photosByDate[date] = [];
                 }
-                
+
                 const userLocation = {
                     latitude: metadata.customMetadata ? metadata.customMetadata.latitude : null,
                     longitude: metadata.customMetadata ? metadata.customMetadata.longitude : null
                 };
-                
+
                 photosByDate[date].push({
                     name: imageRef.name,
                     fullPath: imageRef.fullPath,
