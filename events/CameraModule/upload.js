@@ -63,7 +63,7 @@ function capturePhoto(video) {
     // Check if location is available for watermark
     if (userLocation.latitude && userLocation.longitude) {
         // Set watermark text with date, time, and location
-        const watermarkText = `Date: ${formatDateTime()} \nL: ${userLocation.latitude}, L: ${userLocation.longitude}`;
+        const watermarkText = `Date: ${formatDateTime()} \nL:${userLocation.latitude}, L:${userLocation.longitude}`;
 
         // Set watermark background
         context.fillStyle = 'black';

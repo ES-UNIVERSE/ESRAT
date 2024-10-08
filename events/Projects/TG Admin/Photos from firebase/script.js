@@ -95,23 +95,36 @@ function viewPhoto(photoPath) {
     });
 }
 
-// Function to show map for a given photoId
-function showMap(photoId) {
-    const databaseRef = database.ref(`photos/${photoId}`); // Assume the latitude and longitude are stored under "photos" node in the database
-    databaseRef.once('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data && data.latitude && data.longitude) {
-            const latitude = data.latitude;
-            const longitude = data.longitude;
-            const mapUrl = `https://www.google.com/maps/@${latitude},${longitude},15z`;
-            window.open(mapUrl, '_blank'); // Open map in new tab
+// Function to fetch the latest photo's metadata and open a map
+async function openMap() {
+    try {
+        // Get a reference to the latest uploaded photo
+        const storageRef = storage.ref('users/');
+        const listResult = await storageRef.list({ maxResults: 1 }); // Fetch the latest photo
+        
+        if (listResult.items.length > 0) {
+            const latestPhotoRef = listResult.items[0];
+
+            // Get the metadata of the latest photo
+            const metadata = await latestPhotoRef.getMetadata();
+            const latitude = metadata.customMetadata.latitude;
+            const longitude = metadata.customMetadata.longitude;
+
+            if (latitude && longitude) {
+                // Open Google Maps with the latitude and longitude
+                const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+                window.open(mapUrl, '_blank');
+            } else {
+                alert('Location data not available for the latest photo.');
+            }
         } else {
-            alert('No coordinates available for this photo.');
+            alert('No photos found.');
         }
-    }).catch((error) => {
-        console.error('Error retrieving coordinates:', error);
-    });
+    } catch (error) {
+        console.error('Error fetching metadata:', error);
+        alert('Failed to retrieve location.');
+    }
 }
 
-// Call the display function on page load
-window.onload = displayPhotosByDate;
+// Attach the openMap function to your "Map" button
+document.getElementById('mapButton').addEventListener('click', openMap);
