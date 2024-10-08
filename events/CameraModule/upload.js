@@ -59,14 +59,16 @@ function savePhotoMetadata(fileName, downloadUrl) {
     };
 
     // Push the metadata to the Firebase Realtime Database
-    const databaseRef = database.ref('photos');
-    const newPhotoRef = databaseRef.push();  // Create a new entry for each photo
+    const databaseRef = database.ref('photos'); // Root 'photos' node in the database
+    const newPhotoRef = databaseRef.push();  // Create a new unique entry for each photo
+    
+    // Write the data to Firebase
     newPhotoRef.set(photoMetadata)
         .then(() => {
             console.log('Photo metadata saved successfully:', photoMetadata);
         })
         .catch((error) => {
-            console.error('Error saving photo metadata:', error);
+            console.error('Error saving photo metadata to Firebase:', error);
         });
 }
 
