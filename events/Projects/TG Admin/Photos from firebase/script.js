@@ -17,6 +17,19 @@ const database = firebase.database();
 // Variable to store photos and their locations
 let photosByDate = {};
 
+// Function to format date and return day name
+function formatDateWithDay(dateString) {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+        return { dateFormatted: "Invalid Date", day: "Invalid Date" };
+    }
+    const options = { weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric' };
+    return {
+        dateFormatted: date.toLocaleDateString(undefined, options),
+        day: date.toLocaleDateString('en-US', { weekday: 'short' })
+    };
+}
+
 // Function to retrieve and display photos grouped by date
 function displayPhotosByDate() {
     const storageRef = storage.ref('users');
@@ -30,23 +43,24 @@ function displayPhotosByDate() {
         const promises = photos.map((imageRef) => {
             return imageRef.getMetadata().then((metadata) => {
                 const timestamp = metadata.timeCreated;
-                const date = new Date(timestamp).toLocaleDateString();
-                const dayName = new Date(timestamp).toLocaleDateString('en-US', { weekday: 'short' });
-                
+                const formattedDate = formatDateWithDay(timestamp);
+                const date = formattedDate.dateFormatted;
+
                 if (!photosByDate[date]) {
                     photosByDate[date] = [];
                 }
-                
+
                 const userLocation = {
                     latitude: metadata.customMetadata ? metadata.customMetadata.latitude : null,
                     longitude: metadata.customMetadata ? metadata.customMetadata.longitude : null
                 };
-                
+
                 photosByDate[date].push({
                     name: imageRef.name,
                     fullPath: imageRef.fullPath,
                     time: new Date(timestamp).toLocaleTimeString(),
-                    location: userLocation
+                    location: userLocation,
+                    day: formattedDate.day
                 });
             });
         });
@@ -57,7 +71,7 @@ function displayPhotosByDate() {
             sortedDates.forEach((date) => {
                 const dateItem = document.createElement('div');
                 dateItem.className = 'date-item';
-                dateItem.textContent = `${new Date(date).toLocaleDateString()} (${new Date(date).toLocaleDateString('en-US', { weekday: 'short' })})`;
+                dateItem.textContent = `${date} (${photosByDate[date][0].day})`; // Correctly displaying day
                 dateItem.onclick = () => displayPhotosForDate(photosByDate[date]);
 
                 dateList.appendChild(dateItem);
@@ -114,10 +128,8 @@ function viewPhoto(photoPath) {
 
 // Function to show map for given coordinates
 function showMap(latitude, longitude) {
-    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`); // Log coordinates
     if (latitude && longitude) {
-        // Use the 'q' parameter to pin the coordinates
-        const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+        const mapUrl = `https://www.google.com/maps/@${latitude},${longitude},15z`;
         window.open(mapUrl, '_blank'); // Open map in new tab
     } else {
         alert('No coordinates available for this photo.');
