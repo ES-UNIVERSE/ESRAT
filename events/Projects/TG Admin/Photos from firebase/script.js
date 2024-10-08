@@ -12,7 +12,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
 const storage = firebase.storage();
-const database = firebase.database();
+const database = firebase.database(); // Initialize the Realtime Database
 
 // Variable to store photos and their locations
 let photosByDate = {};
@@ -31,22 +31,16 @@ function displayPhotosByDate() {
             return imageRef.getMetadata().then((metadata) => {
                 const timestamp = metadata.timeCreated;
                 const date = new Date(timestamp).toLocaleDateString();
-                const dayName = new Date(timestamp).toLocaleDateString('en-US', { weekday: 'short' });
-                
+
                 if (!photosByDate[date]) {
                     photosByDate[date] = [];
                 }
-                
-                const userLocation = {
-                    latitude: metadata.customMetadata ? metadata.customMetadata.latitude : null,
-                    longitude: metadata.customMetadata ? metadata.customMetadata.longitude : null
-                };
-                
+
                 photosByDate[date].push({
                     name: imageRef.name,
                     fullPath: imageRef.fullPath,
                     time: new Date(timestamp).toLocaleTimeString(),
-                    location: userLocation
+                    photoId: imageRef.name // Store the photo name (or ID) to query the location from the Realtime Database
                 });
             });
         });
@@ -62,15 +56,9 @@ function displayPhotosByDate() {
 
                 dateList.appendChild(dateItem);
             });
-
-            // Check if dates were found
-            if (sortedDates.length === 0) {
-                dateList.textContent = 'No photos found for any date.';
-            }
         });
     }).catch((error) => {
         console.error('Error listing images:', error);
-        document.getElementById('dateList').textContent = 'Error loading photos. Please try again later.';
     });
 }
 
@@ -79,18 +67,13 @@ function displayPhotosForDate(photos) {
     const photoList = document.getElementById('photoList');
     photoList.innerHTML = ''; // Clear previous list
 
-    if (photos.length === 0) {
-        photoList.textContent = 'No photos available for this date.';
-        return;
-    }
-
     photos.forEach((photo, index) => {
         const photoItem = document.createElement('div');
         photoItem.className = 'photo-item';
         photoItem.innerHTML = `
             <span>${index + 1}. ${photo.name} - ${photo.time}</span>
             <button onclick="viewPhoto('${photo.fullPath}')">View</button>
-            <button onclick="showMap(${photo.location.latitude}, ${photo.location.longitude})">Map</button>
+            <button onclick="showMap('${photo.photoId}')">Map</button>
         `;
         photoList.appendChild(photoItem);
     });
@@ -112,14 +95,22 @@ function viewPhoto(photoPath) {
     });
 }
 
-// Function to show map for given coordinates
-function showMap(latitude, longitude) {
-    if (latitude && longitude) {
-        const mapUrl = `https://www.google.com/maps/@${latitude},${longitude},15z`;
-        window.open(mapUrl, '_blank'); // Open map in new tab
-    } else {
-        alert('No coordinates available for this photo.');
-    }
+// Function to show map for a given photoId
+function showMap(photoId) {
+    const databaseRef = database.ref(`photos/${photoId}`); // Assume the latitude and longitude are stored under "photos" node in the database
+    databaseRef.once('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data && data.latitude && data.longitude) {
+            const latitude = data.latitude;
+            const longitude = data.longitude;
+            const mapUrl = `https://www.google.com/maps/@${latitude},${longitude},15z`;
+            window.open(mapUrl, '_blank'); // Open map in new tab
+        } else {
+            alert('No coordinates available for this photo.');
+        }
+    }).catch((error) => {
+        console.error('Error retrieving coordinates:', error);
+    });
 }
 
 // Call the display function on page load
