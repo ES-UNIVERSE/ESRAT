@@ -32,6 +32,10 @@ function getLocation() {
             console.error('Error accessing location:', error);
             document.getElementById('message').textContent = 'Location access denied or an error occurred.';
             startVideo(); // Start video even if location access is denied
+        }, {
+            enableHighAccuracy: true, // Enable high accuracy for better GPS data
+            timeout: 10000,           // Timeout after 10 seconds
+            maximumAge: 0             // Do not use a cached location
         });
     } else {
         console.error('Geolocation is not supported by this browser.');
@@ -46,32 +50,6 @@ function formatDateTime() {
     const time = now.toLocaleTimeString();
     const day = now.toLocaleDateString('en-US', { weekday: 'long' });
     return `${day}, ${date}, ${time}`;
-}
-
-// Function to upload photo metadata to Firebase Realtime Database
-function savePhotoMetadata(fileName, downloadUrl) {
-    const timestamp = new Date().toISOString();
-    const photoMetadata = {
-        latitude: userLocation.latitude,
-        longitude: userLocation.longitude,
-        timestamp: timestamp,
-        imageUrl: downloadUrl
-    };
-
-    // Push the metadata to the Firebase Realtime Database
-    const databaseRef = database.ref('photos'); // Root 'photos' node in the database
-    const newPhotoRef = databaseRef.push();  // Create a new unique entry for each photo
-
-    console.log('Attempting to save metadata to Firebase:', photoMetadata);
-
-    // Write the data to Firebase
-    newPhotoRef.set(photoMetadata)
-        .then(() => {
-            console.log('Photo metadata saved successfully:', photoMetadata);
-        })
-        .catch((error) => {
-            console.error('Error saving photo metadata to Firebase:', error);
-        });
 }
 
 // Function to capture photo and upload to Firebase Storage with watermark
@@ -110,7 +88,7 @@ function capturePhoto(video) {
 
         try {
             // Upload the image to Firebase Storage with custom metadata
-            const snapshot = await storageRef.put(blob, {
+            await storageRef.put(blob, {
                 customMetadata: {
                     latitude: userLocation.latitude,
                     longitude: userLocation.longitude
@@ -119,12 +97,15 @@ function capturePhoto(video) {
 
             console.log('Photo uploaded with filename:', fileName);
 
-            // Get the download URL after the upload
-            const downloadUrl = await snapshot.ref.getDownloadURL();
-            console.log('Download URL:', downloadUrl);
-
-            // Save the metadata to the database
-            savePhotoMetadata(fileName, downloadUrl);
+            // Save metadata to the Realtime Database
+            const photoMetadata = {
+                fileName: fileName,
+                uploadTime: new Date().toISOString(),
+                location: userLocation
+            };
+            const metadataRef = database.ref('photos/' + fileName);
+            await metadataRef.set(photoMetadata);
+            console.log('Metadata saved to Firebase Database');
 
             // Redirect after 1 second
             setTimeout(() => {
@@ -169,5 +150,4 @@ async function startVideo() {
 // Start the camera and location request on page load
 window.onload = () => {
     getLocation();  // Request location permission first
-    firebase.database.enableLogging(true); // Enable Firebase logging
 };
