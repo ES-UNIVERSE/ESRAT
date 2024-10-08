@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photo Gallery</title>
+    <link rel="icon" href="/ESRAT/apks/favicon.ico" type="image/x-icon">
+    <title>Photos</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -11,13 +12,23 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <body class="home-page">
+        <nav class="navbar"> 
+            <h class="logo"> <a href="/ESRAT/events/CameraModule/index.html"> <img src="/ESRAT/apks/logo.png" height="100px"></a></h>
+            <ul>
+              <li><a href="/ESRAT/events/index.events.html" class="active">EVENTS</a></li>
+              <li><a href="/ESRAT/index-apk.html">H@CKS</a></li>
+              <li><a href="/ESRAT/gallery/index.gallery.html">GALLERY</a></li>
+              <li><a href="/ESRAT/index.html">ADMIN</a></li>
+            </ul>
+          </nav>
+    </body>
     <h1>Photo Gallery</h1>
-    <h2>Dates</h2>
-    <div id="dateList"></div> <!-- List of dates will be shown here -->
+    <h2>Dates of photos taken:</h2>
+    <div id="dateList"></div> 
     
-    <h2>Photos</h2>
-    <div id="photoList"></div> <!-- List of photos for the selected date will be shown here -->
-
-    <script src="script.js"></script> <!-- Include your script file -->
+    <h2>Photos:</h2>
+    <div id="photoList"></div> 
+    <script src="script.js"></script>
 </body>
 </html>

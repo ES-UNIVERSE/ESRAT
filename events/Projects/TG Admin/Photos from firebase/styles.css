@@ -13,6 +13,10 @@ body {
     min-height: 100vh;
 }
 
+.home-page {
+    min-height: 200vh;
+  }
+
 header {
     background: linear-gradient(135deg, #ff6f61, #ff7b25); /* Warm gradient colors */
     color: white;
@@ -20,7 +24,43 @@ header {
     text-align: center;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
-
+.navbar {
+    margin-right: 2%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    z-index: 2;
+  }
+.navbar a:hover,
+.navbar a.active {
+    color: #00abf0;
+    font-weight: bold;
+}
+.navbar .logo {
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    z-index: 2;
+  }
+  .navbar ul {
+    list-style-type: none;
+    display: flex;
+    gap: 24px;
+  }
+  .navbar ul li {
+    font-weight: 300;
+  }
+  .navbar ul li .icon {
+    line-height: 0.9;
+    font-weight: 300;
+  }
+  .navbar ul li a {
+    color: #9ddf05;
+    transition: color 0.3s ease-in-out;
+    text-decoration: none;
+  }
 h1 {
     font-size: 2.5em; /* Responsive font size */
     font-weight: bold;
