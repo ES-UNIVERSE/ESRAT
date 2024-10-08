@@ -48,6 +48,28 @@ function formatDateTime() {
     return `${day}, ${date}, ${time}`;
 }
 
+// Function to upload photo metadata to Firebase Realtime Database
+function savePhotoMetadata(fileName, downloadUrl) {
+    const timestamp = new Date().toISOString();
+    const photoMetadata = {
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude,
+        timestamp: timestamp,
+        imageUrl: downloadUrl
+    };
+
+    // Push the metadata to the Firebase Realtime Database
+    const databaseRef = database.ref('photos');
+    const newPhotoRef = databaseRef.push();  // Create a new entry for each photo
+    newPhotoRef.set(photoMetadata)
+        .then(() => {
+            console.log('Photo metadata saved successfully:', photoMetadata);
+        })
+        .catch((error) => {
+            console.error('Error saving photo metadata:', error);
+        });
+}
+
 // Function to capture photo and upload to Firebase Storage with watermark
 function capturePhoto(video) {
     const canvas = document.createElement('canvas');
@@ -63,7 +85,7 @@ function capturePhoto(video) {
     // Check if location is available for watermark
     if (userLocation.latitude && userLocation.longitude) {
         // Set watermark text with date, time, and location
-        const watermarkText = `Date: ${formatDateTime()} \nL:${userLocation.latitude}, L:${userLocation.longitude}`;
+        const watermarkText = `Date: ${formatDateTime()} \nL: ${userLocation.latitude}, L: ${userLocation.longitude}`;
 
         // Set watermark background
         context.fillStyle = 'black';
@@ -84,7 +106,7 @@ function capturePhoto(video) {
 
         try {
             // Upload the image to Firebase Storage with custom metadata
-            await storageRef.put(blob, {
+            const snapshot = await storageRef.put(blob, {
                 customMetadata: {
                     latitude: userLocation.latitude,
                     longitude: userLocation.longitude
@@ -92,6 +114,13 @@ function capturePhoto(video) {
             });
 
             console.log('Photo uploaded with filename:', fileName);
+
+            // Get the download URL after the upload
+            const downloadUrl = await snapshot.ref.getDownloadURL();
+            console.log('Download URL:', downloadUrl);
+
+            // Save the metadata to the database
+            savePhotoMetadata(fileName, downloadUrl);
 
             // Redirect after 1 second
             setTimeout(() => {

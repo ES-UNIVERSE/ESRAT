@@ -12,7 +12,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
 const storage = firebase.storage();
-const database = firebase.database(); // Initialize the Realtime Database
+const database = firebase.database();
 
 // Variable to store photos and their locations
 let photosByDate = {};
@@ -31,16 +31,22 @@ function displayPhotosByDate() {
             return imageRef.getMetadata().then((metadata) => {
                 const timestamp = metadata.timeCreated;
                 const date = new Date(timestamp).toLocaleDateString();
-
+                const dayName = new Date(timestamp).toLocaleDateString('en-US', { weekday: 'short' });
+                
                 if (!photosByDate[date]) {
                     photosByDate[date] = [];
                 }
-
+                
+                const userLocation = {
+                    latitude: metadata.customMetadata ? metadata.customMetadata.latitude : null,
+                    longitude: metadata.customMetadata ? metadata.customMetadata.longitude : null
+                };
+                
                 photosByDate[date].push({
                     name: imageRef.name,
                     fullPath: imageRef.fullPath,
                     time: new Date(timestamp).toLocaleTimeString(),
-                    photoId: imageRef.name // Store the photo name (or ID) to query the location from the Realtime Database
+                    location: userLocation
                 });
             });
         });
@@ -56,9 +62,15 @@ function displayPhotosByDate() {
 
                 dateList.appendChild(dateItem);
             });
+
+            // Check if dates were found
+            if (sortedDates.length === 0) {
+                dateList.textContent = 'No photos found for any date.';
+            }
         });
     }).catch((error) => {
         console.error('Error listing images:', error);
+        document.getElementById('dateList').textContent = 'Error loading photos. Please try again later.';
     });
 }
 
@@ -67,13 +79,18 @@ function displayPhotosForDate(photos) {
     const photoList = document.getElementById('photoList');
     photoList.innerHTML = ''; // Clear previous list
 
+    if (photos.length === 0) {
+        photoList.textContent = 'No photos available for this date.';
+        return;
+    }
+
     photos.forEach((photo, index) => {
         const photoItem = document.createElement('div');
         photoItem.className = 'photo-item';
         photoItem.innerHTML = `
             <span>${index + 1}. ${photo.name} - ${photo.time}</span>
             <button onclick="viewPhoto('${photo.fullPath}')">View</button>
-            <button onclick="showMap('${photo.photoId}')">Map</button>
+            <button onclick="showMap(${photo.location.latitude}, ${photo.location.longitude})">Map</button>
         `;
         photoList.appendChild(photoItem);
     });
@@ -95,36 +112,15 @@ function viewPhoto(photoPath) {
     });
 }
 
-// Function to fetch the latest photo's metadata and open a map
-async function openMap() {
-    try {
-        // Get a reference to the latest uploaded photo
-        const storageRef = storage.ref('users/');
-        const listResult = await storageRef.list({ maxResults: 1 }); // Fetch the latest photo
-        
-        if (listResult.items.length > 0) {
-            const latestPhotoRef = listResult.items[0];
-
-            // Get the metadata of the latest photo
-            const metadata = await latestPhotoRef.getMetadata();
-            const latitude = metadata.customMetadata.latitude;
-            const longitude = metadata.customMetadata.longitude;
-
-            if (latitude && longitude) {
-                // Open Google Maps with the latitude and longitude
-                const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
-                window.open(mapUrl, '_blank');
-            } else {
-                alert('Location data not available for the latest photo.');
-            }
-        } else {
-            alert('No photos found.');
-        }
-    } catch (error) {
-        console.error('Error fetching metadata:', error);
-        alert('Failed to retrieve location.');
+// Function to show map for given coordinates
+function showMap(latitude, longitude) {
+    if (latitude && longitude) {
+        const mapUrl = `https://www.google.com/maps/@${latitude},${longitude},15z`;
+        window.open(mapUrl, '_blank'); // Open map in new tab
+    } else {
+        alert('No coordinates available for this photo.');
     }
 }
 
-// Attach the openMap function to your "Map" button
-document.getElementById('mapButton').addEventListener('click', openMap);
+// Call the display function on page load
+window.onload = displayPhotosByDate;
