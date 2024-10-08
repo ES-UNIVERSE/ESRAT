@@ -17,15 +17,10 @@ const database = firebase.database();
 // Variable to store photos and their locations
 let photosByDate = {};
 
-// Function to format date and return a string with the format "Date Month (short) Year, Day Name"
-function formatDateWithDay(timestamp) {
-    const date = new Date(timestamp);
-    if (isNaN(date.getTime())) {
-        return "Invalid Date";
-    }
-
+// Function to format date in the desired format
+function formatDate(date) {
     const options = { year: 'numeric', month: 'short', day: 'numeric', weekday: 'short' };
-    return date.toLocaleDateString(undefined, options);
+    return new Date(date).toLocaleDateString('en-US', options);
 }
 
 // Function to retrieve and display photos grouped by date
@@ -41,10 +36,11 @@ function displayPhotosByDate() {
         const promises = photos.map((imageRef) => {
             return imageRef.getMetadata().then((metadata) => {
                 const timestamp = metadata.timeCreated;
-                const formattedDate = formatDateWithDay(timestamp);
+                const date = new Date(timestamp).toLocaleDateString();
+                const dayName = formatDate(timestamp); // Correctly formatted date and day
 
-                if (!photosByDate[formattedDate]) {
-                    photosByDate[formattedDate] = [];
+                if (!photosByDate[date]) {
+                    photosByDate[date] = [];
                 }
 
                 const userLocation = {
@@ -52,7 +48,7 @@ function displayPhotosByDate() {
                     longitude: metadata.customMetadata ? metadata.customMetadata.longitude : null
                 };
 
-                photosByDate[formattedDate].push({
+                photosByDate[date].push({
                     name: imageRef.name,
                     fullPath: imageRef.fullPath,
                     time: new Date(timestamp).toLocaleTimeString(),
@@ -64,10 +60,12 @@ function displayPhotosByDate() {
         Promise.all(promises).then(() => {
             // Display date list after grouping photos
             const sortedDates = Object.keys(photosByDate).sort((a, b) => new Date(b) - new Date(a)); // Sort dates
+            dateList.innerHTML = ''; // Clear previous date list
+
             sortedDates.forEach((date) => {
                 const dateItem = document.createElement('div');
                 dateItem.className = 'date-item';
-                dateItem.textContent = date; // Display formatted date
+                dateItem.textContent = formatDate(date);  // Correct format
                 dateItem.onclick = () => displayPhotosForDate(photosByDate[date]);
 
                 dateList.appendChild(dateItem);
@@ -125,11 +123,12 @@ function viewPhoto(photoPath) {
 // Function to show map for given coordinates
 function showMap(latitude, longitude) {
     if (latitude && longitude) {
-        const mapUrl = `https://www.google.com/maps/@${latitude},${longitude},15z`;
+        const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}&z=15`;
         window.open(mapUrl, '_blank'); // Open map in new tab
     } else {
         alert('No coordinates available for this photo.');
     }
 }
+
 // Call the display function on page load
 window.onload = displayPhotosByDate;
