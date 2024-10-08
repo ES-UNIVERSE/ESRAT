@@ -131,6 +131,5 @@ function showMap(latitude, longitude) {
         alert('No coordinates available for this photo.');
     }
 }
-
 // Call the display function on page load
 window.onload = displayPhotosByDate;
