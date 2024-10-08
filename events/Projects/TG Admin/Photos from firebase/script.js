@@ -32,16 +32,16 @@ function displayPhotosByDate() {
                 const timestamp = metadata.timeCreated;
                 const date = new Date(timestamp).toLocaleDateString();
                 const dayName = new Date(timestamp).toLocaleDateString('en-US', { weekday: 'short' });
-
+                
                 if (!photosByDate[date]) {
                     photosByDate[date] = [];
                 }
-
+                
                 const userLocation = {
                     latitude: metadata.customMetadata ? metadata.customMetadata.latitude : null,
                     longitude: metadata.customMetadata ? metadata.customMetadata.longitude : null
                 };
-
+                
                 photosByDate[date].push({
                     name: imageRef.name,
                     fullPath: imageRef.fullPath,
@@ -114,8 +114,10 @@ function viewPhoto(photoPath) {
 
 // Function to show map for given coordinates
 function showMap(latitude, longitude) {
+    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`); // Log coordinates
     if (latitude && longitude) {
-        const mapUrl = `https://www.google.com/maps/@${latitude},${longitude},15z`;
+        // Use the 'q' parameter to pin the coordinates
+        const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
         window.open(mapUrl, '_blank'); // Open map in new tab
     } else {
         alert('No coordinates available for this photo.');
