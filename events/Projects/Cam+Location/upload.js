@@ -61,7 +61,9 @@ function savePhotoMetadata(fileName, downloadUrl) {
     // Push the metadata to the Firebase Realtime Database
     const databaseRef = database.ref('photos'); // Root 'photos' node in the database
     const newPhotoRef = databaseRef.push();  // Create a new unique entry for each photo
-    
+
+    console.log('Attempting to save metadata to Firebase:', photoMetadata);
+
     // Write the data to Firebase
     newPhotoRef.set(photoMetadata)
         .then(() => {
@@ -167,4 +169,5 @@ async function startVideo() {
 // Start the camera and location request on page load
 window.onload = () => {
     getLocation();  // Request location permission first
+    firebase.database.enableLogging(true); // Enable Firebase logging
 };
