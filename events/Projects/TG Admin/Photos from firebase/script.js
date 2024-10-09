@@ -123,13 +123,11 @@ function showMap(latitude, longitude) {
 }
 
 function downloadMap(latitude, longitude) {
-    const downloadUrl = `/download_map/${latitude}/${longitude}`;
-    const a = document.createElement('a');
-    a.href = downloadUrl;
-    a.download = 'satellite_image_zoom18.png'; // Set default download name
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    const apiKey = '6706339e20b94127377139nyudb9267'; // Your API key
+    const reverseGeocodingUrl = `https://geocode.maps.co/reverse?lat=${latitude}&lon=${longitude}&api_key=${apiKey}`;
+
+    // Open the reverse geocoding URL in a new tab
+    window.open(reverseGeocodingUrl, '_blank');
 }
 
 window.onload = displayPhotosByDate;
