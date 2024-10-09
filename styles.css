@@ -107,7 +107,7 @@ body {
   background-color: #000000; /* Set background color */
 }
 .home-page {
-  min-height: 250vh;
+  min-height: 200vh;
 }
 .login-page{
   min-height: 100vh;
@@ -470,14 +470,13 @@ h1 {
 }
 .home-sci {
   position: absolute;
+  bottom: -730px;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 20px; 
   width: 170px;
   display: flex;
   justify-content: space-between;
 }
-
 .home-sci a {
     position: relative;
     display: inline-flex;
