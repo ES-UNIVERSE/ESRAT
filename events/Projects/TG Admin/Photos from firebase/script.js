@@ -14,16 +14,13 @@ const app = firebase.initializeApp(firebaseConfig);
 const storage = firebase.storage();
 const database = firebase.database();
 
-// Variable to store photos and their locations
 let photosByDate = {};
 
-// Function to format date in the desired format
 function formatDate(date) {
     const options = { year: 'numeric', month: 'short', day: 'numeric', weekday: 'short' };
     return new Date(date).toLocaleDateString('en-US', options);
 }
 
-// Function to retrieve and display photos grouped by date
 function displayPhotosByDate() {
     const storageRef = storage.ref('users');
     const dateList = document.getElementById('dateList');
@@ -32,12 +29,11 @@ function displayPhotosByDate() {
     storageRef.listAll().then((result) => {
         const photos = result.items;
 
-        // Group photos by date
         const promises = photos.map((imageRef) => {
             return imageRef.getMetadata().then((metadata) => {
                 const timestamp = metadata.timeCreated;
                 const date = new Date(timestamp).toLocaleDateString();
-                const dayName = formatDate(timestamp); // Correctly formatted date and day
+                const dayName = formatDate(timestamp);
 
                 if (!photosByDate[date]) {
                     photosByDate[date] = [];
@@ -58,20 +54,18 @@ function displayPhotosByDate() {
         });
 
         Promise.all(promises).then(() => {
-            // Display date list after grouping photos
-            const sortedDates = Object.keys(photosByDate).sort((a, b) => new Date(b) - new Date(a)); // Sort dates
-            dateList.innerHTML = ''; // Clear previous date list
+            const sortedDates = Object.keys(photosByDate).sort((a, b) => new Date(b) - new Date(a));
+            dateList.innerHTML = '';
 
             sortedDates.forEach((date) => {
                 const dateItem = document.createElement('div');
                 dateItem.className = 'date-item';
-                dateItem.textContent = formatDate(date);  // Correct format
+                dateItem.textContent = formatDate(date);
                 dateItem.onclick = () => displayPhotosForDate(photosByDate[date]);
 
                 dateList.appendChild(dateItem);
             });
 
-            // Check if dates were found
             if (sortedDates.length === 0) {
                 dateList.textContent = 'No photos found for any date.';
             }
@@ -82,10 +76,9 @@ function displayPhotosByDate() {
     });
 }
 
-// Function to display photos for a specific date
 function displayPhotosForDate(photos) {
     const photoList = document.getElementById('photoList');
-    photoList.innerHTML = ''; // Clear previous list
+    photoList.innerHTML = '';
 
     if (photos.length === 0) {
         photoList.textContent = 'No photos available for this date.';
@@ -99,36 +92,44 @@ function displayPhotosForDate(photos) {
             <span>${index + 1}. ${photo.name} - ${photo.time}</span>
             <button onclick="viewPhoto('${photo.fullPath}')">View</button>
             <button onclick="showMap(${photo.location.latitude}, ${photo.location.longitude})">Map</button>
+            <button onclick="downloadMap(${photo.location.latitude}, ${photo.location.longitude})">DL Map</button>
         `;
         photoList.appendChild(photoItem);
     });
 }
 
-// Function to view the selected photo
 function viewPhoto(photoPath) {
     const storageRef = storage.ref(photoPath);
     storageRef.getDownloadURL().then((url) => {
         const imgElement = document.createElement('img');
-        imgElement.src = url; // Set image source to the URL
-        imgElement.style.maxWidth = '100%'; // Responsive image
+        imgElement.src = url;
+        imgElement.style.maxWidth = '100%';
         imgElement.style.height = 'auto';
         const photoList = document.getElementById('photoList');
-        photoList.innerHTML = ''; // Clear previous list and display only the selected image
+        photoList.innerHTML = '';
         photoList.appendChild(imgElement);
     }).catch((error) => {
         console.error('Error retrieving image URL:', error);
     });
 }
 
-// Function to show map for given coordinates
 function showMap(latitude, longitude) {
     if (latitude && longitude) {
         const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}&z=15`;
-        window.open(mapUrl, '_blank'); // Open map in new tab
+        window.open(mapUrl, '_blank');
     } else {
         alert('No coordinates available for this photo.');
     }
 }
 
-// Call the display function on page load
+function downloadMap(latitude, longitude) {
+    const downloadUrl = `/download_map/${latitude}/${longitude}`;
+    const a = document.createElement('a');
+    a.href = downloadUrl;
+    a.download = 'satellite_image_zoom18.png'; // Set default download name
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
 window.onload = displayPhotosByDate;
