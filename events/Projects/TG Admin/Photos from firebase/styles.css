@@ -61,13 +61,43 @@ header {
     transition: color 0.3s ease-in-out;
     text-decoration: none;
   }
-h1 {
+  h1 {
     font-size: 2.5em; /* Responsive font size */
     font-weight: bold;
     margin: 0; 
+    padding: 10px;
+    display: flex; /* Use flexbox to align items */
+    align-items: center; /* Center items vertically */
+}
+
+.dynamic-text {
     letter-spacing: 1px; 
     text-transform: uppercase; 
-    padding: 10px;
+    color: #3498db; /* Change text color */
+    background: linear-gradient(90deg, #3498db, #9b59b6); /* Gradient background */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textAnimation 3s infinite; /* Add animation */
+    display: inline-block; /* Allow for padding and background clip */
+}
+
+/* Emoji styling to keep its original color */
+.emoji {
+    font-size: inherit; /* Keep the emoji size the same as the text */
+    margin-left: 10px; /* Add space between text and emoji */
+}
+
+/* Keyframes for text and emoji animation */
+@keyframes textAnimation {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px); /* Move up */
+    }
+    100% {
+        transform: translateY(0);
+    }
 }
 
 main {
