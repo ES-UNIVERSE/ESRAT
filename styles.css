@@ -470,13 +470,14 @@ h1 {
 }
 .home-sci {
   position: absolute;
-  bottom: -730px;
   left: 50%;
   transform: translateX(-50%);
+  bottom: 20px; 
   width: 170px;
   display: flex;
   justify-content: space-between;
 }
+
 .home-sci a {
     position: relative;
     display: inline-flex;
