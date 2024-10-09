@@ -107,7 +107,7 @@ body {
   background-color: #000000; /* Set background color */
 }
 .home-page {
-  min-height: 200vh;
+  min-height: 50vh;
 }
 .login-page{
   min-height: 100vh;
