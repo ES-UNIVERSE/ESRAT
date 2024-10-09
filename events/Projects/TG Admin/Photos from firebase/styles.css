@@ -47,7 +47,7 @@ header {
   .navbar ul {
     list-style-type: none;
     display: flex;
-    gap: 24px;
+    gap: 15px;
   }
   .navbar ul li {
     font-weight: 300;
