@@ -106,6 +106,9 @@ body {
   font-family: Arial, sans-serif; /* Set font family */
   background-color: #000000; /* Set background color */
 }
+.home-page {
+  min-height: 250vh;
+}
 .login-page{
   min-height: 100vh;
 }
