@@ -16,13 +16,13 @@ const database = firebase.database();
 
 let photosByDate = {};
 
-// Function to format date consistently with UTC timezone
+// Function to format date using the user's local time zone
 function formatDate(date) {
     const options = { year: 'numeric', month: 'short', day: 'numeric', weekday: 'short' };
-    return new Date(date).toLocaleDateString('en-US', { ...options, timeZone: 'UTC' }); // Ensure UTC timezone
+    return new Date(date).toLocaleDateString('en-US', options); // Use local time zone by default
 }
 
-// Function to display photos sorted by date
+// Function to display photos by date
 function displayPhotosByDate() {
     const storageRef = storage.ref('users');
     const dateList = document.getElementById('dateList');
@@ -33,9 +33,9 @@ function displayPhotosByDate() {
 
         const promises = photos.map((imageRef) => {
             return imageRef.getMetadata().then((metadata) => {
-                const timestamp = new Date(metadata.timeCreated).toISOString(); // Ensure UTC time
-                const date = new Date(timestamp).toLocaleDateString('en-US', { timeZone: 'UTC' }); // Convert to consistent date
-                const dayName = formatDate(timestamp);
+                const timestamp = metadata.timeCreated;
+                const localDate = new Date(timestamp); // Convert Firebase UTC time to local time
+                const date = localDate.toLocaleDateString(); // Convert to local date string
 
                 if (!photosByDate[date]) {
                     photosByDate[date] = [];
@@ -49,7 +49,7 @@ function displayPhotosByDate() {
                 photosByDate[date].push({
                     name: imageRef.name,
                     fullPath: imageRef.fullPath,
-                    time: new Date(timestamp).toLocaleTimeString('en-US', { timeZone: 'UTC' }), // UTC time
+                    time: localDate.toLocaleTimeString(), // Convert time to local
                     location: userLocation
                 });
             });
@@ -62,7 +62,7 @@ function displayPhotosByDate() {
             sortedDates.forEach((date) => {
                 const dateItem = document.createElement('div');
                 dateItem.className = 'date-item';
-                dateItem.textContent = formatDate(date); // Display formatted date
+                dateItem.textContent = formatDate(date); // Display local formatted date
                 dateItem.onclick = () => displayPhotosForDate(photosByDate[date]);
 
                 dateList.appendChild(dateItem);
