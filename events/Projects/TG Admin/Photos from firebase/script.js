@@ -16,11 +16,13 @@ const database = firebase.database();
 
 let photosByDate = {};
 
+// Function to format date consistently with UTC timezone
 function formatDate(date) {
     const options = { year: 'numeric', month: 'short', day: 'numeric', weekday: 'short' };
-    return new Date(date).toLocaleDateString('en-US', options);
+    return new Date(date).toLocaleDateString('en-US', { ...options, timeZone: 'UTC' }); // Ensure UTC timezone
 }
 
+// Function to display photos sorted by date
 function displayPhotosByDate() {
     const storageRef = storage.ref('users');
     const dateList = document.getElementById('dateList');
@@ -31,8 +33,8 @@ function displayPhotosByDate() {
 
         const promises = photos.map((imageRef) => {
             return imageRef.getMetadata().then((metadata) => {
-                const timestamp = metadata.timeCreated;
-                const date = new Date(timestamp).toLocaleDateString();
+                const timestamp = new Date(metadata.timeCreated).toISOString(); // Ensure UTC time
+                const date = new Date(timestamp).toLocaleDateString('en-US', { timeZone: 'UTC' }); // Convert to consistent date
                 const dayName = formatDate(timestamp);
 
                 if (!photosByDate[date]) {
@@ -47,7 +49,7 @@ function displayPhotosByDate() {
                 photosByDate[date].push({
                     name: imageRef.name,
                     fullPath: imageRef.fullPath,
-                    time: new Date(timestamp).toLocaleTimeString(),
+                    time: new Date(timestamp).toLocaleTimeString('en-US', { timeZone: 'UTC' }), // UTC time
                     location: userLocation
                 });
             });
@@ -60,7 +62,7 @@ function displayPhotosByDate() {
             sortedDates.forEach((date) => {
                 const dateItem = document.createElement('div');
                 dateItem.className = 'date-item';
-                dateItem.textContent = formatDate(date);
+                dateItem.textContent = formatDate(date); // Display formatted date
                 dateItem.onclick = () => displayPhotosForDate(photosByDate[date]);
 
                 dateList.appendChild(dateItem);
@@ -76,6 +78,7 @@ function displayPhotosByDate() {
     });
 }
 
+// Function to display photos for a selected date
 function displayPhotosForDate(photos) {
     const photoList = document.getElementById('photoList');
     photoList.innerHTML = '';
@@ -98,6 +101,7 @@ function displayPhotosForDate(photos) {
     });
 }
 
+// Function to view a photo
 function viewPhoto(photoPath) {
     const storageRef = storage.ref(photoPath);
     storageRef.getDownloadURL().then((url) => {
@@ -113,6 +117,7 @@ function viewPhoto(photoPath) {
     });
 }
 
+// Function to show map with coordinates
 function showMap(latitude, longitude) {
     if (latitude && longitude) {
         const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}&z=15`;
@@ -122,6 +127,7 @@ function showMap(latitude, longitude) {
     }
 }
 
+// Function to download the map
 function downloadMap(latitude, longitude) {
     const apiKey = '6706339e20b94127377139nyudb9267'; // Your API key
     const reverseGeocodingUrl = `https://geocode.maps.co/reverse?lat=${latitude}&lon=${longitude}&api_key=${apiKey}`;
@@ -130,4 +136,5 @@ function downloadMap(latitude, longitude) {
     window.open(reverseGeocodingUrl, '_blank');
 }
 
+// Trigger the photo display when the page loads
 window.onload = displayPhotosByDate;
