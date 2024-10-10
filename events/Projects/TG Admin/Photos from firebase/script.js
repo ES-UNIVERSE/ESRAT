@@ -16,13 +16,20 @@ const database = firebase.database();
 
 let photosByDate = {};
 
-// Function to format date using the user's local time zone
-function formatDate(date) {
-    const options = { year: 'numeric', month: 'short', day: 'numeric', weekday: 'short' };
-    return new Date(date).toLocaleDateString('en-US', options); // Use local time zone by default
+// Function to format date to IST (Indian Standard Time)
+function formatToIST(dateString) {
+    // Convert the date string to a Date object
+    const utcDate = new Date(dateString);
+
+    // Adjust to Indian Standard Time (UTC +5:30)
+    const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC +5:30 in milliseconds
+    const istDate = new Date(utcDate.getTime() + istOffset);
+
+    // Format date as DD-MMM-YYYY
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return istDate.toLocaleDateString('en-US', options);
 }
 
-// Function to display photos by date
 function displayPhotosByDate() {
     const storageRef = storage.ref('users');
     const dateList = document.getElementById('dateList');
@@ -34,11 +41,10 @@ function displayPhotosByDate() {
         const promises = photos.map((imageRef) => {
             return imageRef.getMetadata().then((metadata) => {
                 const timestamp = metadata.timeCreated;
-                const localDate = new Date(timestamp); // Convert Firebase UTC time to local time
-                const date = localDate.toLocaleDateString(); // Convert to local date string
+                const formattedDate = formatToIST(timestamp);
 
-                if (!photosByDate[date]) {
-                    photosByDate[date] = [];
+                if (!photosByDate[formattedDate]) {
+                    photosByDate[formattedDate] = [];
                 }
 
                 const userLocation = {
@@ -46,10 +52,10 @@ function displayPhotosByDate() {
                     longitude: metadata.customMetadata ? metadata.customMetadata.longitude : null
                 };
 
-                photosByDate[date].push({
+                photosByDate[formattedDate].push({
                     name: imageRef.name,
                     fullPath: imageRef.fullPath,
-                    time: localDate.toLocaleTimeString(), // Convert time to local
+                    time: new Date(timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
                     location: userLocation
                 });
             });
@@ -62,7 +68,7 @@ function displayPhotosByDate() {
             sortedDates.forEach((date) => {
                 const dateItem = document.createElement('div');
                 dateItem.className = 'date-item';
-                dateItem.textContent = formatDate(date); // Display local formatted date
+                dateItem.textContent = date; // Using the formatted date without the day name
                 dateItem.onclick = () => displayPhotosForDate(photosByDate[date]);
 
                 dateList.appendChild(dateItem);
@@ -78,7 +84,6 @@ function displayPhotosByDate() {
     });
 }
 
-// Function to display photos for a selected date
 function displayPhotosForDate(photos) {
     const photoList = document.getElementById('photoList');
     photoList.innerHTML = '';
@@ -101,7 +106,6 @@ function displayPhotosForDate(photos) {
     });
 }
 
-// Function to view a photo
 function viewPhoto(photoPath) {
     const storageRef = storage.ref(photoPath);
     storageRef.getDownloadURL().then((url) => {
@@ -117,7 +121,6 @@ function viewPhoto(photoPath) {
     });
 }
 
-// Function to show map with coordinates
 function showMap(latitude, longitude) {
     if (latitude && longitude) {
         const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}&z=15`;
@@ -127,7 +130,6 @@ function showMap(latitude, longitude) {
     }
 }
 
-// Function to download the map
 function downloadMap(latitude, longitude) {
     const apiKey = '6706339e20b94127377139nyudb9267'; // Your API key
     const reverseGeocodingUrl = `https://geocode.maps.co/reverse?lat=${latitude}&lon=${longitude}&api_key=${apiKey}`;
@@ -136,5 +138,4 @@ function downloadMap(latitude, longitude) {
     window.open(reverseGeocodingUrl, '_blank');
 }
 
-// Trigger the photo display when the page loads
 window.onload = displayPhotosByDate;
