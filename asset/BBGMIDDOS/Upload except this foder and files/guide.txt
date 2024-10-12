@@ -14,6 +14,13 @@ You will be adding these 2 codes inside config.json (paste it carefully),add Use
 3. Open 'codespace' section in github and create a new codespace.and wait until entire loading is done.
 4. Inside the codespace(web VS code) launch a terminal and run the commands below>>
 
+
+But if you are running the script locally, you need to go to the folder using Terminal like this- (my ddos files are inside "BGMIDDOS" FOLDER), to go to the folder, copy the path of the folder and paste in terminal- cd 'your ddos path', then do rest other things >>>
+
+PS C:\Users\jrram\OneDrive\Pictures\Documents\GitHub\ESRAT> cd C:\Users\jrram\OneDrive\Pictures\Documents\GitHub\ESRAT\asset\BBGMIDDOS
+PS C:\Users\jrram\OneDrive\Pictures\Documents\GitHub\ESRAT\asset\BBGMIDDOS> python3 sahil.py  
+
+
 5. Commands are.
 
 
@@ -22,7 +29,7 @@ chmod +x *
 ./install.sh
 
 
-Now after that you should get a rebuild popup in the bottom of the screen. Click on "Rebuild", not on full rebuild.
+Now after that you should get a rebuild popup in the bottom of the screen. Click on "Rebuild", not on full `rebuild.
 then after entire loading perform the commands below in terminal, install "pip install flask" if needed (not recommended).
 Those 4 commands are enough.
 
