@@ -1,0 +1,23 @@
+import telebot
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+
+BOT_TOKEN = '7310374468:AAFzNB5ySzSWrAseUcJfeAdlfwSHcrKyw6U'
+bot = telebot.TeleBot(BOT_TOKEN)
+
+@bot.message_handler(commands=['get_admins'])
+def get_admins(message):
+    chat_id = message.chat.id
+    logging.info(f"Received /get_admins command from chat_id: {chat_id}")
+    try:
+        admins = bot.get_chat_administrators(chat_id)
+        admin_ids = [admin.user.id for admin in admins]
+        bot.send_message(chat_id, f"Admin IDs: {admin_ids}")
+        logging.info(f"Admin IDs sent: {admin_ids}")
+    except Exception as e:
+        bot.send_message(chat_id, f"Error: {e}")
+        logging.error(f"Error fetching admin IDs: {e}")
+
+bot.polling()

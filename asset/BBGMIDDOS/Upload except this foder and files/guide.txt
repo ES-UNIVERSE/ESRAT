@@ -1,0 +1,49 @@
+Requirements- 
+
+1- Your bot API Token     (you can get it from @BotFather in Telegram)
+2- Admin ID of Telegram   (search @userinfobot in telegram, the bot will tell you your ID)
+
+You will be adding these 2 codes inside config.json (paste it carefully),add User ID in users.txt also, and modify the dates if needed.
+
+
+
+
+
+1. Create a new private Repo in @github.
+2. Upload all the files present here.
+3. Open 'codespace' section in github and create a new codespace.and wait until entire loading is done.
+4. Inside the codespace(web VS code) launch a terminal and run the commands below>>
+
+5. Commands are.
+
+
+chmod +x *
+
+./install.sh
+
+
+Now after that you should get a rebuild popup in the bottom of the screen. Click on "Rebuild", not on full rebuild.
+then after entire loading perform the commands below in terminal, install "pip install flask" if needed (not recommended).
+Those 4 commands are enough.
+
+
+pip install telebot
+
+
+chmod +x *
+
+python3 sahil.py
+
+and you you should get a message like- "This File Is Made By @SahilModzOwner" and you are good to go.
+
+but things are not done yet, the codespace will run only for 30 minutes in github. To make it run 24/7 you have to go to >settings>codespace>scroll down> select the repository of your ddos file uploaded in github, and change the time to 240 minutes. and click save. Now go to your telegram bot type /start and you should get a Reply, if reply comes that means you are all set now to launch a ddos attack on your target. Happy Hacking. Regards- @jrram3000
+
+
+
+
+yes, sahil.py.enc is encrypted with XOR and Base64 encryption. But i have already decrypted is a python script and it is inside decrypted.sahyil.py.enc.txt text file. Relax it is non of our use now, may be in case for future use.
+
+
+Tutorials: BGMI DDOS TELEGRAM BOT
+
+https://www.youtube.com/watch?v=hlO4Soe0eqw&list=PL87Wt6-f0wA97nGepsG0oI3mG7hxWycpF
