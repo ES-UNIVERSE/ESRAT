@@ -6,7 +6,7 @@
             "version": "latest"
         }
     },
-    "postStartCommand": "python3 /workspaces/sahil/sahil.py",
+    "postStartCommand": "nohup python3 /workspaces/sahil/sahil.py > sahil.log 2>&1 &",
     "customizations": {
         "vscode": {
             "settings": {
@@ -18,4 +18,3 @@
         }
     }
 }
-
