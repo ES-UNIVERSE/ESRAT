@@ -29,4 +29,6 @@ Transform your digital capabilities with our Super Advanced God Mode RATs – be
 
 Happy Hacking🕊️ !
 
-[![Easy Spark profile views](https://u8views.com/api/v1/github/profiles/150267024/views/day-week-month-total-count.svg)](https://u8views.com/github/ES-UNIVERSE)           Implemented on- `19th Oct. 24 (Sat)`
+
+Implementing on- `19th Oct. 2024 (Sat)`
+[![Easy Spark profile views](https://u8views.com/api/v1/github/profiles/150267024/views/day-week-month-total-count.svg)](https://u8views.com/github/ES-UNIVERSE)
