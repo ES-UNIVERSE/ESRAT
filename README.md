@@ -24,6 +24,8 @@ To learn more about our cutting-edge RAT solutions and how they can empower your
 - **Telegram**: [Telegram Link](https://t.me/jrram3000)
 - **Instagram**: [Instagram Profile](https://www.instagram.com/urstruly_ganga/)
 
+[![Easy Spark profile views](https://u8views.com/api/v1/github/profiles/150267024/views/day-week-month-total-count.svg)](https://u8views.com/github/ES-UNIVERSE)
+
 Transform your digital capabilities with our Super Advanced God Mode RATs – because true control is in The Data.
 
 Happy Hacking🕊️ !
