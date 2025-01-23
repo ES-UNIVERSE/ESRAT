@@ -84,7 +84,7 @@ async function detectObjects() {
   predictions.forEach(prediction => {
     const [x, y, width, height] = prediction.bbox;
     ctx.strokeStyle = "#00FFFF";
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 6;  // Thicker Boxes
     ctx.strokeRect(x, y, width, height);
     ctx.fillStyle = "#00FFFF";
     ctx.font = "24px Arial";
@@ -95,8 +95,13 @@ async function detectObjects() {
   if (predictions.length > 0) {
     const currentTime = Date.now();
     if (currentTime - lastAnnouncementTime >= 2000) {
-      const detectionText = predictions.map(p => p.class).join(", ");
-      speak(`A ${detectionText} detected`);
+      const objectsDetected = predictions.map(p => p.class);
+      const uniqueObjects = [...new Set(objectsDetected)];
+      const detectionText = uniqueObjects.length === 1 
+        ? `A ${uniqueObjects[0]} detected` 
+        : `${uniqueObjects.length} objects detected: ${uniqueObjects.join(", ")}`;
+
+      speak(detectionText);
       lastAnnouncementTime = currentTime;
     }
   }
