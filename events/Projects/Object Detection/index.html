@@ -112,22 +112,28 @@
 
     // Function to start the webcam
     async function setupWebcam() {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         const navigatorAny = navigator;
         navigator.getUserMedia = navigator.getUserMedia ||
             navigatorAny.webkitGetUserMedia || navigatorAny.mozGetUserMedia ||
             navigatorAny.msGetUserMedia;
-        if (navigator.getUserMedia) {
-          navigator.getUserMedia({video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } }},
-            stream => {
-              video.srcObject = stream;
-              video.onloadedmetadata = () => resolve(video);
-            },
-            error => console.error(error)
-          );
-        } else {
+
+        if (!navigator.getUserMedia) {
           alert('getUserMedia not supported in this browser.');
+          reject(new Error('getUserMedia not supported'));
+          return;
         }
+
+        navigator.getUserMedia({video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } }},
+          stream => {
+            video.srcObject = stream;
+            video.onloadedmetadata = () => resolve(video);
+          },
+          error => {
+            console.error(error);
+            reject(error);
+          }
+        );
       });
     }
 
@@ -262,6 +268,9 @@
       // Resize canvas on window resize
       window.addEventListener('resize', resizeCanvas);
       resizeCanvas();
+    }).catch(error => {
+      console.error('Error setting up webcam:', error);
+      alert('Failed to access webcam. Please check your browser permissions and try again.');
     });
   </script>
 
