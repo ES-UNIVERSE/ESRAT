@@ -13,7 +13,7 @@ let stream = null;
 let track = null;
 let torchOn = false;
 
-// 🔹 Function to Stop Current Camera Stream
+// 🔹 Stop Current Camera Stream
 function stopStream() {
   if (stream) {
     stream.getTracks().forEach(track => track.stop());
@@ -21,7 +21,7 @@ function stopStream() {
   }
 }
 
-// 🔹 Function to Start Webcam with High Resolution
+// 🔹 Start Webcam with High Resolution
 async function setupWebcam(facingMode) {
   stopStream(); // Stop previous stream before switching
 
@@ -46,7 +46,7 @@ async function setupWebcam(facingMode) {
   }
 }
 
-// 🔹 Function to Toggle Torch (Flashlight)
+// 🔹 Toggle Torch (Flashlight)
 function toggleTorch() {
   if (!track || !track.getCapabilities) {
     alert("Torch mode is not supported on this device.");
@@ -75,7 +75,7 @@ function resizeCanvas() {
   canvas.height = video.videoHeight;
 }
 
-// 🔹 Speak Detected Objects
+// 🔹 Speak Detected Objects (Every 2 Seconds)
 function speak(text) {
   const synth = window.speechSynthesis;
   const utterance = new SpeechSynthesisUtterance(text);
@@ -94,7 +94,7 @@ function getDetectionText(predictions) {
     count === 1 ? className : `${count} ${className}s`
   );
 
-  return `A ${items.join(', ')} detected`;
+  return items.length ? `A ${items.join(', ')} detected` : '';
 }
 
 // 🔹 Detect Objects and Draw Bounding Boxes
@@ -135,8 +135,10 @@ async function detectObjects() {
     const currentTime = Date.now();
     if (currentTime - lastAnnouncementTime >= 2000) { // 2-second interval
       const detectionText = getDetectionText(predictions);
-      speak(detectionText);
-      lastAnnouncementTime = currentTime;
+      if (detectionText) {
+        speak(detectionText);
+        lastAnnouncementTime = currentTime;
+      }
     }
   }
 
