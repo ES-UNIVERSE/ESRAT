@@ -4,11 +4,14 @@ const ctx = canvas.getContext('2d');
 const resultDiv = document.getElementById('result');
 const startButton = document.getElementById('startButton');
 const toggleButton = document.getElementById('toggleCamera');
+const torchButton = document.getElementById('toggleTorch');
 
 let model;
 let lastAnnouncementTime = 0;
 let currentFacingMode = "environment"; // Default to rear camera
 let stream = null;
+let track = null;
+let torchOn = false;
 
 // 🔹 Function to Stop Current Camera Stream
 function stopStream() {
@@ -34,9 +37,29 @@ async function setupWebcam(facingMode) {
 
     video.srcObject = stream;
     video.onloadedmetadata = () => video.play();
+
+    // Get video track for torch control
+    track = stream.getVideoTracks()[0];
   } catch (error) {
     console.error('Webcam error:', error);
     alert('Failed to access webcam. Check browser permissions.');
+  }
+}
+
+// 🔹 Function to Toggle Torch (Flashlight)
+function toggleTorch() {
+  if (!track || !track.getCapabilities) {
+    alert("Torch mode is not supported on this device.");
+    return;
+  }
+
+  const capabilities = track.getCapabilities();
+  if (capabilities.torch) {
+    torchOn = !torchOn;
+    track.applyConstraints({ advanced: [{ torch: torchOn }] })
+      .catch(error => console.error('Torch error:', error));
+  } else {
+    alert("Torch mode is not supported on this device.");
   }
 }
 
@@ -132,6 +155,9 @@ toggleButton.addEventListener('click', () => {
   currentFacingMode = currentFacingMode === "user" ? "environment" : "user";
   setupWebcam(currentFacingMode);
 });
+
+// 🔹 Torch Toggle Button Click
+torchButton.addEventListener('click', toggleTorch);
 
 // 🔹 Ensure HTTPS or localhost for Camera Access
 if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
