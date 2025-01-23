@@ -3,47 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Object Detection</title>
-
-    <!-- TensorFlow.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
-
+    <title>Object Detection with Webcam</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: black; color: white; text-align: center; }
-        header { display: flex; align-items: center; justify-content: space-between; padding: 10px; background: #222; }
-        .logo { width: 50px; }
-        nav a { color: white; text-decoration: none; margin: 0 15px; font-size: 18px; }
-        .container { position: relative; width: 100%; height: 80vh; display: flex; align-items: center; justify-content: center; }
-        video, canvas { position: absolute; width: 100%; height: 100%; object-fit: cover; }
-        .controls { position: absolute; bottom: 20px; display: flex; gap: 10px; }
-        .btn { padding: 10px 15px; border: none; background: #007BFF; color: white; cursor: pointer; font-size: 16px; border-radius: 5px; }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            border: 2px solid #ddd;
+        }
+        .controls {
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
-
-    <header>
-        <img src="logo.png" class="logo" alt="Logo">
-        <nav>
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-        </nav>
-    </header>
-
-    <h1>AI Object Detection</h1>
-    <div class="container">
-        <video id="webcam" autoplay playsinline></video>
-        <canvas id="outputCanvas"></canvas>
-    </div>
-
+    <h1>Real-time Object Detection with Webcam</h1>
     <div class="controls">
-        <button class="btn" id="toggleTorch">Torch On/Off</button>
-        <button class="btn" id="switchCamera">Switch Camera</button>
-        <button class="btn" id="startCamera">Start Camera</button>
+        <button id="startCamera">Start Camera</button>
+        <button id="switchCamera">Switch Camera</button>
+        <button id="toggleTorch">Toggle Torch</button>
     </div>
-
+    <video id="webcam" width="640" height="480" style="display: none;"></video>
+    <canvas id="outputCanvas"></canvas>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
     <script src="script.js"></script>
 </body>
 </html>
