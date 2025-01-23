@@ -3,27 +3,33 @@ const canvas = document.getElementById('outputCanvas');
 const ctx = canvas.getContext('2d');
 const resultDiv = document.getElementById('result');
 const startButton = document.getElementById('startButton');
+const toggleButton = document.getElementById('toggleCamera');
 
 let model;
 let lastAnnouncementTime = 0;
+let currentFacingMode = "environment"; // Default to rear camera
+let stream = null;
 
-// Start Webcam
-async function setupWebcam() {
-  return new Promise((resolve, reject) => {
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", width: 640, height: 480 } })
-      .then(stream => {
-        video.srcObject = stream;
-        video.onloadedmetadata = () => resolve(video);
-      })
-      .catch(error => {
-        console.error('Webcam error:', error);
-        alert('Failed to access webcam. Check browser permissions.');
-        reject(error);
-      });
-  });
+// Function to Start Webcam with Selected Camera
+async function setupWebcam(facingMode) {
+  if (stream) {
+    stream.getTracks().forEach(track => track.stop()); // Stop existing stream
+  }
+
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: facingMode, width: 640, height: 480 }
+    });
+
+    video.srcObject = stream;
+    video.onloadedmetadata = () => video.play();
+  } catch (error) {
+    console.error('Webcam error:', error);
+    alert('Failed to access webcam. Check browser permissions.');
+  }
 }
 
-// Load Model
+// Load COCO-SSD Model
 async function loadModel() {
   model = await cocoSsd.load();
   detectObjects();
@@ -108,12 +114,17 @@ async function detectObjects() {
   requestAnimationFrame(detectObjects);
 }
 
-// Start Camera on Button Click
+// Start Camera Button Click
 startButton.addEventListener('click', () => {
-  setupWebcam().then(() => {
-    video.play();
+  setupWebcam(currentFacingMode).then(() => {
     loadModel();
   }).catch(error => console.error('Camera setup failed:', error));
+});
+
+// Toggle Camera Button Click
+toggleButton.addEventListener('click', () => {
+  currentFacingMode = currentFacingMode === "user" ? "environment" : "user";
+  setupWebcam(currentFacingMode);
 });
 
 // Ensure HTTPS or localhost for Camera Access
