@@ -1,7 +1,6 @@
 const video = document.getElementById("webcam");
 const canvas = document.getElementById("outputCanvas");
 const ctx = canvas.getContext("2d");
-const resultDiv = document.getElementById("result");
 
 const toggleTorchBtn = document.getElementById("toggleTorch");
 const switchCameraBtn = document.getElementById("switchCamera");
@@ -14,6 +13,7 @@ let torchOn = false;
 
 // 🎥 Start Camera
 async function setupWebcam() {
+  stopCamera();
   const constraints = {
     video: { 
       facingMode: useBackCamera ? "environment" : "user",
@@ -22,19 +22,25 @@ async function setupWebcam() {
     }
   };
 
-  stream = await navigator.mediaDevices.getUserMedia(constraints);
-  video.srcObject = stream;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia(constraints);
+    video.srcObject = stream;
+    video.onloadedmetadata = () => video.play();
+  } catch (error) {
+    console.error("Camera error:", error);
+  }
 }
 
 // 🔄 Switch Camera
 switchCameraBtn.addEventListener("click", async () => {
   useBackCamera = !useBackCamera;
-  stopCamera();
   await setupWebcam();
 });
 
 // 🔦 Toggle Torch (Only Works on Supported Devices)
 toggleTorchBtn.addEventListener("click", () => {
+  if (!stream) return;
+
   const track = stream.getVideoTracks()[0];
   const capabilities = track.getCapabilities();
 
@@ -101,5 +107,5 @@ async function detectObjects() {
 // ▶️ Start Camera & Model
 startCameraBtn.addEventListener("click", async () => {
   await setupWebcam();
-  await loadModel();
+  if (!model) await loadModel();
 });
