@@ -14,6 +14,7 @@ let lastAnnouncementTime = 0;
 // Load the COCO-SSD model
 async function loadModel() {
     model = await cocoSsd.load();
+    console.log("COCO-SSD Model Loaded!");
     detectObjects();
 }
 
@@ -31,7 +32,10 @@ async function setupWebcam() {
     try {
         stream = await navigator.mediaDevices.getUserMedia(constraints);
         video.srcObject = stream;
-        video.onloadedmetadata = () => video.play();
+        video.onloadedmetadata = () => {
+            video.play();
+            detectObjects(); // Ensure detection starts when video loads
+        };
     } catch (error) {
         console.error("Camera error:", error);
     }
@@ -73,32 +77,34 @@ async function detectObjects() {
     canvas.height = video.videoHeight;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const predictions = await model.detect(video);
+    if (video.readyState === 4) {
+        const predictions = await model.detect(video);
 
-    predictions.forEach(prediction => {
-        const [x, y, width, height] = prediction.bbox;
-        const label = prediction.class;
-        const confidence = (prediction.score * 100).toFixed(1);
+        predictions.forEach(prediction => {
+            const [x, y, width, height] = prediction.bbox;
+            const label = prediction.class;
+            const confidence = (prediction.score * 100).toFixed(1);
 
-        // Draw bounding box
-        ctx.strokeStyle = "#00FFFF";
-        ctx.lineWidth = 5;
-        ctx.strokeRect(x, y, width, height);
+            // Draw bounding box
+            ctx.strokeStyle = "#00FFFF";
+            ctx.lineWidth = 5;
+            ctx.strokeRect(x, y, width, height);
 
-        // Draw label
-        ctx.fillStyle = "#00FFFF";
-        ctx.font = "18px Arial";
-        ctx.fillText(`${label} (${confidence}%)`, x, y - 5);
-    });
+            // Draw label
+            ctx.fillStyle = "#00FFFF";
+            ctx.font = "18px Arial";
+            ctx.fillText(`${label} (${confidence}%)`, x, y - 5);
+        });
 
-    // Announce detections every 2 seconds
-    if (predictions.length > 0) {
-        const currentTime = Date.now();
-        if (currentTime - lastAnnouncementTime >= 2000) {
-            const objectNames = predictions.map(p => p.class);
-            const announcementText = formatAnnouncement(objectNames);
-            speak(announcementText);
-            lastAnnouncementTime = currentTime;
+        // Announce detections every 2 seconds
+        if (predictions.length > 0) {
+            const currentTime = Date.now();
+            if (currentTime - lastAnnouncementTime >= 2000) {
+                const objectNames = predictions.map(p => p.class);
+                const announcementText = formatAnnouncement(objectNames);
+                speak(announcementText);
+                lastAnnouncementTime = currentTime;
+            }
         }
     }
 
