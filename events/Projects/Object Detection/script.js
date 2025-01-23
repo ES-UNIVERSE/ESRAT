@@ -8,118 +8,124 @@ const startCameraBtn = document.getElementById("startCamera");
 
 let model, stream;
 let useBackCamera = true;
-let lastAnnouncementTime = 0;
 let torchOn = false;
+let lastAnnouncementTime = 0;
 
-// YOLOv8 Model URL
-const modelUrl = "https://github.com/ultralytics/assets/releases/download/v0.0.0/yolov8n.onnx";
-
-// Load YOLOv8 ONNX Model
+// Load the COCO-SSD model
 async function loadModel() {
-  model = await ort.InferenceSession.create(modelUrl);
-  detectObjects();
+    model = await cocoSsd.load();
+    detectObjects();
 }
 
-// Start Camera
+// Start the webcam
 async function setupWebcam() {
-  stopCamera();
-  const constraints = {
-    video: { 
-      facingMode: useBackCamera ? "environment" : "user",
-      width: { ideal: 1280 },
-      height: { ideal: 720 }
-    }
-  };
+    stopCamera();
+    const constraints = {
+        video: {
+            facingMode: useBackCamera ? "environment" : "user",
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+        }
+    };
 
-  try {
-    stream = await navigator.mediaDevices.getUserMedia(constraints);
-    video.srcObject = stream;
-    video.onloadedmetadata = () => video.play();
-  } catch (error) {
-    console.error("Camera error:", error);
-  }
+    try {
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
+        video.srcObject = stream;
+        video.onloadedmetadata = () => video.play();
+    } catch (error) {
+        console.error("Camera error:", error);
+    }
 }
 
-// Switch Camera
+// Switch between front and back camera
 switchCameraBtn.addEventListener("click", async () => {
-  useBackCamera = !useBackCamera;
-  await setupWebcam();
+    useBackCamera = !useBackCamera;
+    await setupWebcam();
 });
 
-// Toggle Torch
+// Toggle Torch (only works on mobile with a rear camera)
 toggleTorchBtn.addEventListener("click", () => {
-  if (!stream) return;
+    if (!stream) return;
 
-  const track = stream.getVideoTracks()[0];
-  const capabilities = track.getCapabilities();
+    const track = stream.getVideoTracks()[0];
+    const capabilities = track.getCapabilities();
 
-  if (capabilities.torch) {
-    torchOn = !torchOn;
-    track.applyConstraints({ advanced: [{ torch: torchOn }] });
-  } else {
-    alert("Torch not supported on this device.");
-  }
+    if (capabilities.torch) {
+        torchOn = !torchOn;
+        track.applyConstraints({ advanced: [{ torch: torchOn }] });
+    } else {
+        alert("Torch not supported on this device.");
+    }
 });
 
-// Stop Camera
+// Stop the camera stream
 function stopCamera() {
-  if (stream) {
-    stream.getTracks().forEach(track => track.stop());
-  }
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+    }
 }
 
-// Convert Video Frame to Tensor
-async function processVideoFrame() {
-  const tensor = tf.browser.fromPixels(video).resizeNearestNeighbor([640, 640]).expandDims(0).toFloat();
-  const input = tensor.dataSync();
-  return new ort.Tensor("float32", input, [1, 3, 640, 640]);
-}
-
-// Detect Objects with YOLOv8
+// Object detection function
 async function detectObjects() {
-  if (!model) return;
+    if (!model) return;
 
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const inputTensor = await processVideoFrame();
-  const outputs = await model.run({ images: inputTensor });
+    const predictions = await model.detect(video);
 
-  const predictions = outputs["output"];
-  predictions.forEach(prediction => {
-    const [x, y, width, height, confidence, classIndex] = prediction;
-    if (confidence > 0.5) {
-      ctx.strokeStyle = "#00FFFF";
-      ctx.lineWidth = 6;
-      ctx.strokeRect(x, y, width, height);
-      ctx.fillStyle = "#00FFFF";
-      ctx.font = "24px Arial";
-      ctx.fillText(`Object ${classIndex}`, x, y - 5);
+    predictions.forEach(prediction => {
+        const [x, y, width, height] = prediction.bbox;
+        const label = prediction.class;
+        const confidence = (prediction.score * 100).toFixed(1);
+
+        // Draw bounding box
+        ctx.strokeStyle = "#00FFFF";
+        ctx.lineWidth = 5;
+        ctx.strokeRect(x, y, width, height);
+
+        // Draw label
+        ctx.fillStyle = "#00FFFF";
+        ctx.font = "18px Arial";
+        ctx.fillText(`${label} (${confidence}%)`, x, y - 5);
+    });
+
+    // Announce detections every 2 seconds
+    if (predictions.length > 0) {
+        const currentTime = Date.now();
+        if (currentTime - lastAnnouncementTime >= 2000) {
+            const objectNames = predictions.map(p => p.class);
+            const announcementText = formatAnnouncement(objectNames);
+            speak(announcementText);
+            lastAnnouncementTime = currentTime;
+        }
     }
-  });
 
-  // Announce detections every 2 seconds
-  if (predictions.length > 0) {
-    const currentTime = Date.now();
-    if (currentTime - lastAnnouncementTime >= 2000) {
-      speak(`Detected ${predictions.length} objects`);
-      lastAnnouncementTime = currentTime;
-    }
-  }
-
-  requestAnimationFrame(detectObjects);
+    requestAnimationFrame(detectObjects);
 }
 
-// Voice Announcements
+// Format speech announcement
+function formatAnnouncement(objects) {
+    const uniqueObjects = [...new Set(objects)];
+    if (uniqueObjects.length === 1) {
+        return `A ${uniqueObjects[0]} detected.`;
+    } else if (uniqueObjects.length === 2) {
+        return `A ${uniqueObjects[0]} and a ${uniqueObjects[1]} detected.`;
+    } else {
+        return `${uniqueObjects.length} objects detected.`;
+    }
+}
+
+// Text-to-Speech
 function speak(text) {
-  const synth = window.speechSynthesis;
-  const utterance = new SpeechSynthesisUtterance(text);
-  synth.speak(utterance);
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(text);
+    synth.speak(utterance);
 }
 
 // Start Camera & Model
 startCameraBtn.addEventListener("click", async () => {
-  await setupWebcam();
-  if (!model) await loadModel();
+    await setupWebcam();
+    if (!model) await loadModel();
 });
