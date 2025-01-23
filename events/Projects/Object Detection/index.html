@@ -113,27 +113,21 @@
     // Function to start the webcam
     async function setupWebcam() {
       return new Promise((resolve, reject) => {
-        const navigatorAny = navigator;
-        navigator.getUserMedia = navigator.getUserMedia ||
-            navigatorAny.webkitGetUserMedia || navigatorAny.mozGetUserMedia ||
-            navigatorAny.msGetUserMedia;
-
-        if (!navigator.getUserMedia) {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
           alert('getUserMedia not supported in this browser.');
           reject(new Error('getUserMedia not supported'));
           return;
         }
 
-        navigator.getUserMedia({video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } }},
-          stream => {
+        navigator.mediaDevices.getUserMedia({video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } }})
+          .then(stream => {
             video.srcObject = stream;
             video.onloadedmetadata = () => resolve(video);
-          },
-          error => {
-            console.error(error);
+          })
+          .catch(error => {
+            console.error('Error accessing media devices.', error);
             reject(error);
-          }
-        );
+          });
       });
     }
 
@@ -261,17 +255,39 @@
       requestAnimationFrame(detectObjects);
     }
 
-    setupWebcam().then(() => {
-      video.play();
-      loadModel();
+    // Add a button to trigger webcam access
+    const startButton = document.createElement('button');
+    startButton.textContent = 'Start Camera';
+    startButton.style.position = 'absolute';
+    startButton.style.bottom = '50px';
+    startButton.style.left = '50%';
+    startButton.style.transform = 'translateX(-50%)';
+    startButton.style.padding = '10px 20px';
+    startButton.style.backgroundColor = '#007BFF';
+    startButton.style.color = 'white';
+    startButton.style.border = 'none';
+    startButton.style.cursor = 'pointer';
 
-      // Resize canvas on window resize
-      window.addEventListener('resize', resizeCanvas);
-      resizeCanvas();
-    }).catch(error => {
-      console.error('Error setting up webcam:', error);
-      alert('Failed to access webcam. Please check your browser permissions and try again.');
+    document.body.appendChild(startButton);
+
+    startButton.addEventListener('click', () => {
+      setupWebcam().then(() => {
+        video.play();
+        loadModel();
+
+        // Resize canvas on window resize
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+      }).catch(error => {
+        console.error('Error setting up webcam:', error);
+        alert('Failed to access webcam. Please check your browser permissions and try again.');
+      });
     });
+
+    // Ensure HTTPS or localhost environment
+    if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+      alert('This page must be served over HTTPS or localhost for the camera to work.');
+    }
   </script>
 
   <script src="script.js"></script>
