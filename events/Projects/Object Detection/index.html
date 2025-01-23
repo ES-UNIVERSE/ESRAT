@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.13/dist/lenis.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="icon" href="apks/favicon.ico" type="image/x-icon">
+  <title>HOME</title>
+
+  <!-- Include TensorFlow.js and COCO-SSD model -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+
+  <style>
+    /* Basic reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      overflow: hidden; /* Remove vertical scrollbar */
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #333;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+    }
+
+    .navbar h1.logo img {
+      height: 50px; /* Adjust logo size for responsiveness */
+    }
+
+    .navbar ul {
+      list-style-type: none;
+      display: flex;
+      gap: 15px;
+    }
+
+    .navbar ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .object-detection-section {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: calc(100% - 70px); /* Subtract navbar height */
+      width: 100%;
+    }
+
+    #webcam, #outputCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #result {
+      position: absolute;
+      bottom: 10px;
+      text-align: center;
+      color: white;
+      font-size: 18px;
+      width: 100%;
+      pointer-events: none; /* Make sure result div doesn't interfere with mouse events */
+    }
+  </style>
+</head>
+<body class="home-page">
+  <nav class="navbar"> 
+    <h1 class="logo"> <a href="/ESRAT/events/CameraModule/index.html"> <img src="/img/logo.png" alt="Logo"></a></h1>
+    <ul>
+      <li><a href="events/index.events.html" class="active">EVENTS</a></li>
+      <li><a href="index-apk.html">H@CKS</a></li>
+      <li><a href="/ESRAT/gallery/index.gallery.html">GALLERY</a></li>
+      <li><a href="index.html">ADMIN</a></li>
+    </ul>
+  </nav>
+
+  <!-- Object Detection Section -->
+  <div class="object-detection-section">
+    <video id="webcam" autoplay></video>
+    <canvas id="outputCanvas"></canvas>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const video = document.getElementById('webcam');
+    const canvas = document.getElementById('outputCanvas');
+    const ctx = canvas.getContext('2d');
+    const resultDiv = document.getElementById('result');
+
+    // Function to start the webcam
+    async function setupWebcam() {
+      return new Promise((resolve) => {
+        const navigatorAny = navigator;
+        navigator.getUserMedia = navigator.getUserMedia ||
+            navigatorAny.webkitGetUserMedia || navigatorAny.mozGetUserMedia ||
+            navigatorAny.msGetUserMedia;
+        if (navigator.getUserMedia) {
+          navigator.getUserMedia({video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } }},
+            stream => {
+              video.srcObject = stream;
+              video.onloadedmetadata = () => resolve(video);
+            },
+            error => console.error(error)
+          );
+        } else {
+          alert('getUserMedia not supported in this browser.');
+        }
+      });
+    }
+
+    let model;
+
+    async function loadModel() {
+      model = await cocoSsd.load();
+      detectObjects();
+    }
+
+    function resizeCanvas() {
+      const containerWidth = window.innerWidth;
+      const containerHeight = window.innerHeight - 70; // Subtract navbar height
+
+      // Calculate the scaling factors based on the video's aspect ratio
+      const aspectRatio = video.videoWidth / video.videoHeight;
+      let newWidth, newHeight;
+
+      if (containerWidth / containerHeight > aspectRatio) {
+        newWidth = containerHeight * aspectRatio;
+        newHeight = containerHeight;
+      } else {
+        newWidth = containerWidth;
+        newHeight = containerWidth / aspectRatio;
+      }
+
+      // Set the canvas dimensions to match the calculated width and height
+      canvas.width = newWidth;
+      canvas.height = newHeight;
+
+      // Position the canvas in the center of the container
+      canvas.style.width = `${newWidth}px`;
+      canvas.style.height = `${newHeight}px`;
+      canvas.style.left = `${(containerWidth - newWidth) / 2}px`;
+      canvas.style.top = `${(containerHeight - newHeight) / 2}px`;
+
+      // Calculate scaling factors for the bounding boxes
+      const scaleX = newWidth / video.videoWidth;
+      const scaleY = newHeight / video.videoHeight;
+
+      return {scaleX, scaleY};
+    }
+
+    async function detectObjects() {
+      if (!model) {
+        console.log('Model is still loading...');
+        setTimeout(detectObjects, 500);
+        return;
+      }
+
+      const {scaleX, scaleY} = resizeCanvas();
+
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+      const predictions = await model.detect(video);
+
+      // Draw bounding boxes and labels on the canvas
+      predictions.forEach(prediction => {
+        const [x, y, width, height] = prediction.bbox;
+        const text = prediction.class;
+
+        // Scale bounding box coordinates
+        const scaledX = x * scaleX;
+        const scaledY = y * scaleY;
+        const scaledWidth = width * scaleX;
+        const scaledHeight = height * scaleY;
+
+        // Draw bounding box
+        ctx.strokeStyle = '#00FFFF';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(scaledX, scaledY, scaledWidth, scaledHeight);
+
+        // Draw label background and text
+        ctx.fillStyle = '#00FFFF';
+        ctx.font = '24px Arial';
+        const textWidth = ctx.measureText(text).width;
+        const textHeight = parseInt(ctx.font, 10); // base 10
+
+        ctx.fillRect(scaledX, scaledY - textHeight - 4, textWidth + 4, textHeight + 4);
+        ctx.fillStyle = '#000000';
+        ctx.fillText(text, scaledX + 2, scaledY - 4);
+      });
+
+      resultDiv.innerHTML = '';
+      predictions.forEach(prediction => {
+        resultDiv.innerHTML += `<p>${prediction.class}: ${Math.round(prediction.score * 100)}%</p>`;
+      });
+
+      requestAnimationFrame(detectObjects);
+    }
+
+    setupWebcam().then(() => {
+      video.play();
+      loadModel();
+
+      // Resize canvas on window resize
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+    });
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>
