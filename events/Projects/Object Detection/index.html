@@ -171,6 +171,32 @@
       return {scaleX, scaleY};
     }
 
+    function speak(text) {
+      const synth = window.speechSynthesis;
+      const utterance = new SpeechSynthesisUtterance(text);
+      synth.speak(utterance);
+    }
+
+    function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    function getDetectionText(predictions) {
+      const counts = {};
+      predictions.forEach(prediction => {
+        const className = capitalizeFirstLetter(prediction.class);
+        counts[className] = (counts[className] || 0) + 1;
+      });
+
+      const items = Object.entries(counts).map(([className, count]) => {
+        return count === 1 ? className : `${count} ${className}s`;
+      });
+
+      return `A ${items.join(', ')} detected`;
+    }
+
+    let lastAnnouncementTime = 0;
+
     async function detectObjects() {
       if (!model) {
         console.log('Model is still loading...');
@@ -213,8 +239,18 @@
 
       resultDiv.innerHTML = '';
       predictions.forEach(prediction => {
-        resultDiv.innerHTML += `<p>${prediction.class}: ${Math.round(prediction.score * 100)}%</p>`;
+        const capitalizedText = capitalizeFirstLetter(prediction.class);
+        resultDiv.innerHTML += `<p>${capitalizedText}: ${Math.round(prediction.score * 100)}%</p>`;
       });
+
+      if (predictions.length > 0) {
+        const currentTime = Date.now();
+        if (currentTime - lastAnnouncementTime >= 2000) { // 2 seconds interval
+          const detectionText = getDetectionText(predictions);
+          speak(detectionText);
+          lastAnnouncementTime = currentTime;
+        }
+      }
 
       requestAnimationFrame(detectObjects);
     }
