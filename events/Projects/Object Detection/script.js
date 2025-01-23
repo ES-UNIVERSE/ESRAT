@@ -11,7 +11,16 @@ let useBackCamera = true;
 let lastAnnouncementTime = 0;
 let torchOn = false;
 
-// 🎥 Start Camera
+// YOLOv8 Model URL
+const modelUrl = "https://github.com/ultralytics/assets/releases/download/v0.0.0/yolov8n.onnx";
+
+// Load YOLOv8 ONNX Model
+async function loadModel() {
+  model = await ort.InferenceSession.create(modelUrl);
+  detectObjects();
+}
+
+// Start Camera
 async function setupWebcam() {
   stopCamera();
   const constraints = {
@@ -31,13 +40,13 @@ async function setupWebcam() {
   }
 }
 
-// 🔄 Switch Camera
+// Switch Camera
 switchCameraBtn.addEventListener("click", async () => {
   useBackCamera = !useBackCamera;
   await setupWebcam();
 });
 
-// 🔦 Toggle Torch (Only Works on Supported Devices)
+// Toggle Torch
 toggleTorchBtn.addEventListener("click", () => {
   if (!stream) return;
 
@@ -52,27 +61,21 @@ toggleTorchBtn.addEventListener("click", () => {
   }
 });
 
-// 🛑 Stop Camera
+// Stop Camera
 function stopCamera() {
   if (stream) {
     stream.getTracks().forEach(track => track.stop());
   }
 }
 
-// 🎙️ Speak Function
-function speak(text) {
-  const synth = window.speechSynthesis;
-  const utterance = new SpeechSynthesisUtterance(text);
-  synth.speak(utterance);
+// Convert Video Frame to Tensor
+async function processVideoFrame() {
+  const tensor = tf.browser.fromPixels(video).resizeNearestNeighbor([640, 640]).expandDims(0).toFloat();
+  const input = tensor.dataSync();
+  return new ort.Tensor("float32", input, [1, 3, 640, 640]);
 }
 
-// 📦 Load COCO-SSD Model
-async function loadModel() {
-  model = await cocoSsd.load();
-  detectObjects();
-}
-
-// 🖼️ Detect Objects
+// Detect Objects with YOLOv8
 async function detectObjects() {
   if (!model) return;
 
@@ -80,28 +83,27 @@ async function detectObjects() {
   canvas.height = video.videoHeight;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const predictions = await model.detect(video);
+  const inputTensor = await processVideoFrame();
+  const outputs = await model.run({ images: inputTensor });
+
+  const predictions = outputs["output"];
   predictions.forEach(prediction => {
-    const [x, y, width, height] = prediction.bbox;
-    ctx.strokeStyle = "#00FFFF";
-    ctx.lineWidth = 6;  // Thicker Boxes
-    ctx.strokeRect(x, y, width, height);
-    ctx.fillStyle = "#00FFFF";
-    ctx.font = "24px Arial";
-    ctx.fillText(prediction.class, x, y - 5);
+    const [x, y, width, height, confidence, classIndex] = prediction;
+    if (confidence > 0.5) {
+      ctx.strokeStyle = "#00FFFF";
+      ctx.lineWidth = 6;
+      ctx.strokeRect(x, y, width, height);
+      ctx.fillStyle = "#00FFFF";
+      ctx.font = "24px Arial";
+      ctx.fillText(`Object ${classIndex}`, x, y - 5);
+    }
   });
 
-  // 📢 Announce Detections (Every 2 Seconds)
+  // Announce detections every 2 seconds
   if (predictions.length > 0) {
     const currentTime = Date.now();
     if (currentTime - lastAnnouncementTime >= 2000) {
-      const objectsDetected = predictions.map(p => p.class);
-      const uniqueObjects = [...new Set(objectsDetected)];
-      const detectionText = uniqueObjects.length === 1 
-        ? `A ${uniqueObjects[0]} detected` 
-        : `${uniqueObjects.length} objects detected: ${uniqueObjects.join(", ")}`;
-
-      speak(detectionText);
+      speak(`Detected ${predictions.length} objects`);
       lastAnnouncementTime = currentTime;
     }
   }
@@ -109,7 +111,14 @@ async function detectObjects() {
   requestAnimationFrame(detectObjects);
 }
 
-// ▶️ Start Camera & Model
+// Voice Announcements
+function speak(text) {
+  const synth = window.speechSynthesis;
+  const utterance = new SpeechSynthesisUtterance(text);
+  synth.speak(utterance);
+}
+
+// Start Camera & Model
 startCameraBtn.addEventListener("click", async () => {
   await setupWebcam();
   if (!model) await loadModel();
