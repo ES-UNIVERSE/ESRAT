@@ -2,20 +2,17 @@
 
 ## Supported Versions
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+We recommend you to use our latest tool to ensure zero data breach.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+| 5.1.4   | :✅: |
+| 5.1.1   | :❌: |
+| 5.1.0   | :❌: |
+| < 4.0   | :❌: |
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
+Feel free to report about bugs through mail.  <br> we value your valuable feedback.
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+sincerely:    -Ganga
