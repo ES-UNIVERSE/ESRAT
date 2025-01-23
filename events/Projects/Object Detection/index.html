@@ -1,51 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Object Detection with Webcam</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-            background-color: #f0f0f0;
-        }
-        canvas {
-            display: block;
-            margin: 20px auto;
-            border: 2px solid #ddd;
-        }
-        .controls {
-            margin: 20px 0;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            margin: 5px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.13/dist/lenis.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="icon" href="apks/favicon.ico" type="image/x-icon">
+  <title>HOME</title>
+
+  <!-- Include TensorFlow.js and COCO-SSD model -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #333;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+    }
+
+    .navbar h1.logo img {
+      height: 50px;
+    }
+
+    .navbar ul {
+      list-style-type: none;
+      display: flex;
+      gap: 15px;
+    }
+
+    .navbar ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .object-detection-section {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: calc(100% - 70px); 
+      width: 100%;
+    }
+
+    #webcam, #outputCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #result {
+      position: absolute;
+      bottom: 10px;
+      text-align: center;
+      color: white;
+      font-size: 18px;
+      width: 100%;
+      pointer-events: none;
+    }
+  </style>
 </head>
-<body>
-    <h1>Real-time Object Detection with Webcam</h1>
-    <div class="controls">
-        <button id="startCamera">Start Camera</button>
-        <button id="switchCamera">Switch Camera</button>
-        <button id="toggleTorch">Toggle Torch</button>
-    </div>
-    <video id="webcam" width="640" height="480" style="display: none;"></video>
+<body class="home-page">
+  <nav class="navbar"> 
+    <h1 class="logo"> <a href="/ESRAT/events/CameraModule/index.html"> <img src="/img/logo.png" alt="Logo"></a></h1>
+    <ul>
+      <li><a href="events/index.events.html" class="active">EVENTS</a></li>
+      <li><a href="index-apk.html">H@CKS</a></li>
+      <li><a href="/ESRAT/gallery/index.gallery.html">GALLERY</a></li>
+      <li><a href="index.html">ADMIN</a></li>
+    </ul>
+  </nav>
+
+  <div class="object-detection-section">
+    <video id="webcam" autoplay></video>
     <canvas id="outputCanvas"></canvas>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const video = document.getElementById('webcam');
+    const canvas = document.getElementById('outputCanvas');
+    const ctx = canvas.getContext('2d');
+    const resultDiv = document.getElementById('result');
     
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
-    <script src="script.js"></script>
+    let model;
+    let lastAnnouncementTime = 0;
+    let currentStream;
+    let currentCamera = 0; // Default to front camera
+
+    async function setupWebcam() {
+      if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+      }
+
+      const constraints = {
+        video: {
+          facingMode: currentCamera === 0 ? "user" : "environment",
+          width: { ideal: 640 },
+          height: { ideal: 480 }
+        }
+      };
+
+      try {
+        currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+        video.srcObject = currentStream;
+        video.onloadedmetadata = () => {
+          video.play();
+          loadModel();
+        };
+      } catch (error) {
+        console.error('Error accessing webcam:', error);
+        alert('Failed to access webcam.');
+      }
+    }
+
+    async function loadModel() {
+      model = await cocoSsd.load();
+      detectObjects();
+    }
+
+    function resizeCanvas() {
+      const containerWidth = window.innerWidth;
+      const containerHeight = window.innerHeight - 70;
+      const aspectRatio = video.videoWidth / video.videoHeight;
+      let newWidth, newHeight;
+
+      if (containerWidth / containerHeight > aspectRatio) {
+        newWidth = containerHeight * aspectRatio;
+        newHeight = containerHeight;
+      } else {
+        newWidth = containerWidth;
+        newHeight = containerWidth / aspectRatio;
+      }
+
+      canvas.width = newWidth;
+      canvas.height = newHeight;
+
+      const scaleX = newWidth / video.videoWidth;
+      const scaleY = newHeight / video.videoHeight;
+
+      return { scaleX, scaleY };
+    }
+
+    function speak(text) {
+      const synth = window.speechSynthesis;
+      const utterance = new SpeechSynthesisUtterance(text);
+      synth.speak(utterance);
+    }
+
+    function getDetectionText(predictions) {
+      const counts = {};
+      predictions.forEach(prediction => {
+        const className = capitalizeFirstLetter(prediction.class);
+        counts[className] = (counts[className] || 0) + 1;
+      });
+
+      const items = Object.entries(counts).map(([className, count]) => {
+        return count === 1 ? className : `${count} ${className}s`;
+      });
+
+      return `A ${items.join(', ')} detected`;
+    }
+
+    function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    async function detectObjects() {
+      if (!model) {
+        console.log('Model is still loading...');
+        setTimeout(detectObjects, 500);
+        return;
+      }
+
+      const { scaleX, scaleY } = resizeCanvas();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const predictions = await model.detect(video);
+
+      predictions.forEach(prediction => {
+        const [x, y, width, height] = prediction.bbox;
+        const text = prediction.class;
+
+        const scaledX = x * scaleX;
+        const scaledY = y * scaleY;
+        const scaledWidth = width * scaleX;
+        const scaledHeight = height * scaleY;
+
+        ctx.strokeStyle = '#00FFFF';
+        ctx.lineWidth = 6;
+        ctx.strokeRect(scaledX, scaledY, scaledWidth, scaledHeight);
+
+        ctx.fillStyle = '#00FFFF';
+        ctx.font = '24px Arial';
+        const textWidth = ctx.measureText(text).width;
+        const textHeight = parseInt(ctx.font, 10);
+
+        ctx.fillRect(scaledX, scaledY - textHeight - 4, textWidth + 4, textHeight + 4);
+        ctx.fillStyle = '#000000';
+        ctx.fillText(text, scaledX + 2, scaledY - 4);
+      });
+
+      resultDiv.innerHTML = '';
+      predictions.forEach(prediction => {
+        const capitalizedText = capitalizeFirstLetter(prediction.class);
+        resultDiv.innerHTML += `<p>${capitalizedText}: ${Math.round(prediction.score * 100)}%</p>`;
+      });
+
+      if (predictions.length > 0) {
+        const currentTime = Date.now();
+        if (currentTime - lastAnnouncementTime >= 2000) {
+          const detectionText = getDetectionText(predictions);
+          speak(detectionText);
+          lastAnnouncementTime = currentTime;
+        }
+      }
+
+      requestAnimationFrame(detectObjects);
+    }
+
+    function toggleCamera() {
+      currentCamera = currentCamera === 0 ? 1 : 0;
+      setupWebcam();
+    }
+
+    function toggleTorch() {
+      const track = currentStream.getVideoTracks()[0];
+      const capabilities = track.getCapabilities();
+
+      if (capabilities.torch) {
+        track.applyConstraints({ advanced: [{ torch: !track.getSettings().torch }] });
+      }
+    }
+
+    document.getElementById('startButton').addEventListener('click', setupWebcam);
+    document.getElementById('cameraSwitch').addEventListener('click', toggleCamera);
+    document.getElementById('torchButton').addEventListener('click', toggleTorch);
+  </script>
+  
+  <script src="script.js"></script>
 </body>
 </html>
