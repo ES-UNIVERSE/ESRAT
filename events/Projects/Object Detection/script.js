@@ -2,165 +2,204 @@ const video = document.getElementById('webcam');
 const canvas = document.getElementById('outputCanvas');
 const ctx = canvas.getContext('2d');
 const resultDiv = document.getElementById('result');
-const startButton = document.getElementById('startButton');
-const toggleButton = document.getElementById('toggleCamera');
-const torchButton = document.getElementById('toggleTorch');
 
 let model;
 let lastAnnouncementTime = 0;
-let currentFacingMode = "environment"; // Default to rear camera
-let stream = null;
+let currentStream = null;
+let useFrontCamera = false;
 let track = null;
-let torchOn = false;
 
-// 🔹 Stop Current Camera Stream
-function stopStream() {
-  if (stream) {
-    stream.getTracks().forEach(track => track.stop());
-    stream = null;
-  }
+// 🔹 Function to start the webcam
+async function setupWebcam() {
+    if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+    }
+
+    const constraints = {
+        video: {
+            facingMode: useFrontCamera ? "user" : "environment",
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+        }
+    };
+
+    try {
+        currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+        video.srcObject = currentStream;
+        track = currentStream.getVideoTracks()[0];
+        video.onloadedmetadata = () => video.play();
+    } catch (error) {
+        console.error('Error accessing camera:', error);
+        alert('Failed to access webcam. Check permissions.');
+    }
 }
 
-// 🔹 Start Webcam with High Resolution
-async function setupWebcam(facingMode) {
-  stopStream(); // Stop previous stream before switching
+// 🔹 Function to load the model
+async function loadModel() {
+    model = await cocoSsd.load();
+    detectObjects();
+}
 
-  try {
-    stream = await navigator.mediaDevices.getUserMedia({
-      video: { 
-        facingMode: facingMode,
-        width: { ideal: 1920 },  // High resolution width
-        height: { ideal: 1080 }, // High resolution height
-        frameRate: { ideal: 30 } // Smooth 30 FPS
-      }
+// 🔹 Function to resize canvas
+function resizeCanvas() {
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+}
+
+// 🔹 Function to enable/disable torch (if supported)
+function toggleTorch() {
+    if (!track) return;
+    
+    const capabilities = track.getCapabilities();
+    if (!capabilities.torch) {
+        alert("Torch is not supported on this device.");
+        return;
+    }
+
+    const torchOn = track.getSettings().torch || false;
+    track.applyConstraints({ advanced: [{ torch: !torchOn }] });
+}
+
+// 🔹 Function to switch camera
+function switchCamera() {
+    useFrontCamera = !useFrontCamera;
+    setupWebcam();
+}
+
+// 🔹 Function to announce detected objects every 2 seconds
+function speak(text) {
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(text);
+    synth.speak(utterance);
+}
+
+// 🔹 Function to capitalize first letter of detected objects
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+// 🔹 Function to get detection text for announcements
+function getDetectionText(predictions) {
+    const counts = {};
+    predictions.forEach(prediction => {
+        const className = capitalizeFirstLetter(prediction.class);
+        counts[className] = (counts[className] || 0) + 1;
     });
 
-    video.srcObject = stream;
-    video.onloadedmetadata = () => video.play();
+    const items = Object.entries(counts).map(([className, count]) => {
+        return count === 1 ? className : `${count} ${className}s`;
+    });
 
-    // Get video track for torch control
-    track = stream.getVideoTracks()[0];
-  } catch (error) {
-    console.error('Webcam error:', error);
-    alert('Failed to access webcam. Check browser permissions.');
-  }
+    return `A ${items.join(', ')} detected`;
 }
 
-// 🔹 Toggle Torch (Flashlight)
-function toggleTorch() {
-  if (!track || !track.getCapabilities) {
-    alert("Torch mode is not supported on this device.");
-    return;
-  }
-
-  const capabilities = track.getCapabilities();
-  if (capabilities.torch) {
-    torchOn = !torchOn;
-    track.applyConstraints({ advanced: [{ torch: torchOn }] })
-      .catch(error => console.error('Torch error:', error));
-  } else {
-    alert("Torch mode is not supported on this device.");
-  }
-}
-
-// 🔹 Load COCO-SSD Model
-async function loadModel() {
-  model = await cocoSsd.load();
-  detectObjects();
-}
-
-// 🔹 Resize Canvas
-function resizeCanvas() {
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-}
-
-// 🔹 Speak Detected Objects (Every 2 Seconds)
-function speak(text) {
-  const synth = window.speechSynthesis;
-  const utterance = new SpeechSynthesisUtterance(text);
-  synth.speak(utterance);
-}
-
-// 🔹 Format Detection Text
-function getDetectionText(predictions) {
-  const counts = {};
-  predictions.forEach(prediction => {
-    const className = prediction.class.charAt(0).toUpperCase() + prediction.class.slice(1);
-    counts[className] = (counts[className] || 0) + 1;
-  });
-
-  const items = Object.entries(counts).map(([className, count]) => 
-    count === 1 ? className : `${count} ${className}s`
-  );
-
-  return items.length ? `A ${items.join(', ')} detected` : '';
-}
-
-// 🔹 Detect Objects and Draw Bounding Boxes
+// 🔹 Function to detect objects
 async function detectObjects() {
-  if (!model) {
-    console.log('Model is still loading...');
-    setTimeout(detectObjects, 500);
-    return;
-  }
-
-  resizeCanvas();
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  const predictions = await model.detect(video);
-
-  predictions.forEach(prediction => {
-    const [x, y, width, height] = prediction.bbox;
-    const text = prediction.class.charAt(0).toUpperCase() + prediction.class.slice(1);
-
-// Draw Bounding Box
-ctx.strokeStyle = '#00FFFF';
-ctx.lineWidth = 10; // 🔹 Increased thickness from 3 to 5
-ctx.strokeRect(x, y, width, height);
-
-// Draw Label
-ctx.fillStyle = '#00FFFF';
-ctx.font = '18px Arial'; // 🔹 Slightly increased font size for better visibility
-ctx.fillText(text, x, y - 10);
-
-  // Update Detected Objects List
-  resultDiv.innerHTML = predictions.map(prediction => 
-    `<p>${prediction.class.charAt(0).toUpperCase() + prediction.class.slice(1)}: ${Math.round(prediction.score * 100)}%</p>`
-  ).join('');
-
-  // Announce Detected Objects Every 2 Seconds
-  if (predictions.length > 0) {
-    const currentTime = Date.now();
-    if (currentTime - lastAnnouncementTime >= 2000) { // 2-second interval
-      const detectionText = getDetectionText(predictions);
-      if (detectionText) {
-        speak(detectionText);
-        lastAnnouncementTime = currentTime;
-      }
+    if (!model) {
+        console.log('Model is still loading...');
+        setTimeout(detectObjects, 500);
+        return;
     }
-  }
 
-  requestAnimationFrame(detectObjects);
+    resizeCanvas();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const predictions = await model.detect(video);
+
+    // 🔹 Draw bounding boxes and labels
+    predictions.forEach(prediction => {
+        const [x, y, width, height] = prediction.bbox;
+        const text = capitalizeFirstLetter(prediction.class);
+
+        // 🔹 Draw bounding box (Thicker)
+        ctx.strokeStyle = '#00FFFF';
+        ctx.lineWidth = 5; // 🔹 Increased thickness
+        ctx.strokeRect(x, y, width, height);
+
+        // 🔹 Draw label background and text
+        ctx.fillStyle = '#00FFFF';
+        ctx.font = '18px Arial';
+        ctx.fillText(text, x, y - 10);
+    });
+
+    // 🔹 Update resultDiv with detected objects
+    resultDiv.innerHTML = '';
+    predictions.forEach(prediction => {
+        const capitalizedText = capitalizeFirstLetter(prediction.class);
+        resultDiv.innerHTML += `<p>${capitalizedText}: ${Math.round(prediction.score * 100)}%</p>`;
+    });
+
+    // 🔹 Speak detected objects every 2 seconds
+    if (predictions.length > 0) {
+        const currentTime = Date.now();
+        if (currentTime - lastAnnouncementTime >= 2000) { // 2 seconds interval
+            const detectionText = getDetectionText(predictions);
+            speak(detectionText);
+            lastAnnouncementTime = currentTime;
+        }
+    }
+
+    requestAnimationFrame(detectObjects);
 }
 
-// 🔹 Start Camera Button Click
+// 🔹 Add Start Camera Button
+const startButton = document.createElement('button');
+startButton.textContent = 'Start Camera';
+startButton.style.position = 'absolute';
+startButton.style.bottom = '60px';
+startButton.style.left = '50%';
+startButton.style.transform = 'translateX(-50%)';
+startButton.style.padding = '10px 20px';
+startButton.style.backgroundColor = '#007BFF';
+startButton.style.color = 'white';
+startButton.style.border = 'none';
+startButton.style.cursor = 'pointer';
+document.body.appendChild(startButton);
+
 startButton.addEventListener('click', () => {
-  setupWebcam(currentFacingMode).then(() => {
-    loadModel();
-  }).catch(error => console.error('Camera setup failed:', error));
+    setupWebcam().then(() => {
+        loadModel();
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+    }).catch(error => {
+        console.error('Error setting up webcam:', error);
+        alert('Failed to access webcam. Check permissions.');
+    });
 });
 
-// 🔹 Toggle Camera Button Click
-toggleButton.addEventListener('click', () => {
-  currentFacingMode = currentFacingMode === "user" ? "environment" : "user";
-  setupWebcam(currentFacingMode);
-});
+// 🔹 Add Switch Camera Button
+const switchButton = document.createElement('button');
+switchButton.textContent = 'Switch Camera';
+switchButton.style.position = 'absolute';
+switchButton.style.bottom = '20px';
+switchButton.style.left = '50%';
+switchButton.style.transform = 'translateX(-50%)';
+switchButton.style.padding = '10px 20px';
+switchButton.style.backgroundColor = '#28A745';
+switchButton.style.color = 'white';
+switchButton.style.border = 'none';
+switchButton.style.cursor = 'pointer';
+document.body.appendChild(switchButton);
 
-// 🔹 Torch Toggle Button Click
+switchButton.addEventListener('click', switchCamera);
+
+// 🔹 Add Torch Button
+const torchButton = document.createElement('button');
+torchButton.textContent = 'Toggle Torch';
+torchButton.style.position = 'absolute';
+torchButton.style.bottom = '100px';
+torchButton.style.left = '50%';
+torchButton.style.transform = 'translateX(-50%)';
+torchButton.style.padding = '10px 20px';
+torchButton.style.backgroundColor = '#FFC107';
+torchButton.style.color = 'black';
+torchButton.style.border = 'none';
+torchButton.style.cursor = 'pointer';
+document.body.appendChild(torchButton);
+
 torchButton.addEventListener('click', toggleTorch);
 
-// 🔹 Ensure HTTPS or localhost for Camera Access
+// 🔹 Ensure HTTPS or localhost
 if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
-  alert('This page must be served over HTTPS or localhost for the camera to work.');
+    alert('This page must be served over HTTPS or localhost for the camera to work.');
 }
