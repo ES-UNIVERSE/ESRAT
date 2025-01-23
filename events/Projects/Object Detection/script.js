@@ -11,6 +11,7 @@ let lastAnnouncementTime = 0;
 let currentStream = null;
 let useFrontCamera = false;
 let track = null;
+let torchEnabled = false;
 
 // 🔹 Start webcam
 async function setupWebcam() {
@@ -59,8 +60,8 @@ function toggleTorch() {
         return;
     }
 
-    const torchOn = track.getSettings().torch || false;
-    track.applyConstraints({ advanced: [{ torch: !torchOn }] });
+    torchEnabled = !torchEnabled;
+    track.applyConstraints({ advanced: [{ torch: torchEnabled }] });
 }
 
 // 🔹 Switch between front and back cameras
@@ -96,6 +97,40 @@ function getDetectionText(predictions) {
     return `A ${items.join(', ')} detected`;
 }
 
+// 🔹 Smooth object detection using keyframe tracking-like logic
+let previousPredictions = [];
+
+function smoothPredictions(newPredictions) {
+    const smoothed = [];
+    newPredictions.forEach(newPred => {
+        let closestMatch = null;
+        let minDistance = Infinity;
+
+        previousPredictions.forEach(oldPred => {
+            const dx = newPred.bbox[0] - oldPred.bbox[0];
+            const dy = newPred.bbox[1] - oldPred.bbox[1];
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestMatch = oldPred;
+            }
+        });
+
+        if (closestMatch && minDistance < 50) {
+            smoothed.push({
+                ...newPred,
+                bbox: closestMatch.bbox.map((val, i) => (val * 0.6 + newPred.bbox[i] * 0.4))
+            });
+        } else {
+            smoothed.push(newPred);
+        }
+    });
+
+    previousPredictions = smoothed;
+    return smoothed;
+}
+
 // 🔹 Detect objects and draw bounding boxes
 async function detectObjects() {
     if (!model) {
@@ -107,7 +142,8 @@ async function detectObjects() {
     resizeCanvas();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const predictions = await model.detect(video);
+    let predictions = await model.detect(video);
+    predictions = smoothPredictions(predictions);
 
     // 🔹 Draw bounding boxes and labels
     predictions.forEach(prediction => {
@@ -116,7 +152,7 @@ async function detectObjects() {
 
         // 🔹 Draw bounding box (Thicker)
         ctx.strokeStyle = '#00FFFF';
-        ctx.lineWidth = 5; // 🔹 Increased thickness
+        ctx.lineWidth = 5;
         ctx.strokeRect(x, y, width, height);
 
         // 🔹 Draw label
@@ -125,17 +161,9 @@ async function detectObjects() {
         ctx.fillText(text, x, y - 10);
     });
 
-    // 🔹 Update resultDiv with detected objects
-    resultDiv.innerHTML = '';
-    predictions.forEach(prediction => {
-        const capitalizedText = capitalizeFirstLetter(prediction.class);
-        resultDiv.innerHTML += `<p>${capitalizedText}: ${Math.round(prediction.score * 100)}%</p>`;
-    });
-
-    // 🔹 Speak detected objects every 2 seconds
     if (predictions.length > 0) {
         const currentTime = Date.now();
-        if (currentTime - lastAnnouncementTime >= 2000) { // 2 seconds interval
+        if (currentTime - lastAnnouncementTime >= 2000) {
             const detectionText = getDetectionText(predictions);
             speak(detectionText);
             lastAnnouncementTime = currentTime;
@@ -145,22 +173,6 @@ async function detectObjects() {
     requestAnimationFrame(detectObjects);
 }
 
-// 🔹 Event Listeners for Buttons
-startButton.addEventListener('click', () => {
-    setupWebcam().then(() => {
-        loadModel();
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-    }).catch(error => {
-        console.error('Error setting up webcam:', error);
-        alert('Failed to access webcam. Check permissions.');
-    });
-});
-
+startButton.addEventListener('click', setupWebcam);
 switchButton.addEventListener('click', switchCamera);
 torchButton.addEventListener('click', toggleTorch);
-
-// 🔹 Ensure HTTPS or localhost
-if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
-    alert('This page must be served over HTTPS or localhost for the camera to work.');
-}
