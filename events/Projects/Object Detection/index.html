@@ -13,6 +13,7 @@
   <!-- Include TensorFlow.js and COCO-SSD model -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+  <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script> <!-- ✅ Fix for Safari -->
 
   <style>
     /* Basic reset */
@@ -24,7 +25,7 @@
 
     body, html {
       height: 100%;
-      overflow: hidden; /* Remove vertical scrollbar */
+      overflow: hidden;
     }
 
     .navbar {
@@ -41,7 +42,7 @@
     }
 
     .navbar h1.logo img {
-      height: 50px; /* Adjust logo size for responsiveness */
+      height: 50px;
     }
 
     .navbar ul {
@@ -62,7 +63,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: calc(100% - 70px); /* Subtract navbar height */
+      height: calc(100% - 70px);
       width: 100%;
     }
 
@@ -82,7 +83,7 @@
       color: white;
       font-size: 18px;
       width: 100%;
-      pointer-events: none; /* Make sure result div doesn't interfere with mouse events */
+      pointer-events: none;
     }
   </style>
 </head>
@@ -97,9 +98,8 @@
     </ul>
   </nav>
 
-  <!-- Object Detection Section -->
   <div class="object-detection-section">
-    <video id="webcam" autoplay></video>
+    <video id="webcam" autoplay playsinline></video> <!-- ✅ Fix for iOS Safari -->
     <canvas id="outputCanvas"></canvas>
     <div id="result"></div>
   </div>
@@ -109,29 +109,34 @@
     const canvas = document.getElementById('outputCanvas');
     const ctx = canvas.getContext('2d');
     const resultDiv = document.getElementById('result');
+    let model;
 
-    // Function to start the webcam
     async function setupWebcam() {
       return new Promise((resolve, reject) => {
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          alert('getUserMedia not supported in this browser.');
+          alert('getUserMedia is not supported in this browser.');
           reject(new Error('getUserMedia not supported'));
           return;
         }
 
-        navigator.mediaDevices.getUserMedia({video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } }})
-          .then(stream => {
-            video.srcObject = stream;
-            video.onloadedmetadata = () => resolve(video);
-          })
-          .catch(error => {
-            console.error('Error accessing media devices.', error);
-            reject(error);
-          });
+        navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: "environment", // ✅ Fix: iOS prefers "environment" instead of "user"
+            width: { ideal: 640 },
+            height: { ideal: 480 }
+          }
+        })
+        .then(stream => {
+          video.srcObject = stream;
+          video.onloadedmetadata = () => resolve(video);
+        })
+        .catch(error => {
+          console.error('Error accessing media devices:', error);
+          alert('Unable to access camera. Check browser settings and permissions.');
+          reject(error);
+        });
       });
     }
-
-    let model;
 
     async function loadModel() {
       model = await cocoSsd.load();
@@ -140,9 +145,7 @@
 
     function resizeCanvas() {
       const containerWidth = window.innerWidth;
-      const containerHeight = window.innerHeight - 70; // Subtract navbar height
-
-      // Calculate the scaling factors based on the video's aspect ratio
+      const containerHeight = window.innerHeight - 70;
       const aspectRatio = video.videoWidth / video.videoHeight;
       let newWidth, newHeight;
 
@@ -154,48 +157,15 @@
         newHeight = containerWidth / aspectRatio;
       }
 
-      // Set the canvas dimensions to match the calculated width and height
       canvas.width = newWidth;
       canvas.height = newHeight;
-
-      // Position the canvas in the center of the container
       canvas.style.width = `${newWidth}px`;
       canvas.style.height = `${newHeight}px`;
       canvas.style.left = `${(containerWidth - newWidth) / 2}px`;
       canvas.style.top = `${(containerHeight - newHeight) / 2}px`;
 
-      // Calculate scaling factors for the bounding boxes
-      const scaleX = newWidth / video.videoWidth;
-      const scaleY = newHeight / video.videoHeight;
-
-      return {scaleX, scaleY};
+      return { scaleX: newWidth / video.videoWidth, scaleY: newHeight / video.videoHeight };
     }
-
-    function speak(text) {
-      const synth = window.speechSynthesis;
-      const utterance = new SpeechSynthesisUtterance(text);
-      synth.speak(utterance);
-    }
-
-    function capitalizeFirstLetter(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
-    function getDetectionText(predictions) {
-      const counts = {};
-      predictions.forEach(prediction => {
-        const className = capitalizeFirstLetter(prediction.class);
-        counts[className] = (counts[className] || 0) + 1;
-      });
-
-      const items = Object.entries(counts).map(([className, count]) => {
-        return count === 1 ? className : `${count} ${className}s`;
-      });
-
-      return `A ${items.join(', ')} detected`;
-    }
-
-    let lastAnnouncementTime = 0;
 
     async function detectObjects() {
       if (!model) {
@@ -204,58 +174,26 @@
         return;
       }
 
-      const {scaleX, scaleY} = resizeCanvas();
-
+      const { scaleX, scaleY } = resizeCanvas();
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
       const predictions = await model.detect(video);
-
-      // Draw bounding boxes and labels on the canvas
       predictions.forEach(prediction => {
         const [x, y, width, height] = prediction.bbox;
-        const text = prediction.class;
-
-        // Scale bounding box coordinates
-        const scaledX = x * scaleX;
-        const scaledY = y * scaleY;
-        const scaledWidth = width * scaleX;
-        const scaledHeight = height * scaleY;
-
-        // Draw bounding box
         ctx.strokeStyle = '#00FFFF';
         ctx.lineWidth = 4;
-        ctx.strokeRect(scaledX, scaledY, scaledWidth, scaledHeight);
+        ctx.strokeRect(x * scaleX, y * scaleY, width * scaleX, height * scaleY);
 
-        // Draw label background and text
         ctx.fillStyle = '#00FFFF';
         ctx.font = '24px Arial';
-        const textWidth = ctx.measureText(text).width;
-        const textHeight = parseInt(ctx.font, 10); // base 10
-
-        ctx.fillRect(scaledX, scaledY - textHeight - 4, textWidth + 4, textHeight + 4);
-        ctx.fillStyle = '#000000';
-        ctx.fillText(text, scaledX + 2, scaledY - 4);
+        ctx.fillText(prediction.class, x * scaleX + 2, y * scaleY - 4);
       });
 
-      resultDiv.innerHTML = '';
-      predictions.forEach(prediction => {
-        const capitalizedText = capitalizeFirstLetter(prediction.class);
-        resultDiv.innerHTML += `<p>${capitalizedText}: ${Math.round(prediction.score * 100)}%</p>`;
-      });
-
-      if (predictions.length > 0) {
-        const currentTime = Date.now();
-        if (currentTime - lastAnnouncementTime >= 2000) { // 2 seconds interval
-          const detectionText = getDetectionText(predictions);
-          speak(detectionText);
-          lastAnnouncementTime = currentTime;
-        }
-      }
+      resultDiv.innerHTML = predictions.map(prediction => `<p>${prediction.class}: ${Math.round(prediction.score * 100)}%</p>`).join('');
 
       requestAnimationFrame(detectObjects);
     }
 
-    // Add a button to trigger webcam access
     const startButton = document.createElement('button');
     startButton.textContent = 'Start Camera';
     startButton.style.position = 'absolute';
@@ -274,22 +212,13 @@
       setupWebcam().then(() => {
         video.play();
         loadModel();
-
-        // Resize canvas on window resize
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
       }).catch(error => {
         console.error('Error setting up webcam:', error);
-        alert('Failed to access webcam. Please check your browser permissions and try again.');
       });
     });
-
-    // Ensure HTTPS or localhost environment
-    if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
-      alert('This page must be served over HTTPS or localhost for the camera to work.');
-    }
   </script>
 
-  <script src="script.js"></script>
 </body>
 </html>
