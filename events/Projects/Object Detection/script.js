@@ -2,6 +2,9 @@ const video = document.getElementById('webcam');
 const canvas = document.getElementById('outputCanvas');
 const ctx = canvas.getContext('2d');
 const resultDiv = document.getElementById('result');
+const startButton = document.getElementById('startButton');
+const switchButton = document.getElementById('switchButton');
+const torchButton = document.getElementById('torchButton');
 
 let model;
 let lastAnnouncementTime = 0;
@@ -9,7 +12,7 @@ let currentStream = null;
 let useFrontCamera = false;
 let track = null;
 
-// 🔹 Function to start the webcam
+// 🔹 Start webcam
 async function setupWebcam() {
     if (currentStream) {
         currentStream.getTracks().forEach(track => track.stop());
@@ -34,19 +37,19 @@ async function setupWebcam() {
     }
 }
 
-// 🔹 Function to load the model
+// 🔹 Load model and start detection
 async function loadModel() {
     model = await cocoSsd.load();
     detectObjects();
 }
 
-// 🔹 Function to resize canvas
+// 🔹 Resize canvas
 function resizeCanvas() {
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
 }
 
-// 🔹 Function to enable/disable torch (if supported)
+// 🔹 Toggle torch (flashlight) ON/OFF
 function toggleTorch() {
     if (!track) return;
     
@@ -60,25 +63,25 @@ function toggleTorch() {
     track.applyConstraints({ advanced: [{ torch: !torchOn }] });
 }
 
-// 🔹 Function to switch camera
+// 🔹 Switch between front and back cameras
 function switchCamera() {
     useFrontCamera = !useFrontCamera;
     setupWebcam();
 }
 
-// 🔹 Function to announce detected objects every 2 seconds
+// 🔹 Announce detected objects every 2 seconds
 function speak(text) {
     const synth = window.speechSynthesis;
     const utterance = new SpeechSynthesisUtterance(text);
     synth.speak(utterance);
 }
 
-// 🔹 Function to capitalize first letter of detected objects
+// 🔹 Format detected object names
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-// 🔹 Function to get detection text for announcements
+// 🔹 Create announcement text for detected objects
 function getDetectionText(predictions) {
     const counts = {};
     predictions.forEach(prediction => {
@@ -93,7 +96,7 @@ function getDetectionText(predictions) {
     return `A ${items.join(', ')} detected`;
 }
 
-// 🔹 Function to detect objects
+// 🔹 Detect objects and draw bounding boxes
 async function detectObjects() {
     if (!model) {
         console.log('Model is still loading...');
@@ -116,7 +119,7 @@ async function detectObjects() {
         ctx.lineWidth = 5; // 🔹 Increased thickness
         ctx.strokeRect(x, y, width, height);
 
-        // 🔹 Draw label background and text
+        // 🔹 Draw label
         ctx.fillStyle = '#00FFFF';
         ctx.font = '18px Arial';
         ctx.fillText(text, x, y - 10);
@@ -142,20 +145,7 @@ async function detectObjects() {
     requestAnimationFrame(detectObjects);
 }
 
-// 🔹 Add Start Camera Button
-const startButton = document.createElement('button');
-startButton.textContent = 'Start Camera';
-startButton.style.position = 'absolute';
-startButton.style.bottom = '60px';
-startButton.style.left = '50%';
-startButton.style.transform = 'translateX(-50%)';
-startButton.style.padding = '10px 20px';
-startButton.style.backgroundColor = '#007BFF';
-startButton.style.color = 'white';
-startButton.style.border = 'none';
-startButton.style.cursor = 'pointer';
-document.body.appendChild(startButton);
-
+// 🔹 Event Listeners for Buttons
 startButton.addEventListener('click', () => {
     setupWebcam().then(() => {
         loadModel();
@@ -167,36 +157,7 @@ startButton.addEventListener('click', () => {
     });
 });
 
-// 🔹 Add Switch Camera Button
-const switchButton = document.createElement('button');
-switchButton.textContent = 'Switch Camera';
-switchButton.style.position = 'absolute';
-switchButton.style.bottom = '20px';
-switchButton.style.left = '50%';
-switchButton.style.transform = 'translateX(-50%)';
-switchButton.style.padding = '10px 20px';
-switchButton.style.backgroundColor = '#28A745';
-switchButton.style.color = 'white';
-switchButton.style.border = 'none';
-switchButton.style.cursor = 'pointer';
-document.body.appendChild(switchButton);
-
 switchButton.addEventListener('click', switchCamera);
-
-// 🔹 Add Torch Button
-const torchButton = document.createElement('button');
-torchButton.textContent = 'Toggle Torch';
-torchButton.style.position = 'absolute';
-torchButton.style.bottom = '100px';
-torchButton.style.left = '50%';
-torchButton.style.transform = 'translateX(-50%)';
-torchButton.style.padding = '10px 20px';
-torchButton.style.backgroundColor = '#FFC107';
-torchButton.style.color = 'black';
-torchButton.style.border = 'none';
-torchButton.style.cursor = 'pointer';
-document.body.appendChild(torchButton);
-
 torchButton.addEventListener('click', toggleTorch);
 
 // 🔹 Ensure HTTPS or localhost
