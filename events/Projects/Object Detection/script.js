@@ -18,13 +18,18 @@ function stopStream() {
   }
 }
 
-// 🔹 Function to Start Webcam with Selected Camera
+// 🔹 Function to Start Webcam with High Resolution
 async function setupWebcam(facingMode) {
   stopStream(); // Stop previous stream before switching
 
   try {
     stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: facingMode, width: 640, height: 480 }
+      video: { 
+        facingMode: facingMode,
+        width: { ideal: 1920 },  // High resolution width
+        height: { ideal: 1080 }, // High resolution height
+        frameRate: { ideal: 30 } // Smooth 30 FPS
+      }
     });
 
     video.srcObject = stream;
