@@ -114,16 +114,15 @@ async function detectObjects() {
     const [x, y, width, height] = prediction.bbox;
     const text = prediction.class.charAt(0).toUpperCase() + prediction.class.slice(1);
 
-    // Draw Bounding Box
-    ctx.strokeStyle = '#00FFFF';
-    ctx.lineWidth = 3;
-    ctx.strokeRect(x, y, width, height);
+// Draw Bounding Box
+ctx.strokeStyle = '#00FFFF';
+ctx.lineWidth = 10; // 🔹 Increased thickness from 3 to 5
+ctx.strokeRect(x, y, width, height);
 
-    // Draw Label
-    ctx.fillStyle = '#00FFFF';
-    ctx.font = '16px Arial';
-    ctx.fillText(text, x, y - 10);
-  });
+// Draw Label
+ctx.fillStyle = '#00FFFF';
+ctx.font = '18px Arial'; // 🔹 Slightly increased font size for better visibility
+ctx.fillText(text, x, y - 10);
 
   // Update Detected Objects List
   resultDiv.innerHTML = predictions.map(prediction => 
