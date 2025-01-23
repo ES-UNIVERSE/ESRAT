@@ -10,23 +10,25 @@ let model, stream;
 let useBackCamera = true;
 let torchOn = false;
 let lastAnnouncementTime = 0;
-let previousDetections = new Map(); // Store previous detections for smoothing
+let previousDetections = new Map();
+let isDetecting = false;
 
-// Load the COCO-SSD model
+// Load COCO-SSD Model
 async function loadModel() {
     model = await cocoSsd.load();
     console.log("COCO-SSD Model Loaded!");
     detectObjects();
 }
 
-// Start the webcam
+// Start Webcam with High FPS
 async function setupWebcam() {
     stopCamera();
     const constraints = {
         video: {
             facingMode: useBackCamera ? "environment" : "user",
-            width: { ideal: 1280 },
-            height: { ideal: 720 }
+            width: { ideal: 1920 },  // High resolution
+            height: { ideal: 1080 },
+            frameRate: { ideal: 60, max: 60 } // 60 FPS
         }
     };
 
@@ -35,20 +37,20 @@ async function setupWebcam() {
         video.srcObject = stream;
         video.onloadedmetadata = () => {
             video.play();
-            detectObjects(); // Start detection when video is ready
+            detectObjects(); 
         };
     } catch (error) {
         console.error("Camera error:", error);
     }
 }
 
-// Switch between front and back camera
+// Switch Camera
 switchCameraBtn.addEventListener("click", async () => {
     useBackCamera = !useBackCamera;
     await setupWebcam();
 });
 
-// Toggle Torch (only works on mobile with a rear camera)
+// Toggle Torch
 toggleTorchBtn.addEventListener("click", () => {
     if (!stream) return;
 
@@ -63,25 +65,28 @@ toggleTorchBtn.addEventListener("click", () => {
     }
 });
 
-// Stop the camera stream
+// Stop Camera
 function stopCamera() {
     if (stream) {
         stream.getTracks().forEach(track => track.stop());
     }
 }
 
-// Object detection function
+// Optimized Object Detection Loop
 async function detectObjects() {
-    if (!model) return;
+    if (!model || isDetecting) return;
 
+    isDetecting = true;
+    requestAnimationFrame(detectObjects);  // Ensure 60 FPS loop
+
+    if (video.readyState !== 4) return;
+    
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (video.readyState === 4) {
-        const predictions = await model.detect(video);
-
-        // Smooth object tracking using previous detections
+    // Run detection asynchronously to avoid frame lag
+    model.detect(video).then(predictions => {
         let updatedDetections = new Map();
 
         predictions.forEach(prediction => {
@@ -89,31 +94,31 @@ async function detectObjects() {
             const label = prediction.class;
             const confidence = prediction.score;
 
-            // Only consider confident detections (reduce flickering)
-            if (confidence > 0.5) {
+            // Only keep high-confidence detections to prevent flickering
+            if (confidence > 0.6) {
                 let prev = previousDetections.get(label);
                 if (prev) {
-                    // Smooth the position using interpolation
-                    prediction.bbox[0] = prev.x * 0.7 + x * 0.3;
-                    prediction.bbox[1] = prev.y * 0.7 + y * 0.3;
-                    prediction.bbox[2] = prev.width * 0.7 + width * 0.3;
-                    prediction.bbox[3] = prev.height * 0.7 + height * 0.3;
+                    // Smooth position using interpolation
+                    prediction.bbox[0] = prev.x * 0.8 + x * 0.2;
+                    prediction.bbox[1] = prev.y * 0.8 + y * 0.2;
+                    prediction.bbox[2] = prev.width * 0.8 + width * 0.2;
+                    prediction.bbox[3] = prev.height * 0.8 + height * 0.2;
                 }
                 updatedDetections.set(label, { x, y, width, height });
             }
         });
 
-        previousDetections = updatedDetections; // Store smoothed detections
+        previousDetections = updatedDetections;
 
-        // Draw bounding boxes smoothly
+        // Draw smooth bounding boxes
         previousDetections.forEach((bbox, label) => {
             ctx.strokeStyle = "#00FFFF";
-            ctx.lineWidth = 5;
+            ctx.lineWidth = 6; // Thicker bounding box
             ctx.strokeRect(bbox.x, bbox.y, bbox.width, bbox.height);
 
             ctx.fillStyle = "#00FFFF";
-            ctx.font = "18px Arial";
-            ctx.fillText(`${label}`, bbox.x, bbox.y - 5);
+            ctx.font = "20px Arial";
+            ctx.fillText(`${label}`, bbox.x, bbox.y - 10);
         });
 
         // Announce detections every 2 seconds
@@ -126,12 +131,12 @@ async function detectObjects() {
                 lastAnnouncementTime = currentTime;
             }
         }
-    }
 
-    requestAnimationFrame(detectObjects);
+        isDetecting = false; // Allow next detection cycle
+    });
 }
 
-// Format speech announcement
+// Format Speech Announcement
 function formatAnnouncement(objects) {
     const uniqueObjects = [...new Set(objects)];
     if (uniqueObjects.length === 1) {
@@ -152,6 +157,6 @@ function speak(text) {
 
 // Start Camera & Model
 startCameraBtn.addEventListener("click", async () => {
+    await loadModel();
     await setupWebcam();
-    if (!model) await loadModel();
 });
