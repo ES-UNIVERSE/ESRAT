@@ -10,6 +10,7 @@ let model, stream;
 let useBackCamera = true;
 let torchOn = false;
 let lastAnnouncementTime = 0;
+let previousDetections = new Map(); // Store previous detections for smoothing
 
 // Load the COCO-SSD model
 async function loadModel() {
@@ -34,7 +35,7 @@ async function setupWebcam() {
         video.srcObject = stream;
         video.onloadedmetadata = () => {
             video.play();
-            detectObjects(); // Ensure detection starts when video loads
+            detectObjects(); // Start detection when video is ready
         };
     } catch (error) {
         console.error("Camera error:", error);
@@ -80,27 +81,46 @@ async function detectObjects() {
     if (video.readyState === 4) {
         const predictions = await model.detect(video);
 
+        // Smooth object tracking using previous detections
+        let updatedDetections = new Map();
+
         predictions.forEach(prediction => {
             const [x, y, width, height] = prediction.bbox;
             const label = prediction.class;
-            const confidence = (prediction.score * 100).toFixed(1);
+            const confidence = prediction.score;
 
-            // Draw bounding box
+            // Only consider confident detections (reduce flickering)
+            if (confidence > 0.5) {
+                let prev = previousDetections.get(label);
+                if (prev) {
+                    // Smooth the position using interpolation
+                    prediction.bbox[0] = prev.x * 0.7 + x * 0.3;
+                    prediction.bbox[1] = prev.y * 0.7 + y * 0.3;
+                    prediction.bbox[2] = prev.width * 0.7 + width * 0.3;
+                    prediction.bbox[3] = prev.height * 0.7 + height * 0.3;
+                }
+                updatedDetections.set(label, { x, y, width, height });
+            }
+        });
+
+        previousDetections = updatedDetections; // Store smoothed detections
+
+        // Draw bounding boxes smoothly
+        previousDetections.forEach((bbox, label) => {
             ctx.strokeStyle = "#00FFFF";
             ctx.lineWidth = 5;
-            ctx.strokeRect(x, y, width, height);
+            ctx.strokeRect(bbox.x, bbox.y, bbox.width, bbox.height);
 
-            // Draw label
             ctx.fillStyle = "#00FFFF";
             ctx.font = "18px Arial";
-            ctx.fillText(`${label} (${confidence}%)`, x, y - 5);
+            ctx.fillText(`${label}`, bbox.x, bbox.y - 5);
         });
 
         // Announce detections every 2 seconds
-        if (predictions.length > 0) {
+        if (previousDetections.size > 0) {
             const currentTime = Date.now();
             if (currentTime - lastAnnouncementTime >= 2000) {
-                const objectNames = predictions.map(p => p.class);
+                const objectNames = [...previousDetections.keys()];
                 const announcementText = formatAnnouncement(objectNames);
                 speak(announcementText);
                 lastAnnouncementTime = currentTime;
