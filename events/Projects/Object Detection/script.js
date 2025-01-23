@@ -10,11 +10,17 @@ let lastAnnouncementTime = 0;
 let currentFacingMode = "environment"; // Default to rear camera
 let stream = null;
 
-// Function to Start Webcam with Selected Camera
-async function setupWebcam(facingMode) {
+// 🔹 Function to Stop Current Camera Stream
+function stopStream() {
   if (stream) {
-    stream.getTracks().forEach(track => track.stop()); // Stop existing stream
+    stream.getTracks().forEach(track => track.stop());
+    stream = null;
   }
+}
+
+// 🔹 Function to Start Webcam with Selected Camera
+async function setupWebcam(facingMode) {
+  stopStream(); // Stop previous stream before switching
 
   try {
     stream = await navigator.mediaDevices.getUserMedia({
@@ -29,35 +35,30 @@ async function setupWebcam(facingMode) {
   }
 }
 
-// Load COCO-SSD Model
+// 🔹 Load COCO-SSD Model
 async function loadModel() {
   model = await cocoSsd.load();
   detectObjects();
 }
 
-// Resize Canvas
+// 🔹 Resize Canvas
 function resizeCanvas() {
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
 }
 
-// Speak Detected Objects
+// 🔹 Speak Detected Objects
 function speak(text) {
   const synth = window.speechSynthesis;
   const utterance = new SpeechSynthesisUtterance(text);
   synth.speak(utterance);
 }
 
-// Capitalize Object Name
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-// Format Detection Text
+// 🔹 Format Detection Text
 function getDetectionText(predictions) {
   const counts = {};
   predictions.forEach(prediction => {
-    const className = capitalizeFirstLetter(prediction.class);
+    const className = prediction.class.charAt(0).toUpperCase() + prediction.class.slice(1);
     counts[className] = (counts[className] || 0) + 1;
   });
 
@@ -68,7 +69,7 @@ function getDetectionText(predictions) {
   return `A ${items.join(', ')} detected`;
 }
 
-// Detect Objects and Draw Bounding Boxes
+// 🔹 Detect Objects and Draw Bounding Boxes
 async function detectObjects() {
   if (!model) {
     console.log('Model is still loading...');
@@ -83,7 +84,7 @@ async function detectObjects() {
 
   predictions.forEach(prediction => {
     const [x, y, width, height] = prediction.bbox;
-    const text = capitalizeFirstLetter(prediction.class);
+    const text = prediction.class.charAt(0).toUpperCase() + prediction.class.slice(1);
 
     // Draw Bounding Box
     ctx.strokeStyle = '#00FFFF';
@@ -98,7 +99,7 @@ async function detectObjects() {
 
   // Update Detected Objects List
   resultDiv.innerHTML = predictions.map(prediction => 
-    `<p>${capitalizeFirstLetter(prediction.class)}: ${Math.round(prediction.score * 100)}%</p>`
+    `<p>${prediction.class.charAt(0).toUpperCase() + prediction.class.slice(1)}: ${Math.round(prediction.score * 100)}%</p>`
   ).join('');
 
   // Announce Detected Objects Every 2 Seconds
@@ -114,20 +115,20 @@ async function detectObjects() {
   requestAnimationFrame(detectObjects);
 }
 
-// Start Camera Button Click
+// 🔹 Start Camera Button Click
 startButton.addEventListener('click', () => {
   setupWebcam(currentFacingMode).then(() => {
     loadModel();
   }).catch(error => console.error('Camera setup failed:', error));
 });
 
-// Toggle Camera Button Click
+// 🔹 Toggle Camera Button Click
 toggleButton.addEventListener('click', () => {
   currentFacingMode = currentFacingMode === "user" ? "environment" : "user";
   setupWebcam(currentFacingMode);
 });
 
-// Ensure HTTPS or localhost for Camera Access
+// 🔹 Ensure HTTPS or localhost for Camera Access
 if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
   alert('This page must be served over HTTPS or localhost for the camera to work.');
 }
