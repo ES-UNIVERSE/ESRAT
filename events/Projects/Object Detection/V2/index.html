@@ -1,55 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YOLOv8 Object Detection</title>
-  
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Object Detection</title>
 
-  
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body, html { height: 100%; overflow: hidden; background: #000; color: white; text-align: center; }
-    
-    .navbar { position: fixed; top: 0; width: 100%; background: #333; padding: 10px; display: flex; justify-content: space-between; }
-    .navbar h1 img { height: 40px; }
-    .navbar ul { list-style: none; display: flex; gap: 15px; }
-    .navbar ul li a { color: white; text-decoration: none; font-size: 16px; }
-    
-    .container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; }
-    video, canvas { position: absolute; top: 50px; width: 100%; height: auto; }
-    
-    .controls { position: absolute; bottom: 10px; display: flex; gap: 10px; }
-    button { padding: 10px 20px; font-size: 16px; background: #007BFF; color: white; border: none; cursor: pointer; }
-  </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: black; color: white; text-align: center; }
+        header { display: flex; align-items: center; justify-content: space-between; padding: 10px; background: #222; }
+        .logo { width: 50px; }
+        nav a { color: white; text-decoration: none; margin: 0 15px; font-size: 18px; }
+        .container { position: relative; width: 100%; height: 80vh; display: flex; align-items: center; justify-content: center; }
+        video, canvas { position: absolute; width: 100%; height: 100%; object-fit: cover; }
+        .controls { position: absolute; bottom: 20px; display: flex; gap: 10px; }
+        .btn { padding: 10px 15px; border: none; background: #007BFF; color: white; cursor: pointer; font-size: 16px; border-radius: 5px; }
+    </style>
 </head>
 <body>
 
-  <nav class="navbar">
-    <h1><img src="/ESRAT/apks/logo.png" alt="Logo"></h1>
-    <ul>
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Gallery</a></li>
-      <li><a href="#">Events</a></li>
-      <li><a href="#">Admin</a></li>
-    </ul>
-  </nav>
+    <header>
+        <img src="/ESRAT/img/logo.png" class="logo" alt="Logo">
+        <nav>
+            <a href="#">V3</a>
+            <a href="#">V4</a>
+            <a href="#">V5</a>
+        </nav>
+    </header>
 
-  <div class="container">
-    <video id="webcam" autoplay playsinline></video>
-    <canvas id="canvas"></canvas>
-    <div class="controls">
-      <button id="startBtn">Start Camera</button>
-      <button id="switchCamBtn">Switch Camera</button>
-      <button id="torchBtn">Torch ON/OFF</button>
+    <h1>AI Object Detection</h1>
+    <div class="container">
+        <video id="webcam" autoplay playsinline></video>
+        <canvas id="outputCanvas"></canvas>
     </div>
-  </div>
 
-  <script src="script.js"></script>
+    <div class="controls">
+        <button class="btn" id="startCamera">Start Camera</button>
+    </div>
 
+    <script>
+        let video;
+        let canvas;
+        let ctx;
+        let model;
+        let isRunning = false; // Flag to control detection loop
+
+        async function startVideo() {
+            video = document.getElementById("webcam");
+            canvas = document.getElementById("outputCanvas");
+            ctx = canvas.getContext('2d');
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                video.srcObject = stream;
+
+                video.onloadedmetadata = async () => {
+                    video.play();
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    model = await cocoSsd.load();
+                    isRunning = true; // Start detection loop
+                    detectObjects();
+                };
+            } catch (error) {
+                console.error("Error accessing webcam:", error);
+                alert("Please allow webcam access to use this feature.");
+            }
+        }
+
+        async function detectObjects() {
+            if (!isRunning) return; // Stop if flag is false
+
+            if (video.readyState === video.HAVE_ENOUGH_DATA) { // Check if video data is ready
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const predictions = await model.detect(canvas);
+                drawDetections(predictions);
+            }
+
+            requestAnimationFrame(detectObjects); // Use requestAnimationFrame for smoother performance
+        }
+
+
+        function drawDetections(predictions) {
+            ctx.strokeStyle = "#FF0000";
+            ctx.lineWidth = 2;
+            ctx.font = "16px sans-serif";
+            ctx.fillStyle = "#FF0000";
+
+            predictions.forEach(prediction => {
+                const x = prediction.bbox[0];
+                const y = prediction.bbox[1];
+                const width = prediction.bbox[2];
+                const height = prediction.bbox[3];
+                ctx.strokeRect(x, y, width, height);
+                ctx.fillText(
+                    `${prediction.class} (${(prediction.score * 100).toFixed(2)}%)`,
+                    x,
+                    y > 10 ? y - 5 : 10
+                );
+            });
+        }
+
+        document.getElementById("startCamera").addEventListener("click", startVideo);
+    </script>
 </body>
 </html>
