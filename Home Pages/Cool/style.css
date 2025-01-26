@@ -75,7 +75,7 @@ body {
 
 .navbar .navbar-brand {
   font-weight: 600;
-  margin-left: -70px;
+  margin-left: -15px;
   font-size: 14px;
   color: #66615B;
   text-transform: uppercase;
@@ -184,7 +184,7 @@ body {
     cursor: pointer;
     position: absolute;  /* Position it to the right side */
     right: 15px;
-    margin-top: 15px;  /* Adjust this to control how far right you want the button */
+    margin-top: 20px;  /* Adjust this to control how far right you want the button */
 }
 
 .navbar-toggler-bar {
