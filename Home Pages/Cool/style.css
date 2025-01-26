@@ -75,8 +75,7 @@ body {
 
 .navbar .navbar-brand {
   font-weight: 600;
-  margin: 5px 0px;
-  padding: 20px 15px;
+  margin-left: -70px;
   font-size: 14px;
   color: #66615B;
   text-transform: uppercase;
@@ -172,14 +171,20 @@ body {
     font-size: 18px;
     color: white;
 }
-
+.navbar .navbar-brand img {
+  height: 120px; /* Adjust this value to make the image smaller */
+  width: auto;
+  margin-top: -40px; /* Keeps aspect ratio */
+  margin-right: 5px; /* Adds space between the logo and text */
+}
 .navbar-toggler {
     background: transparent;
     border: none;
     outline: none;
     cursor: pointer;
     position: absolute;  /* Position it to the right side */
-    right: 15px;  /* Adjust this to control how far right you want the button */
+    right: 15px;
+    margin-top: 15px;  /* Adjust this to control how far right you want the button */
 }
 
 .navbar-toggler-bar {
