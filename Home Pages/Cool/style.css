@@ -184,7 +184,7 @@ body {
     cursor: pointer;
     position: absolute;  /* Position it to the right side */
     right: 15px;
-    margin-top: 20px;  /* Adjust this to control how far right you want the button */
+    margin-top: 0px;  /* Adjust this to control how far right you want the button */
 }
 
 .navbar-toggler-bar {
