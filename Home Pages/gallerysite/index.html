@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Gallery</div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search by name or keyword..." oninput="searchMedia()">
+            <button onclick="searchMedia()">Search</button>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><button onclick="showCategory('all')">All</button></li>
+            <li><button onclick="showCategory('images')">Images</button></li>
+            <li><button onclick="showCategory('videos')">Videos</button></li>
+            <li><button onclick="showCategory('upload')">Upload</button></li>
+        </ul>
+    </nav>
+
+    <div class="gallery" id="gallery">
+        <!-- Thumbnails will be loaded here -->
+    </div>
+
+    <div id="uploadSection" class="upload-section" style="display: none;">
+        <h2>Upload Media</h2>
+        <input type="file" id="fileInput" accept="image/*, video/*" />
+        <button onclick="uploadMedia()">Upload</button>
+    </div>
+
+    <!-- Lightbox Modal for full-size images and videos -->
+    <div id="lightboxModal" class="lightbox-modal">
+        <span class="close" onclick="closeLightbox()">&times;</span>
+        <div class="lightbox-content">
+            <img id="lightboxImage" src="" alt="Full-Size Image" style="display: none;">
+            <video id="lightboxVideo" controls style="display: none;">
+                <source src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+    "images": [
+        { "src": "media/images/photo1.JPG", "title": "Sunset View" },
+        { "src": "media/images/photo2.JPG", "title": "Mountain Peak" },
+        { "src": "media/images/photo3.JPG", "title": "Mountain Peak" },
+        { "src": "media/images/photo4.JPG", "title": "Mountain Peak" },
+        { "src": "media/images/photo5.JPG", "title": "Mountain Peak" }
+    ],
+    "videos": [
+        { "src": "media/videos/video1.mp4", "title": "Ocean Waves" },
+        { "src": "media/videos/video2.mp4", "title": "City Lights" },
+        { "src": "media/videos/video3.mp4", "title": "City Lights" },
+        { "src": "media/videos/video4.mp4", "title": "City Lights" },
+        { "src": "media/videos/video5.mp4", "title": "City Lights" }
+    ]
+}
