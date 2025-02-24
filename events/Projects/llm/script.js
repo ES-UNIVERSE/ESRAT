@@ -52,7 +52,7 @@ async function getResponse(userInput) {
             "X-Title": "My Chatbot" // Optional: Your site name
         },
         body: JSON.stringify({
-            model: "google/gemini-2.0-flash-lite-preview-02-05:free", // Replace with your preferred model
+            model: "qwen/qwen-vl-plus:free", // Replace with your preferred model
             messages: [
                 {
                     role: "user",
