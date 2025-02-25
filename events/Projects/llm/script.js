@@ -15,7 +15,7 @@ themeToggle.addEventListener("click", () => {
 });
 
 // Replace with your OpenRouter API key
-const OPENROUTER_API_KEY = "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";
+const OPENROUTER_API_KEY = "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";
 
 // Load custom responses from responses.json
 let customResponses = {};
