@@ -83,7 +83,7 @@ async function sendMessage() {
       botMessage = await fetchImageResults(userMessage);
     } else {
       // Fetch a direct answer or web results
-      botMessage = await fetchWikipediaSummary(userMessage);
+      botMessage = await fetchDirectAnswer(userMessage);
     }
   } else {
     // Check for custom response or fetch from OpenRouter
@@ -127,21 +127,31 @@ async function fetchOpenRouterResponse(userMessage) {
   }
 }
 
-// Fetch Wikipedia Summary
-async function fetchWikipediaSummary(query) {
+// Google Custom Search API Configuration
+const GOOGLE_API_KEY = 'AIzaSyBKuGTaol29XXgdGOsZ5Pz001aH3uWJx74'; // Replace with your API key
+const GOOGLE_CSE_ID = 'f650ca3150faf4cbc'; // Replace with your CSE ID
+
+// Fetch a direct answer from the web
+async function fetchDirectAnswer(query) {
   try {
-    const apiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
+    const apiUrl = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&key=${GOOGLE_API_KEY}&cx=${GOOGLE_CSE_ID}`;
     const response = await fetch(apiUrl);
     const data = await response.json();
 
-    if (data.extract) {
-      return `Here's what I found on Wikipedia: <strong>${data.extract}</strong><br><a href="${data.content_urls.desktop.page}" target="_blank">Read more</a>`;
+    if (data.items && data.items.length > 0) {
+      const firstResult = data.items[0];
+      const title = firstResult.title;
+      const link = firstResult.link;
+      const snippet = firstResult.snippet || 'No snippet available.';
+
+      // Format the response with a direct answer
+      return `Here's what I found: <strong>${snippet}</strong><br><a href="${link}" target="_blank">Read more</a>`;
     } else {
-      return 'No Wikipedia summary found.';
+      return 'No results found on the web.';
     }
   } catch (error) {
-    console.error('Error fetching Wikipedia summary:', error);
-    return 'Sorry, I couldn\'t fetch information from Wikipedia.';
+    console.error('Error fetching web response:', error);
+    return 'Sorry, I couldn\'t fetch results from the web.';
   }
 }
 
@@ -161,6 +171,24 @@ async function fetchImageResults(query) {
   } catch (error) {
     console.error('Error fetching image results:', error);
     return 'Sorry, I couldn\'t fetch images from the web.';
+  }
+}
+
+// Fetch Wikipedia Summary
+async function fetchWikipediaSummary(query) {
+  try {
+    const apiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    if (data.extract) {
+      return `Here's what I found on Wikipedia: <strong>${data.extract}</strong><br><a href="${data.content_urls.desktop.page}" target="_blank">Read more</a>`;
+    } else {
+      return 'No Wikipedia summary found.';
+    }
+  } catch (error) {
+    console.error('Error fetching Wikipedia summary:', error);
+    return 'Sorry, I couldn\'t fetch information from Wikipedia.';
   }
 }
 
