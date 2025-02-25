@@ -1,42 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JARVIS</title>
-    <link rel="icon" type="image/png" href="https://es-universe.github.io/ESRAT/apks/logo.png">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>JARVIS Chatbot</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
 <body>
-    <!-- Header Container -->
-    <div class="header-container">
-        <div class="logo-container">
-            <img src="https://es-universe.github.io/ESRAT/apks/logo.png" alt="Logo" class="logo">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-left">
+      <img src="https://es-universe.github.io/ESRAT/apks/logo.png" alt="Logo" class="logo">
+    </div>
+    <div class="navbar-right">
+      <!-- Dropdown Menu -->
+      <div class="dropdown">
+        <button class="dropdown-btn">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="dropdown-content">
+          <button id="theme-toggle" class="dropdown-item">
+            <i class="fas fa-moon"></i> Theme
+          </button>
+          <button id="settings-btn" class="dropdown-item">
+            <i class="fas fa-cog"></i> Settings
+          </button>
+          <button id="account-btn" class="dropdown-item">
+            <i class="fas fa-user"></i> Account
+          </button>
+          <button id="contacts-btn" class="dropdown-item">
+            <i class="fas fa-address-book"></i> Contacts
+          </button>
         </div>
-        <div class="nav-container">
-            <div class="nav-icon" id="nav-icon">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <div class="nav-menu" id="nav-menu">
-                <button id="theme-toggle"><i class="fas fa-moon"></i> Theme</button>
-                <button><i class="fas fa-cog"></i> Settings</button>
-                <button><i class="fas fa-user"></i> Account</button>
-            </div>
-        </div>
+      </div>
+      <!-- Language Selector -->
+      <select id="language-select" class="language-select">
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+      </select>
+    </div>
+  </nav>
+
+  <!-- Chat Container -->
+  <div class="chat-container">
+    <!-- Chat Window -->
+    <div class="chat-window" id="chat-window">
+      <!-- Messages will be dynamically added here -->
     </div>
 
-    <!-- Chat Container -->
-    <div class="chat-container">
-        <div id="chat-output"></div>
-        <div class="chat-input">
-            <input type="text" id="user-input" placeholder="Type your message...">
-            <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
-        </div>
+    <!-- Input Area -->
+    <div class="input-area">
+      <div class="input-wrapper">
+        <input type="text" id="user-input" placeholder="Type your message..." />
+        <button id="voice-btn" class="voice-btn"><i class="fas fa-microphone"></i></button>
+      </div>
+      <button id="send-btn" class="send-btn"><i class="fas fa-paper-plane"></i></button>
     </div>
+  </div>
 
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
