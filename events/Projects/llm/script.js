@@ -110,16 +110,23 @@ async function fetchOpenRouterResponse(userMessage) {
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `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`,
+        'Authorization': `Bearer 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`, // Add 'Bearer' prefix
         'Content-Type': 'application/json',
+        'HTTP-Referer': window.location.href, // Required by OpenRouter
+        'X-Title': 'JARVIS Chatbot' // Required by OpenRouter
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
+        model: 'qwen/qwen-vl-plus:free', // Ensure this is the correct model name
         messages: [{ role: 'user', content: userMessage }],
       }),
     });
 
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+
     const data = await response.json();
+    console.log(data); // Log the response for debugging
     return data.choices[0].message.content;
   } catch (error) {
     console.error('Error fetching response:', error);
