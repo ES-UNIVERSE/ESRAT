@@ -104,7 +104,7 @@ async function sendMessage() {
   userInput.value = '';
 }
 
-// Fetch response from OpenRouter API call
+// Fetch response from OpenRouter API
 async function fetchOpenRouterResponse(userMessage) {
   try {
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
