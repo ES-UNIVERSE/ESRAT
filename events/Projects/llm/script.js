@@ -110,7 +110,7 @@ async function fetchOpenRouterResponse(userMessage) {
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `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`, // Add 'Bearer' prefix
+        'Authorization': `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`, // Add 'Bearer' prefix
         'Content-Type': 'application/json',
         'HTTP-Referer': window.location.href, // Required by OpenRouter
         'X-Title': 'JARVIS Chatbot' // Required by OpenRouter
