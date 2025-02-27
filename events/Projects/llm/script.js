@@ -19,7 +19,7 @@ fetch('responses.json')
 // Theme Toggle
 themeToggle.addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
-  themeToggle.innerHTML = document.body.classList.contains('dark-mode') ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+  themeToggle.innerHTML = document.body.classList.contains('dark-mode') ? '<i class="fas fa-sun"></i> Theme' : '<i class="fas fa-moon"></i> Theme';
 });
 
 // Close dropdown when clicking outside
@@ -43,23 +43,31 @@ webBtn.addEventListener('click', () => {
   appendMessage(`Web search mode ${isWebSearchMode ? 'enabled' : 'disabled'}.`, 'bot');
 });
 
+// Voice Search Mode
+let isVoiceSearchMode = false;
+
+voiceBtn.addEventListener('click', () => {
+  isVoiceSearchMode = !isVoiceSearchMode;
+  voiceBtn.classList.toggle('active', isVoiceSearchMode);
+  appendMessage(`Voice search mode ${isVoiceSearchMode ? 'enabled' : 'disabled'}.`, 'bot');
+  
+  if (isVoiceSearchMode) {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = languageSelect.value;
+    recognition.start();
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      userInput.value = transcript;
+      sendMessage();
+    };
+  }
+});
+
 // Send Message Function
 sendBtn.addEventListener('click', sendMessage);
 userInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') sendMessage();
-});
-
-// Voice Input Functionality
-voiceBtn.addEventListener('click', () => {
-  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-  recognition.lang = languageSelect.value;
-  recognition.start();
-
-  recognition.onresult = (event) => {
-    const transcript = event.results[0][0].transcript;
-    userInput.value = transcript;
-    sendMessage();
-  };
 });
 
 // Chat History
@@ -110,7 +118,7 @@ async function fetchOpenRouterResponse(userMessage) {
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `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`, // Add 'Bearer' prefix
+        'Authorization': `Bearer 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`, // Add 'Bearer' prefix
         'Content-Type': 'application/json',
         'HTTP-Referer': window.location.href, // Required by OpenRouter
         'X-Title': 'JARVIS Chatbot' // Required by OpenRouter
