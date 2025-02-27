@@ -1,4 +1,4 @@
-/* General styles */
+/* General Styles */
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     margin: 0;
@@ -353,6 +353,10 @@ body {
   .web-btn:hover {
     color: #007aff;
   }
+
+  .voice-btn:hover {
+    color: #007aff;
+  }  
   
   /* Dropdown Menu */
   .dropdown {
@@ -450,6 +454,7 @@ body {
     background-color: rgba(0, 122, 255, 0.1);
     border-radius: 8px;
   }
+
 /* Bot Message Styling */
 .bot-message a {
     color: #007aff;
