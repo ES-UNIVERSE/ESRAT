@@ -1,3 +1,4 @@
+// DOM Elements
 const chatWindow = document.getElementById('chat-window');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
@@ -14,6 +15,58 @@ fetch('responses.json')
   .then(response => response.json())
   .then(data => customResponses = data)
   .catch(error => console.error('Error loading responses:', error));
+
+// Load contacts
+let contacts = [];
+
+async function loadContacts() {
+  try {
+    const response = await fetch('contacts.csv');
+    const csvData = await response.text();
+    contacts = parseCSV(csvData);
+    console.log('Contacts loaded:', contacts);
+  } catch (error) {
+    console.error('Error loading contacts:', error);
+  }
+}
+
+function parseCSV(csvData) {
+  const rows = csvData.split('\n');
+  const headers = rows[0].split(',').map(header => header.trim()); // Extract headers
+  return rows.slice(1).map(row => {
+    const values = row.split(',');
+    return headers.reduce((obj, header, index) => {
+      obj[header] = values[index] ? values[index].trim() : '';
+      return obj;
+    }, {});
+  });
+}
+
+// Load contacts when the page loads
+loadContacts();
+
+// Fuzzy search for contacts
+function searchContacts(query) {
+  const options = {
+    keys: ['First Name', 'Last Name'], // Search by first and last name
+    threshold: 0.3, // Lower threshold for more flexible matching
+    includeScore: true, // Include match score in results
+    ignoreLocation: true, // Search across the entire string
+    minMatchCharLength: 5, // Minimum characters to match
+  };
+
+  const fuse = new Fuse(contacts, options);
+  const results = fuse.search(query);
+
+  return results.map(result => result.item); // Return the matched contacts
+}
+
+// Clean the search query
+function cleanQuery(query) {
+  return query
+    .replace(/number|contact|phone|of|the/gi, '') // Remove common words
+    .trim(); // Trim extra spaces
+}
 
 // Theme Toggle
 themeToggle.addEventListener('click', () => {
@@ -84,7 +137,19 @@ async function sendMessage() {
   const typingIndicator = appendTypingIndicator();
 
   let botMessage;
-  if (isWebSearchMode) {
+  if (userMessage.toLowerCase().includes('number') || userMessage.toLowerCase().includes('contact') || userMessage.toLowerCase().includes('phone')) {
+    // Clean the query
+    const nameQuery = cleanQuery(userMessage);
+    const matchedContacts = searchContacts(nameQuery);
+
+    if (matchedContacts.length > 0) {
+      botMessage = matchedContacts.map(contact => 
+        `Name: ${contact['First Name']} ${contact['Last Name']}, Phone: ${contact['Phone Number (Mobile)']}`
+      ).join('\n'); // Use newline for better readability
+    } else {
+      botMessage = 'No matching contacts found.';
+    }
+  } else if (isWebSearchMode) {
     // Check if the user is asking for images
     if (userMessage.toLowerCase().includes('show me') || userMessage.toLowerCase().includes('picture of') || userMessage.toLowerCase().includes('image of')) {
       botMessage = await fetchImageResults(userMessage);
@@ -97,18 +162,21 @@ async function sendMessage() {
     botMessage = customResponses[userMessage.toLowerCase()] || await fetchOpenRouterResponse(userMessage);
   }
 
-  // Remove typing indicator and add bot message
-  chatWindow.removeChild(typingIndicator);
-  appendMessage(botMessage, 'bot');
+  // Simulate typing delay for all responses
+  setTimeout(() => {
+    // Remove typing indicator and add bot message
+    chatWindow.removeChild(typingIndicator);
+    appendMessage(botMessage, 'bot');
 
-  // Add the query and response to chat history
-  chatHistory.push({ query: userMessage, response: botMessage });
+    // Add the query and response to chat history
+    chatHistory.push({ query: userMessage, response: botMessage });
 
-  // Provide proactive suggestions
-  provideProactiveSuggestions(userMessage);
+    // Provide proactive suggestions
+    provideProactiveSuggestions(userMessage);
 
-  // Clear input
-  userInput.value = '';
+    // Clear input
+    userInput.value = '';
+  }, 1000); // 1-second typing delay
 }
 
 // Fetch response from OpenRouter API
@@ -117,7 +185,7 @@ async function fetchOpenRouterResponse(userMessage) {
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer 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`, // Add 'Bearer' prefix
+        'Authorization': `Bearer api-key-here`, // Add 'Bearer' prefix
         'Content-Type': 'application/json',
         'HTTP-Referer': window.location.href, // Required by OpenRouter
         'X-Title': 'JARVIS Chatbot' // Required by OpenRouter
@@ -159,7 +227,7 @@ async function fetchDirectAnswer(query) {
       const snippet = firstResult.snippet || 'No snippet available.';
 
       // Format the response with a direct answer
-      return `Here's what I found: <strong>${snippet}</strong><br><a href="${link}" target="_blank">Read more</a>`;
+      return `Here's what I found: ${snippet}\nRead more: ${link}`;
     } else {
       return 'No results found on the web.';
     }
@@ -185,24 +253,6 @@ async function fetchImageResults(query) {
   } catch (error) {
     console.error('Error fetching image results:', error);
     return 'Sorry, I couldn\'t fetch images from the web.';
-  }
-}
-
-// Fetch Wikipedia Summary
-async function fetchWikipediaSummary(query) {
-  try {
-    const apiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-
-    if (data.extract) {
-      return `Here's what I found on Wikipedia: <strong>${data.extract}</strong><br><a href="${data.content_urls.desktop.page}" target="_blank">Read more</a>`;
-    } else {
-      return 'No Wikipedia summary found.';
-    }
-  } catch (error) {
-    console.error('Error fetching Wikipedia summary:', error);
-    return 'Sorry, I couldn\'t fetch information from Wikipedia.';
   }
 }
 
