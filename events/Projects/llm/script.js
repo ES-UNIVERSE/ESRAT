@@ -227,7 +227,7 @@ async function fetchDirectAnswer(query) {
       const snippet = firstResult.snippet || 'No snippet available.';
 
       // Format the response with a direct answer
-      return `Here's what I found: ${snippet}\nRead more: ${link}`;
+      return `➡️ ${snippet}\nRead more: ${link}`;
     } else {
       return 'No results found on the web.';
     }
