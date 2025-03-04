@@ -1,5 +1,5 @@
 # ESRAT by Ganga 🎮
-🔥🔥🔥Super Advanced God MODE RATs and Payloads🔥🔥🔥
+🔥🔥🔥Super Advanced HOD mode RATs and Payloads🔥🔥🔥
 
 Unlock the ultimate in remote access technology with my Super Advanced God Mode RATs. Designed for professionals who demand superior control and precision, our Remote Access Trojans (RATs) provide unparalleled capabilities for monitoring, managing, and securing your digital environment. 🙊
 
