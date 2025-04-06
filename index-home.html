@@ -4,63 +4,1296 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.13/dist/lenis.css">
+  <title>ES Creatives | Tech Nexus</title>
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="icon" href="apks/favicon.ico" type="image/x-icon">
-  <title>HOME</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --secondary: #7c3aed;
+      --dark: #0f172a;
+      --light: #f8fafc;
+      --accent: #10b981;
+      --neon: #06b6d4;
+      --pink: #ec4899;
+      --blue: #3b82f6;
+      --purple: #8b5cf6;
+      --orange: #f97316;
+      --text: #e2e8f0;
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    @font-face {
+      font-family: 'Inter';
+      src: url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--dark);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    /* Header Styles */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 5%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(15, 23, 42, 0.7);
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .navbar .logo img {
+      height: 60px; /* Increased logo size */
+      transition: transform 0.3s ease;
+    }
+
+    .navbar .logo img:hover {
+      transform: scale(1.1);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      position: relative;
+      transition: all 0.3s ease;
+      opacity: 0.9;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      opacity: 1;
+      color: var(--neon);
+      font-weight: bold;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* Tech Marquee */
+    .tech-marquee {
+      position: fixed;
+      top: 80px;
+      left: 0;
+      right: 0;
+      background: rgba(59, 130, 246, 0.1);
+      backdrop-filter: blur(5px);
+      padding: 0.5rem 0;
+      z-index: 999;
+      overflow: hidden;
+      white-space: nowrap;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .tech-marquee span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 20s linear infinite;
+      color: var(--neon);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.9rem;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* Mobile Menu Button */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 1001;
+      width: 30px;
+      height: 24px;
+      position: relative;
+    }
+
+    /* Hamburger Icon */
+    .hamburger-icon,
+    .hamburger-icon::before,
+    .hamburger-icon::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 3px;
+      background: var(--text);
+      transition: all 0.3s ease;
+      border-radius: 3px;
+    }
+
+    .hamburger-icon {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .hamburger-icon::before {
+      top: -8px;
+    }
+
+    .hamburger-icon::after {
+      top: 8px;
+    }
+
+    .mobile-menu-btn.active .hamburger-icon {
+      background: transparent;
+    }
+
+    .mobile-menu-btn.active .hamburger-icon::before {
+      transform: translateY(8px) rotate(45deg);
+      background: var(--neon);
+    }
+
+    .mobile-menu-btn.active .hamburger-icon::after {
+      transform: translateY(-8px) rotate(-45deg);
+      background: var(--neon);
+    }
+
+    /* Mobile Navigation */
+    .mobile-nav {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 80%;
+      max-width: 300px;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.98);
+      backdrop-filter: blur(20px);
+      z-index: 999;
+      padding: 6rem 2rem 2rem;
+      transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .mobile-nav.active {
+      right: 0;
+    }
+
+    .mobile-nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1.2rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      opacity: 0.9;
+      text-transform: uppercase;
+    }
+
+    .mobile-nav a:hover {
+      color: var(--neon);
+      transform: translateX(10px);
+      opacity: 1;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 8rem 5% 0;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .main-title {
+      font-size: clamp(3rem, 10vw, 6rem);
+      font-weight: 800;
+      margin: 2rem 0;
+      background: linear-gradient(90deg, var(--blue), var(--purple), var(--pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: -1px;
+      position: relative;
+      min-height: 8rem; /* Ensure consistent height during transitions */
+    }
+
+    .typing-text {
+      display: inline-block;
+      position: relative;
+      text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    }
+
+    .typing-text::after {
+      content: '|';
+      position: absolute;
+      right: -10px;
+      animation: blink 0.7s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .subtitle {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      opacity: 0.9;
+      line-height: 1.7;
+      text-align: center;
+      color: var(--text);
+    }
+
+    /* LLM Button */
+    .llm-section {
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    .llm-text {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      color: var(--neon);
+      font-weight: 500;
+    }
+
+    .llm-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.5s ease;
+      position: relative;
+      overflow: hidden;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      color: white;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+      z-index: 1;
+    }
+
+    .llm-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+    }
+
+    .llm-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+      z-index: -1;
+    }
+
+    .llm-btn:hover::before {
+      left: 100%;
+    }
+
+    .llm-btn i {
+      margin-left: 0.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    .llm-btn:hover i {
+      transform: translateX(5px);
+    }
+
+    /* Cursor Effect */
+    .cursor-shadow {
+      position: fixed;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      filter: blur(50px);
+      background: rgba(59, 130, 246, 0.3);
+      mix-blend-mode: screen;
+      animation: colorChange 10s infinite linear;
+    }
+
+    @keyframes colorChange {
+      0% { background: rgba(59, 130, 246, 0.3); }
+      25% { background: rgba(139, 92, 246, 0.3); }
+      50% { background: rgba(16, 185, 129, 0.3); }
+      75% { background: rgba(236, 72, 153, 0.3); }
+      100% { background: rgba(59, 130, 246, 0.3); }
+    }
+
+    /* 3D Model Container */
+    .model-container {
+      width: 100%;
+      height: 400px;
+      margin: 3rem auto;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Tech Sections */
+    .section {
+      min-height: 100vh;
+      padding: 6rem 5%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 2rem;
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: 800;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .section-subtitle {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      text-align: center;
+      color: var(--text);
+      opacity: 0.9;
+      line-height: 1.7;
+    }
+
+    /* Coding Section */
+    .coding-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .tech-card {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tech-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+      z-index: -1;
+    }
+
+    .tech-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .tech-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--blue);
+    }
+
+    /* AI Terminal */
+    .ai-terminal {
+      background: #1e1e2e;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 3rem auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(59, 130, 246, 0.1);
+      max-width: 800px;
+      opacity: 0;
+      transform: translateY(50px);
+    }
+
+    .terminal-header {
+      background: #2d2d42;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+
+    .terminal-filename {
+      margin-left: 0.5rem;
+      color: #ccc;
+      font-size: 0.9rem;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .terminal-content {
+      padding: 1.5rem;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      line-height: 1.5;
+      overflow-x: auto;
+      background: #1e1e2e;
+      min-height: 200px;
+    }
+
+    .code-line {
+      display: block;
+      margin-bottom: 0.5rem;
+      white-space: pre;
+    }
+
+    .keyword { color: #569cd6; }
+    .function { color: #dcdcaa; }
+    .string { color: #ce9178; }
+    .comment { color: #6a9955; }
+    .number { color: #b5cea8; }
+    .variable { color: #9cdcfe; }
+    .operator { color: #d4d4d4; }
+
+    /* AI Section */
+    .ai-showcase {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .ai-card {
+      background: rgba(16, 185, 129, 0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(16, 185, 129, 0.1);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .ai-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.1), transparent 70%);
+      z-index: -1;
+    }
+
+    .ai-card:hover {
+      transform: translateY(-5px);
+      background: rgba(16, 185, 129, 0.2);
+      box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+    }
+
+    .ai-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--accent);
+    }
+
+    /* Tech Features */
+    .tech-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--purple);
+    }
+
+    /* Footer */
+    footer {
+      background: rgba(15, 23, 42, 0.9);
+      padding: 4rem 5% 2rem;
+      text-align: center;
+      margin-top: 4rem;
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      text-align: left;
+    }
+
+    .footer-column h3 {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      color: white;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .footer-links a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      opacity: 0.8;
+    }
+
+    .footer-links a:hover {
+      color: var(--neon);
+      opacity: 1;
+    }
+
+    .community-cta {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-top: 2rem;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+    }
+
+    .community-cta h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .community-cta p {
+      margin-bottom: 1.5rem;
+      opacity: 0.9;
+    }
+
+    .community-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1.75rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: linear-gradient(90deg, var(--pink), var(--purple));
+      color: white;
+      box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+    }
+
+    .community-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .social-link {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1.5rem;
+    }
+
+    .social-link:hover {
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      color: white;
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+    }
+
+    .copyright {
+      margin-top: 3rem;
+      opacity: 0.7;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 1024px) {
+      .main-title {
+        font-size: 4rem;
+      }
+      
+      .section {
+        padding: 4rem 5%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      .main-title {
+        font-size: 3rem;
+        margin-top: 4rem;
+      }
+      
+      .coding-grid,
+      .ai-showcase,
+      .tech-features {
+        grid-template-columns: 1fr;
+      }
+
+      .model-container {
+        height: 300px;
+      }
+
+      .tech-marquee {
+        top: 70px;
+        font-size: 0.8rem;
+      }
+
+      .navbar .logo img {
+        height: 50px; /* Slightly smaller logo on mobile */
+      }
+    }
+
+    @media (max-width: 480px) {
+      .navbar {
+        padding: 1rem 5%;
+      }
+      
+      .main-title {
+        font-size: 2.5rem;
+      }
+      
+      .llm-btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+      }
+      
+      .model-container {
+        height: 250px;
+      }
+
+      .social-link {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+
+      .tech-marquee {
+        display: none;
+      }
+
+      .navbar .logo img {
+        height: 45px; /* Even smaller logo on very small screens */
+      }
+    }
+  </style>
 </head>
-<body class="home-page">
-  <nav class="navbar"> 
-    <h class="logo"> <a href="/ESRAT/events/CameraModule/index.html"> <img src="apks/logo.png" height="100px"></a></h>
-    <ul>
-      <li><a href="events/index.events.html" class="active">EVENTS</a></li>
-      <li><a href="index-apk.html">H@CKS</a></li>
-      <li><a href="/ESRAT/gallery/index.gallery.html">GALLERY</a></li>
-      <li><a href="index.html">ADMIN</a></li>
-    </ul>
+<body>
+  <!-- Cursor Effect -->
+  <div class="cursor-shadow"></div>
+
+  <!-- Header -->
+  <nav class="navbar">
+    <div class="logo">
+      <a href="/ESRAT/events/CameraModule/index.html"><img src="apks/logo.png" alt="ES Creatives Logo"></a>
+    </div>
+    <div class="nav-links">
+      <a href="events/index.events.html" class="active">EVENTS</a>
+      <a href="index-apk.html">H@CKS</a>
+      <a href="/ESRAT/gallery/index.gallery.html">GALLERY</a>
+      <a href="index.html">ADMIN</a>
+    </div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <span class="hamburger-icon"></span>
+    </button>
   </nav>
 
-  <!-- Hidden YouTube Player -->
-  <div id="player" style="display: none;"></div>
+  <!-- Tech Marquee -->
+  <div class="tech-marquee">
+    <span>Next-Gen Technologies • AI/ML • Full-Stack Development • Cloud Computing • Neural Networks • Computer Vision • Natural Language Processing • Deep Learning •</span>
+  </div>
 
-  <!-- Music Controls -->
+  <!-- Mobile Navigation -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="events/index.events.html" class="active">EVENTS</a>
+    <a href="index-apk.html">H@CKS</a>
+    <a href="/ESRAT/gallery/index.gallery.html">GALLERY</a>
+    <a href="index.html">ADMIN</a>
+  </div>
 
-  <div class="scroll-text-container">
-    <p class="scroll-text large" style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">CODING <a href="/ESRAT/Home Pages/Cool/index.html">🎮</a></p>
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1 class="main-title">
+      <span class="typing-text" id="typingText"></span>
+    </h1>
 
-    <div style="text-align: center; margin-top: 20px;">
-      <a href="/ESRAT/events/Projects/llm/index.html" 
-         style="display: inline-block; text-align: center; text-decoration: none; padding: 8px 15px; border-radius: 12px; backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); transition: all 0.3s ease-in-out; box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2); color: white; font-size: 1rem; font-weight: bold; text-shadow: 0px 0px 4px rgba(255, 255, 255, 0.5); white-space: nowrap;"
-         onmouseover="this.style.backdropFilter='blur(15px)'; this.style.background='rgba(255, 255, 255, 0.2)'; this.style.transform='scale(1.07)'; this.style.boxShadow='0 6px 18px rgba(255, 255, 255, 0.3)';"
-         onmouseout="this.style.backdropFilter='blur(10px)'; this.style.background='rgba(255, 255, 255, 0.1)'; this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(255, 255, 255, 0.2)';">
-         Try out My LLM ➡️
+    <div class="llm-section">
+      <p class="llm-text">Experience my custom-trained Large Language Model</p>
+      <a href="/ESRAT/events/Projects/llm/index.html" class="llm-btn">
+        Try out My LLM <i class='bx bx-chevron-right'></i>
       </a>
     </div>
 
-    <p class="scroll-text small">&nbsp;Ancient mantras shaped reality through divine chants, resonating with the forces of the universe to bring about change. Today, programming languages are our modern mantras, weaving together logic and creativity to shape the digital world. Each line of code is a digital spell, carefully crafted to invoke precise machine responses, guiding invisible forces toward our desired outcomes. In both realms, precision, discipline, and clarity are paramount. By merging the wisdom of the past with the innovations of the present, we harness the ancient power of intent and combine it with modern technology to create a new kind of magic—one that controls algorithms instead of elements, and circuits instead of stars.</p>
-
-    <p class="scroll-text small2">
-      सङ्गणकभाषाः शक्तिमन्त्रसमानाः,
-जगत्सृजन्ति देवाः प्राचीनकालतः।
-लघुपङ्क्तयः कोडस्य, यथा मन्त्रैः समं,
-दिजिटलवास्तवम्, संचालयन्ति तत्।
-
-यथा मन्त्राः आकाशे गूढशक्तिं जागरयन्ति,
-तथा कोडपङ्क्तयः यन्त्राणि स्पन्दयन्ति।
-सङ्गणकविद्या मन्त्रविद्यायाः एकरूपिणी,
-यत्र पुराणं नूतनं मिलित्वा जगत्परिवर्तयति।
+    <p class="subtitle">
+      Ancient mantras shaped reality through divine chants, resonating with the forces of the universe to bring about change. Today, programming languages are our modern mantras, weaving together logic and creativity to shape the digital world.
     </p>
-  </div>
 
-  <div class="cursor-shadow"></div>
+    <div class="model-container" id="mainModel"></div>
+  </section>
+
+  <!-- Coding Section -->
+  <section class="section" id="coding">
+    <h2 class="section-title">Modern Development</h2>
+    <p class="section-subtitle">Master cutting-edge technologies with our comprehensive resources and tools for developers of all levels.</p>
+    
+    <div class="coding-grid">
+      <div class="tech-card">
+        <div class="tech-icon">
+          <i class='bx bx-code-alt'></i>
+        </div>
+        <h3>Full-Stack JavaScript</h3>
+        <p>Build dynamic web applications with modern JavaScript frameworks like React, Next.js, and Node.js.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">
+          <i class='bx bxl-python'></i>
+        </div>
+        <h3>Python Ecosystem</h3>
+        <p>From web development to data science, master Python with Django, Flask, and ML libraries.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">
+          <i class='bx bx-cloud'></i>
+        </div>
+        <h3>Cloud Architecture</h3>
+        <p>Deploy scalable applications using Docker, Kubernetes, and cloud platforms like AWS and GCP.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Section -->
+  <section class="section" id="ai">
+    <h2 class="section-title">Artificial Intelligence</h2>
+    <p class="section-subtitle">Harness the power of AI with our cutting-edge tools and machine learning frameworks.</p>
+    
+    <div class="ai-terminal" id="aiTerminal">
+      <div class="terminal-header">
+        <div class="terminal-dot dot-red"></div>
+        <div class="terminal-dot dot-yellow"></div>
+        <div class="terminal-dot dot-green"></div>
+        <span class="terminal-filename">ai_terminal.py</span>
+      </div>
+      <div class="terminal-content" id="terminalContent">
+        <!-- Content will be added by JavaScript -->
+      </div>
+    </div>
+    
+    <div class="ai-showcase">
+      <div class="ai-card">
+        <div class="ai-icon">
+          <i class='bx bx-brain'></i>
+        </div>
+        <h3>Machine Learning</h3>
+        <p>Build and train models with TensorFlow, PyTorch, and our intuitive ML platform.</p>
+      </div>
+      <div class="ai-card">
+        <div class="ai-icon">
+          <i class='bx bx-low-vision'></i>
+        </div>
+        <h3>Computer Vision</h3>
+        <p>Develop applications that can analyze and interpret visual information from images.</p>
+      </div>
+      <div class="ai-card">
+        <div class="ai-icon">
+          <i class='bx bx-shape-square'></i>
+        </div>
+        <h3>Generative AI</h3>
+        <p>Create stunning art, music, and content with our generative AI tools and APIs.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tech Features Section -->
+  <section class="section">
+    <h2 class="section-title">Tech Innovations</h2>
+    <p class="section-subtitle">Explore the latest technological advancements shaping our digital future.</p>
+    
+    <div class="tech-features">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class='bx bx-chip'></i>
+        </div>
+        <h3>Quantum Computing</h3>
+        <p>Unlock unprecedented computing power with quantum algorithms and qubit technology.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class='bx bx-network-chart'></i>
+        </div>
+        <h3>Blockchain</h3>
+        <p>Decentralized solutions for secure transactions and smart contract development.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class='bx bx-data'></i>
+        </div>
+        <h3>Big Data</h3>
+        <p>Process and analyze massive datasets with distributed computing frameworks.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3>ES Creatives</h3>
+        <p>Exploring the intersection of coding, gaming, and artificial intelligence.</p>
+      </div>
+      <div class="footer-column">
+        <h3>Quick Links</h3>
+        <div class="footer-links">
+          <a href="events/index.events.html">Events</a>
+          <a href="index-apk.html">H@cks</a>
+          <a href="/ESRAT/gallery/index.gallery.html">Gallery</a>
+          <a href="index.html">Admin</a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h3>Resources</h3>
+        <div class="footer-links">
+          <a href="/ESRAT/events/Projects/llm/index.html">LLM Project</a>
+          <a href="/ESRAT/events/CameraModule/index.html">Camera Module</a>
+          <a href="#">Documentation</a>
+          <a href="#">Tutorials</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="community-cta">
+      <h3>Join Our Tech Community</h3>
+      <p>Connect with like-minded developers and AI enthusiasts to collaborate on innovative projects.</p>
+      <a href="#" class="community-btn">Become a Member</a>
+    </div>
+    
+    <div class="social-links">
+      <a href="https://wa.me/917008265529?text=Hola, I recently visited your website. Let's talk!" class="social-link">
+        <i class='bx bxl-whatsapp'></i>
+      </a>
+      <a href="https://www.instagram.com/urstruly_ganga/" class="social-link">
+        <i class='bx bxl-instagram'></i>
+      </a>
+      <a href="https://github.com/ES-UNIVERSE" class="social-link">
+        <i class='bx bxl-github'></i>
+      </a>
+    </div>
+    
+    <p class="copyright">© 2023 ES Creatives. All rights reserved.</p>
+  </footer>
 
   <!-- Scripts -->
-  <script src="home.js"></script>
-  <script src="music.js"></script> <!-- Link to your music.js file -->
-  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script> 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/loader/GLTFLoader.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script>
+    // Initialize Lenis for smooth scrolling
+    const lenis = new Lenis({
+      lerp: 0.1,
+      smooth: true,
+      direction: 'vertical'
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    let menuOpen = false;
+    
+    mobileMenuBtn.addEventListener('click', function() {
+      menuOpen = !menuOpen;
+      
+      if (menuOpen) {
+        mobileNav.classList.add('active');
+        mobileMenuBtn.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      } else {
+        mobileNav.classList.remove('active');
+        mobileMenuBtn.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+    
+    // Close menu when clicking on links
+    document.querySelectorAll('.mobile-nav a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileNav.classList.remove('active');
+        mobileMenuBtn.classList.remove('active');
+        document.body.style.overflow = '';
+        menuOpen = false;
+      });
+    });
+
+    // Cursor effect
+    const cursorShadow = document.querySelector('.cursor-shadow');
+    document.addEventListener('mousemove', (e) => {
+      cursorShadow.style.left = e.clientX + 'px';
+      cursorShadow.style.top = e.clientY + 'px';
+    });
+
+    // Typing effect for main title
+    const typingText = document.getElementById('typingText');
+    const words = ['CODING', 'GAMING', 'AI'];
+    let wordIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let isEnd = false;
+
+    function type() {
+      const currentWord = words[wordIndex];
+      const currentChar = currentWord.substring(0, charIndex);
+      typingText.textContent = currentChar;
+      typingText.classList.add('typing-text');
+
+      if (!isDeleting && charIndex < currentWord.length) {
+        // Typing
+        charIndex++;
+        setTimeout(type, 150);
+      } else if (isDeleting && charIndex > 0) {
+        // Deleting
+        charIndex--;
+        setTimeout(type, 100);
+      } else {
+        // Change word
+        isDeleting = !isDeleting;
+        typingText.classList.remove('typing-text');
+        if (!isDeleting) {
+          wordIndex = (wordIndex + 1) % words.length;
+        }
+        setTimeout(type, 1200);
+      }
+    }
+
+    // Start typing effect
+    setTimeout(type, 1000);
+
+    // GSAP Animations
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Animate other hero elements
+    gsap.from(".llm-section", {
+      duration: 1,
+      y: 30,
+      opacity: 0,
+      ease: "back.out(1.7)",
+      delay: 0.8
+    });
+
+    gsap.from(".subtitle", {
+      duration: 1,
+      y: 30,
+      opacity: 0,
+      ease: "power3.out",
+      delay: 1.1
+    });
+
+    // Section animations
+    gsap.utils.toArray(".section").forEach((section, i) => {
+      gsap.from(section, {
+        scrollTrigger: {
+          trigger: section,
+          start: "top 75%",
+          toggleActions: "play none none none"
+        },
+        y: 50,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out"
+      });
+    });
+
+    // Card animations
+    gsap.utils.toArray(".tech-card, .ai-card, .feature-card").forEach((card, i) => {
+      gsap.from(card, {
+        scrollTrigger: {
+          trigger: card,
+          start: "top 80%",
+          toggleActions: "play none none none"
+        },
+        y: 50,
+        opacity: 0,
+        duration: 0.6,
+        delay: i * 0.1,
+        ease: "back.out(1.2)"
+      });
+    });
+
+    // AI Terminal Animation
+    function initAITerminal() {
+      const terminal = document.getElementById('aiTerminal');
+      const terminalContent = document.getElementById('terminalContent');
+      const codeLines = [
+        { text: "<span class='comment'># Generative AI Terminal</span>", delay: 0.5 },
+        { text: "<span class='keyword'>import</span> tensorflow <span class='keyword'>as</span> tf", delay: 1 },
+        { text: "<span class='keyword'>from</span> transformers <span class='keyword'>import</span> GPT2LMHeadModel, GPT2Tokenizer", delay: 1.5 },
+        { text: "", delay: 2 },
+        { text: "<span class='comment'># Initialize model and tokenizer</span>", delay: 2.5 },
+        { text: "tokenizer = GPT2Tokenizer.from_pretrained(<span class='string'>'gpt2'</span>)", delay: 3 },
+        { text: "model = GPT2LMHeadModel.from_pretrained(<span class='string'>'gpt2'</span>)", delay: 3.5 },
+        { text: "", delay: 4 },
+        { text: "<span class='comment'># Generate creative coding solutions</span>", delay: 4.5 },
+        { text: "input_text = <span class='string'>'How to implement a neural network in Python:'</span>", delay: 5 },
+        { text: "input_ids = tokenizer.encode(input_text, return_tensors=<span class='string'>'pt'</span>)", delay: 5.5 },
+        { text: "", delay: 6 },
+        { text: "<span class='comment'># Generate output</span>", delay: 6.5 },
+        { text: "output = model.generate(", delay: 7 },
+        { text: "    input_ids, ", delay: 7.2 },
+        { text: "    max_length=100, ", delay: 7.4 },
+        { text: "    temperature=0.7, ", delay: 7.6 },
+        { text: "    num_return_sequences=1", delay: 7.8 },
+        { text: ")", delay: 8 },
+        { text: "", delay: 8.5 },
+        { text: "<span class='comment'># Print the generated code</span>", delay: 9 },
+        { text: "print(tokenizer.decode(output[0], skip_special_tokens=<span class='keyword'>True</span>))", delay: 9.5 },
+        { text: "<span class='comment'># Output will appear here as the model generates it...</span>", delay: 10 }
+      ];
+
+      // Animate terminal entrance
+      gsap.to(terminal, {
+        scrollTrigger: {
+          trigger: terminal,
+          start: "top 80%",
+          toggleActions: "play none none none"
+        },
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power3.out",
+        onComplete: () => {
+          // Type out code lines
+          codeLines.forEach((line, i) => {
+            setTimeout(() => {
+              const codeLine = document.createElement('div');
+              codeLine.className = 'code-line';
+              codeLine.innerHTML = line.text;
+              terminalContent.appendChild(codeLine);
+              terminalContent.scrollTop = terminalContent.scrollHeight;
+            }, line.delay * 1000);
+          });
+        }
+      });
+    }
+
+    // 3D Model
+    function init3DModel() {
+      const container = document.getElementById('mainModel');
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      // Scene
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x0f172a);
+
+      // Camera
+      const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+      camera.position.z = 5;
+
+      // Renderer
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(width, height);
+      container.appendChild(renderer.domElement);
+
+      // Lights
+      const ambientLight = new THREE.AmbientLight(0x404040);
+      scene.add(ambientLight);
+
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+      directionalLight.position.set(1, 1, 1);
+      scene.add(directionalLight);
+
+      // Point light for cursor interaction
+      const pointLight = new THREE.PointLight(0x3b82f6, 1, 10);
+      scene.add(pointLight);
+
+      // Model loader
+      const loader = new THREE.GLTFLoader();
+      
+      loader.load(
+        'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/models/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf',
+        function (gltf) {
+          const model = gltf.scene;
+          model.scale.set(2, 2, 2);
+          scene.add(model);
+
+          // Mouse move interaction
+          container.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width * 2 - 1;
+            const y = -(e.clientY - rect.top) / rect.height * 2 + 1;
+            
+            // Update point light position
+            pointLight.position.x = x * 5;
+            pointLight.position.y = y * 5;
+            pointLight.position.z = 2;
+          });
+
+          // Animation loop
+          function animate() {
+            requestAnimationFrame(animate);
+            model.rotation.x += 0.002;
+            model.rotation.y += 0.005;
+            renderer.render(scene, camera);
+          }
+          animate();
+        },
+        undefined,
+        function (error) {
+          console.error('Error loading 3D model:', error);
+          container.innerHTML = `<div style="color: white; text-align: center; padding: 2rem;">3D Model Loading Failed</div>`;
+        }
+      );
+
+      // Handle resize
+      window.addEventListener('resize', () => {
+        const newWidth = container.clientWidth;
+        const newHeight = container.clientHeight;
+        camera.aspect = newWidth / newHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(newWidth, newHeight);
+      });
+    }
+
+    // Initialize everything
+    document.addEventListener('DOMContentLoaded', () => {
+      init3DModel();
+      initAITerminal();
+    });
+  </script>
+  <script src="music.js"></script>
 </body>
 </html>
