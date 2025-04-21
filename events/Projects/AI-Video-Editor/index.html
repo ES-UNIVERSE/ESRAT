@@ -265,6 +265,9 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
         .music-track:hover {
@@ -277,21 +280,113 @@
             background: rgba(253, 121, 168, 0.1);
         }
 
+        .music-track img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .music-track-info {
+            flex: 1;
+            overflow: hidden;
+        }
+
         .music-track strong {
             display: block;
             font-weight: 600;
             margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .music-track p {
             font-size: 0.8rem;
             opacity: 0.8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .music-track img {
-            width: 100%;
+        .selected-music {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(0, 184, 148, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 184, 148, 0.3);
+            display: none;
+        }
+
+        .selected-music.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .selected-music-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .selected-music img {
+            width: 60px;
+            height: 60px;
             border-radius: 8px;
-            margin-bottom: 0.5rem;
+            object-fit: cover;
+        }
+
+        .selected-music-text {
+            flex: 1;
+        }
+
+        .selected-music strong {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .selected-music p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .music-player-container {
+            margin-top: 0.75rem;
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .music-player-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .change-music-btn {
+            display: block;
+            width: 100%;
+            margin-top: 0.75rem;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: var(--dark);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .change-music-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
 
         /* Render Button */
@@ -533,6 +628,21 @@
                     </h3>
                     <input type="text" id="music-search" placeholder="Search YouTube for music...">
                     <div id="music-results"></div>
+                    <div class="selected-music" id="selected-music">
+                        <div class="selected-music-header">
+                            <img id="selected-music-thumbnail" src="" alt="Selected music">
+                            <div class="selected-music-text">
+                                <strong id="selected-music-title">Selected Music</strong>
+                                <p id="selected-music-channel"></p>
+                            </div>
+                        </div>
+                        <div class="music-player-container" id="music-player">
+                            <!-- YouTube iframe will be inserted here -->
+                        </div>
+                        <button class="change-music-btn" id="change-music-btn">
+                            Change Music
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -563,10 +673,17 @@
         const progressText = document.getElementById('progress-text');
         const musicSearch = document.getElementById('music-search');
         const musicResults = document.getElementById('music-results');
+        const selectedMusicDisplay = document.getElementById('selected-music');
+        const selectedMusicTitle = document.getElementById('selected-music-title');
+        const selectedMusicChannel = document.getElementById('selected-music-channel');
+        const selectedMusicThumbnail = document.getElementById('selected-music-thumbnail');
+        const musicPlayerContainer = document.getElementById('music-player');
+        const changeMusicBtn = document.getElementById('change-music-btn');
         
         // YouTube API Key (Replace with your own)
         const YOUTUBE_API_KEY = 'AIzaSyBam0uawB6TnBKD0gd5uNsQOOu7xevpyts';
         let selectedMusic = null;
+        let currentPlayer = null;
 
         // File upload handling
         mediaUpload.addEventListener('change', () => {
@@ -580,26 +697,32 @@
         // YouTube Music Search
         async function searchYouTubeMusic(query) {
             if (!query || query.length < 3) {
-                musicResults.innerHTML = '<div class="music-track">Type at least 3 characters</div>';
+                musicResults.innerHTML = '<div class="music-track">Type at least 3 characters to search</div>';
                 return;
             }
 
             musicResults.innerHTML = '<div class="music-track">Searching YouTube...</div>';
             
             try {
-                // Use a proxy to avoid CORS issues (in production, use your own backend)
-                const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-                const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${encodeURIComponent(query + ' music')}&type=video&key=${YOUTUBE_API_KEY}`;
+                // Note: In production, you should make this request through your own backend
+                // to keep your API key secure. This is just for demonstration.
+                const response = await fetch(
+                    `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${encodeURIComponent(query + ' music')}&type=video&key=${YOUTUBE_API_KEY}`
+                );
                 
-                const response = await fetch(proxyUrl + apiUrl);
                 const data = await response.json();
                 
                 if (data.items && data.items.length > 0) {
                     musicResults.innerHTML = data.items.map(item => `
-                        <div class="music-track" data-id="${item.id.videoId}">
+                        <div class="music-track" data-id="${item.id.videoId}" 
+                             data-title="${item.snippet.title}" 
+                             data-channel="${item.snippet.channelTitle}"
+                             data-thumbnail="${item.snippet.thumbnails.default.url}">
                             <img src="${item.snippet.thumbnails.default.url}" alt="${item.snippet.title}">
-                            <strong>${item.snippet.title}</strong>
-                            <p>${item.snippet.channelTitle}</p>
+                            <div class="music-track-info">
+                                <strong>${item.snippet.title}</strong>
+                                <p>${item.snippet.channelTitle}</p>
+                            </div>
                         </div>
                     `).join('');
                 } else {
@@ -611,11 +734,47 @@
             }
         }
 
+        // Create YouTube player
+        function createPlayer(videoId) {
+            // Clear previous player if exists
+            if (currentPlayer) {
+                musicPlayerContainer.innerHTML = '';
+            }
+            
+            // Create new iframe player
+            const iframe = document.createElement('iframe');
+            iframe.setAttribute('src', `https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&controls=1&modestbranding=1&rel=0`);
+            iframe.setAttribute('frameborder', '0');
+            iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+            iframe.setAttribute('allowfullscreen', '');
+            
+            musicPlayerContainer.appendChild(iframe);
+            currentPlayer = iframe;
+        }
+
+        // Music selection handler
+        function handleMusicSelection(track) {
+            // Set selected music data
+            selectedMusic = track.dataset.id;
+            selectedMusicTitle.textContent = track.dataset.title;
+            selectedMusicChannel.textContent = track.dataset.channel;
+            selectedMusicThumbnail.src = track.dataset.thumbnail;
+            
+            // Hide all other results and show selected music
+            musicResults.style.display = 'none';
+            selectedMusicDisplay.classList.add('active');
+            
+            // Create YouTube player for preview
+            createPlayer(selectedMusic);
+        }
+
         // Music search event with debounce
         let searchTimeout;
         musicSearch.addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
+                // Show results container when searching
+                musicResults.style.display = 'grid';
                 searchYouTubeMusic(e.target.value);
             }, 500);
         });
@@ -624,15 +783,22 @@
         musicResults.addEventListener('click', (e) => {
             const track = e.target.closest('.music-track');
             if (track) {
-                // Remove previous selection
-                document.querySelectorAll('.music-track').forEach(t => {
-                    t.classList.remove('active');
-                });
-                
-                // Highlight new selection
-                track.classList.add('active');
-                selectedMusic = track.dataset.id;
-                console.log("Selected YouTube music ID:", selectedMusic);
+                handleMusicSelection(track);
+            }
+        });
+
+        // Change music button
+        changeMusicBtn.addEventListener('click', () => {
+            // Show search results again
+            musicResults.style.display = 'grid';
+            selectedMusicDisplay.classList.remove('active');
+            musicSearch.value = '';
+            musicSearch.focus();
+            
+            // Clear player
+            if (currentPlayer) {
+                musicPlayerContainer.innerHTML = '';
+                currentPlayer = null;
             }
         });
 
