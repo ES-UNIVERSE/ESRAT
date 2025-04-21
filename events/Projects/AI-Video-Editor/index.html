@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ES | Video Editor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --secondary: #A29BFE;
+            --accent: #FD79A8;
+            --dark: #2D3436;
+            --light: #F5F6FA;
+            --success: #00B894;
+            --glass: rgba(255, 255, 255, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Main Container */
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        /* Glass Panel Styling */
+        .glass-panel {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .glass-panel:hover {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Header */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+        }
+
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Main Editor Grid */
+        .editor-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 1.5rem;
+            height: calc(100vh - 120px);
+        }
+
+        @media (max-width: 1200px) {
+            .editor-grid {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+        }
+
+        /* Left Panel - Tools */
+        .tools-panel {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .panel-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--dark);
+        }
+
+        .panel-title .icon {
+            font-size: 1.25rem;
+        }
+
+        /* Preview Canvas */
+        .preview-container {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #preview-canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            z-index: 2;
+        }
+
+        .canvas-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            z-index: 1;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .canvas-overlay h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .canvas-overlay p {
+            opacity: 0.9;
+        }
+
+        /* Right Panel - Properties */
+        .properties-panel {
+            padding: 1.5rem;
+        }
+
+        /* Upload Button */
+        .upload-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+        }
+
+        .upload-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(108, 92, 231, 0.4);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 0 3px rgba(253, 121, 168, 0.2);
+        }
+
+        /* Music Search */
+        .music-search-container {
+            margin-top: 1.5rem;
+        }
+
+        #music-results {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .music-track {
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .music-track:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .music-track.active {
+            border-color: var(--accent);
+            background: rgba(253, 121, 168, 0.1);
+        }
+
+        .music-track strong {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .music-track p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .music-track img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Render Button */
+        .render-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 8px 24px rgba(253, 121, 168, 0.4);
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .render-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 28px rgba(253, 121, 168, 0.5);
+        }
+
+        .render-btn .icon {
+            font-size: 1.25rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            bottom: 6rem;
+            right: 2rem;
+            width: 300px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .progress-container.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        #progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s ease;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 1200px) {
+            .editor-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .preview-container {
+                height: 60vh;
+                margin-bottom: 1.5rem;
+            }
+            
+            .render-btn {
+                position: static;
+                width: 100%;
+                margin-top: 1.5rem;
+                border-radius: 12px;
+                justify-content: center;
+            }
+            
+            .progress-container {
+                position: static;
+                width: 100%;
+                margin-top: 1rem;
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        /* Animation Classes */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header animate-in">
+            <a href="#" class="logo">
+                <div class="logo-icon">ES</div>
+                <div class="logo-text">Video Editor</div>
+            </a>
+            <div class="ai-toggle glass-panel">
+                <input type="checkbox" id="ai-toggle" checked>
+                <label for="ai-toggle">AI Assist</label>
+            </div>
+        </header>
+
+        <!-- Main Editor -->
+        <div class="editor-grid">
+            <!-- Left Panel - Tools -->
+            <div class="tools-panel glass-panel animate-in delay-1">
+                <div class="form-group">
+                    <label for="media-upload" class="panel-title">
+                        <span class="icon">📤</span>
+                        Media
+                    </label>
+                    <input type="file" id="media-upload" accept="video/*,image/*" multiple hidden>
+                    <button class="upload-btn" id="upload-trigger">
+                        <span class="icon">＋</span>
+                        Add Media
+                    </button>
+                    <div id="file-list" style="margin-top: 0.5rem; font-size: 0.9rem;"></div>
+                </div>
+
+                <div class="form-group">
+                    <h3 class="panel-title">
+                        <span class="icon">🎚️</span>
+                        Adjustments
+                    </h3>
+                    <label>Brightness</label>
+                    <input type="range" min="0" max="200" value="100">
+                    
+                    <label>Contrast</label>
+                    <input type="range" min="0" max="200" value="100">
+                    
+                    <label>Saturation</label>
+                    <input type="range" min="0" max="200" value="100">
+                </div>
+            </div>
+
+            <!-- Center Panel - Preview -->
+            <div class="preview-container animate-in delay-2">
+                <canvas id="preview-canvas"></canvas>
+                <div class="canvas-overlay">
+                    <h3>Your Video Preview</h3>
+                    <p>Upload media to begin editing</p>
+                </div>
+            </div>
+
+            <!-- Right Panel - Properties -->
+            <div class="properties-panel glass-panel animate-in delay-3">
+                <div class="form-group">
+                    <h3 class="panel-title">
+                        <span class="icon">✏️</span>
+                        Text
+                    </h3>
+                    <input type="text" id="caption-text" placeholder="Add your text">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.75rem;">
+                        <div>
+                            <label>Font</label>
+                            <select id="font-select">
+                                <option>Montserrat</option>
+                                <option>Poppins</option>
+                                <option>Roboto</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Size</label>
+                            <select id="font-size">
+                                <option>Small</option>
+                                <option selected>Medium</option>
+                                <option>Large</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="margin-top: 0.75rem;">
+                        <label>
+                            <input type="checkbox" id="shadow-toggle" checked>
+                            Text Shadow
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3 class="panel-title">
+                        <span class="icon">🎑</span>
+                        Templates
+                    </h3>
+                    <select id="filter-select">
+                        <option value="none">No Template</option>
+                        <option value="auto">Automatic</option>
+                        <option value="gadgets">Gadgets</option>
+                        <option value="ls">Lifestyle</option>
+                        <option value="tech">Tech</option>
+                        <option value="info">Review</option>
+                        <option value="loveria">Loveria</option>
+                        <option value="serene">Serene</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <h3 class="panel-title">
+                        <span class="icon">🎨</span>
+                        Filters
+                    </h3>
+                    <select id="filter-select">
+                        <option value="none">No Filter</option>
+                        <option value="vintage">Vintage</option>
+                        <option value="bw">Black & White</option>
+                        <option value="vibrant">Vibrant</option>
+                        <option value="dramatic">Dramatic</option>
+                    </select>
+                </div>
+
+                <div class="form-group music-search-container">
+                    <h3 class="panel-title">
+                        <span class="icon">🎵</span>
+                        Music
+                    </h3>
+                    <input type="text" id="music-search" placeholder="Search YouTube for music...">
+                    <div id="music-results"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Render Button -->
+        <button id="render-btn" class="render-btn">
+            <span class="icon">✨</span>
+            Export Video
+        </button>
+
+        <!-- Progress Bar -->
+        <div class="progress-container" id="progress-container">
+            <div>Processing your video...</div>
+            <div class="progress-bar">
+                <div id="progress-fill"></div>
+            </div>
+            <div id="progress-text" style="margin-top: 0.25rem; font-size: 0.9rem;"></div>
+        </div>
+    </div>
+
+    <!-- YouTube API & FFmpeg -->
+    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.10.1/dist/ffmpeg.min.js"></script>
+    <script>
+        // Initialize FFmpeg
+        const { createFFmpeg, fetchFile } = FFmpeg;
+        const ffmpeg = createFFmpeg({ 
+            log: true,
+            corePath: 'https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js'
+        });
+
+        // DOM Elements
+        const mediaUpload = document.getElementById('media-upload');
+        const fileList = document.getElementById('file-list');
+        const renderBtn = document.getElementById('render-btn');
+        const progressContainer = document.getElementById('progress-container');
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-text');
+        const musicSearch = document.getElementById('music-search');
+        const musicResults = document.getElementById('music-results');
+        
+        // YouTube API Key (Replace with your own)
+        const YOUTUBE_API_KEY = 'AIzaSyBam0uawB6TnBKD0gd5uNsQOOu7xevpyts';
+        let selectedMusic = null;
+
+        // File upload handling
+        mediaUpload.addEventListener('change', () => {
+            if (mediaUpload.files.length > 0) {
+                fileList.textContent = `${mediaUpload.files.length} file(s) selected`;
+            } else {
+                fileList.textContent = "No files selected";
+            }
+        });
+
+        // YouTube Music Search
+        async function searchYouTubeMusic(query) {
+            if (!query || query.length < 3) {
+                musicResults.innerHTML = '<div class="music-track">Type at least 3 characters</div>';
+                return;
+            }
+
+            musicResults.innerHTML = '<div class="music-track">Searching YouTube...</div>';
+            
+            try {
+                // Use a proxy to avoid CORS issues (in production, use your own backend)
+                const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+                const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${encodeURIComponent(query + ' music')}&type=video&key=${YOUTUBE_API_KEY}`;
+                
+                const response = await fetch(proxyUrl + apiUrl);
+                const data = await response.json();
+                
+                if (data.items && data.items.length > 0) {
+                    musicResults.innerHTML = data.items.map(item => `
+                        <div class="music-track" data-id="${item.id.videoId}">
+                            <img src="${item.snippet.thumbnails.default.url}" alt="${item.snippet.title}">
+                            <strong>${item.snippet.title}</strong>
+                            <p>${item.snippet.channelTitle}</p>
+                        </div>
+                    `).join('');
+                } else {
+                    musicResults.innerHTML = '<div class="music-track">No results found</div>';
+                }
+            } catch (error) {
+                console.error("YouTube search error:", error);
+                musicResults.innerHTML = '<div class="music-track">Error searching YouTube</div>';
+            }
+        }
+
+        // Music search event with debounce
+        let searchTimeout;
+        musicSearch.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                searchYouTubeMusic(e.target.value);
+            }, 500);
+        });
+
+        // Music selection
+        musicResults.addEventListener('click', (e) => {
+            const track = e.target.closest('.music-track');
+            if (track) {
+                // Remove previous selection
+                document.querySelectorAll('.music-track').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                // Highlight new selection
+                track.classList.add('active');
+                selectedMusic = track.dataset.id;
+                console.log("Selected YouTube music ID:", selectedMusic);
+            }
+        });
+
+        // Render Function
+        renderBtn.addEventListener('click', async () => {
+            const files = mediaUpload.files;
+            if (files.length === 0) {
+                alert("Please upload media first!");
+                return;
+            }
+            
+            // Show progress container
+            progressContainer.classList.add('visible');
+            renderBtn.disabled = true;
+            progressText.textContent = "Initializing...";
+            
+            try {
+                // Load FFmpeg if not already loaded
+                if (!ffmpeg.isLoaded()) {
+                    progressText.textContent = "Loading video engine...";
+                    await ffmpeg.load();
+                }
+                
+                // Process first file
+                progressText.textContent = "Processing your video...";
+                const data = await fetchFile(files[0]);
+                ffmpeg.FS('writeFile', 'input.mp4', data);
+                
+                // Set progress handler
+                ffmpeg.setProgress(({ ratio }) => {
+                    const percent = Math.round(ratio * 100);
+                    progressFill.style.width = `${percent}%`;
+                    progressText.textContent = `Processing: ${percent}%`;
+                });
+                
+                // Simple processing (in a real app, you'd add the selected music)
+                await ffmpeg.run(
+                    '-i', 'input.mp4',
+                    '-preset', 'fast',
+                    'output.mp4'
+                );
+                
+                // Complete
+                progressText.textContent = "Done! Download starting...";
+                
+                // Create download
+                const finalData = ffmpeg.FS('readFile', 'output.mp4');
+                const blob = new Blob([finalData.buffer], { type: 'video/mp4' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'es-video-edit.mp4';
+                a.click();
+                
+            } catch (error) {
+                console.error("Rendering error:", error);
+                progressText.textContent = "Error occurred - please try again";
+            } finally {
+                renderBtn.disabled = false;
+                setTimeout(() => {
+                    progressContainer.classList.remove('visible');
+                }, 3000);
+            }
+        });
+
+        // Initialize FFmpeg
+        (async function init() {
+            try {
+                await ffmpeg.load();
+                console.log("FFmpeg ready!");
+            } catch (error) {
+                console.error("Failed to load FFmpeg:", error);
+            }
+        })();
+    </script>
+</body>
+</html>
