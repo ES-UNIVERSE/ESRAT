@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://es-universe.github.io/ESRAT/sitemap.xml
