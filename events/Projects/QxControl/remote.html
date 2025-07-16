@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Remote Mode Switch</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    #currentMode {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin: 15px 0;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>Toggle Mode</h2>
+  <p id="currentMode">Current Mode: ⏳ Loading...</p>
+  <button onclick="setMode('pro')">Set Pro Mode</button>
+  <button onclick="setMode('legit')">Set Legit Mode</button>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDEAy2KXezICmuuQZnhNq12nqwwBouDjt4",
+      authDomain: "webcamera-es-universe-git.firebaseapp.com",
+      databaseURL: "https://webcamera-es-universe-git-default-rtdb.firebaseio.com",
+      projectId: "webcamera-es-universe-git",
+      storageBucket: "webcamera-es-universe-git.appspot.com",
+      messagingSenderId: "949054088643",
+      appId: "1:949054088643:web:039f79fcae7259f4358976"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // Update mode in Firebase
+    function setMode(modeType) {
+      const newMode = {
+        pro: modeType === "pro",
+        legit: modeType === "legit"
+      };
+      db.ref("mode").set(newMode);
+    }
+
+    // Real-time listener for mode
+    db.ref("mode").on("value", (snapshot) => {
+      const mode = snapshot.val();
+      const display = document.getElementById("currentMode");
+
+      if (!mode) {
+        display.textContent = "Current Mode: ❌ Unknown";
+      } else if (mode.pro) {
+        display.textContent = "Current Mode: 🟢 PRO";
+      } else if (mode.legit) {
+        display.textContent = "Current Mode: 🔵 LEGIT";
+      } else {
+        display.textContent = "Current Mode: ❌ None";
+      }
+    });
+  </script>
+</body>
+</html>
