@@ -1,31 +1,105 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Remote Mode Switch</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #141e30, #243b55);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 30px 25px;
+      max-width: 350px;
+      width: 90%;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 10px;
+      font-size: 24px;
+      letter-spacing: 1px;
     }
     #currentMode {
-      font-size: 1.2em;
+      font-size: 1.1em;
       font-weight: bold;
-      margin: 15px 0;
+      margin: 20px 0;
+      color: #eee;
     }
     button {
-      padding: 10px 20px;
-      margin: 5px;
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
       font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    button:hover {
+      transform: translateY(-2px);
+    }
+    .pro {
+      background: linear-gradient(90deg, #00c9ff, #92fe9d);
+      color: #000;
+    }
+    .legit {
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      color: #fff;
+    }
+    .reset {
+      background: linear-gradient(90deg, #ff4e50, #f9d423);
+      color: #000;
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px;
+      }
+      h2 {
+        font-size: 20px;
+      }
+      button {
+        font-size: 14px;
+      }
     }
   </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/ESRAT/apks/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/ESRAT/events/Projects/Project Page 3/project3.css">
+    <style>
+
+    </style>
+    <title>PROJECTS</title>
 </head>
 <body>
-  <h2>Toggle Mode</h2>
-  <p id="currentMode">Current Mode: ⏳ Loading...</p>
-  <button onclick="setMode('pro')">Set Pro Mode</button>
-  <button onclick="setMode('legit')">Set Legit Mode</button>
+  <div class="container">
+    <h2>🛠️ Toggle Mode</h2>
+    <p id="currentMode">Current Mode: ⏳ Loading...</p>
+    <button class="pro" onclick="setMode('pro')">🟢 Set Pro Mode</button>
+    <button class="legit" onclick="setMode('legit')">🔵 Set Legit Mode</button>
+    <button class="reset" onclick="resetMode()">❌ Reset Mode</button>
+  </div>
 
+  <!-- Firebase Scripts -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
   <script>
@@ -38,12 +112,17 @@
       messagingSenderId: "949054088643",
       appId: "1:949054088643:web:039f79fcae7259f4358976"
     };
+    <nav class="navbar" class="BACK"> 
+        <h class="logo"> <a href="/ESRAT/index-home.html"> <img src="/ESRAT/img/logo.png" height="100px"></a></h>
+        <ul class="BACK">
+            <li><a href="#">There is nothing blurred. This is just for styling my page.</a></li>
+          </ul>
+    </nav>
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
+    <div class="BACK2">Here's also nothing blurred. Go to hell..</div>
 
-    // Update mode in Firebase
     function setMode(modeType) {
       const newMode = {
         pro: modeType === "pro",
@@ -52,10 +131,31 @@
       db.ref("mode").set(newMode);
     }
 
-    // Real-time listener for mode
+    function resetMode() {
+      db.ref("mode").set({ pro: false, legit: false });
+      alert("✅ Mode has been reset!");
+    }
+    <section class="home">
+        <div class="home-content">
+            <div class="btn-box">
+                <a href="/ESRAT/events/Projects/Object Detection/index.html" class="">Obj. Detection</a>
+            </div>
+            <div class="btn-box">
+                <a href="/ESRAT/events/Projects/QxControl/remote.html" class="">Qx. Extn Ctrl</a>
+            </div>
+            </div>
+            <div class="btn-box">
+                <a href="/ESRAT/events/Projects/Project Page 3/project3.css" class="">BACK</a>
+            </div>
+
     db.ref("mode").on("value", (snapshot) => {
       const mode = snapshot.val();
       const display = document.getElementById("currentMode");
+    <div class="home-sci">
+        <a href="https://wa.me/917008265529?text=Hello"><i class='bx bxl-whatsapp'></i></a>
+        <a href="https://www.instagram.com/urstruly_ganga/"><i class='bx bxl-instagram'></i></a>
+        <a href="https://t.me/jrram3000"><i class='bx bxl-telegram'></i></a>
+    </div>
 
       if (!mode) {
         display.textContent = "Current Mode: ❌ Unknown";
@@ -64,7 +164,7 @@
       } else if (mode.legit) {
         display.textContent = "Current Mode: 🔵 LEGIT";
       } else {
-        display.textContent = "Current Mode: ❌ None";
+        display.textContent = "Current Mode: ⚪ NONE";
       }
     });
   </script>
