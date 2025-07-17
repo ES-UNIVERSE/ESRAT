@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Remote Mode & Trade Panel</title>
+  <meta charset="UTF-8">
+  <title>Remote Mode Switch</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
       padding: 0;
@@ -15,14 +17,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      height: 100vh;
     }
     .container {
       background: rgba(255, 255, 255, 0.06);
       backdrop-filter: blur(10px);
       border-radius: 16px;
       padding: 30px 25px;
-      max-width: 400px;
+      max-width: 350px;
       width: 90%;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       text-align: center;
@@ -32,20 +34,11 @@
       font-size: 24px;
       letter-spacing: 1px;
     }
-    #currentMode, #plStatus {
+    #currentMode {
       font-size: 1.1em;
       font-weight: bold;
-      margin: 15px 0;
+      margin: 20px 0;
       color: #eee;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 12px 0;
-      font-size: 16px;
-      border-radius: 8px;
-      border: none;
-      outline: none;
     }
     button {
       display: block;
@@ -62,40 +55,58 @@
     button:hover {
       transform: translateY(-2px);
     }
-    .pro { background: linear-gradient(90deg, #00c9ff, #92fe9d); color: #000; }
-    .legit { background: linear-gradient(90deg, #667eea, #764ba2); color: #fff; }
-    .reset { background: linear-gradient(90deg, #ff4e50, #f9d423); color: #000; }
-    .trade-up { background: linear-gradient(90deg, #43e97b, #38f9d7); color: #000; }
-    .trade-down { background: linear-gradient(90deg, #ff0844, #ffb199); color: #000; }
-    .auto { background: linear-gradient(90deg, #00f260, #0575e6); color: #fff; }
-    .stop { background: linear-gradient(90deg, #ef3b36, #ffffff); color: #000; }
-
+    .pro {
+      background: linear-gradient(90deg, #00c9ff, #92fe9d);
+      color: #000;
+    }
+    .legit {
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      color: #fff;
+    }
+    .reset {
+      background: linear-gradient(90deg, #ff4e50, #f9d423);
+      color: #000;
+    }
+    .trade-toggle {
+      background: linear-gradient(90deg, #FF4747, #FF8E53);
+      color: white;
+      margin: 15px 0;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .trade-toggle.on {
+      background: linear-gradient(90deg, #00DF75, #00B47C);
+    }
     @media (max-width: 480px) {
-      .container { padding: 20px; }
-      h2 { font-size: 20px; }
-      button { font-size: 14px; }
+      .container {
+        padding: 20px;
+      }
+      h2 {
+        font-size: 20px;
+      }
+      button {
+        font-size: 14px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>📲 Remote Panel</h2>
+    <h2>🛠️ Toggle Mode</h2>
     <p id="currentMode">Current Mode: ⏳ Loading...</p>
-
     <button class="pro" onclick="setMode('pro')">🟢 Set Pro Mode</button>
     <button class="legit" onclick="setMode('legit')">🔵 Set Legit Mode</button>
     <button class="reset" onclick="resetMode()">❌ Reset Mode</button>
-
-    <input type="number" id="amount" placeholder="Enter Investment ₹" />
-    <button class="trade-up" onclick="placeTrade('up')">📈 Trade UP</button>
-    <button class="trade-down" onclick="placeTrade('down')">📉 Trade DOWN</button>
-
-    <button class="auto" onclick="startAuto()">⚙️ Execute Auto Trade</button>
-    <button class="stop" onclick="stopAuto()">🛑 Stop Auto</button>
-
-    <p id="plStatus">P/L: —</p>
+    <button id="remoteTradeToggle" class="trade-toggle" onclick="toggleRemoteTrade()">
+      ⚡ Auto Trade: OFF
+    </button>
   </div>
 
+  <!-- Firebase Scripts -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
   <script>
@@ -112,21 +123,35 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
+    // Existing mode functions
     function setMode(modeType) {
-      db.ref("mode").set({
+      const newMode = {
         pro: modeType === "pro",
         legit: modeType === "legit"
-      });
+      };
+      db.ref("mode").set(newMode);
     }
 
     function resetMode() {
       db.ref("mode").set({ pro: false, legit: false });
-      alert("✅ Mode reset successfully!");
+      alert("✅ Mode has been reset!");
     }
 
+    // Auto Trade Control
+    function toggleRemoteTrade() {
+      const isActive = !document.getElementById('remoteTradeToggle').classList.contains('on');
+      db.ref("tradeCommands").set({
+        type: "AUTO_TRADE",
+        state: isActive,
+        timestamp: Date.now()
+      });
+    }
+
+    // Listeners
     db.ref("mode").on("value", (snapshot) => {
       const mode = snapshot.val();
       const display = document.getElementById("currentMode");
+
       if (!mode) {
         display.textContent = "Current Mode: ❌ Unknown";
       } else if (mode.pro) {
@@ -138,50 +163,14 @@
       }
     });
 
-    function placeTrade(direction) {
-      const amount = parseFloat(document.getElementById("amount").value);
-      if (!amount || amount <= 0) {
-        alert("⚠️ Enter a valid investment amount!");
-        return;
-      }
-
-      db.ref("remoteTrade").set({
-        direction,
-        amount
-      });
-
-      document.getElementById("plStatus").innerText = `📤 Trade ${direction.toUpperCase()} sent...`;
-    }
-
-    db.ref("remoteResult").on("value", (snapshot) => {
-      const data = snapshot.val();
-      const plStatus = document.getElementById("plStatus");
-      if (!data || data.pl === undefined) {
-        plStatus.innerText = "P/L: —";
-      } else {
-        plStatus.innerText = `${data.result} | ₹${data.pl}`;
-      }
+    db.ref("tradeCommands").on("value", (snapshot) => {
+      const cmd = snapshot.val();
+      if (!cmd || cmd.type !== "AUTO_TRADE") return;
+      
+      const toggle = document.getElementById('remoteTradeToggle');
+      toggle.classList.toggle('on', cmd.state);
+      toggle.innerHTML = cmd.state ? "⚡ Auto Trade: ON" : "⚡ Auto Trade: OFF";
     });
-
-    function startAuto() {
-      const amount = parseFloat(document.getElementById("amount").value);
-      if (!amount || amount <= 0) {
-        alert("⚠️ Enter a valid investment amount!");
-        return;
-      }
-
-      firebase.database().ref("autoTrade").set({
-        execute: true,
-        amount: amount
-      });
-
-      document.getElementById("plStatus").innerText = `🚀 Auto Trade Executing...`;
-    }
-
-    function stopAuto() {
-      firebase.database().ref("autoTrade").set({ execute: false });
-      document.getElementById("plStatus").innerText = `🛑 Auto Trade Stopped.`;
-    }
   </script>
 </body>
 </html>
