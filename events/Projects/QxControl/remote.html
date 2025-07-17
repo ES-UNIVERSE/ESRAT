@@ -123,7 +123,16 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // Existing mode functions
+    // Initialize state
+    let currentTradeState = false;
+    const tradeToggle = document.getElementById('remoteTradeToggle');
+
+    // Load initial state
+    db.ref("tradeState").on("value", (snapshot) => {
+      currentTradeState = snapshot.val() || false;
+      updateTradeButton();
+    });
+
     function setMode(modeType) {
       const newMode = {
         pro: modeType === "pro",
@@ -137,17 +146,23 @@
       alert("✅ Mode has been reset!");
     }
 
-    // Auto Trade Control
     function toggleRemoteTrade() {
-      const isActive = !document.getElementById('remoteTradeToggle').classList.contains('on');
+      currentTradeState = !currentTradeState;
+      db.ref("tradeState").set(currentTradeState);
       db.ref("tradeCommands").set({
         type: "AUTO_TRADE",
-        state: isActive,
+        state: currentTradeState,
         timestamp: Date.now()
       });
+      updateTradeButton();
     }
 
-    // Listeners
+    function updateTradeButton() {
+      tradeToggle.classList.toggle('on', currentTradeState);
+      tradeToggle.innerHTML = currentTradeState ? "⚡ Auto Trade: ON" : "⚡ Auto Trade: OFF";
+    }
+
+    // Mode listener
     db.ref("mode").on("value", (snapshot) => {
       const mode = snapshot.val();
       const display = document.getElementById("currentMode");
@@ -161,15 +176,6 @@
       } else {
         display.textContent = "Current Mode: ⚪ NONE";
       }
-    });
-
-    db.ref("tradeCommands").on("value", (snapshot) => {
-      const cmd = snapshot.val();
-      if (!cmd || cmd.type !== "AUTO_TRADE") return;
-      
-      const toggle = document.getElementById('remoteTradeToggle');
-      toggle.classList.toggle('on', cmd.state);
-      toggle.innerHTML = cmd.state ? "⚡ Auto Trade: ON" : "⚡ Auto Trade: OFF";
     });
   </script>
 </body>
