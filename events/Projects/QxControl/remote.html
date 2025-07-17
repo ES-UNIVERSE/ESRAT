@@ -2,55 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Remote Mode Switch</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Remote Control</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * {
       box-sizing: border-box;
-    }
-    body {
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
       background: linear-gradient(135deg, #141e30, #243b55);
       color: #fff;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       height: 100vh;
     }
     .container {
       background: rgba(255, 255, 255, 0.06);
       backdrop-filter: blur(10px);
       border-radius: 16px;
-      padding: 30px 25px;
-      max-width: 350px;
+      padding: 30px;
       width: 90%;
+      max-width: 350px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       text-align: center;
     }
     h2 {
-      margin-bottom: 10px;
+      margin-bottom: 20px;
       font-size: 24px;
-      letter-spacing: 1px;
-    }
-    #currentMode {
-      font-size: 1.1em;
-      font-weight: bold;
-      margin: 20px 0;
-      color: #eee;
     }
     button {
-      display: block;
       width: 100%;
       padding: 12px;
       margin: 10px 0;
-      font-size: 16px;
-      font-weight: bold;
       border: none;
       border-radius: 8px;
+      font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
+      transition: all 0.3s;
     }
     button:hover {
       transform: translateY(-2px);
@@ -71,45 +62,32 @@
       background: linear-gradient(90deg, #FF4747, #FF8E53);
       color: white;
       margin: 15px 0;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s;
     }
     .trade-toggle.on {
       background: linear-gradient(90deg, #00DF75, #00B47C);
     }
-    @media (max-width: 480px) {
-      .container {
-        padding: 20px;
-      }
-      h2 {
-        font-size: 20px;
-      }
-      button {
-        font-size: 14px;
-      }
+    #currentMode {
+      margin: 20px 0;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>🛠️ Toggle Mode</h2>
-    <p id="currentMode">Current Mode: ⏳ Loading...</p>
-    <button class="pro" onclick="setMode('pro')">🟢 Set Pro Mode</button>
-    <button class="legit" onclick="setMode('legit')">🔵 Set Legit Mode</button>
-    <button class="reset" onclick="resetMode()">❌ Reset Mode</button>
-    <button id="remoteTradeToggle" class="trade-toggle" onclick="toggleRemoteTrade()">
+    <h2>🛠️ Quotex Remote</h2>
+    <p id="currentMode">Current Mode: Loading...</p>
+    <button class="pro" onclick="setMode('pro')">🟢 Pro Mode</button>
+    <button class="legit" onclick="setMode('legit')">🔵 Legit Mode</button>
+    <button class="reset" onclick="resetMode()">❌ Reset Modes</button>
+    <button id="tradeToggle" class="trade-toggle" onclick="toggleTrade()">
       ⚡ Auto Trade: OFF
     </button>
   </div>
 
-  <!-- Firebase Scripts -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
   <script>
+    // Firebase Setup
     const firebaseConfig = {
       apiKey: "AIzaSyDEAy2KXezICmuuQZnhNq12nqwwBouDjt4",
       authDomain: "webcamera-es-universe-git.firebaseapp.com",
@@ -123,30 +101,39 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // Initialize state
+    // State Management
     let currentTradeState = false;
-    const tradeToggle = document.getElementById('remoteTradeToggle');
+    const tradeToggle = document.getElementById('tradeToggle');
 
-    // Load initial state
+    // Initialize
     db.ref("tradeState").on("value", (snapshot) => {
       currentTradeState = snapshot.val() || false;
       updateTradeButton();
     });
 
+    db.ref("mode").on("value", (snapshot) => {
+      const mode = snapshot.val();
+      const display = document.getElementById("currentMode");
+      
+      if (!mode) display.textContent = "Current Mode: None";
+      else if (mode.pro) display.textContent = "Current Mode: 🟢 PRO";
+      else if (mode.legit) display.textContent = "Current Mode: 🔵 LEGIT";
+      else display.textContent = "Current Mode: None";
+    });
+
+    // Control Functions
     function setMode(modeType) {
-      const newMode = {
+      db.ref("mode").set({
         pro: modeType === "pro",
         legit: modeType === "legit"
-      };
-      db.ref("mode").set(newMode);
+      });
     }
 
     function resetMode() {
       db.ref("mode").set({ pro: false, legit: false });
-      alert("✅ Mode has been reset!");
     }
 
-    function toggleRemoteTrade() {
+    function toggleTrade() {
       currentTradeState = !currentTradeState;
       db.ref("tradeState").set(currentTradeState);
       db.ref("tradeCommands").set({
@@ -154,29 +141,15 @@
         state: currentTradeState,
         timestamp: Date.now()
       });
-      updateTradeButton();
     }
 
     function updateTradeButton() {
       tradeToggle.classList.toggle('on', currentTradeState);
-      tradeToggle.innerHTML = currentTradeState ? "⚡ Auto Trade: ON" : "⚡ Auto Trade: OFF";
+      tradeToggle.textContent = `⚡ Auto Trade: ${currentTradeState ? 'ON' : 'OFF'}`;
     }
 
-    // Mode listener
-    db.ref("mode").on("value", (snapshot) => {
-      const mode = snapshot.val();
-      const display = document.getElementById("currentMode");
-
-      if (!mode) {
-        display.textContent = "Current Mode: ❌ Unknown";
-      } else if (mode.pro) {
-        display.textContent = "Current Mode: 🟢 PRO";
-      } else if (mode.legit) {
-        display.textContent = "Current Mode: 🔵 LEGIT";
-      } else {
-        display.textContent = "Current Mode: ⚪ NONE";
-      }
-    });
+    // Initial load
+    db.ref("tradeState").once("value").then(updateTradeButton);
   </script>
 </body>
 </html>
