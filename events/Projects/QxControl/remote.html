@@ -2,103 +2,137 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ESRAT Remote | Premium Control</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ES Remote Control</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <style>
-    /* Apple-inspired compact design */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-    
     :root {
-      --glass-bg: rgba(255, 255, 255, 0.08);
-      --glass-border: rgba(255, 255, 255, 0.12);
-      --primary-text: rgba(255, 255, 255, 0.92);
-      --secondary-text: rgba(255, 255, 255, 0.7);
-      --pro-gradient: linear-gradient(135deg, #00c6fb, #005bea);
-      --legit-gradient: linear-gradient(135deg, #8e2de2, #4a00e0);
-      --reset-gradient: linear-gradient(135deg, #ff416c, #ff4b2b);
-      --trade-off-gradient: linear-gradient(135deg, #FF4747, #FF8E53);
-      --trade-on-gradient: linear-gradient(135deg, #00b09b, #96c93d);
+      --primary-bg: #000000;
+      --card-bg: rgba(28, 28, 30, 0.8);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(235, 235, 245, 0.6);
+      --pro-gradient: linear-gradient(135deg, #32D74B, #0A84FF);
+      --legit-gradient: linear-gradient(135deg, #BF5AF2, #FF375F);
+      --reset-gradient: linear-gradient(135deg, #FF453A, #FF9F0A);
+      --toggle-off: rgba(120, 120, 128, 0.32);
+      --toggle-on: #34C759;
     }
     
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
     
     body {
-      background: radial-gradient(circle at center, #0f0f1a, #121a2e);
-      color: var(--primary-text);
+      background: var(--primary-bg);
+      color: var(--text-primary);
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      padding: 16px;
+      height: 100vh;
+      padding: 20px;
+      overflow: hidden;
     }
     
     .container {
-      background: var(--glass-bg);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid var(--glass-border);
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
       border-radius: 24px;
       padding: 24px;
       width: 100%;
-      max-width: 340px;
-      box-shadow: 
-        0 8px 25px rgba(0, 0, 0, 0.2),
-        inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
+      max-width: 380px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
       text-align: center;
     }
     
-    .logo-link {
-      display: inline-block;
+    .logo-container {
+      margin-bottom: 24px;
       cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-    
-    .logo-link:hover {
-      transform: scale(1.05);
     }
     
     .logo {
-      width: 100px;
-      height: auto;
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+    }
+    
+    h2 {
       margin-bottom: 16px;
-      user-select: none;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
     }
     
-    .status {
-      background: rgba(0, 0, 0, 0.25);
+    .mode-indicator {
+      background: rgba(120, 120, 128, 0.18);
       border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 20px;
-      font-size: 14px;
-      font-weight: 500;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-    
-    .btn {
-      width: 100%;
-      padding: 14px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 24px;
       font-size: 15px;
       font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      min-height: 44px;
+    }
+    
+    .mode-indicator .indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+    
+    .mode-indicator.pro .indicator {
+      background: #32D74B;
+      box-shadow: 0 0 8px rgba(50, 215, 75, 0.4);
+    }
+    
+    .mode-indicator.legit .indicator {
+      background: #0A84FF;
+      box-shadow: 0 0 8px rgba(10, 132, 255, 0.4);
+    }
+    
+    .mode-indicator.none .indicator {
+      background: var(--text-secondary);
+    }
+    
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    button {
+      width: 100%;
+      padding: 16px;
+      margin: 0;
+      border: none;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.4, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
       position: relative;
       overflow: hidden;
     }
     
-    .btn::after {
+    button:active {
+      transform: scale(0.96);
+    }
+    
+    button::after {
       content: '';
       position: absolute;
       top: 0;
@@ -107,84 +141,137 @@
       height: 100%;
       background: rgba(255, 255, 255, 0.1);
       opacity: 0;
-      transition: opacity 0.2s;
+      transition: opacity 0.3s;
     }
     
-    .btn:hover::after {
+    button:hover::after {
       opacity: 1;
     }
     
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
-    }
-    
-    .btn:active {
-      transform: translateY(0);
-    }
-    
-    .btn-pro {
+    .pro {
       background: var(--pro-gradient);
-      color: white;
     }
     
-    .btn-legit {
+    .legit {
       background: var(--legit-gradient);
-      color: white;
     }
     
-    .btn-reset {
+    .reset {
       background: var(--reset-gradient);
-      color: white;
     }
     
-    .btn-trade {
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(120, 120, 128, 0.18);
+      border-radius: 12px;
+      padding: 12px 16px;
       margin: 20px 0;
-      background: var(--trade-off-gradient);
-      color: white;
     }
     
-    .btn-trade.on {
-      background: var(--trade-on-gradient);
+    .toggle-label {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    
+    .toggle-switch {
+      position: relative;
+      width: 52px;
+      height: 32px;
+    }
+    
+    .toggle-checkbox {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--toggle-off);
+      transition: .4s;
+      border-radius: 16px;
+    }
+    
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 28px;
+      width: 28px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    
+    .toggle-checkbox:checked + .toggle-slider {
+      background-color: var(--toggle-on);
+    }
+    
+    .toggle-checkbox:checked + .toggle-slider:before {
+      transform: translateX(20px);
     }
     
     .icon {
-      font-size: 16px;
-      filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
+      margin-right: 8px;
+      font-size: 20px;
     }
     
-    .divider {
-      height: 1px;
-      background: rgba(255, 255, 255, 0.1);
-      margin: 16px 0;
+    @media (max-width: 400px) {
+      .container {
+        padding: 20px;
+        border-radius: 20px;
+      }
+      
+      button {
+        padding: 14px;
+        font-size: 16px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <a href="https://es-universe.github.io/ESRAT/index-home.html" class="logo-link" target="_blank">
-      <img src="https://raw.githubusercontent.com/ES-UNIVERSE/ESRAT/main/img/logo.png" alt="ESRAT Logo" class="logo">
-    </a>
-    <div class="status" id="currentMode">Current Mode: Loading...</div>
+    <div class="logo-container" onclick="window.location.href='/ESRAT/index-home.html'">
+      <img src="https://github.com/ES-UNIVERSE/ESRAT/blob/dbb75ca702d58cdc00bc94613d0e99cda16a044d/img/logo.png?raw=true" alt="ES Logo" class="logo">
+    </div>
     
-    <button class="btn btn-pro" onclick="setMode('pro')">
-      <span class="icon">🟢</span> Pro Mode
-    </button>
-    <button class="btn btn-legit" onclick="setMode('legit')">
-      <span class="icon">🔵</span> Legit Mode
-    </button>
-    <button class="btn btn-reset" onclick="resetMode()">
-      <span class="icon">❌</span> Reset Modes
-    </button>
+    <h2>Remote Control Panel</h2>
     
-    <div class="divider"></div>
+    <div id="currentMode" class="mode-indicator none">
+      <span class="indicator"></span>
+      <span>Current Mode: Loading...</span>
+    </div>
     
-    <button id="tradeToggle" class="btn btn-trade" onclick="toggleTrade()">
-      <span class="icon">⚡</span> Auto Trade: OFF
-    </button>
+    <div class="button-grid">
+      <button class="pro" onclick="setMode('pro')">
+        <span class="icon">🟢</span> Pro Mode
+      </button>
+      <button class="legit" onclick="setMode('legit')">
+        <span class="icon">🔵</span> Legit Mode
+      </button>
+      <button class="reset" onclick="resetMode()">
+        <span class="icon">✖</span> Reset Modes
+      </button>
+    </div>
+    
+    <div class="toggle-container">
+      <span class="toggle-label">Auto Trade</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="tradeToggle" class="toggle-checkbox" onclick="toggleTrade()">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
   </div>
 
-  <!-- Firebase scripts -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
   <script>
@@ -199,86 +286,67 @@
       appId: "1:949054088643:web:039f79fcae7259f4358976"
     };
 
-    // Initialize Firebase only if not already initialized
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
+    firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
     // State Management
     let currentTradeState = false;
-    let isProcessing = false;
     const tradeToggle = document.getElementById('tradeToggle');
 
     // Initialize
     db.ref("tradeState").on("value", (snapshot) => {
       currentTradeState = snapshot.val() || false;
-      updateTradeButton();
+      tradeToggle.checked = currentTradeState;
     });
 
     db.ref("mode").on("value", (snapshot) => {
       const mode = snapshot.val();
       const display = document.getElementById("currentMode");
       
+      display.className = "mode-indicator none";
+      display.innerHTML = '<span class="indicator"></span><span>Current Mode: ';
+      
       if (!mode) {
-        display.textContent = "Current Mode: None";
+        display.className = "mode-indicator none";
+        display.innerHTML += 'None</span>';
       } else if (mode.pro) {
-        display.textContent = "Current Mode: 🟢 PRO";
+        display.className = "mode-indicator pro";
+        display.innerHTML += 'PRO</span>';
       } else if (mode.legit) {
-        display.textContent = "Current Mode: 🔵 LEGIT";
+        display.className = "mode-indicator legit";
+        display.innerHTML += 'LEGIT</span>';
       } else {
-        display.textContent = "Current Mode: None";
+        display.className = "mode-indicator none";
+        display.innerHTML += 'None</span>';
       }
     });
 
     // Control Functions
     function setMode(modeType) {
-      try {
-        db.ref("mode").set({
-          pro: modeType === "pro",
-          legit: modeType === "legit"
-        });
-      } catch (error) {
-        console.error("Error setting mode:", error);
-      }
+      db.ref("mode").set({
+        pro: modeType === "pro",
+        legit: modeType === "legit"
+      });
     }
 
     function resetMode() {
-      try {
-        db.ref("mode").set({ pro: false, legit: false });
-      } catch (error) {
-        console.error("Error resetting mode:", error);
-      }
+      db.ref("mode").set({ pro: false, legit: false });
     }
 
-    async function toggleTrade() {
-      if (isProcessing) return;
-      
-      isProcessing = true;
-      const newState = !currentTradeState;
-      
-      try {
-        await db.ref("tradeState").set(newState);
-        currentTradeState = newState;
-        updateTradeButton();
-      } catch (error) {
-        console.error("Error toggling trade:", error);
-      } finally {
-        isProcessing = false;
-      }
-    }
-
-    function updateTradeButton() {
-      tradeToggle.classList.toggle('on', currentTradeState);
-      tradeToggle.innerHTML = `<span class="icon">⚡</span> Auto Trade: ${currentTradeState ? 'ON' : 'OFF'}`;
-    }
-
-    // Initial load
-    db.ref("tradeState").once("value")
-      .then(updateTradeButton)
-      .catch(error => {
-        console.error("Error loading initial trade state:", error);
+    function toggleTrade() {
+      currentTradeState = !currentTradeState;
+      db.ref("tradeState").set(currentTradeState);
+      db.ref("tradeCommands").set({
+        type: "AUTO_TRADE",
+        state: currentTradeState,
+        timestamp: Date.now()
       });
+    }
+
+    // Prevent scrolling
+    document.addEventListener('touchmove', function(e) {
+      e.preventDefault();
+    }, { passive: false });
   </script>
 </body>
 </html>
