@@ -46,44 +46,54 @@
       border-radius: 24px;
       padding: 24px;
       width: 100%;
-      max-width: 340px; /* Reduced from 400px */
+      max-width: 340px;
       box-shadow: 
         0 8px 25px rgba(0, 0, 0, 0.2),
         inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
       text-align: center;
     }
     
+    .logo-link {
+      display: inline-block;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    
+    .logo-link:hover {
+      transform: scale(1.05);
+    }
+    
     .logo {
-      width: 100px; /* Reduced from 120px */
+      width: 100px;
       height: auto;
-      margin-bottom: 16px; /* Reduced from 20px */
+      margin-bottom: 16px;
       user-select: none;
     }
     
     .status {
       background: rgba(0, 0, 0, 0.25);
       border-radius: 12px;
-      padding: 12px; /* Reduced from 14px */
-      margin-bottom: 20px; /* Reduced from 24px */
-      font-size: 14px; /* Reduced from 15px */
+      padding: 12px;
+      margin-bottom: 20px;
+      font-size: 14px;
       font-weight: 500;
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
     
     .btn {
       width: 100%;
-      padding: 14px; /* Reduced from 16px */
-      margin: 8px 0; /* Reduced from 10px */
+      padding: 14px;
+      margin: 8px 0;
       border: none;
-      border-radius: 12px; /* Reduced from 14px */
-      font-size: 15px; /* Reduced from 16px */
+      border-radius: 12px;
+      font-size: 15px;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px; /* Reduced from 10px */
+      gap: 8px;
       position: relative;
       overflow: hidden;
     }
@@ -106,7 +116,7 @@
     
     .btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25); /* Reduced shadow */
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
     }
     
     .btn:active {
@@ -129,7 +139,7 @@
     }
     
     .btn-trade {
-      margin: 20px 0; /* Reduced from 24px */
+      margin: 20px 0;
       background: var(--trade-off-gradient);
       color: white;
     }
@@ -139,20 +149,22 @@
     }
     
     .icon {
-      font-size: 16px; /* Reduced from 18px */
+      font-size: 16px;
       filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
     }
     
     .divider {
       height: 1px;
       background: rgba(255, 255, 255, 0.1);
-      margin: 16px 0; /* Reduced from 20px */
+      margin: 16px 0;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="https://raw.githubusercontent.com/ES-UNIVERSE/ESRAT/main/img/logo.png" alt="ESRAT Logo" class="logo">
+    <a href="https://es-universe.github.io/ESRAT/index-home.html" class="logo-link" target="_blank">
+      <img src="https://raw.githubusercontent.com/ES-UNIVERSE/ESRAT/main/img/logo.png" alt="ESRAT Logo" class="logo">
+    </a>
     <div class="status" id="currentMode">Current Mode: Loading...</div>
     
     <button class="btn btn-pro" onclick="setMode('pro')">
