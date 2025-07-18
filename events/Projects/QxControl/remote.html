@@ -199,7 +199,10 @@
       appId: "1:949054088643:web:039f79fcae7259f4358976"
     };
 
-    firebase.initializeApp(firebaseConfig);
+    // Initialize Firebase only if not already initialized
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
     const db = firebase.database();
 
     // State Management
@@ -217,22 +220,35 @@
       const mode = snapshot.val();
       const display = document.getElementById("currentMode");
       
-      if (!mode) display.textContent = "Current Mode: None";
-      else if (mode.pro) display.textContent = "Current Mode: 🟢 PRO";
-      else if (mode.legit) display.textContent = "Current Mode: 🔵 LEGIT";
-      else display.textContent = "Current Mode: None";
+      if (!mode) {
+        display.textContent = "Current Mode: None";
+      } else if (mode.pro) {
+        display.textContent = "Current Mode: 🟢 PRO";
+      } else if (mode.legit) {
+        display.textContent = "Current Mode: 🔵 LEGIT";
+      } else {
+        display.textContent = "Current Mode: None";
+      }
     });
 
     // Control Functions
     function setMode(modeType) {
-      db.ref("mode").set({
-        pro: modeType === "pro",
-        legit: modeType === "legit"
-      });
+      try {
+        db.ref("mode").set({
+          pro: modeType === "pro",
+          legit: modeType === "legit"
+        });
+      } catch (error) {
+        console.error("Error setting mode:", error);
+      }
     }
 
     function resetMode() {
-      db.ref("mode").set({ pro: false, legit: false });
+      try {
+        db.ref("mode").set({ pro: false, legit: false });
+      } catch (error) {
+        console.error("Error resetting mode:", error);
+      }
     }
 
     async function toggleTrade() {
@@ -258,7 +274,11 @@
     }
 
     // Initial load
-    db.ref("tradeState").once("value").then(updateTradeButton);
+    db.ref("tradeState").once("value")
+      .then(updateTradeButton)
+      .catch(error => {
+        console.error("Error loading initial trade state:", error);
+      });
   </script>
 </body>
 </html>
