@@ -5,7 +5,7 @@
   <title>ESRAT Remote | Premium Control</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* Apple-inspired styles with ESRAT branding */
+    /* Apple-inspired compact design */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
     
     :root {
@@ -35,7 +35,7 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 20px;
+      padding: 16px;
     }
     
     .container {
@@ -43,47 +43,47 @@
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       border: 1px solid var(--glass-border);
-      border-radius: 28px;
-      padding: 32px;
+      border-radius: 24px;
+      padding: 24px;
       width: 100%;
-      max-width: 400px;
+      max-width: 340px; /* Reduced from 400px */
       box-shadow: 
-        0 12px 30px rgba(0, 0, 0, 0.25),
+        0 8px 25px rgba(0, 0, 0, 0.2),
         inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
       text-align: center;
     }
     
     .logo {
-      width: 120px;
+      width: 100px; /* Reduced from 120px */
       height: auto;
-      margin-bottom: 20px;
+      margin-bottom: 16px; /* Reduced from 20px */
       user-select: none;
     }
     
     .status {
       background: rgba(0, 0, 0, 0.25);
-      border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 24px;
-      font-size: 15px;
+      border-radius: 12px;
+      padding: 12px; /* Reduced from 14px */
+      margin-bottom: 20px; /* Reduced from 24px */
+      font-size: 14px; /* Reduced from 15px */
       font-weight: 500;
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
     
     .btn {
       width: 100%;
-      padding: 16px;
-      margin: 10px 0;
+      padding: 14px; /* Reduced from 16px */
+      margin: 8px 0; /* Reduced from 10px */
       border: none;
-      border-radius: 14px;
-      font-size: 16px;
+      border-radius: 12px; /* Reduced from 14px */
+      font-size: 15px; /* Reduced from 16px */
       font-weight: 500;
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 8px; /* Reduced from 10px */
       position: relative;
       overflow: hidden;
     }
@@ -106,7 +106,7 @@
     
     .btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25); /* Reduced shadow */
     }
     
     .btn:active {
@@ -129,7 +129,7 @@
     }
     
     .btn-trade {
-      margin: 24px 0;
+      margin: 20px 0; /* Reduced from 24px */
       background: var(--trade-off-gradient);
       color: white;
     }
@@ -139,14 +139,14 @@
     }
     
     .icon {
-      font-size: 18px;
+      font-size: 16px; /* Reduced from 18px */
       filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
     }
     
     .divider {
       height: 1px;
       background: rgba(255, 255, 255, 0.1);
-      margin: 20px 0;
+      margin: 16px 0; /* Reduced from 20px */
     }
   </style>
 </head>
