@@ -103,6 +103,7 @@
 
     // State Management
     let currentTradeState = false;
+    let isProcessing = false; // Flag to prevent double clicks
     const tradeToggle = document.getElementById('tradeToggle');
 
     // Initialize
@@ -133,14 +134,22 @@
       db.ref("mode").set({ pro: false, legit: false });
     }
 
-    function toggleTrade() {
-      currentTradeState = !currentTradeState;
-      db.ref("tradeState").set(currentTradeState);
-      db.ref("tradeCommands").set({
-        type: "AUTO_TRADE",
-        state: currentTradeState,
-        timestamp: Date.now()
-      });
+    async function toggleTrade() {
+      if (isProcessing) return;
+      
+      isProcessing = true;
+      const newState = !currentTradeState;
+      
+      try {
+        // Only update tradeState - remove the tradeCommands update
+        await db.ref("tradeState").set(newState);
+        currentTradeState = newState;
+        updateTradeButton();
+      } catch (error) {
+        console.error("Error toggling trade:", error);
+      } finally {
+        isProcessing = false;
+      }
     }
 
     function updateTradeButton() {
