@@ -2,88 +2,177 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Remote Control</title>
+  <title>ESRAT Remote | Premium Control</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    /* Apple-inspired styles with ESRAT branding */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+    
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --primary-text: rgba(255, 255, 255, 0.92);
+      --secondary-text: rgba(255, 255, 255, 0.7);
+      --pro-gradient: linear-gradient(135deg, #00c6fb, #005bea);
+      --legit-gradient: linear-gradient(135deg, #8e2de2, #4a00e0);
+      --reset-gradient: linear-gradient(135deg, #ff416c, #ff4b2b);
+      --trade-off-gradient: linear-gradient(135deg, #FF4747, #FF8E53);
+      --trade-on-gradient: linear-gradient(135deg, #00b09b, #96c93d);
+    }
+    
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
+    
     body {
-      background: linear-gradient(135deg, #141e30, #243b55);
-      color: #fff;
+      background: radial-gradient(circle at center, #0f0f1a, #121a2e);
+      color: var(--primary-text);
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
+      padding: 20px;
     }
+    
     .container {
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(10px);
-      border-radius: 16px;
-      padding: 30px;
-      width: 90%;
-      max-width: 350px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      background: var(--glass-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--glass-border);
+      border-radius: 28px;
+      padding: 32px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 
+        0 12px 30px rgba(0, 0, 0, 0.25),
+        inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
       text-align: center;
     }
-    h2 {
+    
+    .logo {
+      width: 120px;
+      height: auto;
       margin-bottom: 20px;
-      font-size: 24px;
+      user-select: none;
     }
-    button {
+    
+    .status {
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 24px;
+      font-size: 15px;
+      font-weight: 500;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .btn {
       width: 100%;
-      padding: 12px;
+      padding: 16px;
       margin: 10px 0;
       border: none;
-      border-radius: 8px;
-      font-weight: bold;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 500;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
     }
-    button:hover {
+    
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    
+    .btn:hover::after {
+      opacity: 1;
+    }
+    
+    .btn:hover {
       transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     }
-    .pro {
-      background: linear-gradient(90deg, #00c9ff, #92fe9d);
-      color: #000;
+    
+    .btn:active {
+      transform: translateY(0);
     }
-    .legit {
-      background: linear-gradient(90deg, #667eea, #764ba2);
-      color: #fff;
-    }
-    .reset {
-      background: linear-gradient(90deg, #ff4e50, #f9d423);
-      color: #000;
-    }
-    .trade-toggle {
-      background: linear-gradient(90deg, #FF4747, #FF8E53);
+    
+    .btn-pro {
+      background: var(--pro-gradient);
       color: white;
-      margin: 15px 0;
     }
-    .trade-toggle.on {
-      background: linear-gradient(90deg, #00DF75, #00B47C);
+    
+    .btn-legit {
+      background: var(--legit-gradient);
+      color: white;
     }
-    #currentMode {
+    
+    .btn-reset {
+      background: var(--reset-gradient);
+      color: white;
+    }
+    
+    .btn-trade {
+      margin: 24px 0;
+      background: var(--trade-off-gradient);
+      color: white;
+    }
+    
+    .btn-trade.on {
+      background: var(--trade-on-gradient);
+    }
+    
+    .icon {
+      font-size: 18px;
+      filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
+    }
+    
+    .divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
       margin: 20px 0;
-      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>🛠️ Quotex Remote</h2>
-    <p id="currentMode">Current Mode: Loading...</p>
-    <button class="pro" onclick="setMode('pro')">🟢 Pro Mode</button>
-    <button class="legit" onclick="setMode('legit')">🔵 Legit Mode</button>
-    <button class="reset" onclick="resetMode()">❌ Reset Modes</button>
-    <button id="tradeToggle" class="trade-toggle" onclick="toggleTrade()">
-      ⚡ Auto Trade: OFF
+    <img src="https://raw.githubusercontent.com/ES-UNIVERSE/ESRAT/main/img/logo.png" alt="ESRAT Logo" class="logo">
+    <div class="status" id="currentMode">Current Mode: Loading...</div>
+    
+    <button class="btn btn-pro" onclick="setMode('pro')">
+      <span class="icon">🟢</span> Pro Mode
+    </button>
+    <button class="btn btn-legit" onclick="setMode('legit')">
+      <span class="icon">🔵</span> Legit Mode
+    </button>
+    <button class="btn btn-reset" onclick="resetMode()">
+      <span class="icon">❌</span> Reset Modes
+    </button>
+    
+    <div class="divider"></div>
+    
+    <button id="tradeToggle" class="btn btn-trade" onclick="toggleTrade()">
+      <span class="icon">⚡</span> Auto Trade: OFF
     </button>
   </div>
 
+  <!-- Firebase scripts -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
   <script>
@@ -103,7 +192,7 @@
 
     // State Management
     let currentTradeState = false;
-    let isProcessing = false; // Flag to prevent double clicks
+    let isProcessing = false;
     const tradeToggle = document.getElementById('tradeToggle');
 
     // Initialize
@@ -141,7 +230,6 @@
       const newState = !currentTradeState;
       
       try {
-        // Only update tradeState - remove the tradeCommands update
         await db.ref("tradeState").set(newState);
         currentTradeState = newState;
         updateTradeButton();
@@ -154,7 +242,7 @@
 
     function updateTradeButton() {
       tradeToggle.classList.toggle('on', currentTradeState);
-      tradeToggle.textContent = `⚡ Auto Trade: ${currentTradeState ? 'ON' : 'OFF'}`;
+      tradeToggle.innerHTML = `<span class="icon">⚡</span> Auto Trade: ${currentTradeState ? 'ON' : 'OFF'}`;
     }
 
     // Initial load
