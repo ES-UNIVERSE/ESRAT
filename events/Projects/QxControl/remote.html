@@ -2,26 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Remote Control</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon Remote</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <style>
     :root {
-      --primary-bg: #000;
-      --secondary-bg: #1a1a1a;
-      --card-bg: rgba(28, 28, 30, 0.8);
-      --card-border: rgba(255, 255, 255, 0.1);
-      --text-primary: #ffffff;
-      --text-secondary: rgba(235, 235, 245, 0.6);
-      --accent-blue: #0a84ff;
-      --accent-green: #30d158;
-      --accent-purple: #bf5af2;
-      --accent-orange: #ff9f0a;
-      --accent-red: #ff453a;
-      --blur-intensity: 20px;
-      --border-radius: 18px;
-      --button-height: 52px;
-      --spacing-unit: 16px;
-      --transition-speed: 0.3s;
+      --cyber-dark: #0a0a12;
+      --cyber-darker: #050508;
+      --neon-pink: #ff2a6d;
+      --neon-blue: #05d9e8;
+      --neon-purple: #d300c5;
+      --neon-green: #00ff9d;
+      --neon-yellow: #f9f002;
+      --text-glow: 0 0 10px currentColor;
+      --panel-glow: 0 0 20px rgba(5, 217, 232, 0.3);
+    }
+    
+    @font-face {
+      font-family: 'Rajdhani';
+      src: url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;700&display=swap');
     }
     
     * {
@@ -32,71 +30,107 @@
       -moz-osx-font-smoothing: grayscale;
     }
     
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      touch-action: manipulation;
+      background-color: var(--cyber-dark);
+      background-image: 
+        radial-gradient(circle at 20% 30%, rgba(213, 0, 197, 0.15) 0%, transparent 30%),
+        radial-gradient(circle at 80% 70%, rgba(5, 217, 232, 0.15) 0%, transparent 30%);
+    }
+    
     body {
-      background: var(--primary-bg);
-      color: var(--text-primary);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: white;
+      font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+      font-weight: 500;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      padding: var(--spacing-unit);
-      overflow: hidden;
+      padding: 0;
+      position: fixed;
     }
     
     .container {
       width: 100%;
-      max-width: 380px;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
       display: flex;
       flex-direction: column;
-      gap: var(--spacing-unit);
+      gap: 12px;
+      padding: 15px;
+      box-sizing: border-box;
+      overflow: hidden;
     }
     
-    .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(var(--blur-intensity));
-      -webkit-backdrop-filter: blur(var(--blur-intensity));
-      border: 1px solid var(--card-border);
-      border-radius: var(--border-radius);
-      padding: var(--spacing-unit);
+    .cyber-panel {
+      background: rgba(10, 10, 18, 0.85);
+      border: 1px solid var(--neon-blue);
+      border-radius: 8px;
+      padding: 16px;
       width: 100%;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      box-shadow: var(--panel-glow);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(5px);
+    }
+    
+    .cyber-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
     }
     
     h2 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: calc(var(--spacing-unit) * 1.5);
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
       display: flex;
       align-items: center;
       gap: 8px;
+      color: var(--neon-blue);
+      text-shadow: var(--text-glow);
+      letter-spacing: 1px;
     }
     
     #currentMode {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-      margin-bottom: var(--spacing-unit);
-      padding: 12px;
-      background: rgba(120, 120, 128, 0.18);
-      border-radius: 10px;
+      font-size: 0.9rem;
+      color: var(--neon-green);
+      margin-bottom: 16px;
+      padding: 10px;
+      background: rgba(5, 217, 232, 0.1);
+      border-radius: 6px;
       text-align: center;
+      border: 1px solid var(--neon-green);
+      text-shadow: var(--text-glow);
     }
     
     button {
       width: 100%;
-      height: var(--button-height);
+      height: 48px;
       border: none;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 500;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: all var(--transition-speed);
+      transition: all 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      margin-bottom: var(--spacing-unit);
-      color: white;
+      margin-bottom: 12px;
+      color: var(--cyber-dark);
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      box-shadow: 0 0 15px rgba(5, 217, 232, 0.3);
     }
     
     button:active {
@@ -107,146 +141,236 @@
       margin-bottom: 0;
     }
     
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+    }
+    
+    button:hover::before {
+      left: 100%;
+    }
+    
     .pro {
-      background: linear-gradient(135deg, var(--accent-green), #27a84a);
+      background: var(--neon-green);
+      color: var(--cyber-dark);
+      border: 1px solid var(--neon-green);
     }
     
     .legit {
-      background: linear-gradient(135deg, var(--accent-blue), #0066cc);
+      background: var(--neon-blue);
+      color: var(--cyber-dark);
+      border: 1px solid var(--neon-blue);
     }
     
     .reset {
-      background: linear-gradient(135deg, var(--accent-orange), var(--accent-red));
+      background: var(--neon-pink);
+      color: white;
+      border: 1px solid var(--neon-pink);
     }
     
     .trade-toggle {
-      background: linear-gradient(135deg, #ff453a, #ff375f);
-      margin: calc(var(--spacing-unit) * 1.5) 0;
+      background: var(--neon-pink);
+      margin: 16px 0;
+      color: white;
+      border: 1px solid var(--neon-pink);
     }
     
     .trade-toggle.on {
-      background: linear-gradient(135deg, var(--accent-green), #27a84a);
+      background: var(--neon-green);
+      color: var(--cyber-dark);
+      border: 1px solid var(--neon-green);
     }
     
     .stats-section {
-      background: var(--card-bg);
-      backdrop-filter: blur(var(--blur-intensity));
-      -webkit-backdrop-filter: blur(var(--blur-intensity));
-      border: 1px solid var(--card-border);
-      border-radius: var(--border-radius);
-      padding: var(--spacing-unit);
+      background: rgba(10, 10, 18, 0.85);
+      border: 1px solid var(--neon-purple);
+      border-radius: 8px;
+      padding: 16px;
       width: 100%;
+      box-shadow: 0 0 20px rgba(211, 0, 197, 0.3);
+      backdrop-filter: blur(5px);
     }
     
     .stats-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      margin-bottom: var(--spacing-unit);
+      margin-bottom: 12px;
     }
     
     .stat-item {
-      background: rgba(120, 120, 128, 0.18);
-      border-radius: 10px;
+      background: rgba(5, 217, 232, 0.1);
+      border-radius: 6px;
       padding: 12px;
+      border: 1px solid var(--neon-blue);
+      text-align: center;
     }
     
     .stat-item p:first-child {
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      margin-bottom: 4px;
+      font-size: 0.75rem;
+      color: var(--neon-blue);
+      margin-bottom: 6px;
+      text-shadow: var(--text-glow);
     }
     
     .stat-item span {
       font-size: 1.1rem;
-      font-weight: 500;
+      font-weight: 700;
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: 1px;
     }
     
     #totalPL {
-      color: var(--accent-green);
+      color: var(--neon-green);
+      text-shadow: var(--text-glow);
     }
     
     #wins {
-      color: var(--accent-green);
+      color: var(--neon-green);
+      text-shadow: var(--text-glow);
     }
     
     #losses {
-      color: var(--accent-red);
+      color: var(--neon-pink);
+      text-shadow: 0 0 10px var(--neon-pink);
     }
     
     #winLossRatio {
-      color: var(--text-primary);
+      color: var(--neon-yellow);
+      text-shadow: var(--text-glow);
     }
     
     #accuracy {
-      color: var(--accent-blue);
+      color: var(--neon-blue);
+      text-shadow: var(--text-glow);
     }
     
     #lastUpdated {
-      font-size: 0.8rem;
-      color: var(--text-secondary);
+      font-size: 0.7rem;
+      color: var(--neon-blue);
       text-align: center;
-      margin-top: var(--spacing-unit);
+      margin-top: 12px;
+      text-shadow: var(--text-glow);
     }
     
     .refresh-btn {
-      background: rgba(120, 120, 128, 0.18);
-      color: var(--text-primary);
-      font-size: 0.9rem;
-      margin-top: var(--spacing-unit);
+      background: rgba(255, 42, 109, 0.1);
+      color: var(--neon-pink);
+      font-size: 0.85rem;
+      margin-top: 12px;
+      border: 1px solid var(--neon-pink);
+      text-shadow: var(--text-glow);
+      box-shadow: 0 0 15px rgba(255, 42, 109, 0.3);
     }
     
-    .refresh-btn:hover {
-      background: rgba(120, 120, 128, 0.3);
+    .remote-panel {
+      margin-top: 0;
+    }
+    
+    /* Cyberpunk scanline effect */
+    .cyber-panel::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        rgba(5, 217, 232, 0.1) 0%,
+        rgba(5, 217, 232, 0) 10%
+      );
+      background-size: 100% 4px;
+      pointer-events: none;
+      animation: scan 4s linear infinite;
+    }
+    
+    @keyframes scan {
+      0% { top: -100%; }
+      100% { top: 100%; }
+    }
+    
+    /* Grid overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(5, 217, 232, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(5, 217, 232, 0.1) 1px, transparent 1px);
+      background-size: 20px 20px;
+      z-index: -1;
+      opacity: 0.3;
+    }
+    
+    /* Glow animation */
+    @keyframes pulse {
+      0% { opacity: 0.8; }
+      50% { opacity: 1; }
+      100% { opacity: 0.8; }
+    }
+    
+    h2, #currentMode, .stat-item span {
+      animation: pulse 3s infinite;
     }
   </style>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
-    <div class="card">
-      <h2>🛠️ Quotex Remote</h2>
-      <p id="currentMode">Current Mode: Loading...</p>
-      <button class="pro" onclick="setMode('pro')">
-        <span>🟢</span> Pro Mode
-      </button>
-      <button class="legit" onclick="setMode('legit')">
-        <span>🔵</span> Legit Mode
-      </button>
-      <button class="reset" onclick="resetMode()">
-        <span>❌</span> Reset Modes
-      </button>
-      <button id="tradeToggle" class="trade-toggle" onclick="toggleTrade()">
-        <span>⚡</span> Auto Trade: OFF
-      </button>
-    </div>
-    
-    <div class="stats-section">
-      <h2>📊 Trading Statistics</h2>
+    <div class="stats-section cyber-panel">
+      <h2>📊 TRADING METRICS</h2>
       <div class="stats-grid">
         <div class="stat-item">
-          <p>Total P/L</p>
+          <p>PROFIT/LOSS</p>
           <span id="totalPL">₹0.00</span>
         </div>
         <div class="stat-item">
-          <p>Accuracy</p>
+          <p>ACCURACY</p>
           <span id="accuracy">0.00%</span>
         </div>
         <div class="stat-item">
-          <p>Wins</p>
+          <p>WINS</p>
           <span id="wins">0</span>
         </div>
         <div class="stat-item">
-          <p>Losses</p>
+          <p>LOSSES</p>
           <span id="losses">0</span>
         </div>
       </div>
-      <div class="stat-item" style="grid-column: span 2;">
-        <p>Win/Loss Ratio</p>
+      <div class="stat-item" style="grid-column: span 2; margin-bottom: 0;">
+        <p>WIN/LOSS RATIO</p>
         <span id="winLossRatio">0/0</span>
       </div>
-      <p id="lastUpdated">Last updated: Never</p>
+      <p id="lastUpdated">LAST SYNC: NEVER</p>
       <button class="refresh-btn" onclick="fetchTelegramMessages()">
-        <span>🔄</span> Refresh Stats
+        <span>🔄</span> REFRESH METRICS
+      </button>
+    </div>
+
+    <div class="cyber-panel remote-panel">
+      <h2>🛠️ NEON REMOTE</h2>
+      <p id="currentMode">CURRENT MODE: LOADING...</p>
+      <button class="pro" onclick="setMode('pro')">
+        <span>🟢</span> PRO MODE
+      </button>
+      <button class="legit" onclick="setMode('legit')">
+        <span>🔵</span> LEGIT MODE
+      </button>
+      <button class="reset" onclick="resetMode()">
+        <span>❌</span> RESET MODES
+      </button>
+      <button id="tradeToggle" class="trade-toggle" onclick="toggleTrade()">
+        <span>⚡</span> AUTO TRADE: OFF
       </button>
     </div>
   </div>
@@ -282,10 +406,10 @@
       const mode = snapshot.val();
       const display = document.getElementById("currentMode");
       
-      if (!mode) display.textContent = "Current Mode: None";
-      else if (mode.pro) display.textContent = "Current Mode: 🟢 PRO";
-      else if (mode.legit) display.textContent = "Current Mode: 🔵 LEGIT";
-      else display.textContent = "Current Mode: None";
+      if (!mode) display.textContent = "CURRENT MODE: NONE";
+      else if (mode.pro) display.textContent = "CURRENT MODE: 🟢 PRO";
+      else if (mode.legit) display.textContent = "CURRENT MODE: 🔵 LEGIT";
+      else display.textContent = "CURRENT MODE: NONE";
     });
 
     // Control Functions
@@ -313,8 +437,8 @@
     function updateTradeButton() {
       tradeToggle.classList.toggle('on', currentTradeState);
       tradeToggle.innerHTML = currentTradeState 
-        ? '<span>⚡</span> Auto Trade: ON' 
-        : '<span>⚡</span> Auto Trade: OFF';
+        ? '<span>⚡</span> AUTO TRADE: ON' 
+        : '<span>⚡</span> AUTO TRADE: OFF';
     }
 
     // Trading Statistics Management
@@ -323,7 +447,7 @@
       wins: 0,
       losses: 0,
       accuracy: 0,
-      lastUpdated: 'Never'
+      lastUpdated: 'NEVER'
     };
 
     // Telegram Bot Configuration
@@ -344,7 +468,7 @@
       } catch (error) {
         console.error('Error fetching Telegram messages:', error);
         // Update last updated time even on error
-        document.getElementById('lastUpdated').textContent = 'Last updated: ' + new Date().toLocaleString() + ' (Error)';
+        document.getElementById('lastUpdated').textContent = 'LAST SYNC: ' + new Date().toLocaleString() + ' (ERROR)';
       }
     }
 
@@ -380,7 +504,7 @@
     function updateStatisticsDisplay() {
       const totalTrades = tradingStats.wins + tradingStats.losses;
       tradingStats.accuracy = totalTrades > 0 ? ((tradingStats.wins / totalTrades) * 100).toFixed(2) : 0;
-      tradingStats.lastUpdated = new Date().toLocaleString();
+      tradingStats.lastUpdated = new Date().toLocaleTimeString();
 
       // Update DOM elements
       document.getElementById('totalPL').textContent = `₹${tradingStats.totalPL.toFixed(2)}`;
@@ -388,7 +512,7 @@
       document.getElementById('losses').textContent = tradingStats.losses;
       document.getElementById('winLossRatio').textContent = `${tradingStats.wins}/${tradingStats.losses}`;
       document.getElementById('accuracy').textContent = `${tradingStats.accuracy}%`;
-      document.getElementById('lastUpdated').textContent = `Last updated: ${tradingStats.lastUpdated}`;
+      document.getElementById('lastUpdated').textContent = `LAST SYNC: ${tradingStats.lastUpdated}`;
 
       // Store in Firebase for persistence
       db.ref("tradingStats").set(tradingStats);
