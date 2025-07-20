@@ -2,273 +2,252 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ES Remote Control</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Remote Control</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
-      --primary-bg: #000000;
+      --primary-bg: #000;
+      --secondary-bg: #1a1a1a;
       --card-bg: rgba(28, 28, 30, 0.8);
       --card-border: rgba(255, 255, 255, 0.1);
       --text-primary: #ffffff;
       --text-secondary: rgba(235, 235, 245, 0.6);
-      --pro-gradient: linear-gradient(135deg, #32D74B, #0A84FF);
-      --legit-gradient: linear-gradient(135deg, #BF5AF2, #FF375F);
-      --reset-gradient: linear-gradient(135deg, #FF453A, #FF9F0A);
-      --toggle-off: rgba(120, 120, 128, 0.32);
-      --toggle-on: #34C759;
+      --accent-blue: #0a84ff;
+      --accent-green: #30d158;
+      --accent-purple: #bf5af2;
+      --accent-orange: #ff9f0a;
+      --accent-red: #ff453a;
+      --blur-intensity: 20px;
+      --border-radius: 18px;
+      --button-height: 52px;
+      --spacing-unit: 16px;
+      --transition-speed: 0.3s;
     }
     
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      -webkit-tap-highlight-color: transparent;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
     
     body {
       background: var(--primary-bg);
       color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      padding: 20px;
+      min-height: 100vh;
+      padding: var(--spacing-unit);
       overflow: hidden;
     }
     
     .container {
-      background: var(--card-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--card-border);
-      border-radius: 24px;
-      padding: 24px;
       width: 100%;
       max-width: 380px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-unit);
     }
     
-    .logo-container {
-      margin-bottom: 24px;
-      cursor: pointer;
-    }
-    
-    .logo {
-      height: 48px;
-      width: auto;
-      object-fit: contain;
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(var(--blur-intensity));
+      -webkit-backdrop-filter: blur(var(--blur-intensity));
+      border: 1px solid var(--card-border);
+      border-radius: var(--border-radius);
+      padding: var(--spacing-unit);
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
     
     h2 {
-      margin-bottom: 16px;
-      font-size: 20px;
+      font-size: 1.25rem;
       font-weight: 600;
-      color: var(--text-primary);
-    }
-    
-    .mode-indicator {
-      background: rgba(120, 120, 128, 0.18);
-      border-radius: 12px;
-      padding: 12px 16px;
-      margin-bottom: 24px;
-      font-size: 15px;
-      font-weight: 500;
+      margin-bottom: calc(var(--spacing-unit) * 1.5);
       display: flex;
       align-items: center;
-      justify-content: center;
-      min-height: 44px;
+      gap: 8px;
     }
     
-    .mode-indicator .indicator {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      margin-right: 8px;
-    }
-    
-    .mode-indicator.pro .indicator {
-      background: #32D74B;
-      box-shadow: 0 0 8px rgba(50, 215, 75, 0.4);
-    }
-    
-    .mode-indicator.legit .indicator {
-      background: #0A84FF;
-      box-shadow: 0 0 8px rgba(10, 132, 255, 0.4);
-    }
-    
-    .mode-indicator.none .indicator {
-      background: var(--text-secondary);
-    }
-    
-    .button-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      margin-bottom: 20px;
+    #currentMode {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-unit);
+      padding: 12px;
+      background: rgba(120, 120, 128, 0.18);
+      border-radius: 10px;
+      text-align: center;
     }
     
     button {
       width: 100%;
-      padding: 16px;
-      margin: 0;
+      height: var(--button-height);
       border: none;
       border-radius: 12px;
-      font-size: 17px;
+      font-size: 1rem;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.4, 1);
+      transition: all var(--transition-speed);
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 8px;
+      margin-bottom: var(--spacing-unit);
       color: white;
-      position: relative;
-      overflow: hidden;
     }
     
     button:active {
-      transform: scale(0.96);
+      transform: scale(0.98);
     }
     
-    button::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.1);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    
-    button:hover::after {
-      opacity: 1;
+    button:last-child {
+      margin-bottom: 0;
     }
     
     .pro {
-      background: var(--pro-gradient);
+      background: linear-gradient(135deg, var(--accent-green), #27a84a);
     }
     
     .legit {
-      background: var(--legit-gradient);
+      background: linear-gradient(135deg, var(--accent-blue), #0066cc);
     }
     
     .reset {
-      background: var(--reset-gradient);
+      background: linear-gradient(135deg, var(--accent-orange), var(--accent-red));
     }
     
-    .toggle-container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .trade-toggle {
+      background: linear-gradient(135deg, #ff453a, #ff375f);
+      margin: calc(var(--spacing-unit) * 1.5) 0;
+    }
+    
+    .trade-toggle.on {
+      background: linear-gradient(135deg, var(--accent-green), #27a84a);
+    }
+    
+    .stats-section {
+      background: var(--card-bg);
+      backdrop-filter: blur(var(--blur-intensity));
+      -webkit-backdrop-filter: blur(var(--blur-intensity));
+      border: 1px solid var(--card-border);
+      border-radius: var(--border-radius);
+      padding: var(--spacing-unit);
+      width: 100%;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: var(--spacing-unit);
+    }
+    
+    .stat-item {
       background: rgba(120, 120, 128, 0.18);
-      border-radius: 12px;
-      padding: 12px 16px;
-      margin: 20px 0;
+      border-radius: 10px;
+      padding: 12px;
     }
     
-    .toggle-label {
-      font-size: 16px;
+    .stat-item p:first-child {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+    
+    .stat-item span {
+      font-size: 1.1rem;
       font-weight: 500;
+    }
+    
+    #totalPL {
+      color: var(--accent-green);
+    }
+    
+    #wins {
+      color: var(--accent-green);
+    }
+    
+    #losses {
+      color: var(--accent-red);
+    }
+    
+    #winLossRatio {
       color: var(--text-primary);
     }
     
-    .toggle-switch {
-      position: relative;
-      width: 52px;
-      height: 32px;
+    #accuracy {
+      color: var(--accent-blue);
     }
     
-    .toggle-checkbox {
-      opacity: 0;
-      width: 0;
-      height: 0;
+    #lastUpdated {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-top: var(--spacing-unit);
     }
     
-    .toggle-slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: var(--toggle-off);
-      transition: .4s;
-      border-radius: 16px;
+    .refresh-btn {
+      background: rgba(120, 120, 128, 0.18);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      margin-top: var(--spacing-unit);
     }
     
-    .toggle-slider:before {
-      position: absolute;
-      content: "";
-      height: 28px;
-      width: 28px;
-      left: 2px;
-      bottom: 2px;
-      background-color: white;
-      transition: .4s;
-      border-radius: 50%;
-    }
-    
-    .toggle-checkbox:checked + .toggle-slider {
-      background-color: var(--toggle-on);
-    }
-    
-    .toggle-checkbox:checked + .toggle-slider:before {
-      transform: translateX(20px);
-    }
-    
-    .icon {
-      margin-right: 8px;
-      font-size: 20px;
-    }
-    
-    @media (max-width: 400px) {
-      .container {
-        padding: 20px;
-        border-radius: 20px;
-      }
-      
-      button {
-        padding: 14px;
-        font-size: 16px;
-      }
+    .refresh-btn:hover {
+      background: rgba(120, 120, 128, 0.3);
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="logo-container" onclick="window.location.href='/ESRAT/index-home.html'">
-      <img src="https://github.com/ES-UNIVERSE/ESRAT/blob/dbb75ca702d58cdc00bc94613d0e99cda16a044d/img/logo.png?raw=true" alt="ES Logo" class="logo">
-    </div>
-    
-    <h2>Remote Control Panel</h2>
-    
-    <div id="currentMode" class="mode-indicator none">
-      <span class="indicator"></span>
-      <span>Current Mode: Loading...</span>
-    </div>
-    
-    <div class="button-grid">
+    <div class="card">
+      <h2>🛠️ Quotex Remote</h2>
+      <p id="currentMode">Current Mode: Loading...</p>
       <button class="pro" onclick="setMode('pro')">
-        <span class="icon">🟢</span> Pro Mode
+        <span>🟢</span> Pro Mode
       </button>
       <button class="legit" onclick="setMode('legit')">
-        <span class="icon">🔵</span> Legit Mode
+        <span>🔵</span> Legit Mode
       </button>
       <button class="reset" onclick="resetMode()">
-        <span class="icon">✖</span> Reset Modes
+        <span>❌</span> Reset Modes
+      </button>
+      <button id="tradeToggle" class="trade-toggle" onclick="toggleTrade()">
+        <span>⚡</span> Auto Trade: OFF
       </button>
     </div>
     
-    <div class="toggle-container">
-      <span class="toggle-label">Auto Trade</span>
-      <label class="toggle-switch">
-        <input type="checkbox" id="tradeToggle" class="toggle-checkbox" onclick="toggleTrade()">
-        <span class="toggle-slider"></span>
-      </label>
+    <div class="stats-section">
+      <h2>📊 Trading Statistics</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <p>Total P/L</p>
+          <span id="totalPL">₹0.00</span>
+        </div>
+        <div class="stat-item">
+          <p>Accuracy</p>
+          <span id="accuracy">0.00%</span>
+        </div>
+        <div class="stat-item">
+          <p>Wins</p>
+          <span id="wins">0</span>
+        </div>
+        <div class="stat-item">
+          <p>Losses</p>
+          <span id="losses">0</span>
+        </div>
+      </div>
+      <div class="stat-item" style="grid-column: span 2;">
+        <p>Win/Loss Ratio</p>
+        <span id="winLossRatio">0/0</span>
+      </div>
+      <p id="lastUpdated">Last updated: Never</p>
+      <button class="refresh-btn" onclick="fetchTelegramMessages()">
+        <span>🔄</span> Refresh Stats
+      </button>
     </div>
   </div>
 
@@ -296,29 +275,17 @@
     // Initialize
     db.ref("tradeState").on("value", (snapshot) => {
       currentTradeState = snapshot.val() || false;
-      tradeToggle.checked = currentTradeState;
+      updateTradeButton();
     });
 
     db.ref("mode").on("value", (snapshot) => {
       const mode = snapshot.val();
       const display = document.getElementById("currentMode");
       
-      display.className = "mode-indicator none";
-      display.innerHTML = '<span class="indicator"></span><span>Current Mode: ';
-      
-      if (!mode) {
-        display.className = "mode-indicator none";
-        display.innerHTML += 'None</span>';
-      } else if (mode.pro) {
-        display.className = "mode-indicator pro";
-        display.innerHTML += 'PRO</span>';
-      } else if (mode.legit) {
-        display.className = "mode-indicator legit";
-        display.innerHTML += 'LEGIT</span>';
-      } else {
-        display.className = "mode-indicator none";
-        display.innerHTML += 'None</span>';
-      }
+      if (!mode) display.textContent = "Current Mode: None";
+      else if (mode.pro) display.textContent = "Current Mode: 🟢 PRO";
+      else if (mode.legit) display.textContent = "Current Mode: 🔵 LEGIT";
+      else display.textContent = "Current Mode: None";
     });
 
     // Control Functions
@@ -343,10 +310,107 @@
       });
     }
 
-    // Prevent scrolling
-    document.addEventListener('touchmove', function(e) {
-      e.preventDefault();
-    }, { passive: false });
+    function updateTradeButton() {
+      tradeToggle.classList.toggle('on', currentTradeState);
+      tradeToggle.innerHTML = currentTradeState 
+        ? '<span>⚡</span> Auto Trade: ON' 
+        : '<span>⚡</span> Auto Trade: OFF';
+    }
+
+    // Trading Statistics Management
+    let tradingStats = {
+      totalPL: 0,
+      wins: 0,
+      losses: 0,
+      accuracy: 0,
+      lastUpdated: 'Never'
+    };
+
+    // Telegram Bot Configuration
+    const TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN'; // Replace with your bot token
+    const TELEGRAM_CHAT_ID = 'YOUR_CHAT_ID'; // Replace with your chat ID
+
+    // Function to fetch last messages from Telegram
+    async function fetchTelegramMessages() {
+      try {
+        const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates?limit=2&offset=-2`);
+        const data = await response.json();
+        
+        if (data.ok && data.result.length > 0) {
+          // Process the last 1-2 messages
+          const messages = data.result;
+          processTradingMessages(messages);
+        }
+      } catch (error) {
+        console.error('Error fetching Telegram messages:', error);
+        // Update last updated time even on error
+        document.getElementById('lastUpdated').textContent = 'Last updated: ' + new Date().toLocaleString() + ' (Error)';
+      }
+    }
+
+    // Function to process trading messages and update statistics
+    function processTradingMessages(messages) {
+      messages.forEach(update => {
+        if (update.message && update.message.text) {
+          const text = update.message.text.toLowerCase();
+          
+          // Parse trading results from messages
+          if (text.includes('win') || text.includes('profit')) {
+            tradingStats.wins++;
+            // Extract profit amount if available
+            const profitMatch = text.match(/₹?(\d+\.?\d*)/);
+            if (profitMatch) {
+              tradingStats.totalPL += parseFloat(profitMatch[1]);
+            }
+          } else if (text.includes('loss') || text.includes('lose')) {
+            tradingStats.losses++;
+            // Extract loss amount if available
+            const lossMatch = text.match(/₹?(\d+\.?\d*)/);
+            if (lossMatch) {
+              tradingStats.totalPL -= parseFloat(lossMatch[1]);
+            }
+          }
+        }
+      });
+      
+      updateStatisticsDisplay();
+    }
+
+    // Function to update statistics display
+    function updateStatisticsDisplay() {
+      const totalTrades = tradingStats.wins + tradingStats.losses;
+      tradingStats.accuracy = totalTrades > 0 ? ((tradingStats.wins / totalTrades) * 100).toFixed(2) : 0;
+      tradingStats.lastUpdated = new Date().toLocaleString();
+
+      // Update DOM elements
+      document.getElementById('totalPL').textContent = `₹${tradingStats.totalPL.toFixed(2)}`;
+      document.getElementById('wins').textContent = tradingStats.wins;
+      document.getElementById('losses').textContent = tradingStats.losses;
+      document.getElementById('winLossRatio').textContent = `${tradingStats.wins}/${tradingStats.losses}`;
+      document.getElementById('accuracy').textContent = `${tradingStats.accuracy}%`;
+      document.getElementById('lastUpdated').textContent = `Last updated: ${tradingStats.lastUpdated}`;
+
+      // Store in Firebase for persistence
+      db.ref("tradingStats").set(tradingStats);
+    }
+
+    // Load existing statistics from Firebase
+    db.ref("tradingStats").on("value", (snapshot) => {
+      const stats = snapshot.val();
+      if (stats) {
+        tradingStats = stats;
+        updateStatisticsDisplay();
+      }
+    });
+
+    // Initial load
+    db.ref("tradeState").once("value").then(updateTradeButton);
+
+    // Auto-fetch Telegram messages every 30 seconds
+    setInterval(fetchTelegramMessages, 30000);
+
+    // Initial fetch
+    fetchTelegramMessages();
   </script>
 </body>
 </html>
