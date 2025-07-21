@@ -152,7 +152,7 @@
       width: 100%;
     }
     
-    .stats-header {
+    .stats-title-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -251,12 +251,36 @@
       font-size: 0.7rem;
       color: var(--text-secondary);
     }
+    
+    /* TIME DISPLAY STYLES */
+    .time-display {
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      color: var(--accent-blue);
+      background: rgba(0, 0, 0, 0.3);
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(10, 132, 255, 0.3);
+      margin-left: auto;
+    }
+    
+    .time-digit {
+      display: inline-block;
+    }
+    
+    .colon {
+      animation: blink 1s step-end infinite;
+    }
+    
+    @keyframes blink {
+      50% { opacity: 0.3; }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="stats-section">
-      <div class="stats-header">
+      <div class="stats-title-row">
         <a href="/ESRAT/index-home.html" class="logo-link">
           <img src="https://github.com/ES-UNIVERSE/ESRAT/blob/f1da595fe06150973079f1857ca3162ebd064cd3/img/logo.png?raw=true" class="logo" alt="logo">
           <div class="stats-title">
@@ -264,6 +288,7 @@
             <span class="stats-subtitle">Live Performance Metrics</span>
           </div>
         </a>
+        <div class="time-display" id="timeDisplay">--:--:--</div>
       </div>
       
       <div class="stats-grid">
@@ -292,7 +317,7 @@
       <div class="stats-footer">
         <span id="lastUpdated">Never updated</span>
         <button class="refresh-btn" onclick="fetchTelegramMessages()">
-          <span>🌪️</span> Refresh Stats
+          <span>🔄</span> Refresh Stats
         </button>
       </div>
     </div>
@@ -395,8 +420,8 @@
     };
 
     // Telegram Bot Configuration
-    const TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN'; // Replace with your bot token
-    const TELEGRAM_CHAT_ID = 'YOUR_CHAT_ID'; // Replace with your chat ID
+    const TELEGRAM_BOT_TOKEN = '7781088213:AAHuQiyC5YNjmruGSwvIsczAzQblCsDfDM0'; // Replace with your bot token
+    const TELEGRAM_CHAT_ID = '6302429987'; // Replace with your chat ID
 
     // Function to fetch last messages from Telegram
     async function fetchTelegramMessages() {
@@ -479,6 +504,26 @@
 
     // Initial fetch
     fetchTelegramMessages();
+
+    // TIME DISPLAY
+    function updateTime() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      
+      document.getElementById('timeDisplay').innerHTML = `
+        <span class="time-digit">${hours}</span>
+        <span class="colon">:</span>
+        <span class="time-digit">${minutes}</span>
+        <span class="colon">:</span>
+        <span class="time-digit">${seconds}</span>
+      `;
+    }
+
+    // Update time every second
+    setInterval(updateTime, 1000);
+    updateTime(); // Initial call
   </script>
 </body>
 </html>
