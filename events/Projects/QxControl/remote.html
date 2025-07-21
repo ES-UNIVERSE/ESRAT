@@ -19,9 +19,9 @@
       --accent-orange: #ff9f0a;
       --accent-red: #ff453a;
       --blur-intensity: 20px;
-      --border-radius: 18px;
-      --button-height: 52px;
-      --spacing-unit: 16px;
+      --border-radius: 14px;
+      --button-height: 40px;
+      --spacing-unit: 10px;
       --transition-speed: 0.3s;
     }
     
@@ -39,7 +39,7 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       min-height: 100vh;
       padding: var(--spacing-unit);
       overflow: hidden;
@@ -64,48 +64,59 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
     
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-unit);
+    }
+    
     h2 {
-      font-size: 1.25rem;
+      font-size: 1.1rem;
       font-weight: 600;
-      margin-bottom: calc(var(--spacing-unit) * 1.5);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      margin: 0;
     }
     
     #currentMode {
-      font-size: 0.95rem;
+      font-size: 0.8rem;
       color: var(--text-secondary);
-      margin-bottom: var(--spacing-unit);
-      padding: 12px;
       background: rgba(120, 120, 128, 0.18);
-      border-radius: 10px;
-      text-align: center;
+      border-radius: 8px;
+      padding: 6px 10px;
+      white-space: nowrap;
+    }
+    
+    .mode-buttons {
+      display: flex;
+      gap: var(--spacing-unit);
+      margin-bottom: var(--spacing-unit);
+    }
+    
+    .mode-buttons button {
+      flex: 1;
+      margin-bottom: 0;
     }
     
     button {
-      width: 100%;
       height: var(--button-height);
       border: none;
-      border-radius: 12px;
-      font-size: 1rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
       font-weight: 500;
       cursor: pointer;
       transition: all var(--transition-speed);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      margin-bottom: var(--spacing-unit);
+      gap: 6px;
       color: white;
     }
     
     button:active {
       transform: scale(0.98);
-    }
-    
-    button:last-child {
-      margin-bottom: 0;
     }
     
     .pro {
@@ -118,11 +129,13 @@
     
     .reset {
       background: linear-gradient(135deg, var(--accent-orange), var(--accent-red));
+      width: 100%;
+      margin-bottom: var(--spacing-unit);
     }
     
     .trade-toggle {
       background: linear-gradient(135deg, #ff453a, #ff375f);
-      margin: calc(var(--spacing-unit) * 1.5) 0;
+      width: 100%;
     }
     
     .trade-toggle.on {
@@ -139,80 +152,138 @@
       width: 100%;
     }
     
+    .stats-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-unit);
+    }
+    
     .stats-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: var(--spacing-unit);
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-unit);
     }
     
     .stat-item {
       background: rgba(120, 120, 128, 0.18);
-      border-radius: 10px;
-      padding: 12px;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
     }
     
-    .stat-item p:first-child {
-      font-size: 0.8rem;
+    .stat-label {
+      font-size: 0.7rem;
       color: var(--text-secondary);
       margin-bottom: 4px;
     }
     
-    .stat-item span {
-      font-size: 1.1rem;
+    .stat-value {
+      font-size: 0.95rem;
       font-weight: 500;
     }
     
-    #totalPL {
-      color: var(--accent-green);
-    }
+    .total-pl { color: var(--accent-green); }
+    .wins { color: var(--accent-green); }
+    .losses { color: var(--accent-red); }
+    .accuracy { color: var(--accent-blue); }
+    .win-loss { color: var(--text-primary); }
     
-    #wins {
-      color: var(--accent-green);
-    }
-    
-    #losses {
-      color: var(--accent-red);
-    }
-    
-    #winLossRatio {
-      color: var(--text-primary);
-    }
-    
-    #accuracy {
-      color: var(--accent-blue);
+    .stats-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: var(--spacing-unit);
     }
     
     #lastUpdated {
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       color: var(--text-secondary);
-      text-align: center;
-      margin-top: var(--spacing-unit);
     }
     
     .refresh-btn {
       background: rgba(120, 120, 128, 0.18);
       color: var(--text-primary);
-      font-size: 0.9rem;
-      margin-top: var(--spacing-unit);
+      font-size: 0.8rem;
+      padding: 0 12px;
+      height: 32px;
+      border-radius: 8px;
     }
     
     .refresh-btn:hover {
       background: rgba(120, 120, 128, 0.3);
     }
+    
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .logo {
+      width: 24px;
+      height: 24px;
+      margin-right: 8px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
+    <div class="stats-section">
+      <div class="stats-header">
+        <h2>
+          <a href="/ESRAT/index-home.html" class="logo-link">
+            <img src="https://github.com/ES-UNIVERSE/ESRAT/blob/f1da595fe06150973079f1857ca3162ebd064cd3/img/logo.png?raw=true" class="logo" alt="logo">
+            Trading Stats
+          </a>
+        </h2>
+      </div>
+      
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-label">Total P/L</div>
+          <div id="totalPL" class="stat-value total-pl">₹0.00</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Accuracy</div>
+          <div id="accuracy" class="stat-value accuracy">0.00%</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Wins</div>
+          <div id="wins" class="stat-value wins">0</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Losses</div>
+          <div id="losses" class="stat-value losses">0</div>
+        </div>
+        <div class="stat-item" style="grid-column: span 2;">
+          <div class="stat-label">Win/Loss Ratio</div>
+          <div id="winLossRatio" class="stat-value win-loss">0/0</div>
+        </div>
+      </div>
+      
+      <div class="stats-footer">
+        <span id="lastUpdated">Never updated</span>
+        <button class="refresh-btn" onclick="fetchTelegramMessages()">
+          <span>🔄</span> Refresh
+        </button>
+      </div>
+    </div>
+    
     <div class="card">
-      <h2>🛠️ Quotex Remote</h2>
-      <p id="currentMode">Current Mode: Loading...</p>
-      <button class="pro" onclick="setMode('pro')">
-        <span>🟢</span> Pro Mode
-      </button>
-      <button class="legit" onclick="setMode('legit')">
-        <span>🔵</span> Legit Mode
-      </button>
+      <div class="header-row">
+        <h2>🛠️ Quotex Remote</h2>
+        <div id="currentMode">Loading...</div>
+      </div>
+      <div class="mode-buttons">
+        <button class="pro" onclick="setMode('pro')">
+          <span>🟢</span> Pro
+        </button>
+        <button class="legit" onclick="setMode('legit')">
+          <span>🔵</span> Legit
+        </button>
+      </div>
       <button class="reset" onclick="resetMode()">
         <span>❌</span> Reset Modes
       </button>
@@ -220,41 +291,12 @@
         <span>⚡</span> Auto Trade: OFF
       </button>
     </div>
-    
-    <div class="stats-section">
-      <h2>📊 Trading Statistics</h2>
-      <div class="stats-grid">
-        <div class="stat-item">
-          <p>Total P/L</p>
-          <span id="totalPL">₹0.00</span>
-        </div>
-        <div class="stat-item">
-          <p>Accuracy</p>
-          <span id="accuracy">0.00%</span>
-        </div>
-        <div class="stat-item">
-          <p>Wins</p>
-          <span id="wins">0</span>
-        </div>
-        <div class="stat-item">
-          <p>Losses</p>
-          <span id="losses">0</span>
-        </div>
-      </div>
-      <div class="stat-item" style="grid-column: span 2;">
-        <p>Win/Loss Ratio</p>
-        <span id="winLossRatio">0/0</span>
-      </div>
-      <p id="lastUpdated">Last updated: Never</p>
-      <button class="refresh-btn" onclick="fetchTelegramMessages()">
-        <span>🔄</span> Refresh Stats
-      </button>
-    </div>
   </div>
 
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
   <script>
+    // [Previous JavaScript code remains exactly the same]
     // Firebase Setup
     const firebaseConfig = {
       apiKey: "AIzaSyDEAy2KXezICmuuQZnhNq12nqwwBouDjt4",
@@ -283,10 +325,10 @@
       const mode = snapshot.val();
       const display = document.getElementById("currentMode");
       
-      if (!mode) display.textContent = "Current Mode: None";
-      else if (mode.pro) display.textContent = "Current Mode: 🟢 PRO";
-      else if (mode.legit) display.textContent = "Current Mode: 🔵 LEGIT";
-      else display.textContent = "Current Mode: None";
+      if (!mode) display.textContent = "None";
+      else if (mode.pro) display.textContent = "🟢 PRO";
+      else if (mode.legit) display.textContent = "🔵 LEGIT";
+      else display.textContent = "None";
     });
 
     // Control Functions
@@ -345,7 +387,7 @@
       } catch (error) {
         console.error('Error fetching Telegram messages:', error);
         // Update last updated time even on error
-        document.getElementById('lastUpdated').textContent = 'Last updated: ' + new Date().toLocaleString() + ' (Error)';
+        document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString() + ' (Error)';
       }
     }
 
@@ -381,7 +423,7 @@
     function updateStatisticsDisplay() {
       const totalTrades = tradingStats.wins + tradingStats.losses;
       tradingStats.accuracy = totalTrades > 0 ? ((tradingStats.wins / totalTrades) * 100).toFixed(2) : 0;
-      tradingStats.lastUpdated = new Date().toLocaleString();
+      tradingStats.lastUpdated = new Date().toLocaleTimeString();
 
       // Update DOM elements
       document.getElementById('totalPL').textContent = `₹${tradingStats.totalPL.toFixed(2)}`;
@@ -389,7 +431,7 @@
       document.getElementById('losses').textContent = tradingStats.losses;
       document.getElementById('winLossRatio').textContent = `${tradingStats.wins}/${tradingStats.losses}`;
       document.getElementById('accuracy').textContent = `${tradingStats.accuracy}%`;
-      document.getElementById('lastUpdated').textContent = `Last updated: ${tradingStats.lastUpdated}`;
+      document.getElementById('lastUpdated').textContent = tradingStats.lastUpdated;
 
       // Store in Firebase for persistence
       db.ref("tradingStats").set(tradingStats);
