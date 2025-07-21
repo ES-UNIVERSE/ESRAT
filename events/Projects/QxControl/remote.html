@@ -5,6 +5,13 @@
   <title>Remote Control</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="/ESRAT/apks/favicon.ico" type="image/x-icon">
+  <!-- Add these inside the <head> section -->
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Remote Control">
+<link rel="apple-touch-icon" href="https://github.com/ES-UNIVERSE/ESRAT/blob/f1da595fe06150973079f1857ca3162ebd064cd3/img/logo.png?raw=true">
+<link rel="manifest" href="/manifest.json">
   <style>
     :root {
       --primary-bg: #000;
@@ -294,28 +301,28 @@
       <div class="stats-grid">
         <div class="stat-item">
           <div class="stat-label">Total P/L</div>
-          <div id="totalPL" class="stat-value total-pl">₹0.00</div>
+          <div id="totalPL" class="stat-value total-pl">₹+525</div>
         </div>
         <div class="stat-item">
           <div class="stat-label">Accuracy</div>
-          <div id="accuracy" class="stat-value accuracy">0.00%</div>
+          <div id="accuracy" class="stat-value accuracy">71.43%</div>
         </div>
         <div class="stat-item">
           <div class="stat-label">Wins</div>
-          <div id="wins" class="stat-value wins">0</div>
+          <div id="wins" class="stat-value wins">15</div>
         </div>
         <div class="stat-item">
           <div class="stat-label">Losses</div>
-          <div id="losses" class="stat-value losses">0</div>
+          <div id="losses" class="stat-value losses">6</div>
         </div>
         <div class="stat-item" style="grid-column: span 2;">
           <div class="stat-label">Win/Loss Ratio</div>
-          <div id="winLossRatio" class="stat-value win-loss">0/0</div>
+          <div id="winLossRatio" class="stat-value win-loss">2/5</div>
         </div>
       </div>
       
       <div class="stats-footer">
-        <span id="lastUpdated">Never updated</span>
+        <span id="lastUpdated">Updated: 04-07-2025</span>
         <button class="refresh-btn" onclick="fetchTelegramMessages()">
           <span>🌪️</span> Refresh Stats
         </button>
