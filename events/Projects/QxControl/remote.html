@@ -202,16 +202,25 @@
     }
     
     .refresh-btn {
-      background: rgba(120, 120, 128, 0.18);
-      color: var(--text-primary);
+      background: rgba(10, 132, 255, 0.2);
+      color: var(--accent-blue);
       font-size: 0.8rem;
       padding: 0 12px;
       height: 32px;
       border-radius: 8px;
+      border: 1px solid rgba(10, 132, 255, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
     }
     
     .refresh-btn:hover {
-      background: rgba(120, 120, 128, 0.3);
+      background: rgba(10, 132, 255, 0.3);
+    }
+    
+    .refresh-btn:active {
+      transform: scale(0.95);
     }
     
     .logo-link {
@@ -222,9 +231,25 @@
     }
     
     .logo {
-      width: 24px;
-      height: 24px;
+      width: 100px;
+      height: 100px;
       margin-right: 8px;
+      object-fit: contain;
+    }
+    
+    .stats-title {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .stats-title-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    
+    .stats-subtitle {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
     }
   </style>
 </head>
@@ -232,12 +257,13 @@
   <div class="container">
     <div class="stats-section">
       <div class="stats-header">
-        <h2>
-          <a href="/ESRAT/index-home.html" class="logo-link">
-            <img src="https://github.com/ES-UNIVERSE/ESRAT/blob/f1da595fe06150973079f1857ca3162ebd064cd3/img/logo.png?raw=true" class="logo" alt="logo">
-            Trading Stats
-          </a>
-        </h2>
+        <a href="/ESRAT/index-home.html" class="logo-link">
+          <img src="https://github.com/ES-UNIVERSE/ESRAT/blob/f1da595fe06150973079f1857ca3162ebd064cd3/img/logo.png?raw=true" class="logo" alt="logo">
+          <div class="stats-title">
+            <span class="stats-title-text">Trading Stats</span>
+            <span class="stats-subtitle">Live Performance Metrics</span>
+          </div>
+        </a>
       </div>
       
       <div class="stats-grid">
@@ -266,7 +292,7 @@
       <div class="stats-footer">
         <span id="lastUpdated">Never updated</span>
         <button class="refresh-btn" onclick="fetchTelegramMessages()">
-          <span>🔄</span> Refresh
+          <span>🌪️</span> Refresh Stats
         </button>
       </div>
     </div>
@@ -296,7 +322,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
   <script>
-    // [Previous JavaScript code remains exactly the same]
     // Firebase Setup
     const firebaseConfig = {
       apiKey: "AIzaSyDEAy2KXezICmuuQZnhNq12nqwwBouDjt4",
