@@ -5,471 +5,785 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
 <title>ES-Ops</title>
 <link rel="icon" href="https://es-universe.github.io/ESRAT/apks/logo.png" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* -------------------------
-   ES-Ops — Enhanced Single-file UI
-   Mobile-first responsive with iPhone 12 Safari optimization
+   ES-Ops — Professional Enhanced Single-file UI
+   Mobile-first responsive with premium design aesthetics
    ------------------------- */
 
 /* Root & Themes */
 :root{
-  --bg: #0b1020;
-  --panel: rgba(255,255,255,0.04);
-  --muted: rgba(255,255,255,0.6);
-  --accent: #6EE7B7;
-  --accent-2: #60A5FA;
-  --user-bubble: linear-gradient(135deg,#0ea5a4 0%, #3b82f6 100%);
-  --assistant-bubble: linear-gradient(135deg,#111827 0%, #0f172a 100%);
-  --glass: rgba(255,255,255,0.03);
-  --glass-strong: rgba(255,255,255,0.08);
-  --backdrop: rgba(0,0,0,0.4);
-  --text: #e6eef8;
-  --radius: 18px;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  font-size: 16px; /* keep >=16 to avoid iOS zoom on input focus */
+  --bg: #0a0e1a;
+  --bg-secondary: #0f1419;
+  --panel: rgba(255,255,255,0.03);
+  --panel-hover: rgba(255,255,255,0.06);
+  --muted: rgba(255,255,255,0.55);
+  --text-secondary: rgba(255,255,255,0.75);
+  --accent: #00d4aa;
+  --accent-hover: #00c49a;
+  --accent-2: #4f46e5;
+  --accent-gradient: linear-gradient(135deg, #00d4aa 0%, #4f46e5 100%);
+  --user-bubble: linear-gradient(135deg, #00d4aa 0%, #4f46e5 100%);
+  --assistant-bubble: linear-gradient(135deg, #1a1f2e 0%, #0f1419 100%);
+  --glass: rgba(255,255,255,0.02);
+  --glass-strong: rgba(255,255,255,0.06);
+  --glass-border: rgba(255,255,255,0.08);
+  --backdrop: rgba(0,0,0,0.6);
+  --text: #ffffff;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.15);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.25);
+  --shadow-xl: 0 20px 60px rgba(0,0,0,0.4);
+  --radius: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+  font-weight: 400;
 }
 
 /* Light theme variables */
 html.light{
-  --bg: #f7fafc;
-  --panel: rgba(2,6,23,0.04);
-  --muted: rgba(3,7,18,0.6);
-  --accent: #0ea5a4;
-  --accent-2: #2563eb;
-  --user-bubble: linear-gradient(135deg,#06b6d4 0%, #1e40af 100%);
-  --assistant-bubble: linear-gradient(135deg,#ffffff 0%, #f3f4f6 100%);
-  --glass: rgba(0,0,0,0.04);
-  --glass-strong: rgba(0,0,0,0.12);
-  --backdrop: rgba(255,255,255,0.6);
-  --text: #071128;
+  --bg: #fafbfc;
+  --bg-secondary: #f5f7fa;
+  --panel: rgba(15,23,42,0.03);
+  --panel-hover: rgba(15,23,42,0.06);
+  --muted: rgba(15,23,42,0.6);
+  --text-secondary: rgba(15,23,42,0.8);
+  --accent: #00a085;
+  --accent-hover: #008f75;
+  --accent-2: #4338ca;
+  --accent-gradient: linear-gradient(135deg, #00a085 0%, #4338ca 100%);
+  --user-bubble: linear-gradient(135deg, #00a085 0%, #4338ca 100%);
+  --assistant-bubble: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  --glass: rgba(15,23,42,0.02);
+  --glass-strong: rgba(15,23,42,0.06);
+  --glass-border: rgba(15,23,42,0.08);
+  --backdrop: rgba(255,255,255,0.8);
+  --text: #0f172a;
+  --shadow-sm: 0 2px 8px rgba(15,23,42,0.08);
+  --shadow-md: 0 4px 20px rgba(15,23,42,0.12);
+  --shadow-lg: 0 8px 32px rgba(15,23,42,0.16);
+  --shadow-xl: 0 20px 60px rgba(15,23,42,0.2);
 }
 
 /* Basic layout */
-*{box-sizing:border-box}
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 html,body{height:100%}
 body{
   margin:0;
-  background: radial-gradient(1200px 600px at 10% 10%, rgba(96,165,250,0.06), transparent),
-              linear-gradient(0deg,var(--bg),var(--bg));
-  color:var(--text);
-  -webkit-touch-callout:none;
-  -webkit-user-select:none;
-  user-select:none;
-  overflow:hidden;
-  /* iOS Safari specific */
+  background: 
+    radial-gradient(1400px 800px at 20% 10%, rgba(0,212,170,0.03), transparent),
+    radial-gradient(1200px 600px at 80% 90%, rgba(79,70,229,0.03), transparent),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-secondary) 100%);
+  color: var(--text);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  overflow: hidden;
   -webkit-overflow-scrolling: touch;
   -webkit-tap-highlight-color: transparent;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
 }
 
-/* App shell with safe area support */
+/* App shell with safe area support - FIXED POSITIONING */
 .app{
-  height:100vh;
-  height:100dvh; /* Dynamic viewport height for mobile */
-  display:grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 56px 1fr auto;
-  gap:0;
-  position:relative;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* Header with enhanced backdrop */
+/* Header with enhanced backdrop - FIXED AT TOP */
 .header{
-  height:56px;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:8px 12px;
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  background: linear-gradient(180deg, var(--glass-strong), var(--glass));
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  z-index:30;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  padding-top: calc(12px + env(safe-area-inset-top));
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  background: linear-gradient(180deg, var(--glass-strong) 0%, var(--glass) 100%);
+  border-bottom: 1px solid var(--glass-border);
+  z-index: 100;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-gradient);
+  opacity: 0.02;
+  pointer-events: none;
+}
+
 .logo {
-  display:flex;
-  gap:10px;
-  align-items:center;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.logo:hover {
+  transform: translateY(-1px);
+}
+
 .logo img{
-  height:36px;
-  width:36px;
-  object-fit:contain;
-  border-radius:8px;
-  box-shadow: 0 8px 25px rgba(11,18,32,0.5);
+  height: 40px;
+  width: 40px;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.logo img:hover {
+  box-shadow: var(--shadow-lg);
+  transform: scale(1.05);
+}
+
 .title{
-  font-weight:700;
-  font-size:16px;
-  letter-spacing:0.2px;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.025em;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
+
+.logo .small {
+  font-weight: 500;
+  opacity: 0.8;
+}
+
 .header-actions{
-  margin-left:auto;
-  display:flex;
-  gap:8px;
-  align-items:center;
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 /* Enhanced icon button style */
 .icon-btn{
-  border:0;
-  background:var(--glass);
-  height:40px;
-  min-width:40px;
-  padding:8px;
-  border-radius:12px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  transition:all .2s cubic-bezier(.2,.9,.3,1);
-  box-shadow: 0 4px 15px rgba(2,6,23,0.25);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.05);
+  border: 0;
+  background: var(--glass);
+  height: 44px;
+  min-width: 44px;
+  padding: 10px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  position: relative;
+  overflow: hidden;
 }
-.icon-btn:hover{ 
-  background:var(--glass-strong);
-  transform:translateY(-1px);
-  box-shadow: 0 6px 20px rgba(2,6,23,0.35);
-}
-.icon-btn:active{ transform:scale(.96) translateY(0) }
 
-/* Layout grid (sidebar + main) */
+.icon-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-gradient);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.icon-btn:hover{ 
+  background: var(--glass-strong);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.icon-btn:hover::before {
+  opacity: 0.1;
+}
+
+.icon-btn:active{ 
+  transform: translateY(0) scale(0.98);
+}
+
+.icon-btn svg {
+  position: relative;
+  z-index: 1;
+}
+
+/* Layout grid (sidebar + main) - ADJUSTED FOR FIXED HEADER/FOOTER */
 .content{
-  display:grid;
-  grid-template-columns: 280px 1fr;
-  gap:12px;
-  height:calc(100vh - 56px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-  padding:12px;
-  padding-left: max(12px, env(safe-area-inset-left));
-  padding-right: max(12px, env(safe-area-inset-right));
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 16px;
+  flex: 1;
+  margin-top: calc(64px + env(safe-area-inset-top));
+  margin-bottom: 88px;
+  padding: 16px 20px;
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
+  overflow: hidden;
 }
 
 /* Enhanced sidebar with better transparency */
 .sidebar{
-  width:100%;
-  background: linear-gradient(180deg, var(--glass-strong), var(--glass));
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-radius:16px;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  min-height:0;
-  border: 1px solid rgba(255,255,255,0.08);
-  padding:12px;
-  box-shadow: 0 8px 32px rgba(2,6,23,0.3);
+  width: 100%;
+  background: linear-gradient(180deg, var(--glass-strong) 0%, var(--glass) 100%);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border: 1px solid var(--glass-border);
+  padding: 20px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+}
+
+.sidebar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-gradient);
+  opacity: 0.02;
+  pointer-events: none;
 }
 
 /* Sidebar close button */
 .sidebar-header{
-  display:none;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:12px;
-  padding-bottom:8px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--glass-border);
 }
+
 .sidebar-title{
-  font-weight:600;
-  font-size:14px;
-  color:var(--muted);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--text);
 }
+
 .close-sidebar{
-  background:transparent;
-  border:0;
-  color:var(--muted);
-  cursor:pointer;
-  padding:4px;
-  border-radius:6px;
-  transition:all .2s;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 10px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .close-sidebar:hover{
-  background:var(--glass);
-  color:var(--text);
+  background: var(--glass);
+  color: var(--text);
+  transform: scale(1.1);
 }
 
 .sidebar .search{
-  display:flex;
-  gap:8px;
-  margin-bottom:10px;
-  background:var(--glass);
-  padding:8px 12px;
-  border-radius:12px;
-  border: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  background: var(--glass);
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--glass-border);
+  transition: all 0.2s;
 }
+
+.sidebar .search:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+}
+
 .search input{
-  background:transparent;
-  border:0;
-  outline:none;
-  color:var(--text);
-  flex:1;
-  font-size:14px;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--text);
+  flex: 1;
+  font-size: 15px;
+  font-weight: 500;
 }
+
 .search input::placeholder{
-  color:var(--muted);
+  color: var(--muted);
+  font-weight: 400;
 }
+
 .sidebar .controls{
-  display:flex;
-  gap:6px;
-  margin-bottom:8px;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
 }
+
 .btn{
-  display:inline-flex;
-  gap:8px;
-  align-items:center;
-  padding:8px 10px;
-  border-radius:12px;
-  background:var(--glass);
-  border: 1px solid rgba(255,255,255,0.05);
-  cursor:pointer;
-  transition: all .2s cubic-bezier(.2,.9,.3,1);
-  font-size:13px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 14px;
+  font-weight: 500;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
 }
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-gradient);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
 .btn:hover{
-  background:var(--glass-strong);
-  transform:translateY(-1px);
+  background: var(--glass-strong);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
-.btn:active{ transform:translateY(1px) }
+
+.btn:hover::before {
+  opacity: 0.1;
+}
+
+.btn:active{ 
+  transform: translateY(0) scale(0.98);
+}
+
+.btn svg {
+  position: relative;
+  z-index: 1;
+}
+
 .chats{
-  overflow:auto;
-  padding-right:6px;
-  flex:1;
+  overflow: auto;
+  padding-right: 8px;
+  flex: 1;
   -webkit-overflow-scrolling: touch;
 }
+
 .chat-item{
-  padding:10px;
-  border-radius:12px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  cursor:pointer;
-  margin-bottom:8px;
-  transition: all .2s cubic-bezier(.2,.9,.3,1);
+  padding: 14px 16px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+  position: relative;
+  overflow: hidden;
 }
+
+.chat-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-gradient);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
 .chat-item:hover{ 
   background: var(--glass);
-  transform:translateX(2px);
+  transform: translateX(4px);
+  border-color: var(--glass-border);
 }
+
+.chat-item:hover::before {
+  opacity: 0.05;
+}
+
 .chat-item.active{
   background: var(--glass-strong);
-  border: 1px solid rgba(255,255,255,0.08);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
 }
-.chat-item .meta{ font-size:13px; color:var(--muted) }
 
-/* Enhanced main chat area */
-.main{
-  display:flex;
-  flex-direction:column;
-  background: linear-gradient(180deg, var(--glass), transparent);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-radius:16px;
-  padding:14px;
-  min-height:0;
-  overflow:hidden;
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 8px 32px rgba(2,6,23,0.3);
+.chat-item.active::before {
+  opacity: 0.1;
 }
+
+.chat-item .meta{ 
+  font-size: 13px; 
+  color: var(--muted);
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+}
+
+.chat-item > div:first-child {
+  position: relative;
+  z-index: 1;
+  font-weight: 500;
+}
+
+/* Enhanced main chat area - SCROLLABLE CONTAINER */
+.main{
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, var(--glass-strong) 0%, var(--glass) 100%);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+}
+
+.main::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-gradient);
+  opacity: 0.01;
+  pointer-events: none;
+}
+
 .messages{
-  overflow:auto;
-  padding:8px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  flex:1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--glass) transparent;
 }
+
 .msg{
-  max-width:84%;
-  padding:12px 14px;
-  border-radius:18px;
-  position:relative;
-  line-height:1.4;
-  box-shadow: 0 4px 20px rgba(2,6,23,0.25);
-  transform-origin:center;
-  animation: messageSlideIn .3s cubic-bezier(.2,.9,.3,1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  max-width: 85%;
+  padding: 16px 20px;
+  border-radius: var(--radius-lg);
+  position: relative;
+  line-height: 1.5;
+  box-shadow: var(--shadow-md);
+  transform-origin: center;
+  animation: messageSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-weight: 500;
+  border: 1px solid var(--glass-border);
 }
+
 .msg.assistant{
-  align-self:flex-start;
-  background:var(--assistant-bubble);
-  color:var(--text);
-  border-bottom-left-radius:6px;
-  border-bottom-right-radius:18px;
-  border: 1px solid rgba(255,255,255,0.05);
+  align-self: flex-start;
+  background: var(--assistant-bubble);
+  color: var(--text);
+  border-bottom-left-radius: 8px;
+  position: relative;
 }
+
+.msg.assistant::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-gradient);
+  opacity: 0.03;
+  border-radius: inherit;
+}
+
 .msg.user{
-  align-self:flex-end;
-  background:var(--user-bubble);
-  color:#fff;
-  border-bottom-right-radius:6px;
-  border-bottom-left-radius:18px;
+  align-self: flex-end;
+  background: var(--user-bubble);
+  color: #ffffff;
+  border-bottom-right-radius: 8px;
+  font-weight: 600;
 }
 
 /* Enhanced typing indicator */
 .typing {
-  height:10px;
-  display:flex;
-  gap:6px;
-  align-items:center;
+  height: 12px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
 }
-.typing span{
-  width:8px; height:8px; border-radius:50%;
-  background:var(--accent);
-  opacity:.5;
-  animation: typingBounce 1.4s infinite ease-in-out;
-}
-.typing span:nth-child(2){ animation-delay:.2s }
-.typing span:nth-child(3){ animation-delay:.4s }
 
-/* Enhanced input area with better mobile support */
+.typing span{
+  width: 10px; 
+  height: 10px; 
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.4;
+  animation: typingBounce 1.6s infinite ease-in-out;
+}
+
+.typing span:nth-child(2){ animation-delay: 0.2s }
+.typing span:nth-child(3){ animation-delay: 0.4s }
+
+/* Enhanced input area with better mobile support - FIXED AT BOTTOM */
 .input-wrap{
-  position:fixed;
-  left:12px;
-  right:12px;
-  bottom: max(12px, env(safe-area-inset-bottom));
-  left: max(12px, env(safe-area-inset-left));
-  right: max(12px, env(safe-area-inset-right));
-  display:flex;
-  align-items:center;
-  gap:10px;
-  z-index:60;
-  pointer-events:auto;
+  position: fixed;
+  left: 20px;
+  right: 20px;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  left: max(20px, env(safe-area-inset-left));
+  right: max(20px, env(safe-area-inset-right));
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 90;
+  pointer-events: auto;
 }
+
 .input-inner{
-  flex:1;
-  background: linear-gradient(180deg, var(--glass-strong), var(--glass));
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  padding:8px 10px;
-  border-radius:999px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 8px 32px rgba(2,6,23,0.3);
+  flex: 1;
+  background: linear-gradient(180deg, var(--glass-strong) 0%, var(--glass) 100%);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  padding: 12px 16px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-xl);
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
 }
+
+.input-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-gradient);
+  opacity: 0.02;
+  pointer-events: none;
+}
+
+.input-inner:focus-within {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-xl), 0 0 0 4px rgba(0, 212, 170, 0.1);
+}
+
 .input-inner input[type="text"]{
-  border:0;
-  background:transparent;
-  outline:none;
-  color:var(--text);
-  padding:10px 8px;
-  font-size:17px; /* >=16 to avoid iOS zoom */
-  flex:1;
+  border: 0;
+  background: transparent;
+  outline: none;
+  color: var(--text);
+  padding: 12px 8px;
+  font-size: 16px;
+  flex: 1;
   -webkit-appearance: none;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
 }
+
 .input-inner input[type="text"]::placeholder{
-  color:var(--muted);
+  color: var(--muted);
+  font-weight: 400;
 }
+
 .input-action{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:44px; height:44px;
-  border-radius:999px;
-  cursor:pointer;
-  border:0;
-  background:var(--glass);
-  transition:all .2s cubic-bezier(.2,.9,.3,1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px; 
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 0;
+  background: var(--glass);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  position: relative;
+  overflow: hidden;
 }
+
+.input-action::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-gradient);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
 .input-action:hover{
-  background:var(--glass-strong);
-  transform:scale(1.05);
+  background: var(--glass-strong);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
 }
-.input-action:active{ transform:scale(.95) }
+
+.input-action:hover::before {
+  opacity: 0.1;
+}
+
+.input-action:active{ 
+  transform: scale(0.95);
+}
+
+.input-action svg {
+  position: relative;
+  z-index: 1;
+}
+
+#sendBtn {
+  width: 60px;
+  height: 60px;
+  background: var(--accent-gradient);
+  border: none;
+}
+
+#sendBtn::before {
+  display: none;
+}
+
+#sendBtn:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
+}
+
+#sendBtn svg {
+  color: white;
+}
 
 /* Enhanced settings modal with better transparency */
 .modal-backdrop{
-  position:fixed;
-  inset:0;
+  position: fixed;
+  inset: 0;
   background: var(--backdrop);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:90;
-  animation: backdropFadeIn .3s ease-out;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  animation: backdropFadeIn 0.3s ease-out;
 }
+
 .modal{
-  width:92%;
-  max-width:760px;
-  max-height:86vh;
-  background: linear-gradient(180deg, var(--glass-strong), var(--glass));
-  backdrop-filter: blur(30px) saturate(200%);
-  -webkit-backdrop-filter: blur(30px) saturate(200%);
-  border-radius:20px;
-  padding:20px;
-  overflow:auto;
-  position:relative;
-  border: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 20px 60px rgba(2,6,23,0.4);
-  animation: modalSlideIn .3s cubic-bezier(.2,.9,.3,1);
+  width: 92%;
+  max-width: 800px;
+  max-height: 86vh;
+  background: linear-gradient(180deg, var(--glass-strong) 0%, var(--glass) 100%);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  overflow: auto;
+  position: relative;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-xl);
+  animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   -webkit-overflow-scrolling: touch;
 }
+
+.modal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-gradient);
+  opacity: 0.02;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
 .modal .close{
-  position:sticky;
-  top:8px;
-  margin-left:auto;
-  display:inline-flex;
-  justify-self:end;
+  position: sticky;
+  top: 8px;
+  margin-left: auto;
+  display: inline-flex;
+  justify-self: end;
 }
 
 /* Sidebar backdrop for mobile */
 .sidebar-backdrop{
-  position:fixed;
-  inset:0;
+  position: fixed;
+  inset: 0;
   background: var(--backdrop);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  z-index:70;
-  display:none;
-  animation: backdropFadeIn .3s ease-out;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 70;
+  display: none;
+  animation: backdropFadeIn 0.3s ease-out;
 }
 
 /* responsive behaviors with iPhone 12 Safari optimization */
-@media (max-width:880px){
+@media (max-width:920px){
   .content{ 
     grid-template-columns: 1fr; 
-    padding:12px;
-    padding-left: max(12px, env(safe-area-inset-left));
-    padding-right: max(12px, env(safe-area-inset-right));
+    padding: 16px;
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
   }
-  .sidebar{ 
-    position:fixed; 
-    left: max(12px, env(safe-area-inset-left)); 
-    top:76px; 
-    bottom: max(100px, env(safe-area-inset-bottom) + 100px); 
-    width:calc(84% - env(safe-area-inset-left) - env(safe-area-inset-right)); 
-    max-width:380px; 
-    transform:translateX(-120%); 
-    transition:transform .3s cubic-bezier(.2,.9,.3,1); 
-    z-index:80;
-  }
-  .sidebar.open{ transform:translateX(0) }
-  .sidebar-backdrop.open{ display:block }
-  .sidebar-header{ display:flex }
-  .main{ margin-left:0 }
   
-  /* iPhone 12 specific adjustments */
+  .sidebar{ 
+    position: fixed; 
+    left: max(16px, env(safe-area-inset-left)); 
+    top: calc(80px + env(safe-area-inset-top)); 
+    bottom: max(104px, env(safe-area-inset-bottom) + 104px); 
+    width: calc(85% - env(safe-area-inset-left) - env(safe-area-inset-right)); 
+    max-width: 400px; 
+    transform: translateX(-120%); 
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+    z-index: 80;
+  }
+  
+  .sidebar.open{ 
+    transform: translateX(0);
+  }
+  
+  .sidebar-backdrop.open{ 
+    display: block;
+  }
+  
+  .sidebar-header{ 
+    display: flex;
+  }
+  
+  .main{ 
+    margin-left: 0;
+  }
+  
   .input-wrap{
-    bottom: max(12px, env(safe-area-inset-bottom) + 12px);
+    left: 16px;
+    right: 16px;
+    bottom: max(16px, env(safe-area-inset-bottom) + 16px);
   }
 }
 
@@ -481,7 +795,7 @@ body{
   }
   
   .input-wrap{
-    bottom: max(20px, env(safe-area-inset-bottom) + 8px);
+    bottom: max(24px, env(safe-area-inset-bottom) + 12px);
   }
   
   .modal{
@@ -493,77 +807,95 @@ body{
 /* Enhanced animations */
 @keyframes messageSlideIn {
   from{ 
-    transform: translateY(20px) scale(.98); 
-    opacity:0;
+    transform: translateY(24px) scale(0.96); 
+    opacity: 0;
   }
   to{ 
     transform: none; 
-    opacity:1;
+    opacity: 1;
   }
 }
 
 @keyframes typingBounce {
   0%, 80%, 100%{ 
     transform: translateY(0); 
-    opacity:.3;
+    opacity: 0.3;
   }
   40%{ 
-    transform: translateY(-8px); 
-    opacity:1;
+    transform: translateY(-10px); 
+    opacity: 1;
   }
 }
 
 @keyframes backdropFadeIn {
-  from{ opacity:0 }
-  to{ opacity:1 }
+  from{ opacity: 0 }
+  to{ opacity: 1 }
 }
 
 @keyframes modalSlideIn {
   from{ 
-    transform: translateY(30px) scale(.95); 
-    opacity:0;
+    transform: translateY(40px) scale(0.94); 
+    opacity: 0;
   }
   to{ 
     transform: none; 
-    opacity:1;
+    opacity: 1;
   }
 }
 
 /* Liquid button 'squish' micro-interaction */
 .btn-liquid{
-  position:relative;
-  overflow:hidden;
+  position: relative;
+  overflow: hidden;
 }
+
 .btn-liquid::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background: radial-gradient(circle at 50% 50%, var(--glass-strong), transparent 70%);
-  opacity:0;
-  transition: all .3s cubic-bezier(.2,.9,.3,1);
-  transform: scale(.8);
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, var(--accent) 0%, transparent 70%);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: scale(0.8);
 }
+
 .btn-liquid:active::after{ 
-  opacity:1; 
+  opacity: 0.2; 
   transform: scale(1.2);
 }
 
 /* Enhanced utility classes */
-.small{ font-size:13px; color:var(--muted) }
-.center{ display:flex; align-items:center; justify-content:center }
-.hidden{ display:none !important }
+.small{ 
+  font-size: 14px; 
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.center{ 
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+}
+
+.hidden{ 
+  display: none !important;
+}
 
 /* Smooth scrollbar styling */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--glass);
-  border-radius: 3px;
+  border-radius: 4px;
+  border: 1px solid var(--glass-border);
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--glass-strong);
 }
@@ -579,12 +911,161 @@ body{
 input:focus {
   outline: none;
 }
+
+/* API Configuration Section Styles */
+.api-config-section {
+  margin-top: 24px;
+  padding: 20px;
+  background: var(--glass);
+  border-radius: var(--radius);
+  border: 1px solid var(--glass-border);
+  position: relative;
+  overflow: hidden;
+}
+
+.api-config-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-gradient);
+  opacity: 0.02;
+  pointer-events: none;
+}
+
+.api-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.api-input-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.api-input-group input {
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass);
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.api-input-group input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+}
+
+.api-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+}
+
+.api-status.success {
+  color: var(--accent);
+}
+
+.api-status.error {
+  color: #ef4444;
+}
+
+.api-test-btn {
+  background: var(--accent-gradient);
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  z-index: 1;
+}
+
+.api-test-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.api-test-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Professional enhancements */
+.glow-effect {
+  position: relative;
+}
+
+.glow-effect::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: var(--accent-gradient);
+  border-radius: inherit;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s;
+  filter: blur(8px);
+}
+
+.glow-effect:hover::after {
+  opacity: 0.3;
+}
+
+/* Improved section headers */
+h3, h4 {
+  position: relative;
+  z-index: 1;
+}
+
+h3 {
+  font-size: 20px;
+  font-weight: 700;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Enhanced modal sections */
+.modal section {
+  position: relative;
+  z-index: 1;
+}
+
+.modal section:not(:last-child) {
+  border-bottom: 1px solid var(--glass-border);
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
 </style>
 </head>
 <body>
   <div class="app" role="application" aria-label="ES-Ops chat app">
 
-    <!-- Header -->
+    <!-- Header - FIXED AT TOP -->
     <div class="header">
       <div class="logo" aria-hidden="false">
         <img src="https://es-universe.github.io/ESRAT/apks/logo.png" alt="ES-Ops logo" />
@@ -595,17 +1076,16 @@ input:focus {
       </div>
 
       <div class="header-actions">
-        <button class="icon-btn" id="sidebarToggle" title="Toggle sidebar" aria-label="Toggle sidebar">
-          <!-- sidebar icon -->
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6h18M3 12h12M3 18h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <button class="icon-btn glow-effect" id="sidebarToggle" title="Toggle sidebar" aria-label="Toggle sidebar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6h18M3 12h12M3 18h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
         </button>
 
-        <button class="icon-btn" id="settingsBtn" title="Settings" aria-label="Settings">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" stroke="currentColor" stroke-width="1.4"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06A2 2 0 1 1 2.29 17.9l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09c.7 0 1.33-.4 1.51-1a1.65 1.65 0 0 0-.33-1.82l-.06-.06A2 2 0 1 1 6.4 2.29l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09c.7 0 1.33.4 1.51 1a1.65 1.65 0 0 0 1.82.33l.06-.06A2 2 0 1 1 21.71 6.1l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c0 .63.36 1.2.95 1.44a1.65 1.65 0 0 0 1.51-.33z" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <button class="icon-btn glow-effect" id="settingsBtn" title="Settings" aria-label="Settings">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" stroke="currentColor" stroke-width="1.4"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06A2 2 0 1 1 2.29 17.9l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09c.7 0 1.33-.4 1.51-1a1.65 1.65 0 0 0-.33-1.82l-.06-.06A2 2 0 1 1 6.4 2.29l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09c.7 0 1.33.4 1.51 1a1.65 1.65 0 0 0 1.82.33l.06-.06A2 2 0 1 1 21.71 6.1l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c0 .63.36 1.2.95 1.44a1.65 1.65 0 0 0 1.51-.33z" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
 
-        <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <button class="icon-btn glow-effect" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
         </button>
       </div>
     </div>
@@ -620,31 +1100,31 @@ input:focus {
         <div class="sidebar-header">
           <div class="sidebar-title">Chats</div>
           <button class="close-sidebar" id="closeSidebar" title="Close sidebar" aria-label="Close sidebar">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
               <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
           </button>
         </div>
 
         <div class="search" role="search">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.6"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.6"/></svg>
           <input id="chatSearch" type="search" placeholder="Search chats" aria-label="Search chats" />
         </div>
 
         <div class="controls">
-          <button class="btn btn-liquid" id="newChatBtn" title="New Chat">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+          <button class="btn btn-liquid glow-effect" id="newChatBtn" title="New Chat">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
               <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
             New Chat
           </button>
           <button class="btn btn-liquid" id="deleteChatBtn" title="Delete Chat">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
               <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z" stroke="currentColor" stroke-width="1.5"/>
             </svg>
           </button>
           <button class="btn btn-liquid" id="shareChatBtn" title="Share Chat">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
               <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
           </button>
@@ -654,7 +1134,7 @@ input:focus {
           <!-- chat items injected here -->
         </div>
 
-        <div style="padding-top:10px" class="small">Tip: Tap a chat to open. Use the settings to edit default instructions.</div>
+        <div style="padding-top:16px" class="small">Tip: Tap a chat to open. Use the settings to edit default instructions.</div>
       </aside>
 
       <!-- Main chat -->
@@ -662,27 +1142,24 @@ input:focus {
         <div class="messages" id="messages" aria-live="polite" aria-atomic="false">
           <!-- messages injected here -->
         </div>
-
-        <!-- bottom spacing to avoid overlap with fixed input on small screens -->
-        <div style="height:84px"></div>
       </main>
     </div>
 
-    <!-- Input area fixed -->
+    <!-- Input area - FIXED AT BOTTOM -->
     <div class="input-wrap" id="inputWrap">
-      <button class="input-action" id="attachBtn" title="Attach file" aria-label="Attach file">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66L9.64 16.2a2 2 0 0 1-2.83-2.83l8.49-8.49" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <button class="input-action glow-effect" id="attachBtn" title="Attach file" aria-label="Attach file">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66L9.64 16.2a2 2 0 0 1-2.83-2.83l8.49-8.49" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
 
       <div class="input-inner" role="region" aria-label="Message input">
         <input id="messageInput" placeholder="Ask anything" type="text" autocomplete="off" />
         <button class="input-action" id="micBtn" title="Voice input" aria-label="Voice input">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" stroke="currentColor" stroke-width="1.4"/><path d="M19 10v2a7 7 0 0 1-14 0v-2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M12 19v4M8 23h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" stroke="currentColor" stroke-width="1.4"/><path d="M19 10v2a7 7 0 0 1-14 0v-2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M12 19v4M8 23h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
         </button>
       </div>
 
-      <button class="icon-btn" id="sendBtn" title="Send" aria-label="Send message" style="width:56px; height:56px;">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <button class="icon-btn glow-effect" id="sendBtn" title="Send" aria-label="Send message">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
 
       <!-- hidden file input -->
@@ -692,26 +1169,52 @@ input:focus {
     <!-- Settings modal (hidden by default) -->
     <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
       <div class="modal" role="dialog" aria-modal="true" aria-label="Settings">
-        <div style="display:flex; gap:8px; align-items:center; margin-bottom:16px;">
-          <h3 style="margin:0; font-size:18px; font-weight:600;">Settings</h3>
+        <div style="display:flex; gap:12px; align-items:center; margin-bottom:20px;">
+          <h3 style="margin:0;">Settings</h3>
           <div style="flex:1"></div>
           <button class="btn small close" id="closeModal">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
               <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
             Close
           </button>
         </div>
 
-        <section>
-          <h4 style="margin-bottom:8px; font-size:16px; font-weight:600;">Custom instructions</h4>
-          <p class="small" style="margin-bottom:12px;">These act as system-level instructions applied to every chat. Edit, save, or remove as needed.</p>
-          <div id="instructionsList" style="display:flex;flex-direction:column;gap:8px; margin-top:8px;"></div>
+        <!-- API Configuration Section -->
+        <section class="api-config-section">
+          <h4 style="margin-bottom:16px;">API Configuration</h4>
+          <p class="small" style="margin-bottom:20px;">Configure your OpenAI API settings. Changes are saved automatically.</p>
+          
+          <div class="api-input-group">
+            <label for="apiKeyInput">API Key</label>
+            <input id="apiKeyInput" type="password" placeholder="sk-..." />
+          </div>
+          
+          <div class="api-input-group">
+            <label for="apiModelInput">Model</label>
+            <input id="apiModelInput" type="text" placeholder="gpt-4o-mini" />
+          </div>
+          
+          <div class="api-input-group">
+            <label for="apiBaseInput">API Base URL (Optional)</label>
+            <input id="apiBaseInput" type="text" placeholder="https://api.openai.com/v1" />
+          </div>
+          
+          <div style="display: flex; gap: 12px; align-items: center; margin-top: 16px;">
+            <button class="api-test-btn glow-effect" id="testApiBtn">Test Connection</button>
+            <div class="api-status" id="apiStatus"></div>
+          </div>
+        </section>
 
-          <div style="display:flex; gap:8px; margin-top:12px;">
-            <input id="newInstructionInput" placeholder="Add new instruction" style="flex:1; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,0.08); background:var(--glass); color:var(--text); font-size:14px;" />
-            <button class="btn" id="addInstructionBtn">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+        <section>
+          <h4 style="margin-bottom:12px;">Custom instructions</h4>
+          <p class="small" style="margin-bottom:16px;">These act as system-level instructions applied to every chat. Edit, save, or remove as needed.</p>
+          <div id="instructionsList" style="display:flex;flex-direction:column;gap:12px; margin-top:12px;"></div>
+
+          <div style="display:flex; gap:12px; margin-top:16px;">
+            <input id="newInstructionInput" placeholder="Add new instruction" style="flex:1; padding:12px 16px; border-radius:12px; border:1px solid var(--glass-border); background:var(--glass); color:var(--text); font-size:15px; font-weight:500;" />
+            <button class="btn glow-effect" id="addInstructionBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                 <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               </svg>
               Add
@@ -719,10 +1222,10 @@ input:focus {
           </div>
         </section>
 
-        <section style="margin-top:24px;">
-          <h4 style="margin-bottom:8px; font-size:16px; font-weight:600;">Account / My details</h4>
-          <p class="small" style="margin-bottom:12px;">Defaults shown below (editable in instructions):</p>
-          <div style="padding:12px; border-radius:12px; background:var(--glass); border:1px solid rgba(255,255,255,0.05)">
+        <section>
+          <h4 style="margin-bottom:12px;">Account / My details</h4>
+          <p class="small" style="margin-bottom:16px;">Defaults shown below (editable in instructions):</p>
+          <div style="padding:16px; border-radius:12px; background:var(--glass); border:1px solid var(--glass-border)">
             <div class="small" id="myDetailsDisplay"></div>
           </div>
         </section>
@@ -740,12 +1243,14 @@ input:focus {
      Prefer building a tiny server proxy to keep your key secret.
    ================================== */
 
-const OPENAI_API_KEY = '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'; // Your provided API key
-const OPENAI_MODEL = 'gpt-4o-mini'; // You can change model name here if needed
+let OPENAI_API_KEY = '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'; // Your provided API key
+let OPENAI_MODEL = 'gpt-4o-mini'; // You can change model name here if needed
+let OPENAI_BASE_URL = 'https://api.openai.com/v1';
 
 /* Local storage keys */
 const STORE_CHATS = 'esops.chats.v1';
 const STORE_SETTINGS = 'esops.settings.v1';
+const STORE_API_CONFIG = 'esops.api.v1';
 
 /* Default content — includes the default welcome assistant message and default "my details" instruction per your request */
 const DEFAULT_MY_DETAILS = "Ganga, from Odisha, India, B.Tech CSc, tech enthusiast, saved DDoS script in laptop notes 📝";
@@ -761,6 +1266,18 @@ Feel free to reach out. What can I help you?`;
    ------------------------- */
 function uid(prefix='id'){ return prefix + Math.random().toString(36).slice(2,9) }
 function now(){ return new Date().toISOString() }
+
+/* Load API configuration */
+let apiConfig = JSON.parse(localStorage.getItem(STORE_API_CONFIG) || 'null') || {
+  apiKey: OPENAI_API_KEY,
+  model: OPENAI_MODEL,
+  baseUrl: OPENAI_BASE_URL
+};
+
+// Update global variables with stored config
+OPENAI_API_KEY = apiConfig.apiKey;
+OPENAI_MODEL = apiConfig.model;
+OPENAI_BASE_URL = apiConfig.baseUrl;
 
 /* Load settings or defaults */
 let settings = JSON.parse(localStorage.getItem(STORE_SETTINGS) || 'null') || {
@@ -819,6 +1336,13 @@ const fileInput = document.getElementById('fileInput');
 const micBtn = document.getElementById('micBtn');
 const inputWrap = document.getElementById('inputWrap');
 
+// API Configuration DOM refs
+const apiKeyInput = document.getElementById('apiKeyInput');
+const apiModelInput = document.getElementById('apiModelInput');
+const apiBaseInput = document.getElementById('apiBaseInput');
+const testApiBtn = document.getElementById('testApiBtn');
+const apiStatus = document.getElementById('apiStatus');
+
 /* -------------------------
    UI rendering
    ------------------------- */
@@ -828,29 +1352,99 @@ function saveSettings(){
 function saveChats(){
   localStorage.setItem(STORE_CHATS, JSON.stringify(chats));
 }
+function saveApiConfig(){
+  localStorage.setItem(STORE_API_CONFIG, JSON.stringify(apiConfig));
+}
+
+function renderApiConfig(){
+  apiKeyInput.value = apiConfig.apiKey || '';
+  apiModelInput.value = apiConfig.model || 'gpt-4o-mini';
+  apiBaseInput.value = apiConfig.baseUrl || 'https://api.openai.com/v1';
+}
+
+function updateApiConfig(){
+  apiConfig.apiKey = apiKeyInput.value.trim();
+  apiConfig.model = apiModelInput.value.trim() || 'gpt-4o-mini';
+  apiConfig.baseUrl = apiBaseInput.value.trim() || 'https://api.openai.com/v1';
+  
+  // Update global variables
+  OPENAI_API_KEY = apiConfig.apiKey;
+  OPENAI_MODEL = apiConfig.model;
+  OPENAI_BASE_URL = apiConfig.baseUrl;
+  
+  saveApiConfig();
+}
+
+async function testApiConnection(){
+  updateApiConfig();
+  
+  if(!OPENAI_API_KEY || OPENAI_API_KEY.includes('REPLACE')){
+    showApiStatus('API key is required', 'error');
+    return;
+  }
+  
+  testApiBtn.disabled = true;
+  testApiBtn.textContent = 'Testing...';
+  showApiStatus('Testing connection...', '');
+  
+  try {
+    const endpoint = `${OPENAI_BASE_URL}/chat/completions`;
+    const body = {
+      model: OPENAI_MODEL,
+      messages: [{ role: 'user', content: 'Hello' }],
+      max_tokens: 5
+    };
+    
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + OPENAI_API_KEY
+      },
+      body: JSON.stringify(body)
+    });
+    
+    if(res.ok){
+      showApiStatus('✓ Connection successful', 'success');
+    } else {
+      const errorText = await res.text();
+      showApiStatus(`✗ Error: ${res.status} ${errorText.slice(0, 100)}`, 'error');
+    }
+  } catch(err) {
+    showApiStatus(`✗ Connection failed: ${err.message}`, 'error');
+  }
+  
+  testApiBtn.disabled = false;
+  testApiBtn.textContent = 'Test Connection';
+}
+
+function showApiStatus(message, type){
+  apiStatus.textContent = message;
+  apiStatus.className = `api-status ${type}`;
+}
 
 function renderInstructions(){
   instructionsList.innerHTML = '';
   settings.instructions.forEach((txt, idx) => {
     const wrap = document.createElement('div');
     wrap.style.display = 'flex';
-    wrap.style.gap = '8px';
+    wrap.style.gap = '12px';
     wrap.style.alignItems = 'center';
-    wrap.style.marginBottom = '8px';
+    wrap.style.marginBottom = '12px';
 
     const txtEl = document.createElement('div');
     txtEl.style.flex = '1';
-    txtEl.style.padding = '10px 12px';
-    txtEl.style.borderRadius = '10px';
+    txtEl.style.padding = '12px 16px';
+    txtEl.style.borderRadius = '12px';
     txtEl.style.background = 'var(--glass)';
-    txtEl.style.border = '1px solid rgba(255,255,255,0.05)';
+    txtEl.style.border = '1px solid var(--glass-border)';
     txtEl.textContent = txt;
     txtEl.className = 'small';
     wrap.appendChild(txtEl);
 
     const editBtn = document.createElement('button');
     editBtn.className = 'btn small';
-    editBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="1.5"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="1.5"/></svg>';
+    editBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="1.5"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="1.5"/></svg>';
     editBtn.onclick = () => {
       const v = prompt('Edit instruction:', txt);
       if(v!==null){ settings.instructions[idx] = v.trim() || txt; saveSettings(); renderInstructions(); }
@@ -859,145 +1453,96 @@ function renderInstructions(){
 
     const delBtn = document.createElement('button');
     delBtn.className = 'btn small';
-    delBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z" stroke="currentColor" stroke-width="1.5"/></svg>';
+    delBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z" stroke="currentColor" stroke-width="1.5"/></svg>';
     delBtn.onclick = () => {
-      if(confirm('Delete this instruction?')) {
-        settings.instructions.splice(idx,1); saveSettings(); renderInstructions();
-      }
+      if(confirm('Delete this instruction?')){ settings.instructions.splice(idx,1); saveSettings(); renderInstructions(); }
     };
     wrap.appendChild(delBtn);
 
     instructionsList.appendChild(wrap);
   });
+}
+
+function renderMyDetails(){
   myDetailsDisplay.textContent = settings.myDetails;
 }
 
 function renderChatsList(filter=''){
+  const filtered = chats.filter(c => !filter || c.title.toLowerCase().includes(filter.toLowerCase()));
   chatsList.innerHTML = '';
-  const q = filter.trim().toLowerCase();
-  chats.slice().reverse().forEach(chat => {
-    const contentText = (chat.messages || []).map(m=>m.content).join(' ').toLowerCase();
-    if(q && !(chat.title.toLowerCase().includes(q) || contentText.includes(q))) return;
-
-    const el = document.createElement('div');
-    el.className = 'chat-item';
-    if(chat.id === selectedChatId) el.classList.add('active');
-    el.dataset.chatId = chat.id;
-    el.onclick = ()=> { selectChat(chat.id) };
-
-    const meta = document.createElement('div');
-    meta.style.flex = '1';
-    meta.innerHTML = `<div style="font-weight:600; margin-bottom:2px;">${escapeHtml(chat.title)}</div><div class="meta">${new Date(chat.updatedAt).toLocaleString()}</div>`;
-    el.appendChild(meta);
-
-    chatsList.appendChild(el);
+  filtered.forEach(chat => {
+    const item = document.createElement('div');
+    item.className = 'chat-item' + (chat.id === selectedChatId ? ' active' : '');
+    item.innerHTML = `
+      <div style="flex:1">
+        <div>${chat.title}</div>
+        <div class="meta">${new Date(chat.updatedAt).toLocaleDateString()}</div>
+      </div>
+    `;
+    item.onclick = () => selectChat(chat.id);
+    chatsList.appendChild(item);
   });
 }
 
-/* Render messages for selected chat */
 function renderMessages(){
-  messagesEl.innerHTML = '';
   const chat = chats.find(c=>c.id===selectedChatId);
   if(!chat) return;
-  chat.messages.forEach(m => {
-    if(m.role === 'system') return; // Don't display system messages
+  messagesEl.innerHTML = '';
+  chat.messages.forEach(msg => {
+    if(msg.role === 'system') return; // don't show system messages
     const div = document.createElement('div');
-    div.className = 'msg ' + (m.role==='user' ? 'user' : (m.role==='assistant' ? 'assistant' : 'assistant'));
-    if(m.role === 'file'){
-      div.innerHTML = `<strong>📎 File:</strong> ${escapeHtml(m.fileName)} <div style="font-size:12px; color:rgba(255,255,255,0.7); margin-top:4px;">${escapeHtml(m.meta || '')}</div>`;
+    div.className = 'msg ' + msg.role;
+    if(msg.role === 'file'){
+      div.innerHTML = `📎 <strong>${msg.fileName}</strong> (${msg.meta})`;
     } else {
-      div.textContent = m.content;
-      // preserve simple line breaks
-      if(m.content && m.content.includes('\n')){
-        div.innerHTML = m.content.split('\n').map(line => `<div>${escapeHtml(line)}</div>`).join('');
-      }
+      div.textContent = msg.content;
     }
     messagesEl.appendChild(div);
   });
-
-  // scroll to bottom with smooth animation
-  requestAnimationFrame(()=> {
-    messagesEl.scrollTop = messagesEl.scrollHeight;
-  });
+  messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
-/* escape html helper (for safety) */
-function escapeHtml(str=''){
-  return String(str).replace(/[&<>"']/g, (s) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
-}
-
-/* -------------------------
-   Enhanced sidebar controls
-   ------------------------- */
-function openSidebar(){
-  sidebar.classList.add('open');
-  sidebarBackdrop.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeSidebarFn(){
-  sidebar.classList.remove('open');
-  sidebarBackdrop.classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-/* -------------------------
-   Chat actions
-   ------------------------- */
 function selectChat(id){
   selectedChatId = id;
   renderChatsList(chatSearch.value || '');
   renderMessages();
-  // close sidebar on small screens
-  if(window.innerWidth <= 880) closeSidebarFn();
+  if(window.innerWidth <= 920) closeSidebarFn();
 }
 
 function newChat(){
-  const ch = {
+  const chat = {
     id: uid('chat_'),
     title: 'New chat',
     createdAt: now(),
     updatedAt: now(),
-    messages: [ { role:'system', content: settings.instructions.join('\n'), time: now() } ]
+    messages: [
+      { role:'system', content: settings.instructions.join('\n'), time: now() }
+    ]
   };
-  chats.push(ch);
+  chats.unshift(chat);
   saveChats();
-  renderChatsList();
-  selectChat(ch.id);
-  // focus input
+  selectChat(chat.id);
   messageInput.focus();
 }
 
 function deleteCurrentChat(){
-  const idx = chats.findIndex(c=>c.id===selectedChatId);
-  if(idx===-1) return alert('No chat selected');
   if(!confirm('Delete this chat?')) return;
+  const idx = chats.findIndex(c=>c.id===selectedChatId);
+  if(idx===-1) return;
   chats.splice(idx,1);
+  if(!chats.length) newChat();
+  else selectChat(chats[0].id);
   saveChats();
-  if(chats.length) selectedChatId = chats[0].id;
-  else { newChat(); }
-  renderChatsList();
-  renderMessages();
+  renderChatsList(chatSearch.value || '');
 }
 
 function shareCurrentChat(){
   const chat = chats.find(c=>c.id===selectedChatId);
-  if(!chat) return alert('No chat to share');
-  const payload = {
-    title: chat.title,
-    createdAt: chat.createdAt,
-    messages: chat.messages.filter(m => m.role !== 'system') // Don't include system messages in export
-  };
-  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
-  const fileName = (chat.title || 'chat').replace(/[^a-z0-9]/gi, '_') + '.json';
-  if(navigator.canShare && navigator.canShare({files:[new File([blob], fileName)]})){
-    navigator.share({ files: [new File([blob], fileName)], title: chat.title }).catch(()=> downloadBlob(blob, fileName));
-  } else {
-    downloadBlob(blob, fileName);
-  }
-}
-function downloadBlob(blob, fileName){
+  if(!chat) return;
+  const content = chat.messages.filter(m=>m.role!=='system').map(m=>`${m.role}: ${m.content}`).join('\n\n');
+  const blob = new Blob([content], {type:'text/plain'});
   const url = URL.createObjectURL(blob);
+  const fileName = `${chat.title.replace(/[^a-zA-Z0-9]/g,'_')}.txt`;
   const a = document.createElement('a');
   a.href = url;
   a.download = fileName;
@@ -1005,6 +1550,16 @@ function downloadBlob(blob, fileName){
   a.click();
   a.remove();
   URL.revokeObjectURL(url);
+}
+
+function openSidebar(){
+  sidebar.classList.add('open');
+  sidebarBackdrop.classList.add('open');
+}
+
+function closeSidebarFn(){
+  sidebar.classList.remove('open');
+  sidebarBackdrop.classList.remove('open');
 }
 
 /* -------------------------
@@ -1080,8 +1635,8 @@ async function sendUserMessage(text){
 
 /* Call Chat Completions API (basic non-streaming call) */
 async function callCompletionApi(messages){
-  if(!OPENAI_API_KEY || OPENAI_API_KEY.includes('REPLACE')) throw new Error('API key not set. Replace placeholder inside the HTML file.');
-  const endpoint = 'https://api.openai.com/v1/chat/completions';
+  if(!OPENAI_API_KEY || OPENAI_API_KEY.includes('REPLACE')) throw new Error('API key not set. Please configure in Settings.');
+  const endpoint = `${OPENAI_BASE_URL}/chat/completions`;
   const body = {
     model: OPENAI_MODEL,
     messages: messages,
@@ -1173,7 +1728,7 @@ shareChatBtn.addEventListener('click', shareCurrentChat);
 
 // Enhanced sidebar controls
 sidebarToggle.addEventListener('click', ()=> {
-  if(window.innerWidth <= 880) {
+  if(window.innerWidth <= 920) {
     if(sidebar.classList.contains('open')) {
       closeSidebarFn();
     } else {
@@ -1190,6 +1745,7 @@ settingsBtn.addEventListener('click', ()=> {
   modalBackdrop.style.display = 'flex';
   modalBackdrop.setAttribute('aria-hidden','false');
   document.body.style.overflow = 'hidden';
+  renderApiConfig(); // Load current API config when opening settings
 });
 
 function closeModalFn(){
@@ -1220,6 +1776,12 @@ newInstructionInput.addEventListener('keydown', (e)=>{
 });
 
 chatSearch.addEventListener('input', ()=> renderChatsList(chatSearch.value));
+
+// API Configuration event listeners
+apiKeyInput.addEventListener('input', updateApiConfig);
+apiModelInput.addEventListener('input', updateApiConfig);
+apiBaseInput.addEventListener('input', updateApiConfig);
+testApiBtn.addEventListener('click', testApiConnection);
 
 /* theme toggle */
 function applyTheme(){
@@ -1293,8 +1855,10 @@ document.addEventListener('keydown', (e) => {
 /* initial render */
 applyTheme();
 renderInstructions();
+renderMyDetails();
 renderChatsList();
 renderMessages();
+renderApiConfig();
 
 /* select initial chat */
 selectChat(selectedChatId);
