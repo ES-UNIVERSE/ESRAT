@@ -12,32 +12,42 @@
     body.light-mode { background: #f5f5f7; color: #000; }
     body.light-mode::before { background: radial-gradient(1200px 800px at 10% -10%, #e5e5e7 10%, #f5f5f7 60%); }
     body.light-mode::after { background: rgba(255,255,255,0.7); }
-    body.light-mode .input-area { background: rgba(255,255,255,0.7); }
+    
+    /* Light mode styling fixes */
+    body.light-mode .input-area { background: rgba(255,255,255,0.8); }
     body.light-mode .chat-bubble.bot { background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
     body.light-mode .sidebar, body.light-mode .side-search, body.light-mode .chat-item, 
-    body.light-mode .icon-btn, body.light-mode .new-chat-btn { background: rgba(255,255,255,0.7); border-color: rgba(0,0,0,0.1); }
-    body.light-mode .settings-content { background: rgba(255,255,255,0.9); border: 1px solid rgba(0,0,0,0.1); }
+    body.light-mode .icon-btn { background: rgba(255,255,255,0.9); border-color: rgba(0,0,0,0.1); }
+    body.light-mode .new-chat-btn { background: rgba(255,255,255,0.9); border-color: rgba(0,0,0,0.1); color: #000; }
+    body.light-mode .settings-panel { background: rgba(255,255,255,0.95); border-color: rgba(0,0,0,0.1); }
+    body.light-mode .settings-content { background: rgba(255,255,255,0.95); }
     body.light-mode .side-head .side-title { color: #000; }
     body.light-mode .settings-section h3 { color: #000; }
     body.light-mode .settings-option span { color: #000; }
     body.light-mode select { background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1); color: #000; }
     body.light-mode .prompt-chip { background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1); color: #000; }
-    body.light-mode .input-area .field { background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1); }
     body.light-mode .input-area .field input { color: #000; }
     body.light-mode .input-area .field input::placeholder { color: #666; }
     body.light-mode .side-search input { color: #000; }
     body.light-mode .side-search input::placeholder { color: #666; }
     body.light-mode .chat-name { color: #000; }
     body.light-mode .chip { color: #666; }
+    
+    /* Icon color fixes for light mode */
+    body.light-mode .menu svg { stroke: #000; }
+    body.light-mode .settings-btn svg { stroke: #000; }
     body.light-mode .icon-btn svg { stroke: #000; }
+    body.light-mode .side-search svg { stroke: #000; }
+    body.light-mode .feature-icon { stroke: #000; }
 
     /* BACKGROUND */
     body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(1200px 800px at 10% -10%, #1d1d1f 10%, #0a0a0a 60%); z-index: -2; transition: background 0.3s ease; }
     body::after { content: ""; position: fixed; inset: 0; backdrop-filter: blur(22px) saturate(180%); background: rgba(255,255,255,0.05); z-index: -1; transition: backdrop-filter .3s ease, background .3s ease; }
-    body.blur::after { backdrop-filter: blur(28px) saturate(220%); background: rgba(255,255,255,0.10); }
+    body.blur::after { backdrop-filter: blur(35px) saturate(220%); background: rgba(255,255,255,0.15); }
 
     /* HEADER */
-    header { position: fixed; top: 0; left: 0; right: 0; height: 60px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 20px; font-weight: 600; background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.12); z-index: 200; }
+    header { position: fixed; top: 0; left: 0; right: 0; height: 60px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 20px; font-weight: 600; background: rgba(255,255,255,0.06); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.12); z-index: 200; transition: backdrop-filter 0.3s ease; }
+    body.blur header { backdrop-filter: blur(25px); }
     .brand { letter-spacing: .3px; transition: opacity 0.3s ease; }
     .brand.hidden { opacity: 0; }
     .listening { position: absolute; display: flex; align-items: center; gap: 6px; font-size: 16px; font-weight: 500; opacity: 0; transition: opacity 0.3s ease; }
@@ -55,106 +65,112 @@
     .settings-btn svg { width: 22px; height: 22px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; }
 
     /* CHAT CONTAINER */
-    .chat-container { position: absolute; top: 60px; bottom: 78px; left: 0; right: 0; overflow-y: auto; overflow-x: hidden; padding: 14px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+    .chat-container { position: absolute; top: 60px; bottom: 60px; left: 0; right: 0; overflow-y: auto; overflow-x: hidden; padding: 14px; display: flex; flex-direction: column; gap: 8px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
     .chat-container::-webkit-scrollbar { display: none; }
 
-    .chat-bubble { max-width: 82%; padding: 12px 16px; border-radius: 18px; font-size: 15px; line-height: 1.45; word-wrap: break-word; overflow-wrap: anywhere; white-space: pre-wrap; animation: pop .25s ease; position: relative; }
-    .user { align-self: flex-end; background: linear-gradient(135deg, #007aff, #5ac8fa); color: #fff; border-bottom-right-radius: 6px; }
-    .bot { align-self: flex-start; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.10); backdrop-filter: blur(10px); border-bottom-left-radius: 6px; }
-    .message-time { font-size: 10px; opacity: 0.7; margin-top: 4px; text-align: right; }
+    /* COMPACT CHAT BUBBLES */
+    .chat-bubble { max-width: 75%; padding: 8px 12px; border-radius: 16px; font-size: 14px; line-height: 1.4; word-wrap: break-word; overflow-wrap: anywhere; white-space: pre-wrap; animation: pop .25s ease; position: relative; }
+    .user { align-self: flex-end; background: linear-gradient(135deg, #007aff, #5ac8fa); color: #fff; border-bottom-right-radius: 4px; }
+    .bot { align-self: flex-start; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.10); backdrop-filter: blur(10px); border-bottom-left-radius: 4px; }
+    .message-time { font-size: 9px; opacity: 0.7; margin-top: 3px; text-align: right; }
     .bot .message-time { text-align: left; }
     @keyframes pop { from{ opacity: 0; transform: translateY(8px) } to{ opacity:1; transform: translateY(0) } }
 
     /* TYPING INDICATOR */
     .typing { display: inline-flex; gap: 4px; align-items: center; }
-    .typing .t { width:6px; height:6px; border-radius:50%; background:#d1d1d6; animation: type 1s infinite; }
+    .typing .t { width:5px; height:5px; border-radius:50%; background:#d1d1d6; animation: type 1s infinite; }
     .typing .t:nth-child(2){ animation-delay:.15s } .t:nth-child(3){ animation-delay:.3s }
     @keyframes type { 0%,100%{ transform: translateY(0); opacity:.5 } 50%{ transform: translateY(-4px); opacity:1 } }
 
-    /* INPUT AREA - Semi-transparent with dynamic blur */
-    .input-area { position: fixed; bottom: 0; left: 0; right: 0; height: 68px; background: rgba(255,255,255,0.04); backdrop-filter: blur(15px); display: flex; align-items: center; padding: 10px; gap: 10px; z-index: 100; }
-    .field-wrap { position: relative; flex: 1; height: 40px; }
-    .field { position: absolute; inset: 0; display: flex; align-items: center; border-radius: 20px; background: rgba(255,255,255,0.10); padding: 0 14px; overflow: hidden; }
-    .field input { flex: 1; height: 36px; border: none; outline: none; font-size: 16px; background: transparent; color: #fff; }
+    /* INPUT AREA - Invisible background with dynamic blur */
+    .input-area { position: fixed; bottom: 0; left: 0; right: 0; height: 60px; background: transparent; backdrop-filter: blur(20px); display: flex; align-items: center; padding: 10px; gap: 10px; z-index: 100; transition: backdrop-filter 0.3s ease; }
+    body.blur .input-area { backdrop-filter: blur(30px); }
+    .field-wrap { position: relative; flex: 1; height: 36px; }
+    .field { position: absolute; inset: 0; display: flex; align-items: center; border-radius: 18px; background: transparent; padding: 0 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+    .field input { flex: 1; height: 32px; border: none; outline: none; font-size: 16px; background: transparent; color: #fff; }
     .field input::placeholder { color: #999; }
 
     /* SUGGESTED PROMPTS */
-    .suggested-prompts { position: absolute; bottom: 75px; left: 0; right: 0; padding: 10px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; transition: opacity 0.3s ease, transform 0.3s ease; }
+    .suggested-prompts { position: absolute; bottom: 68px; left: 0; right: 0; padding: 10px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; transition: opacity 0.3s ease, transform 0.3s ease; }
     .suggested-prompts::-webkit-scrollbar { display: none; }
-    .prompt-chip { padding: 8px 14px; background: rgba(255,255,255,0.10); border-radius: 16px; font-size: 13px; white-space: nowrap; cursor: pointer; transition: transform 0.1s ease; backdrop-filter: blur(10px); }
+    .prompt-chip { padding: 6px 12px; background: rgba(255,255,255,0.10); border-radius: 14px; font-size: 12px; white-space: nowrap; cursor: pointer; transition: transform 0.1s ease; backdrop-filter: blur(10px); }
     .prompt-chip:active { transform: scale(0.95); }
     .suggested-prompts.hidden { opacity: 0; pointer-events: none; transform: translateY(10px); }
 
-    /* LIVE MIC VISUALIZER - covers entire input field */
-    .visualizer { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 3px; padding: 0 18px; background: rgba(255,255,255,0.10); border-radius: 20px; }
-    .bar { width: 4px; background: linear-gradient(180deg, #34c759, #30d158); border-radius: 2px; height: 10px; }
+    /* LIVE MIC VISUALIZER */
+    .visualizer { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 3px; padding: 0 18px; background: rgba(255,255,255,0.10); border-radius: 18px; }
+    .bar { width: 3px; background: linear-gradient(180deg, #34c759, #30d158); border-radius: 2px; height: 8px; }
     
     /* MIC BUTTON */
-    .mic-btn { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #ff3b30, #ff2d55); display: grid; place-items: center; cursor: pointer; transition: transform .12s ease, filter .2s ease; }
+    .mic-btn { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #ff3b30, #ff2d55); display: grid; place-items: center; cursor: pointer; transition: transform .12s ease, filter .2s ease; }
     .mic-btn:active { transform: scale(.95); }
-    .mic-btn svg { width: 20px; height: 20px; fill: #fff; }
-    .mic-btn.recording { background: linear-gradient(135deg, #ff453a, #ff375f); box-shadow: 0 0 0 8px rgba(255,56,95,0.15); }
+    .mic-btn svg { width: 18px; height: 18px; fill: #fff; }
+    .mic-btn.recording { background: linear-gradient(135deg, #ff453a, #ff375f); box-shadow: 0 0 0 6px rgba(255,56,95,0.15); }
 
-    /* SIDEBAR */
+    /* SIDEBAR - COMPACT LAYOUT */
     .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.25); opacity: 0; pointer-events: none; transition: opacity .25s ease; z-index: 250; }
     .overlay.show { opacity: 1; pointer-events: auto; }
-    .sidebar { position: fixed; top: 10px; left: 10px; bottom: 10px; width: 86%; max-width: 360px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 22px; backdrop-filter: blur(18px); transform: translateX(-120%); transition: transform .28s cubic-bezier(.2,.8,.2,1); z-index: 300; display: flex; flex-direction: column; overflow: hidden; }
+    .sidebar { position: fixed; top: 10px; left: 10px; bottom: 10px; width: 86%; max-width: 320px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; backdrop-filter: blur(20px); transform: translateX(-120%); transition: transform .28s cubic-bezier(.2,.8,.2,1); z-index: 300; display: flex; flex-direction: column; overflow: hidden; }
     .sidebar.show { transform: translateX(0); }
     
-    /* Enhanced Sidebar Header */
-    .side-head { display: flex; flex-direction: column; padding: 20px 16px 16px; border-bottom: 1px solid rgba(255,255,255,0.12); background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06)); }
-    .sidebar-logo { width: 48px; height: 48px; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-    .side-title { font-weight: 700; font-size: 18px; margin-bottom: 12px; background: linear-gradient(135deg, #007aff, #5ac8fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .new-chat-btn { padding: 10px 16px; border-radius: 12px; background: linear-gradient(135deg, #007aff, #5ac8fa); border: none; color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; box-shadow: 0 2px 8px rgba(0,122,255,0.3); }
+    /* COMPACT SIDEBAR HEADER - Single line layout */
+    .side-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.12); background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06)); }
+    .sidebar-brand { display: flex; align-items: center; gap: 8px; flex: 1; }
+    .sidebar-logo { width: 32px; height: 32px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+    .side-title { font-weight: 600; font-size: 14px; background: linear-gradient(135deg, #007aff, #5ac8fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .new-chat-btn { padding: 6px 10px; border-radius: 8px; background: linear-gradient(135deg, #007aff, #5ac8fa); border: none; color: #fff; font-size: 12px; font-weight: 600; cursor: pointer; transition: transform .15s ease; }
     .new-chat-btn:active { transform: scale(0.95); }
-    .new-chat-btn:hover { box-shadow: 0 4px 12px rgba(0,122,255,0.4); }
     
-    .side-search { margin: 12px 16px; display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 10px 12px; }
-    .side-search input { flex:1; border:none; outline:none; background:transparent; color:#fff; font-size:14px; }
+    .side-search { margin: 8px 12px; display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 6px 8px; }
+    .side-search input { flex:1; border:none; outline:none; background:transparent; color:#fff; font-size:13px; }
     .side-search input::placeholder { color: #999; }
+    .side-search svg { width: 14px; height: 14px; }
 
-    .chats { overflow-y:auto; padding: 8px 16px; display:flex; flex-direction:column; gap:8px; }
-    .chat-item { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:12px 14px; border-radius:16px; background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.10); cursor: pointer; transition: all .2s ease; position: relative; }
-    .chat-item:hover { background: rgba(255,255,255,0.12); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .chats { overflow-y:auto; padding: 6px 12px; display:flex; flex-direction:column; gap:6px; }
+    .chat-item { display:flex; align-items:center; justify-content:space-between; gap:6px; padding:8px 10px; border-radius:12px; background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.10); cursor: pointer; transition: all .2s ease; position: relative; }
+    .chat-item:hover { background: rgba(255,255,255,0.12); transform: translateY(-1px); }
     .chat-item.active { background: linear-gradient(135deg, rgba(0,122,255,0.2), rgba(90,200,250,0.1)); border-color: rgba(0,122,255,0.3); }
     .chat-content { flex: 1; min-width: 0; }
-    .chat-name { font-size:14px; font-weight: 500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom: 2px; }
-    .chip { font-size: 11px; opacity:.7; }
-    .pin-icon { position: absolute; top: 8px; right: 8px; width: 14px; height: 14px; opacity: 0.7; }
-    .actions { display:flex; gap:4px; opacity: 0; transition: opacity .2s ease; }
+    .chat-name { font-size:13px; font-weight: 500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom: 1px; }
+    .chip { font-size: 10px; opacity:.7; }
+    .pin-icon { position: absolute; top: 6px; right: 6px; width: 12px; height: 12px; opacity: 0.7; }
+    .actions { display:flex; gap:3px; opacity: 0; transition: opacity .2s ease; }
     .chat-item:hover .actions { opacity: 1; }
-    .icon-btn { width:28px; height:28px; display:grid; place-items:center; border-radius: 8px; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.08); transition: all .15s ease; }
-    .icon-btn:hover { background: rgba(255,255,255,0.15); transform: scale(1.05); }
+    .icon-btn { width:24px; height:24px; display:grid; place-items:center; border-radius: 6px; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.08); transition: all .15s ease; }
+    .icon-btn:hover { background: rgba(255,255,255,0.15); }
     .icon-btn:active{ transform: scale(.95) }
-    .icon-btn svg { width:14px; height:14px; stroke:#fff; stroke-width:2; fill:none; }
+    .icon-btn svg { width:12px; height:12px; stroke:#fff; stroke-width:2; fill:none; }
 
-    /* SETTINGS PANEL */
-    .settings-panel { position: fixed; top: 10px; right: 10px; bottom: 10px; width: 86%; max-width: 360px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 22px; backdrop-filter: blur(18px); transform: translateX(120%); transition: transform .28s cubic-bezier(.2,.8,.2,1); z-index: 300; display: flex; flex-direction: column; overflow: hidden; }
+    /* COMPACT SETTINGS PANEL */
+    .settings-panel { position: fixed; top: 10px; right: 10px; bottom: 10px; width: 86%; max-width: 280px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; backdrop-filter: blur(20px); transform: translateX(120%); transition: transform .28s cubic-bezier(.2,.8,.2,1); z-index: 300; display: flex; flex-direction: column; overflow: hidden; }
     .settings-panel.show { transform: translateX(0); }
-    .settings-content { padding: 16px; overflow-y: auto; }
-    .settings-section { margin-bottom: 20px; }
-    .settings-section h3 { margin-bottom: 12px; font-size: 16px; font-weight: 600; }
-    .settings-option { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .settings-header { display: flex; align-items: center; justify-content: center; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.12); background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06)); }
+    .settings-title { font-weight: 600; font-size: 14px; background: linear-gradient(135deg, #007aff, #5ac8fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .settings-content { padding: 12px; overflow-y: auto; }
+    .settings-section { margin-bottom: 16px; }
+    .settings-section h3 { margin-bottom: 8px; font-size: 14px; font-weight: 600; }
+    .settings-option { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
     .settings-option:last-child { border-bottom: none; }
-    .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
+    .settings-option span { font-size: 13px; }
+    .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
     .switch input { opacity: 0; width: 0; height: 0; }
-    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.3); transition: .4s; border-radius: 24px; }
-    .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.3); transition: .4s; border-radius: 20px; }
+    .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
     input:checked + .slider { background-color: #007AFF; }
-    input:checked + .slider:before { transform: translateX(26px); }
-    select { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px; color: #fff; }
+    input:checked + .slider:before { transform: translateX(20px); }
+    select { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 6px; color: #fff; font-size: 12px; }
 
-    /* WELCOME MESSAGE */
+    /* WELCOME MESSAGE - Mobile optimized */
     .welcome-message { 
       text-align: center; 
-      padding: 40px 20px; 
-      max-width: 400px; 
+      padding: 20px 16px; 
+      max-width: 350px; 
       opacity: 1; 
       transition: all 0.5s ease; 
-      margin: 60px auto 0; 
+      margin: 40px auto 0; 
       background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
       border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 24px;
+      border-radius: 20px;
       backdrop-filter: blur(20px);
       box-shadow: 0 8px 32px rgba(0,0,0,0.1);
     }
@@ -167,43 +183,35 @@
       transform: translateY(-20px);
     }
     .welcome-title {
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 700;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       background: linear-gradient(135deg, #007aff, #5ac8fa);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
     .welcome-subtitle {
-      font-size: 16px;
-      opacity: 0.8;
-      margin-bottom: 24px;
-      line-height: 1.5;
-    }
-    .welcome-features {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .feature-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 12px;
       font-size: 14px;
-      backdrop-filter: blur(10px);
-    }
-    .feature-icon {
-      width: 16px;
-      height: 16px;
       opacity: 0.8;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+    
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 480px) {
+      .sidebar, .settings-panel { width: 90%; max-width: 300px; }
+      .chat-bubble { max-width: 85%; }
+      .welcome-message { max-width: 320px; margin: 20px auto 0; }
+      .welcome-title { font-size: 20px; }
+      .welcome-subtitle { font-size: 13px; }
     }
 
-    @media (min-width: 768px){ .chat-bubble{ max-width: 720px } .sidebar, .settings-panel { width: 360px } }
+    @media (min-width: 768px) { 
+      .chat-bubble { max-width: 600px; } 
+      .sidebar { max-width: 340px; }
+      .settings-panel { max-width: 300px; }
+    }
   </style>
 </head>
 <body>
@@ -225,29 +233,6 @@
     <div class="welcome-message" id="welcomeMessage">
       <div class="welcome-title">Welcome to GangaAI</div>
       <div class="welcome-subtitle">Your intelligent AI assistant ready to help with anything you need</div>
-      <div class="welcome-features">
-        <div class="feature-item">
-          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-          </svg>
-          Smart Responses
-        </div>
-        <div class="feature-item">
-          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-            <line x1="12" y1="19" x2="12" y2="23"/>
-            <line x1="8" y1="23" x2="16" y2="23"/>
-          </svg>
-          Voice Input
-        </div>
-        <div class="feature-item">
-          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-          </svg>
-          Chat History
-        </div>
-      </div>
     </div>
   </div>
 
@@ -274,12 +259,15 @@
   <div class="overlay" id="overlay"></div>
   <aside class="sidebar" id="sidebar" aria-label="Conversations">
     <div class="side-head">
-      <img src="https://es-universe.github.io/ESRAT/apks/logo.png" alt="GangaAI Logo" class="sidebar-logo">
-      <div class="side-title">Conversations</div>
+      <div class="sidebar-brand">
+        <img src="https://es-universe.github.io/ESRAT/apks/logo.png" alt="GangaAI Logo" class="sidebar-logo">
+        <div class="side-title">Conversations</div>
+      </div>
       <button class="new-chat-btn" id="newChatBtn">+ New Chat</button>
     </div>
+    
     <div class="side-search">
-      <svg viewBox="0 0 24 24" width="16" height="16" stroke="#fff" stroke-width="2" fill="none"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+      <svg viewBox="0 0 24 24" stroke="#fff" stroke-width="2" fill="none"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
       <input id="searchChats" placeholder="Search chats" />
     </div>
     <div class="chats" id="chatList"></div>
@@ -287,12 +275,12 @@
 
   <!-- Settings Panel -->
   <aside class="settings-panel" id="settingsPanel">
-    <div class="side-head">
-      <div class="side-title">Settings</div>
+    <div class="settings-header">
+      <div class="settings-title">Settings</div>
     </div>
     <div class="settings-content">
       <div class="settings-section">
-        <h3>Voice Settings</h3>
+        <h3>Voice</h3>
         <div class="settings-option">
           <span>Voice Output</span>
           <label class="switch">
@@ -313,7 +301,7 @@
         </div>
       </div>
       <div class="settings-section">
-        <h3>Appearance</h3>
+        <h3>Theme</h3>
         <div class="settings-option">
           <span>Light Mode</span>
           <label class="switch">
@@ -425,29 +413,6 @@
         welcomeDiv.innerHTML = `
           <div class="welcome-title">Welcome to GangaAI</div>
           <div class="welcome-subtitle">Your intelligent AI assistant ready to help with anything you need</div>
-          <div class="welcome-features">
-            <div class="feature-item">
-              <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-              </svg>
-              Smart Responses
-            </div>
-            <div class="feature-item">
-              <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                <line x1="12" y1="19" x2="12" y2="23"/>
-                <line x1="8" y1="23" x2="16" y2="23"/>
-              </svg>
-              Voice Input
-            </div>
-            <div class="feature-item">
-              <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-              </svg>
-              Chat History
-            </div>
-          </div>
         `;
         chat.appendChild(welcomeDiv);
         
@@ -483,7 +448,7 @@
       chatList.innerHTML = filtered.map(c => {
         const isActive = c.id === currentId;
         const lastMsg = c.messages[c.messages.length - 1];
-        const preview = lastMsg ? lastMsg.content.substring(0, 30) + "..." : "No messages";
+        const preview = lastMsg ? lastMsg.content.substring(0, 25) + "..." : "No messages";
         
         return `
           <div class="chat-item ${isActive ? 'active' : ''}" data-id="${c.id}">
@@ -824,7 +789,7 @@
       for(let i=0;i<8;i++){ 
         const b=document.createElement("div"); 
         b.className="bar"; 
-        b.style.height = "10px";
+        b.style.height = "8px";
         v.appendChild(b); 
         bars.push(b);
       } 
@@ -967,7 +932,7 @@
         time += 0.1;
         for (let i = 0; i < bars.length; i++) {
           // Simulate audio levels with a sine wave
-          const height = 10 + Math.abs(Math.sin(time + i * 0.5) * 34);
+          const height = 8 + Math.abs(Math.sin(time + i * 0.5) * 20);
           bars[i].style.height = height + "px";
         }
         if (recording) {
