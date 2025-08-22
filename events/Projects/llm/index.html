@@ -51,12 +51,10 @@
     .field { position: absolute; inset: 0; display: flex; align-items: center; border-radius: 24px; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.12); padding: 0 14px; overflow: hidden; }
     .field input { flex: 1; height: 44px; border: none; outline: none; font-size: 16px; background: transparent; color: #fff; }
 
-    /* VISUALIZER - covers entire input field */
+    /* LIVE MIC VISUALIZER - covers entire input field */
     .visualizer { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 3px; padding: 0 18px; background: rgba(255,255,255,0.10); border-radius: 24px; }
-    .bar { width: 4px; background: linear-gradient(180deg,#34c759,#30d158); border-radius: 2px; animation: bounce 1.1s infinite ease-in-out; }
-    @keyframes bounce { 0%,100% { height: 10px; opacity:.7 } 50% { height: 44px; opacity:1 } }
-    .bar:nth-child(1){animation-delay:0s}.bar:nth-child(2){animation-delay:.05s}.bar:nth-child(3){animation-delay:.1s}.bar:nth-child(4){animation-delay:.15s}.bar:nth-child(5){animation-delay:.2s}.bar:nth-child(6){animation-delay:.25s}.bar:nth-child(7){animation-delay:.3s}.bar:nth-child(8){animation-delay:.35s}
-
+    .bar { width: 4px; background: linear-gradient(180deg, #34c759, #30d158); border-radius: 2px; height: 10px; }
+    
     /* MIC BUTTON */
     .mic-btn { width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.12); background: linear-gradient(135deg, #ff3b30, #ff2d55); display: grid; place-items: center; cursor: pointer; transition: transform .12s ease, filter .2s ease; }
     .mic-btn:active { transform: scale(.95); }
@@ -68,8 +66,10 @@
     .overlay.show { opacity: 1; pointer-events: auto; }
     .sidebar { position: fixed; top: 10px; left: 10px; bottom: 10px; width: 86%; max-width: 360px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 22px; backdrop-filter: blur(18px); transform: translateX(-120%); transition: transform .28s cubic-bezier(.2,.8,.2,1); z-index: 300; display: flex; flex-direction: column; overflow: hidden; }
     .sidebar.show { transform: translateX(0); }
-    .side-head { display:flex; align-items:center; gap:10px; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.12); }
+    .side-head { display:flex; align-items:center; justify-content: space-between; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.12); }
     .side-title { font-weight: 600; font-size: 16px; }
+    .new-chat-btn { padding: 8px 12px; border-radius: 10px; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.12); color: #fff; font-size: 14px; cursor: pointer; transition: transform .1s ease; }
+    .new-chat-btn:active { transform: scale(0.95); }
     .side-search { margin: 10px 12px; display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 8px 10px; }
     .side-search input { flex:1; border:none; outline:none; background:transparent; color:#fff; font-size:14px; }
 
@@ -123,6 +123,7 @@
   <aside class="sidebar" id="sidebar" aria-label="Conversations">
     <div class="side-head">
       <div class="side-title">Conversations</div>
+      <button class="new-chat-btn" id="newChatBtn">+ New Chat</button>
     </div>
     <div class="side-search">
       <svg viewBox="0 0 24 24" width="16" height="16" stroke="#fff" stroke-width="2" fill="none"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
@@ -146,92 +147,288 @@
     const chatList = document.getElementById('chatList');
     const searchChats = document.getElementById('searchChats');
     const pullCue = document.getElementById('pullCue');
+    const newChatBtn = document.getElementById('newChatBtn');
 
     const STORAGE_KEY = 'gangaai_chats_v1';
     let chats = loadChats();
     let currentId = chats.length ? chats[0].id : createChat().id; // latest first
+    let audioContext = null;
+    let analyser = null;
+    let microphone = null;
+    let javascriptNode = null;
+    let bars = [];
+    let animationId = null;
 
     function uid(){ return 'c_' + Math.random().toString(36).slice(2,9); }
     function now(){ return Date.now(); }
     function loadChats(){ try{ const d = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); return Array.isArray(d)? d.sort((a,b)=>b.updated-a.updated):[] }catch{ return [] } }
     function saveChats(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(chats)); renderChatList(); }
 
-    function createChat(title='New Chat'){ const id = uid(); const chat = { id, title, messages: [], created: now(), updated: now() }; chats.unshift(chat); saveChats(); return chat; }
+    function createChat(title='New Chat'){ 
+      const id = uid(); 
+      const chat = { id, title, messages: [], created: now(), updated: now() }; 
+      chats.unshift(chat); 
+      saveChats(); 
+      return chat; 
+    }
+    
     function getChat(id){ return chats.find(c=>c.id===id); }
 
     // ====== RENDER ======
-    function renderChat(id=currentId){ const c = getChat(id); if(!c) return; chatEl.innerHTML=''; c.messages.forEach(m=> addBubble(m.role,m.content,false)); scrollToBottom(); }
+    function renderChat(id=currentId){ 
+      const c = getChat(id); 
+      if(!c) return; 
+      chatEl.innerHTML=''; 
+      c.messages.forEach(m=> addBubble(m.role,m.content,false)); 
+      scrollToBottom(); 
+    }
 
     function addBubble(role, text, push=true){
-      if(push){ const c = getChat(currentId); c.messages.push({ role, content: text, ts: now() }); c.updated = now(); saveChats(); }
-      const b = document.createElement('div'); b.className = `chat-bubble ${role}`; chatEl.appendChild(b);
-      if(role==='bot' && typewriterEnabled){ typewriter(b, text); } else { b.textContent = text; }
+      if(push){ 
+        const c = getChat(currentId); 
+        c.messages.push({ role, content: text, ts: now() }); 
+        c.updated = now(); 
+        saveChats(); 
+      }
+      const b = document.createElement('div'); 
+      b.className = `chat-bubble ${role}`; 
+      chatEl.appendChild(b);
+      if(role==='bot' && typewriterEnabled){ 
+        typewriter(b, text); 
+      } else { 
+        b.textContent = text; 
+      }
       scrollToBottom();
     }
 
-    function showTyping(){ const wrap = document.createElement('div'); wrap.className = 'chat-bubble bot'; const t = document.createElement('div'); t.className='typing'; t.innerHTML = '<span class="t"></span><span class="t"></span><span class="t"></span>'; wrap.appendChild(t); chatEl.appendChild(wrap); scrollToBottom(); return wrap; }
+    function showTyping(){ 
+      const wrap = document.createElement('div'); 
+      wrap.className = 'chat-bubble bot'; 
+      const t = document.createElement('div'); 
+      t.className='typing'; 
+      t.innerHTML = '<span class="t"></span><span class="t"></span><span class="t"></span>'; 
+      wrap.appendChild(t); 
+      chatEl.appendChild(wrap); 
+      scrollToBottom(); 
+      return wrap; 
+    }
 
     function scrollToBottom(){ chatEl.scrollTop = chatEl.scrollHeight; }
 
-    function renderChatList(filter=''){ chatList.innerHTML=''; const q = filter.trim().toLowerCase(); chats.filter(c=> !q || c.title.toLowerCase().includes(q)).forEach(c=> chatList.appendChild(chatListItem(c))); }
+    function renderChatList(filter=''){ 
+      chatList.innerHTML=''; 
+      const q = filter.trim().toLowerCase(); 
+      chats.filter(c=> !q || c.title.toLowerCase().includes(q)).forEach(c=> chatList.appendChild(chatListItem(c))); 
+    }
 
-    function chatListItem(c){ const item = document.createElement('div'); item.className='chat-item'; item.dataset.id=c.id; item.addEventListener('click', (e)=>{ if(e.target.closest('.actions')) return; currentId=c.id; renderChat(); closeSidebar(); });
-      const left = document.createElement('div'); left.style.minWidth='0';
-      const name = document.createElement('div'); name.className='chat-name'; name.textContent=c.title || 'Untitled';
-      const chip = document.createElement('div'); chip.className='chip'; chip.textContent = new Date(c.updated).toLocaleString();
-      left.appendChild(name); left.appendChild(chip);
-      const actions = document.createElement('div'); actions.className='actions';
+    function chatListItem(c){ 
+      const item = document.createElement('div'); 
+      item.className='chat-item'; 
+      item.dataset.id=c.id; 
+      item.addEventListener('click', (e)=>{ 
+        if(e.target.closest('.actions')) return; 
+        currentId=c.id; 
+        renderChat(); 
+        closeSidebar(); 
+      });
+      
+      const left = document.createElement('div'); 
+      left.style.minWidth='0';
+      
+      const name = document.createElement('div'); 
+      name.className='chat-name'; 
+      name.textContent=c.title || 'Untitled';
+      
+      const chip = document.createElement('div'); 
+      chip.className='chip'; 
+      chip.textContent = new Date(c.updated).toLocaleString();
+      
+      left.appendChild(name); 
+      left.appendChild(chip);
+      
+      const actions = document.createElement('div'); 
+      actions.className='actions';
       actions.appendChild(iconBtn('✏️', ()=> renameChat(c.id)));
       actions.appendChild(iconBtnSVG('delete', ()=> deleteChat(c.id)));
       actions.appendChild(iconBtnSVG('export', ()=> exportChat(c.id)));
-      item.appendChild(left); item.appendChild(actions);
-      return item; }
+      
+      item.appendChild(left); 
+      item.appendChild(actions);
+      return item; 
+    }
 
-    function iconBtn(label, onClick){ const b=document.createElement('button'); b.className='icon-btn'; b.textContent=label; b.addEventListener('click', (e)=>{ e.stopPropagation(); onClick(); }); return b; }
+    function iconBtn(label, onClick){ 
+      const b=document.createElement('button'); 
+      b.className='icon-btn'; 
+      b.textContent=label; 
+      b.addEventListener('click', (e)=>{ 
+        e.stopPropagation(); 
+        onClick(); 
+      }); 
+      return b; 
+    }
 
-    function iconBtnSVG(kind, onClick){ const b=document.createElement('button'); b.className='icon-btn'; b.innerHTML = kind==='delete'
-      ? '<svg viewBox="0 0 24 24"><path d="M3 6h18M8 6v14a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6M9 6l1-2h4l1 2"/></svg>'
-      : '<svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 21h14"/></svg>';
-      b.addEventListener('click', (e)=>{ e.stopPropagation(); onClick(); }); return b; }
+    function iconBtnSVG(kind, onClick){ 
+      const b=document.createElement('button'); 
+      b.className='icon-btn'; 
+      b.innerHTML = kind==='delete'
+        ? '<svg viewBox="0 0 24 24"><path d="M3 6h18M8 6v14a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6M9 6l1-2h4l1 2"/></svg>'
+        : '<svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 21h14"/></svg>';
+      b.addEventListener('click', (e)=>{ 
+        e.stopPropagation(); 
+        onClick(); 
+      }); 
+      return b; 
+    }
 
     // ====== CHAT LOGIC ======
     let typewriterEnabled = true;
-    function sendText(text){ if(!text) return; addBubble('user', text); input.value=''; const typing = showTyping(); setTimeout(()=>{ typing.remove(); addBubble('bot', generateBotReply(text)); }, 600 + Math.min(1200, text.length*30)); }
+    function sendText(text){ 
+      if(!text) return; 
+      addBubble('user', text); 
+      input.value=''; 
+      const typing = showTyping(); 
+      setTimeout(()=>{ 
+        typing.remove(); 
+        addBubble('bot', generateBotReply(text)); 
+      }, 600 + Math.min(1200, text.length*30)); 
+    }
 
-    function generateBotReply(msg){ const replies = [
-      "Interesting… tell me more!", "I'm here to help you ❤", "That sounds cool!",
-      "Can you explain a bit more?", "I like how you're thinking 🤔", "Apple vibes, right? 🍏✨"
-    ]; return replies[Math.floor(Math.random()*replies.length)]; }
+    function generateBotReply(msg){ 
+      const replies = [
+        "Interesting… tell me more!", 
+        "I'm here to help you ❤", 
+        "That sounds cool!",
+        "Can you explain a bit more?", 
+        "I like how you're thinking 🤔", 
+        "Apple vibes, right? 🍏✨"
+      ]; 
+      return replies[Math.floor(Math.random()*replies.length)]; 
+    }
 
-    function typewriter(el, text){ let i=0; const id=setInterval(()=>{ el.textContent += text[i++]; if(i>=text.length) clearInterval(id); }, 12); }
+    function typewriter(el, text){ 
+      let i=0; 
+      const id=setInterval(()=>{ 
+        el.textContent += text[i++]; 
+        if(i>=text.length) clearInterval(id); 
+      }, 12); 
+    }
 
-    input.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); sendText(input.value.trim()); } });
+    input.addEventListener('keydown', (e)=>{ 
+      if(e.key==='Enter'){ 
+        e.preventDefault(); 
+        sendText(input.value.trim()); 
+      } 
+    });
 
     // Pull-to-refresh (clear current chat)
-    let startY=null, pulling=false; chatEl.addEventListener('touchstart', (e)=>{ if(chatEl.scrollTop===0){ startY = e.touches[0].clientY; pulling=true; } });
-    chatEl.addEventListener('touchmove', (e)=>{ if(!pulling) return; const dy = e.touches[0].clientY - startY; if(dy>40){ pullCue.classList.add('show'); } else { pullCue.classList.remove('show'); } });
-    chatEl.addEventListener('touchend', ()=>{ if(pullCue.classList.contains('show')){ clearCurrentChat(); } pullCue.classList.remove('show'); pulling=false; startY=null; });
+    let startY=null, pulling=false; 
+    chatEl.addEventListener('touchstart', (e)=>{ 
+      if(chatEl.scrollTop===0){ 
+        startY = e.touches[0].clientY; 
+        pulling=true; 
+      } 
+    });
+    
+    chatEl.addEventListener('touchmove', (e)=>{ 
+      if(!pulling) return; 
+      const dy = e.touches[0].clientY - startY; 
+      if(dy>40){ 
+        pullCue.classList.add('show'); 
+      } else { 
+        pullCue.classList.remove('show'); 
+      } 
+    });
+    
+    chatEl.addEventListener('touchend', ()=>{ 
+      if(pullCue.classList.contains('show')){ 
+        clearCurrentChat(); 
+      } 
+      pullCue.classList.remove('show'); 
+      pulling=false; 
+      startY=null; 
+    });
 
-    function clearCurrentChat(){ const c=getChat(currentId); if(!c) return; c.messages=[]; c.updated=now(); saveChats(); renderChat(); }
+    function clearCurrentChat(){ 
+      const c=getChat(currentId); 
+      if(!c) return; 
+      c.messages=[]; 
+      c.updated=now(); 
+      saveChats(); 
+      renderChat(); 
+    }
 
     // ====== SIDEBAR ======
-    function openSidebar(){ sidebar.classList.add('show'); overlay.classList.add('show'); document.body.classList.add('blur'); menuIcon.setAttribute('d','M6 6L18 18M6 18L18 6'); // not used, but keeps API
-      menuBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 6L18 18M6 18L18 6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>'; }
-    function closeSidebar(){ sidebar.classList.remove('show'); overlay.classList.remove('show'); document.body.classList.remove('blur'); menuBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>'; }
+    function openSidebar(){ 
+      sidebar.classList.add('show'); 
+      overlay.classList.add('show'); 
+      document.body.classList.add('blur'); 
+      menuBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 6L18 18M6 18L18 6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>'; 
+    }
+    
+    function closeSidebar(){ 
+      sidebar.classList.remove('show'); 
+      overlay.classList.remove('show'); 
+      document.body.classList.remove('blur'); 
+      menuBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>'; 
+    }
 
-    menuBtn.addEventListener('click', ()=>{ if(sidebar.classList.contains('show')) closeSidebar(); else openSidebar(); });
+    menuBtn.addEventListener('click', ()=>{ 
+      if(sidebar.classList.contains('show')) closeSidebar(); 
+      else openSidebar(); 
+    });
+    
     overlay.addEventListener('click', closeSidebar);
 
     searchChats.addEventListener('input', ()=> renderChatList(searchChats.value));
+    
+    newChatBtn.addEventListener('click', () => {
+      const newChat = createChat();
+      currentId = newChat.id;
+      renderChat();
+      closeSidebar();
+    });
 
-    function renameChat(id){ const c=getChat(id); if(!c) return; const t = prompt('Rename chat:', c.title||''); if(t==null) return; c.title = t.trim()||'Untitled'; c.updated=now(); saveChats(); renderChatList(searchChats.value); }
-    function deleteChat(id){ const i = chats.findIndex(c=>c.id===id); if(i<0) return; const isCurrent = chats[i].id===currentId; chats.splice(i,1); if(!chats.length) createChat(); if(isCurrent) currentId = chats[0].id; saveChats(); renderChat(); }
-    function exportChat(id){ const c = getChat(id); if(!c) return; const blob = new Blob([JSON.stringify(c, null, 2)], {type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = (c.title||'chat') + '.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=> URL.revokeObjectURL(a.href), 1000); }
+    function renameChat(id){ 
+      const c=getChat(id); 
+      if(!c) return; 
+      const t = prompt('Rename chat:', c.title||''); 
+      if(t !== null) { 
+        c.title = t.trim()||'Untitled'; 
+        c.updated=now(); 
+        saveChats(); 
+        renderChatList(searchChats.value); 
+      }
+    }
+    
+    function deleteChat(id){ 
+      const i = chats.findIndex(c=>c.id===id); 
+      if(i<0) return; 
+      const isCurrent = chats[i].id===currentId; 
+      chats.splice(i,1); 
+      if(!chats.length) createChat(); 
+      if(isCurrent) currentId = chats[0].id; 
+      saveChats(); 
+      renderChat(); 
+    }
+    
+    function exportChat(id){ 
+      const c = getChat(id); 
+      if(!c) return; 
+      const blob = new Blob([JSON.stringify(c, null, 2)], {type:'application/json'}); 
+      const a = document.createElement('a'); 
+      a.href = URL.createObjectURL(blob); 
+      a.download = (c.title||'chat') + '.json'; 
+      document.body.appendChild(a); 
+      a.click(); 
+      a.remove(); 
+      setTimeout(()=> URL.revokeObjectURL(a.href), 1000); 
+    }
 
-    // ====== VOICE (SpeechRecognition) ======
-    let recognition = null; let recording = false; let interimBuffer='';
-    function hasSpeech(){ return 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window; }
-
+    // ====== VOICE (Live Audio Visualization) ======
+    let recording = false; 
+    let interimBuffer='';
+    
     function startMic(){ 
       if(recording) return; 
       recording = true; 
@@ -239,31 +436,7 @@
       listening.classList.add('active'); 
       brand.classList.add('hidden');
       showVisualizer(); 
-      
-      if(!hasSpeech()){ // fallback fake capture
-        interimBuffer=''; 
-        return; 
-      }
-      
-      const SR = window.SpeechRecognition || window.webkitSpeechRecognition; 
-      recognition = new SR();
-      recognition.lang = navigator.language || 'en-US'; 
-      recognition.interimResults = true; 
-      recognition.continuous = true;
-      
-      recognition.onresult = (e)=>{
-        let finalText = '';
-        for(let i=e.resultIndex; i<e.results.length; i++){
-          const r = e.results[i];
-          if(r.isFinal){ finalText += r[0].transcript; } else { interimBuffer = r[0].transcript; }
-        }
-        if(finalText){ input.value = (input.value+ ' ' + finalText).trim(); }
-      };
-      
-      recognition.onerror = ()=>{};
-      recognition.onend = ()=>{ /* handled by stopMic */ };
-      
-      try{ recognition.start(); }catch{}
+      startAudioVisualization();
     }
 
     function stopMic(){ 
@@ -273,10 +446,7 @@
       listening.classList.remove('active'); 
       brand.classList.remove('hidden');
       hideVisualizer();
-      
-      if(recognition){ 
-        try{ recognition.stop(); }catch{} 
-      }
+      stopAudioVisualization();
       
       // Auto-send the captured text
       const text = (input.value + ' ' + (interimBuffer||'')).trim(); 
@@ -284,7 +454,11 @@
       if(text) sendText(text);
     }
 
-    function toggleMic(){ if(recording) stopMic(); else startMic(); }
+    function toggleMic(){ 
+      if(recording) stopMic(); 
+      else startMic(); 
+    }
+    
     micBtn.addEventListener('click', toggleMic);
 
     function showVisualizer(){ 
@@ -295,7 +469,9 @@
       for(let i=0;i<8;i++){ 
         const b=document.createElement('div'); 
         b.className='bar'; 
+        b.style.height = '10px';
         v.appendChild(b); 
+        bars.push(b);
       } 
       field.appendChild(v); 
     }
@@ -304,6 +480,92 @@
       const v=document.getElementById('viz'); 
       if(v) v.remove(); 
       input.style.visibility='visible'; 
+      bars = [];
+    }
+    
+    function startAudioVisualization() {
+      try {
+        // Create audio context
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+        
+        // Get microphone input
+        navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+          .then(function(stream) {
+            microphone = audioContext.createMediaStreamSource(stream);
+            javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
+            
+            microphone.connect(analyser);
+            analyser.connect(javascriptNode);
+            javascriptNode.connect(audioContext.destination);
+            
+            javascriptNode.onaudioprocess = function() {
+              const array = new Uint8Array(analyser.frequencyBinCount);
+              analyser.getByteFrequencyData(array);
+              
+              // Update visualization
+              if (bars.length > 0) {
+                for (let i = 0; i < bars.length; i++) {
+                  const value = array[i * 4] / 255;
+                  const height = Math.max(10, value * 44);
+                  bars[i].style.height = height + 'px';
+                }
+              }
+            };
+          })
+          .catch(function(err) {
+            console.error('Error getting microphone access:', err);
+            // Fallback to animation if microphone access is denied
+            animateBars();
+          });
+      } catch (e) {
+        console.error('Error initializing audio visualization:', e);
+        // Fallback to animation if Web Audio API is not supported
+        animateBars();
+      }
+    }
+    
+    function stopAudioVisualization() {
+      if (javascriptNode) {
+        javascriptNode.disconnect();
+        javascriptNode = null;
+      }
+      if (analyser) {
+        analyser.disconnect();
+        analyser = null;
+      }
+      if (microphone) {
+        microphone.disconnect();
+        microphone = null;
+      }
+      if (audioContext) {
+        audioContext.close();
+        audioContext = null;
+      }
+      
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      }
+    }
+    
+    function animateBars() {
+      // Fallback animation when microphone access isn't available
+      let time = 0;
+      
+      function updateBars() {
+        time += 0.1;
+        for (let i = 0; i < bars.length; i++) {
+          const height = 10 + Math.abs(Math.sin(time + i * 0.5) * 34);
+          bars[i].style.height = height + 'px';
+        }
+        if (recording) {
+          animationId = requestAnimationFrame(updateBars);
+        }
+      }
+      
+      animationId = requestAnimationFrame(updateBars);
     }
 
     // TAP OUTSIDE SIDEBAR CLOSE (already via overlay), also prevent background scroll when open
