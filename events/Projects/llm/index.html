@@ -17,10 +17,11 @@
 
     /* HEADER */
     header { position: fixed; top: 0; left: 0; right: 0; height: 60px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 20px; font-weight: 600; background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.12); z-index: 200; }
-    .brand { letter-spacing: .3px; }
-    .listening { position: absolute; bottom: 6px; font-size: 12px; opacity: 0; pointer-events: none; transition: opacity .2s ease; display: flex; gap: 4px; align-items: center; }
-    .listening.active { opacity: .9; }
-    .dot { width: 4px; height: 4px; border-radius: 50%; background: #34c759; animation: pulse 1.2s infinite ease-in-out; }
+    .brand { letter-spacing: .3px; transition: opacity 0.3s ease; }
+    .brand.hidden { opacity: 0; }
+    .listening { position: absolute; display: flex; align-items: center; gap: 6px; font-size: 16px; font-weight: 500; opacity: 0; transition: opacity 0.3s ease; }
+    .listening.active { opacity: 1; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: #34c759; animation: pulse 1.2s infinite ease-in-out; }
     .dot:nth-child(2){ animation-delay:.15s } .dot:nth-child(3){ animation-delay:.3s }
     @keyframes pulse { 0%,100%{ transform: scale(.8); opacity:.5 } 50%{ transform: scale(1.3); opacity:1 } }
 
@@ -47,11 +48,11 @@
     /* INPUT AREA */
     .input-area { position: fixed; bottom: 0; left: 0; right: 0; height: 78px; background: rgba(255,255,255,0.06); border-top: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(10px); display: flex; align-items: center; padding: 10px; gap: 10px; }
     .field-wrap { position: relative; flex: 1; height: 48px; }
-    .field { position: absolute; inset: 0; display: flex; align-items: center; border-radius: 24px; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.12); padding: 0 14px; }
+    .field { position: absolute; inset: 0; display: flex; align-items: center; border-radius: 24px; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.12); padding: 0 14px; overflow: hidden; }
     .field input { flex: 1; height: 44px; border: none; outline: none; font-size: 16px; background: transparent; color: #fff; }
 
-    /* VISUALIZER fills whole placeholder */
-    .visualizer { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 3px; padding: 0 18px; }
+    /* VISUALIZER - covers entire input field */
+    .visualizer { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 3px; padding: 0 18px; background: rgba(255,255,255,0.10); border-radius: 24px; }
     .bar { width: 4px; background: linear-gradient(180deg,#34c759,#30d158); border-radius: 2px; animation: bounce 1.1s infinite ease-in-out; }
     @keyframes bounce { 0%,100% { height: 10px; opacity:.7 } 50% { height: 44px; opacity:1 } }
     .bar:nth-child(1){animation-delay:0s}.bar:nth-child(2){animation-delay:.05s}.bar:nth-child(3){animation-delay:.1s}.bar:nth-child(4){animation-delay:.15s}.bar:nth-child(5){animation-delay:.2s}.bar:nth-child(6){animation-delay:.25s}.bar:nth-child(7){animation-delay:.3s}.bar:nth-child(8){animation-delay:.35s}
@@ -137,6 +138,7 @@
     const field = document.getElementById('field');
     const micBtn = document.getElementById('micBtn');
     const listening = document.getElementById('listening');
+    const brand = document.querySelector('.brand');
     const menuBtn = document.getElementById('menuBtn');
     const menuIcon = document.getElementById('menuIcon');
     const overlay = document.getElementById('overlay');
@@ -230,11 +232,25 @@
     let recognition = null; let recording = false; let interimBuffer='';
     function hasSpeech(){ return 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window; }
 
-    function startMic(){ if(recording) return; recording = true; micBtn.classList.add('recording'); listening.classList.add('active'); showVisualizer();
+    function startMic(){ 
+      if(recording) return; 
+      recording = true; 
+      micBtn.classList.add('recording'); 
+      listening.classList.add('active'); 
+      brand.classList.add('hidden');
+      showVisualizer(); 
+      
       if(!hasSpeech()){ // fallback fake capture
-        interimBuffer=''; return; }
-      const SR = window.SpeechRecognition || window.webkitSpeechRecognition; recognition = new SR();
-      recognition.lang = navigator.language || 'en-US'; recognition.interimResults = true; recognition.continuous = true;
+        interimBuffer=''; 
+        return; 
+      }
+      
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition; 
+      recognition = new SR();
+      recognition.lang = navigator.language || 'en-US'; 
+      recognition.interimResults = true; 
+      recognition.continuous = true;
+      
       recognition.onresult = (e)=>{
         let finalText = '';
         for(let i=e.resultIndex; i<e.results.length; i++){
@@ -243,28 +259,59 @@
         }
         if(finalText){ input.value = (input.value+ ' ' + finalText).trim(); }
       };
+      
       recognition.onerror = ()=>{};
       recognition.onend = ()=>{ /* handled by stopMic */ };
+      
       try{ recognition.start(); }catch{}
     }
 
-    function stopMic(){ if(!recording) return; recording=false; micBtn.classList.remove('recording'); listening.classList.remove('active'); hideVisualizer();
-      if(recognition){ try{ recognition.stop(); }catch{} }
+    function stopMic(){ 
+      if(!recording) return; 
+      recording=false; 
+      micBtn.classList.remove('recording'); 
+      listening.classList.remove('active'); 
+      brand.classList.remove('hidden');
+      hideVisualizer();
+      
+      if(recognition){ 
+        try{ recognition.stop(); }catch{} 
+      }
+      
       // Auto-send the captured text
-      const text = (input.value + ' ' + (interimBuffer||'')).trim(); interimBuffer=''; if(text) sendText(text);
+      const text = (input.value + ' ' + (interimBuffer||'')).trim(); 
+      interimBuffer=''; 
+      if(text) sendText(text);
     }
 
     function toggleMic(){ if(recording) stopMic(); else startMic(); }
     micBtn.addEventListener('click', toggleMic);
 
-    function showVisualizer(){ input.style.visibility='hidden'; let v=document.createElement('div'); v.className='visualizer'; v.id='viz'; for(let i=0;i<8;i++){ const b=document.createElement('div'); b.className='bar'; v.appendChild(b); } field.appendChild(v); }
-    function hideVisualizer(){ const v=document.getElementById('viz'); if(v) v.remove(); input.style.visibility='visible'; }
+    function showVisualizer(){ 
+      input.style.visibility='hidden'; 
+      let v=document.createElement('div'); 
+      v.className='visualizer'; 
+      v.id='viz'; 
+      for(let i=0;i<8;i++){ 
+        const b=document.createElement('div'); 
+        b.className='bar'; 
+        v.appendChild(b); 
+      } 
+      field.appendChild(v); 
+    }
+    
+    function hideVisualizer(){ 
+      const v=document.getElementById('viz'); 
+      if(v) v.remove(); 
+      input.style.visibility='visible'; 
+    }
 
     // TAP OUTSIDE SIDEBAR CLOSE (already via overlay), also prevent background scroll when open
     overlay.addEventListener('touchmove', (e)=> e.preventDefault(), {passive:false});
 
     // INIT
-    renderChat(); renderChatList();
+    renderChat(); 
+    renderChatList();
   </script>
 </body>
 </html>
