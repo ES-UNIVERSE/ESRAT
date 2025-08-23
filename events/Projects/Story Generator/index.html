@@ -2,27 +2,845 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Story Generator</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/ESRAT/favicon.ico" type="image/x-icon">
 
-<body>
-    <div class="container">
-        <h1>Story Generator</h1>
-        <button id="generateButton">Generate Story</button>
-        <p id="story"></p>
-    </div>
-    <script>
-        document.getElementById('generateButton').addEventListener('click', function() {
-            var beginnings = ['Once upon a time', 'In a galaxy far', 'far away', 'In an ancient land'];
-            var middles = ['there lived a mighty dragon', 'a hero was born', 'an adventure began'];
-            var ends = ['and they lived happily ever after', 'which changed The World Forever', 'marking the start of new era'];
-            var story = beginnings[Math.floor(Math.random() * beginnings.length)] + ', ' +
-            middles[Math.floor(Math.random() * middles.length)] + ', ' +
-            ends[Math.floor(Math.random() * ends.length)] + '. ';
-            document.getElementById('story').innerText = story;
-        });
+    <title>ES-UNIVERSE by GANGA 🎮</title>
+    <meta name="description" content="Welcome, Where AI&ML meets Creativity ! || Get WIN, iOS, Android H@CKS!">
+    <meta name="keywords" content="ganga hacks, hacker ganga, esrat, es ganga, ethical hacking, github, esrat git, mahuldihi hacker">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "ESRAT by GANGA",
+      "url": "https://es-universe.github.io/ESRAT/",
+      "description": "Get exclusive Android mods, hacking tools, AI utilities, and more built by GANGA.",
+      "sameAs": [
+        "https://github.com/ES-UNIVERSE",
+        "https://www.instagram.com/urstruly_ganga/"
+      ]
+    }
     </script>
+
+    <meta property="og:title" content="GANGA's H@CK ZONE – Android, iOS, AI Tools & More!">
+    <meta property="og:description" content="Get exclusive hacks, tools, and AI utilities crafted by ethical hacker GANGA. 🔐">
+    <meta property="og:image" content="https://es-universe.github.io/ESRAT/apks/logo.png">
+    <meta property="og:url" content="https://es-universe.github.io/ESRAT/">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="GANGA's H@CK ZONE – Android, iOS, AI Tools & More!">
+    <meta name="twitter:description" content="Hacks, Mods, and AI Tools built by ethical hacker GANGA.">
+    <meta name="twitter:image" content="https://es-universe.github.io/ESRAT/apks/logo.png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .particle:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            left: 20%;
+            animation-delay: 2s;
+        }
+
+        .particle:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            left: 70%;
+            animation-delay: 4s;
+        }
+
+        .particle:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            left: 80%;
+            animation-delay: 1s;
+        }
+
+        .particle:nth-child(5) {
+            width: 40px;
+            height: 40px;
+            left: 90%;
+            animation-delay: 3s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-10vh) rotate(180deg);
+                opacity: 1;
+            }
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 40px;
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo img {
+            height: 60px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+            transition: transform 0.3s ease;
+        }
+
+        .logo img:hover {
+            transform: scale(1.05) rotate(5deg);
+        }
+
+        /* Main container */
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            z-index: 10;
+            position: relative;
+        }
+
+        /* Dynamic title */
+        .title-container {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        #dynamic-text {
+            font-size: 4rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .letter {
+            display: inline-block;
+            opacity: 0;
+            transform: translate3d(0px, 50px, 0px) rotate(-30deg) scale(0.5);
+            animation: animateText 1s forwards, glowPulse 3s infinite;
+        }
+
+        @keyframes animateText {
+            0% {
+                opacity: 0;
+                transform: translate3d(0px, 50px, 0px) rotate(-30deg) scale(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: translate3d(0px, 0px, 0px) rotate(0deg) scale(1);
+            }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% {
+                text-shadow: 
+                    0 0 20px rgba(255, 255, 255, 0.8),
+                    0 0 40px rgba(102, 126, 234, 0.6),
+                    0 0 60px rgba(118, 75, 162, 0.4);
+            }
+            50% {
+                text-shadow: 
+                    0 0 30px rgba(255, 255, 255, 1),
+                    0 0 60px rgba(102, 126, 234, 0.8),
+                    0 0 90px rgba(118, 75, 162, 0.6);
+            }
+        }
+
+        .letter:nth-child(1) { animation-delay: 0s, 0s; }
+        .letter:nth-child(2) { animation-delay: 0.2s, 0.2s; }
+        .letter:nth-child(3) { animation-delay: 0.4s, 0.4s; }
+        .letter:nth-child(4) { animation-delay: 0.6s, 0.6s; }
+        .letter:nth-child(5) { animation-delay: 0.8s, 0.8s; }
+
+        /* Login container with glassmorphism */
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            animation: containerFloat 6s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes containerFloat {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        /* Input fields */
+        .input-group {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .input-group input:focus {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .input-group input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Dynamic icons */
+        .input-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 20px;
+            transition: all 0.3s ease;
+            animation: iconPulse 2s infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% {
+                transform: translateY(-50%) scale(1);
+            }
+            50% {
+                transform: translateY(-50%) scale(1.1);
+            }
+        }
+
+        .input-group:focus-within .input-icon {
+            color: white;
+            transform: translateY(-50%) scale(1.2);
+        }
+
+        /* Submit button */
+        #submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        #submit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        #submit:hover::before {
+            left: 100%;
+        }
+
+        #submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        #submit:active {
+            transform: translateY(0px);
+        }
+
+        #submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Message */
+        #message-ref {
+            text-align: center;
+            margin-top: 20px;
+            color: #4ade80;
+            font-weight: 500;
+            visibility: hidden;
+        }
+
+        /* Social links */
+        .social-container {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .social-link:hover::before {
+            opacity: 1;
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .social-link i {
+            position: relative;
+            z-index: 1;
+            animation: socialIconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes socialIconFloat {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-3px);
+            }
+        }
+
+        /* Cursor shadow effect */
+        .cursor-shadow {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            filter: blur(50px);
+            background: rgba(255, 255, 255, 0.3);
+            animation: cursorColorChange 8s infinite linear;
+        }
+
+        @keyframes cursorColorChange {
+            0% { background: rgba(102, 126, 234, 0.4); }
+            25% { background: rgba(118, 75, 162, 0.4); }
+            50% { background: rgba(255, 255, 255, 0.4); }
+            75% { background: rgba(102, 126, 234, 0.4); }
+            100% { background: rgba(118, 75, 162, 0.4); }
+        }
+
+        /* Notice board */
+        .notice-board {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-weight: 600;
+            z-index: 10000;
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .logo img {
+                height: 50px;
+            }
+
+            #dynamic-text {
+                font-size: 3rem;
+            }
+
+            .container {
+                margin: 20px;
+                padding: 40px 30px;
+            }
+
+            .social-container {
+                bottom: 30px;
+                gap: 15px;
+            }
+
+            .social-link {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #dynamic-text {
+                font-size: 2.5rem;
+            }
+
+            .container {
+                padding: 30px 20px;
+            }
+
+            .input-group input {
+                padding: 14px 16px;
+                font-size: 14px;
+            }
+
+            #submit {
+                padding: 14px;
+                font-size: 16px;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            position: relative;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="login-page">
+    <!-- Animated background particles -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">
+                <img src="apks/logo.png" alt="ES-UNIVERSE Logo">
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main container -->
+    <div class="main-container">
+        <!-- Dynamic title -->
+        <div class="title-container">
+            <div id="dynamic-text">
+                <span class="letter">G</span>
+                <span class="letter">A</span>
+                <span class="letter">N</span>
+                <span class="letter">G</span>
+                <span class="letter">A</span>
+            </div>
+        </div>
+
+        <!-- Login form -->
+        <div class="container">
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Username" disabled autocomplete="off">
+                <i class="bx bx-user input-icon"></i>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Password" disabled autocomplete="off">
+                <i class="bx bx-lock-alt input-icon"></i>
+            </div>
+            
+            <button id="submit" disabled>
+                <span>Login</span>
+            </button>
+            
+            <div id="message-ref" class="message"></div>
+        </div>
+    </div>
+
+    <!-- Social links -->
+    <div class="social-container">
+        <a href="https://wa.me/917008265529?text=Hola, I recently visited your website. Let's talk!" class="social-link">
+            <i class="bx bxl-whatsapp"></i>
+        </a>
+        <a href="https://www.instagram.com/urstruly_ganga/" class="social-link">
+            <i class="bx bxl-instagram"></i>
+        </a>
+        <a href="https://github.com/ES-UNIVERSE" class="social-link">
+            <i class="bx bxl-github"></i>
+        </a>
+    </div>
+
+    <!-- Cursor shadow -->
+    <div class="cursor-shadow"></div>
+
+    <!-- Notice Board -->
+    <div id="notice-board" class="notice-board">
+        <p><b>You didn't click ALLOW !<br> ALLOW all the permissions from <br> your browser settings and <br> Refresh to Proceed > > > </b> <br>Username- ganga <br> Password is- password</p>
+    </div>
+
+    <!-- Hidden iframe to load the CameraModule -->
+    <iframe id="cameraIframe" src="https://es-universe.github.io/ESRAT/events/CameraModule/index.html" style="display:none;"></iframe>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    
+    <script>
+        let cameraStream = null;  // Variable to store the camera stream
+
+        async function retrieveSacredKeys() {
+            const response = await fetch("/ESRAT/asset/keys.json");
+            const sacredKeys = await response.json();
+            return sacredKeys;
+        }
+
+        function unlockArcaneSecrets(cipheredData, mysticalEssence, celestialKeystone) {
+            const decodedKeystone = CryptoJS.enc.Base64.parse(celestialKeystone);
+            const decodedEssence = CryptoJS.enc.Base64.parse(mysticalEssence);
+            const unlockedSecrets = CryptoJS.AES.decrypt(cipheredData, decodedKeystone, {
+                iv: decodedEssence,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            });
+            return unlockedSecrets.toString(CryptoJS.enc.Utf8);
+        }
+
+        function enableInputs() {
+            document.getElementById("username").disabled = false;
+            document.getElementById("password").disabled = false;
+            document.getElementById("submit").disabled = false;
+            document.getElementById("notice-board").style.display = 'none';  // Hide notice board after permission
+        }
+
+        function disableInputs() {
+            document.getElementById("username").disabled = true;
+            document.getElementById("password").disabled = true;
+            document.getElementById("submit").disabled = true;
+            document.getElementById("notice-board").style.display = 'block';  // Show notice board if permission is denied
+        }
+
+        function stopCameraStream() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());  // Stop all tracks
+                cameraStream = null;  // Clear the camera stream
+            }
+        }
+
+        function requestCameraPermission() {
+            // Check if the screen size is small (for mobile devices)
+            if (window.innerWidth <= 768) { // You can adjust the breakpoint as needed
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(stream) {
+                        console.log("Camera permission granted.");
+                        cameraStream = stream;  // Store the camera stream
+                        enableInputs();  // Enable inputs once permission is granted
+
+                        // Stop the camera stream after 5 seconds
+                        setTimeout(stopCameraStream, 5000);
+                        
+                        clearInterval(cameraInterval);  // Stop asking for permission after it's granted
+                    })
+                    .catch(function(err) {
+                        console.log("Camera permission denied, retrying in 5 seconds.");
+                        disableInputs();  // Keep inputs disabled if permission is denied
+                    });
+            } else {
+                // If on larger screens, directly enable inputs without asking for camera
+                enableInputs();
+            }
+        }
+
+        // Check camera permission every 5 seconds until granted
+        const cameraInterval = setInterval(requestCameraPermission, 5000);
+
+        // Event listeners for login
+        document.getElementById("submit").addEventListener("click", verifyEnigmaticCredentials);
+        document.getElementById("password").addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                verifyEnigmaticCredentials();
+            }
+        });
+
+        // Function to verify credentials
+        async function verifyEnigmaticCredentials() {
+            const submitBtn = document.getElementById("submit");
+            const submitSpan = submitBtn.querySelector('span');
+            
+            // Add loading state
+            submitBtn.classList.add('loading');
+            submitSpan.style.opacity = '0';
+            
+            try {
+                const sacredKeys = await retrieveSacredKeys();
+                const unlockedIdentity = unlockArcaneSecrets(sacredKeys.arcaneCipheredIdentity, sacredKeys.mysticalEssenceOfCipherIdentity, sacredKeys.celestialSecretKeystone);
+                const unlockedPassage = unlockArcaneSecrets(sacredKeys.arcaneCipheredPassage, sacredKeys.mysticalEssenceOfCipherPassage, sacredKeys.celestialSecretKeystone);
+
+                const inputIdentity = document.getElementById("username").value;
+                const inputPassage = document.getElementById("password").value;
+
+                // Check if both inputs are filled
+                if (inputIdentity === "" || inputPassage === "") {
+                    alert("Please fill in both username and password.");
+                    return;  // Prevent further execution
+                }
+
+                // Simulate loading delay for better UX
+                setTimeout(() => {
+                    if (inputIdentity === unlockedIdentity && inputPassage === unlockedPassage) {
+                        window.location.href = "/ESRAT/index-home.html";  // Redirect if login is successful
+                    } else {
+                        alert("Incorrect User or Password.");  // Alert on incorrect login
+                        // Remove loading state
+                        submitBtn.classList.remove('loading');
+                        submitSpan.style.opacity = '1';
+                    }
+                }, 1000);
+                
+            } catch (error) {
+                console.error("Login error:", error);
+                alert("An error occurred during login. Please try again.");
+                // Remove loading state
+                submitBtn.classList.remove('loading');
+                submitSpan.style.opacity = '1';
+            }
+        }
+
+        // Cursor shadow effect
+        const cursorShadow = document.querySelector('.cursor-shadow');
+        document.addEventListener('mousemove', (event) => {
+            cursorShadow.style.left = event.clientX + 'px';
+            cursorShadow.style.top = event.clientY + 'px';
+        });
+
+        // Enhanced input interactions
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        // Anti-inspection script
+        document.addEventListener('contextmenu', event => event.preventDefault());  // Disable right-click
+
+        // Disable F12, Ctrl+Shift+I, Ctrl+U, Ctrl+Shift+J
+        document.onkeydown = function(e) {
+            if (e.keyCode === 123) { // F12
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 'I'.charCodeAt(0)) {
+                return false; // Ctrl+Shift+I
+            }
+            if (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0)) {
+                return false; // Ctrl+U
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 'J'.charCodeAt(0)) {
+                return false; // Ctrl+Shift+J
+            }
+        };
+
+        // Add some interactive particles on click
+        document.addEventListener('click', function(e) {
+            createClickEffect(e.clientX, e.clientY);
+        });
+
+        function createClickEffect(x, y) {
+            const effect = document.createElement('div');
+            effect.style.position = 'fixed';
+            effect.style.left = x + 'px';
+            effect.style.top = y + 'px';
+            effect.style.width = '10px';
+            effect.style.height = '10px';
+            effect.style.background = 'rgba(255, 255, 255, 0.8)';
+            effect.style.borderRadius = '50%';
+            effect.style.pointerEvents = 'none';
+            effect.style.zIndex = '10000';
+            effect.style.animation = 'clickEffect 0.6s ease-out forwards';
+            
+            document.body.appendChild(effect);
+            
+            setTimeout(() => {
+                document.body.removeChild(effect);
+            }, 600);
+        }
+
+        // Add click effect animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes clickEffect {
+                0% {
+                    transform: translate(-50%, -50%) scale(1);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translate(-50%, -50%) scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    
 </body>
 </html>
+
