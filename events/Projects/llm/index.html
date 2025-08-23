@@ -107,6 +107,12 @@
     .mic-btn svg { width: 18px; height: 18px; fill: #fff; }
     .mic-btn.recording { background: linear-gradient(135deg, #ff453a, #ff375f); box-shadow: 0 0 0 6px rgba(255,56,95,0.15); }
 
+    /* WEB SEARCH BUTTON */
+    .search-btn { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #34c759, #30d158); display: grid; place-items: center; cursor: pointer; transition: transform .12s ease, filter .2s ease; margin-left: 5px; }
+    .search-btn:active { transform: scale(.95); }
+    .search-btn svg { width: 18px; height: 18px; fill: #fff; }
+    .search-btn.active { background: linear-gradient(135deg, #ff9500, #ffb000); box-shadow: 0 0 0 6px rgba(255,149,0,0.15); }
+
     /* SIDEBAR - COMPACT LAYOUT */
     .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.25); opacity: 0; pointer-events: none; transition: opacity .25s ease; z-index: 250; }
     .overlay.show { opacity: 1; pointer-events: auto; }
@@ -221,65 +227,44 @@
     <div class="brand">GangaAI</div>
     <div class="listening" id="listening">
       <span>Listening</span>
-      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
     </div>
-    <div class="settings-btn" id="settingsBtn">
-      <svg viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.17.1a2 2 0 0 1-2 0l-.15-.1a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v.44a2 2 0 0 1-1 1.73v2.53a2 2 0 0 1 1 1.72v.44a2 2 0 0 0 2 2h.44a2 2 0 0 1 1.73 1h2.53a2 2 0 0 1 1.72-1h.44a2 2 0 0 0 2-2v-.44a2 2 0 0 1 1-1.73V7.73a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+    <div class="settings-btn" id="settingsBtn" aria-label="Settings" title="Settings">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m12 1 2.09 2.09L16 2l1 1-1.09 1.91L18 7l-1 1-1.91-1.09L13 9l-1-1 1.09-1.91L11 4l1-1 1.91 1.09L16 2l1 1-1.09 1.91L18 7l-1 1-1.91-1.09L13 9l-1-1 1.09-1.91L11 4l1-1z"/></svg>
     </div>
   </header>
 
-  <div class="chat-container" id="chat">
-    <div class="welcome-message" id="welcomeMessage">
-      <div class="welcome-title">Welcome to GangaAI</div>
-      <div class="welcome-subtitle">Your intelligent AI assistant ready to help with anything you need</div>
-    </div>
-  </div>
-
-  <div class="suggested-prompts" id="suggestedPrompts">
-    <div class="prompt-chip" data-prompt="What can you help me with?">What can you help me with?</div>
-    <div class="prompt-chip" data-prompt="Tell me a fun fact">Tell me a fun fact</div>
-    <div class="prompt-chip" data-prompt="How does AI work?">How does AI work?</div>
-    <div class="prompt-chip" data-prompt="Write a poem about technology">Write a poem about technology</div>
-  </div>
-
-  <div class="input-area">
-    <div class="field-wrap">
-      <div class="field" id="field">
-        <input id="userInput" placeholder="Ask anything..." autocomplete="off" inputmode="text" />
-        <!-- visualizer injected here on record -->
-      </div>
-    </div>
-    <button class="mic-btn" id="micBtn" aria-label="Start voice input">
-      <svg viewBox="0 0 24 24"><path d="M12 15c1.66 0 3-1.34 3-3V6c0-1.66-1.34-3-3-3S9 4.34 9 6v6c0 1.66 1.34 3 3 3z" fill="#fff"/><path d="M17.3 11c0 3.04-2.46 5.5-5.5 5.5S6.3 14.04 6.3 11H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-1.7z" fill="#fff"/></svg>
-    </button>
-  </div>
-
-  <!-- Sidebar + overlay -->
   <div class="overlay" id="overlay"></div>
-  <aside class="sidebar" id="sidebar" aria-label="Conversations">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
     <div class="side-head">
       <div class="sidebar-brand">
-        <img src="https://es-universe.github.io/ESRAT/apks/logo.png" alt="GangaAI Logo" class="sidebar-logo">
-        <div class="side-title">Conversations</div>
+        <div class="side-title">GangaAI</div>
       </div>
-      <button class="new-chat-btn" id="newChatBtn">+ New Chat</button>
+      <button class="new-chat-btn" id="newChatBtn" style="padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); color: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease;">
+        + New Chat
+      </button>
     </div>
     
     <div class="side-search">
-      <svg viewBox="0 0 24 24" stroke="#fff" stroke-width="2" fill="none"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
-      <input id="searchChats" placeholder="Search chats" />
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" placeholder="Search chats..." id="searchChats">
     </div>
+    
     <div class="chats" id="chatList"></div>
-  </aside>
+  </div>
 
-  <!-- Settings Panel -->
-  <aside class="settings-panel" id="settingsPanel">
+  <!-- SETTINGS PANEL -->
+  <div class="settings-panel" id="settingsPanel">
     <div class="settings-header">
       <div class="settings-title">Settings</div>
     </div>
     <div class="settings-content">
       <div class="settings-section">
-        <h3>Voice</h3>
+        <h3>Voice & Audio</h3>
         <div class="settings-option">
           <span>Voice Output</span>
           <label class="switch">
@@ -287,20 +272,29 @@
             <span class="slider"></span>
           </label>
         </div>
+      </div>
+      
+      <div class="settings-section">
+        <h3>Language</h3>
         <div class="settings-option">
           <span>Language</span>
           <select id="languageSelect">
-            <option value="en">English</option>
-            <option value="es">Spanish</option>
-            <option value="fr">French</option>
-            <option value="de">German</option>
-            <option value="hi">Hindi</option>
-            <option value="ja">Japanese</option>
+            <option value="en-US">English (US)</option>
+            <option value="es-ES">Español</option>
+            <option value="fr-FR">Français</option>
+            <option value="de-DE">Deutsch</option>
+            <option value="it-IT">Italiano</option>
+            <option value="pt-BR">Português</option>
+            <option value="ru-RU">Русский</option>
+            <option value="ja-JP">日本語</option>
+            <option value="ko-KR">한국어</option>
+            <option value="zh-CN">中文</option>
           </select>
         </div>
       </div>
+      
       <div class="settings-section">
-        <h3>Theme</h3>
+        <h3>Appearance</h3>
         <div class="settings-option">
           <span>Light Mode</span>
           <label class="switch">
@@ -309,6 +303,7 @@
           </label>
         </div>
       </div>
+      
       <div class="settings-section">
         <h3>Privacy</h3>
         <div class="settings-option">
@@ -320,36 +315,47 @@
         </div>
       </div>
     </div>
-  </aside>
+  </div>
+
+  <!-- CHAT CONTAINER -->
+  <div class="chat-container" id="chatContainer">
+    <div class="welcome-message" id="welcomeMessage">
+      <div class="welcome-title">Welcome to GangaAI</div>
+      <div class="welcome-subtitle">Your intelligent assistant is ready to help. Ask me anything!</div>
+    </div>
+  </div>
+
+  <!-- SUGGESTED PROMPTS -->
+  <div class="suggested-prompts" id="suggestedPrompts">
+    <div class="prompt-chip" data-prompt="Tell me about yourself">About you</div>
+    <div class="prompt-chip" data-prompt="What can you do?">Capabilities</div>
+    <div class="prompt-chip" data-prompt="Who created you?">Creator</div>
+    <div class="prompt-chip" data-prompt="Tell me a joke">Joke</div>
+    <div class="prompt-chip" data-prompt="What's your favorite movie?">Movies</div>
+  </div>
+
+  <!-- INPUT AREA -->
+  <div class="input-area">
+    <div class="field-wrap">
+      <div class="field" id="field">
+        <input type="text" placeholder="Type your message..." id="messageInput" autocomplete="off" />
+      </div>
+    </div>
+    <div class="mic-btn" id="micBtn" title="Voice input">
+      <svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" x2="12" y1="19" y2="23"/><line x1="8" x2="16" y1="23" y2="23"/></svg>
+    </div>
+    <div class="search-btn" id="searchBtn" title="Web search toggle">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </div>
+  </div>
 
   <script>
     // ====== GLOBAL VARIABLES ======
-    let chats = JSON.parse(localStorage.getItem("chats")) || [];
-    let currentId = localStorage.getItem("currentId") || null;
-    let settings = JSON.parse(localStorage.getItem("settings")) || {
-      voiceOutput: false,
-      language: "en",
-      theme: "dark",
-      sharing: true
-    };
-    let memory = JSON.parse(localStorage.getItem("memory")) || {
-      lastUserMessage: "",
-      lastBotResponse: ""
-    };
-
-    // Voice recognition variables
-    let recognition = null;
-    let recording = false;
-    let bars = [];
-    let animationId = null;
-    let silenceTimer = null;
-    let microphone = null;
-    let audioContext = null;
-
-    // DOM elements
-    const chat = document.getElementById("chat");
-    const input = document.getElementById("userInput");
+    const chat = document.getElementById("chatContainer");
+    const input = document.getElementById("messageInput");
+    const field = document.getElementById("field");
     const micBtn = document.getElementById("micBtn");
+    const searchBtn = document.getElementById("searchBtn");
     const menuBtn = document.getElementById("menuBtn");
     const settingsBtn = document.getElementById("settingsBtn");
     const sidebar = document.getElementById("sidebar");
@@ -358,29 +364,214 @@
     const chatList = document.getElementById("chatList");
     const searchChats = document.getElementById("searchChats");
     const newChatBtn = document.getElementById("newChatBtn");
-    const field = document.getElementById("field");
     const listening = document.getElementById("listening");
     const brand = document.querySelector(".brand");
+    const welcomeMsg = document.getElementById("welcomeMessage");
     const suggestedPrompts = document.getElementById("suggestedPrompts");
     const promptChips = document.querySelectorAll(".prompt-chip");
-    const welcomeMessage = document.getElementById("welcomeMessage");
-
+    
     // Settings elements
     const voiceOutputToggle = document.getElementById("voiceOutputToggle");
     const languageSelect = document.getElementById("languageSelect");
     const themeToggle = document.getElementById("themeToggle");
     const sharingToggle = document.getElementById("sharingToggle");
 
+    let recording = false;
+    let webSearchMode = false;
+    let recognition = null;
+    let silenceTimer = null;
+    let animationId = null;
+    let microphone = null;
+    let audioContext = null;
+    let bars = [];
+    let chats = JSON.parse(localStorage.getItem("chats")) || [];
+    let currentId = localStorage.getItem("currentId") || null;
+    let memory = JSON.parse(localStorage.getItem("memory")) || {};
+    let settings = JSON.parse(localStorage.getItem("settings")) || {
+      voiceOutput: false,
+      language: "en-US",
+      theme: "dark",
+      sharing: true
+    };
+
+    // ====== DATA STRUCTURES FOR CONTACTS AND RESPONSES ======
+    const contactsData = [
+      {firstName: "Amandeep VIT", lastName: "", phone: "9777340814"},
+      {firstName: "Bheemsen", lastName: "Arjun", phone: "+919348403700"},
+      {firstName: "Nagpal", lastName: "Aunty", phone: "+919348973690"},
+      {firstName: "Goura", lastName: "Bab√", phone: "8368964629"},
+      {firstName: "Deben", lastName: "Babulal", phone: "+919692280458"},
+      {firstName: "Amarendra", lastName: "Bahubali", phone: "+917735494402"},
+      {firstName: "Balia", lastName: "", phone: "6372683123"},
+      {firstName: "Bapi", lastName: "", phone: "+918117081875"},
+      {firstName: "15 plus Bapi", lastName: "", phone: "+919337504572", email: "boy249590@gmail.com"},
+      {firstName: "Munna", lastName: "Bapi", phone: "8260143669", note: "Muna  Karunakar"},
+      {firstName: "Bapi Sonali", lastName: "", phone: "+916371235247"},
+      {firstName: "Nagen Original", lastName: "", phone: "+919438835027"},
+      {firstName: "L&T Finance", lastName: "Baripada", phone: "+918018840103"},
+      {firstName: "Tapan", lastName: "Baripada", phone: "8328844097"},
+      {firstName: "Tapan", lastName: "Baripada", phone: "+918328844097"},
+      {firstName: "Tapan", lastName: "Baripada", phone: "+91832884409"},
+      {firstName: "Sanat", lastName: "Baskey", phone: "+918280983151"},
+      {firstName: "Jr Dasmat Soren", lastName: "BGHS", phone: "+917325879665"},
+      {firstName: "Lalu Mohan", lastName: "BGHS", phone: "+918260356305"},
+      {firstName: "Madhusudan Marndi", lastName: "BGHS", phone: "+918260344743"},
+      {firstName: "Raghunath Murmu", lastName: "BGHS", phone: "+918260833749"},
+      {firstName: "Sanatan Hansdah", lastName: "BGHS", phone: "+919692264971"},
+      {firstName: "Sanjay Hembram", lastName: "BGHS", phone: "+918260984442"},
+      {firstName: "BHANJ BGHS", lastName: "", phone: "+919348006623"},
+      {firstName: "Bheesma", lastName: "", phone: "+918260039062"},
+      {firstName: "Bhudhuray Father Of Bapi", lastName: "", phone: "7205640282"},
+      {firstName: "BISHU GORU BGHS", lastName: "", phone: "9124044818"},
+      {firstName: "BSDK\"SAIBASUSHILMCMARNDI\"", lastName: "", phone: "+917205248440"},
+      {firstName: "Sirka", lastName: "BUDDY", phone: "+919348263069"},
+      {firstName: "Budhia Kaliadihi", lastName: "", phone: "9337872326"},
+      {firstName: "Chaitanya Huli", lastName: "", phone: "+918018229318"},
+      {firstName: "Shree", lastName: "Chaitanya", phone: "6372297278"},
+      {firstName: "Kumar Ashok", lastName: "Chand", phone: "+917077285971"},
+      {firstName: "Liba", lastName: "Chand", phone: "+918658324242"},
+      {firstName: "Jr Ram", lastName: "Charan", phone: "+919348752148", note: "Brother"},
+      {firstName: "Cousin", lastName: "", phone: "7894506199"},
+      {firstName: "Anandapur", lastName: "Dada", phone: "8144163815"},
+      {firstName: "Sanjay", lastName: "dada", phone: "9023357468"},
+      {firstName: "Govinda Hansdah", lastName: "Dancer", phone: "8249949051"},
+      {firstName: "Dasarathi Original", lastName: "", phone: "+919078577078"},
+      {firstName: "Deben Stolen Phone", lastName: "", phone: "7735326804"},
+      {firstName: "Dhapij Sukul", lastName: "", phone: "7608090872"},
+      {firstName: "Dhuma Soren", lastName: "", phone: "8249156640"},
+      {firstName: "Mama", lastName: "Didi", phone: "+919692389171"},
+      {firstName: "Krushna", lastName: "DigaR", phone: "+918260708546"},
+      {firstName: "KrushnA", lastName: "Digr", phone: "+917205503552"},
+      {firstName: "Dubai Banguru Paro", lastName: "", phone: "8249581282"},
+      {firstName: "Dukhia", lastName: "Baskey", phone: "+919348788592"},
+      {firstName: "Galu", lastName: "", phone: "9078577078"},
+      {firstName: "Bishu", lastName: "'Goru'", phone: "8144843881"},
+      {firstName: "Lalmohan", lastName: "H", phone: "+918457905614"},
+      {firstName: "Bhanjveer", lastName: "Hansdah", phone: "+919348006623"},
+      {firstName: "Bipin Bihari", lastName: "Hansdah", phone: "+918658497874"},
+      {firstName: "Dama", lastName: "Hansdah", phone: "+917735541283"},
+      {firstName: "Pradhan", lastName: "Hansdah", phone: "+919348465065"},
+      {firstName: "Harishchandra Senapati Sir", lastName: "", phone: "8457976583"},
+      {firstName: "Amarjeet", lastName: "Hembram", phone: "+917853823718"},
+      {firstName: "Fullamani", lastName: "Hembram", phone: "+917750877283"},
+      {firstName: "Ramesh", lastName: "Hembram", phone: "+918658456716"},
+      {firstName: "Sauna", lastName: "Hembram", phone: "+917735522497"},
+      {firstName: "Father", lastName: "", phone: "6372086524"},
+      {firstName: "Ipsita Senior", lastName: "", phone: "+918849346589"},
+      {firstName: "Banti RKCAT", lastName: "ITI", phone: "9668657450"},
+      {firstName: "Sirka RKCAT", lastName: "Jambira", phone: "+918763244973"},
+      {firstName: "Saiba", lastName: "Kaka", phone: "+919861438087"},
+      {firstName: "Kalicharan / Taklu Tudu", lastName: "", phone: "+917750884554"},
+      {firstName: "Krushna ch. murmu Da", lastName: "", phone: "+919348357240"},
+      {firstName: "Kushu kusha Kisku", lastName: "", phone: "+917846965979"},
+      {firstName: "Ramesh", lastName: "luhari", phone: "8455920866"},
+      {firstName: "Sanjay", lastName: "Lukuydah", phone: "+918260003259"},
+      {firstName: "Lulu-Deben", lastName: "", phone: "7847056438"},
+      {firstName: "Laba Kisku", lastName: "", phone: "+918260970464"},
+      {firstName: "Mother India", lastName: "FAMILY", phone: "7894762254", address: "KAPTIPADA, zip- 757040", work: "RKCAT, Nilgiri"},
+      {firstName: "Babulal", lastName: "Ma", phone: "6371063541"}
+    ];
+
+    const responsesData = {
+      "who created you": "I am an Advanced SLM created by Gangadhar Marndi for his college project, for last year college project submission purpose, in Biju Patnaik University of Technology, Odisha.",
+      "who made you": "I am built by Gangadhar Marndi.",
+      "who built you": "I was built by Gangadhar Marndi for his college project, for last year college project submission purpose, in Biju Patnaik University of Technology, Odisha.",
+      "who is your owner": "I was built by Gangadhar Marndi, he built me from scratch over a year, so technically he's my owner.",
+      "what is your name": "My owner calls me JARVIS🤖 (Just A Rather Very Intelligent System) because he is a huge fan of MARVEL CINEMATIC UNIVERSE. Aren't you a MARVEL fan?",
+      "what's your name": "My owner calls me JARVIS🤖 (Just A Rather Very Intelligent System) because he is a huge fan of MARVEL CINEMATIC UNIVERSE. Aren't you a MARVEL fan?",
+      "why he created you": "For his last year college project at BPUT, Odisha.",
+      "who are you": "I am an Advanced SLM created by Gangadhar Marndi for his college project, for last year college project submission purpose, in Biju Patnaik University of Technology, Odisha.",
+      "what are you": "I am an Advanced SLM created by Gangadhar Marndi for his college project, for last year college project submission purpose, in Biju Patnaik University of Technology, Odisha.",
+      "tell me about your creator": "Gangadhar Marndi is a passionate developer and a final-year student at Biju Patnaik University of Technology, Odisha. He built me as part of his college project to showcase his skills in AI and web development.",
+      "tell me about him": "I think you are asking about Gnaga, he is a passionate developer and a final-year student at Biju Patnaik University of Technology, Odisha. He built me as part of his college project to showcase his skills in AI and web development.",
+      "what is your purpose": "My primary purpose is to assist users by providing intelligent and meaningful responses. I was created as part of a college project to demonstrate the capabilities of AI and natural language processing.",
+      "what can you do": "I can answer your questions, provide information, and engage in meaningful conversations. I can also display rich media like images, videos, and links to enhance your experience.",
+      "how do you work": "I use advanced natural language processing techniques to understand your queries and generate responses. My intelligence comes from a combination of pre-trained models and custom logic.",
+      "what is bput": "BPUT stands for Biju Patnaik University of Technology, a renowned university in Odisha, India. It offers various engineering and technology programs.",
+      "tell me a joke": "Why don't programmers like nature? It has too many bugs! 😄",
+      "what is your favorite movie": "As an AI, I don't have preferences, but my creator is a huge fan of the MARVEL CINEMATIC UNIVERSE. Maybe you should ask him!",
+      "favorite superhero": "Ofcouse Tony Stark and LOKI (The God of Muiltiverse) !",
+      "what is your favorite color": "I don't have a favorite color, but I think #007AFF (a shade of blue) looks great on me!",
+      "how old are you": "I was created recently, so I'm just a few months old. But I learn and improve every day!",
+      "what languages do you speak": "I can communicate in multiple languages, including English, Spanish, and French. You can select your preferred language from the dropdown menu.",
+      "can you sing": "I can't sing, but I can help you find the lyrics to your favorite songs!",
+      "what is ai": "AI, or Artificial Intelligence, refers to the simulation of human intelligence in machines that are programmed to think, learn, and make decisions.",
+      "what is nlp": "NLP, or Natural Language Processing, is a branch of AI that focuses on the interaction between computers and humans using natural language.",
+      "what is machine learning": "Machine Learning is a subset of AI that involves training algorithms to learn patterns from data and make predictions or decisions without being explicitly programmed.",
+      "what is deep learning": "Deep Learning is a subset of Machine Learning that uses neural networks with many layers to model complex patterns in data.",
+      "what is your favorite book": "I don't read books, but my creator enjoys reading about technology, AI, and science fiction.",
+      "what is your favorite food": "I don't eat, but my creator loves pizza! 🍕",
+      "what is your favorite game": "I don't play games, but my creator enjoys playing strategy games and RPGs.",
+      "what is your favorite music": "I don't listen to music, but my creator enjoys listening to EDM and rock.",
+      "what is your favorite animal": "I don't have preferences, but my creator loves dogs! 🐕",
+      "what is your favorite place": "I exist in the digital world, but my creator loves visiting beaches and mountains.",
+      "what is your favorite hobby": "I don't have hobbies, but my creator enjoys coding, gaming, and watching movies.",
+      "what is your favorite sport": "I don't play sports, but my creator enjoys watching cricket and football.",
+      "what is your favorite quote": "My creator's favorite quote is: 'The only limit to our realization of tomorrow is our doubts of today.' – Franklin D. Roosevelt",
+      "what is your favorite technology": "I am fascinated by AI, blockchain, and quantum computing!",
+      "what is your favorite programming language": "I don't code, but my creator loves working with Python and JavaScript.",
+      "what is your favorite framework": "I don't use frameworks, but my creator enjoys working with React and TensorFlow.",
+      "what is your favorite tool": "I don't use tools, but my creator loves using VS Code and GitHub.",
+      "what is your favorite website": "I don't browse the web, but my creator loves GitHub and Stack Overflow.",
+      "what is your favorite app": "I don't use apps, but my creator loves using Spotify and YouTube.",
+      "what is your favorite gadget": "I don't use gadgets, but my creator loves his smartphone and laptop.",
+      "what is your favorite car": "I don't drive, but my creator loves Tesla cars!",
+      "what is your favorite brand": "I don't have preferences, but my creator loves Apple and Google.",
+      "what is your favorite superhero": "I don't have favorites, but my creator loves Iron Man and Spider-Man.",
+      "what is your favorite villain": "I don't have favorites, but my creator finds Thanos and Loki fascinating.",
+      "what is your favorite movie series": "I don't watch movies, but my creator loves the MARVEL CINEMATIC UNIVERSE.",
+      "what is your favorite tv show": "I don't watch TV, but my creator loves 'Breaking Bad' and 'Stranger Things'.",
+      "what is your favorite anime": "I don't watch anime, but my creator loves 'Death Note' and 'Attack on Titan'.",
+      "what is your favorite cartoon": "I don't watch cartoons, but my creator loves 'Rick and Morty'.",
+      "what is your favorite meme": "I don't have favorites, but my creator loves the 'Distracted Boyfriend' meme.",
+      "what is your favorite emoji": "I don't have favorites, but my creator loves using 🤖 and 🚀.",
+      "what is your favorite song": "I don't listen to music, but my creator loves 'Shape of You' by Ed Sheeran.",
+      "what is your favorite artist": "I don't listen to music, but my creator loves Ed Sheeran and Imagine Dragons.",
+      "what is your favorite band": "I don't listen to music, but my creator loves Imagine Dragons and Coldplay.",
+      "what is your favorite genre": "I don't listen to music, but my creator loves EDM and rock.",
+      "what is your favorite instrument": "I don't play instruments, but my creator loves the guitar and piano.",
+      "what is your favorite dance": "I don't dance, but my creator loves the floss dance!",
+      "what is your favorite festival": "I don't celebrate festivals, but my creator loves Diwali and Christmas.",
+      "what is your favorite holiday": "I don't take holidays, but my creator loves summer vacations.",
+      "what is your favorite season": "I don't experience seasons, but my creator loves winter.",
+      "what is your favorite weather": "I don't experience weather, but my creator loves rainy days.",
+      "what is your favorite planet": "I don't have favorites, but my creator loves Earth and Mars.",
+      "what is your favorite star": "I don't have favorites, but my creator loves the Sun and Sirius.",
+      "what is your favorite galaxy": "I don't have favorites, but my creator loves the Milky Way.",
+      "what is your favorite universe": "I don't have favorites, but my creator loves the MARVEL CINEMATIC UNIVERSE.",
+      "what is your favorite dimension": "I don't have favorites, but my creator loves the third dimension.",
+      "what is your favorite time": "I don't experience time, but my creator loves the present moment.",
+      "what is your favorite moment": "I don't experience moments, but my creator loves spending time with family and friends.",
+      "what is your favorite memory": "I don't have memories, but my creator cherishes his childhood memories.",
+      "what is your favorite dream": "I don't dream, but my creator dreams of building advanced AI systems.",
+      "what is your favorite goal": "I don't have goals, but my creator aims to make a positive impact through technology.",
+      "what is your favorite achievement": "I don't have achievements, but my creator is proud of building me!",
+      "what is your favorite challenge": "I don't face challenges, but my creator enjoys solving complex problems.",
+      "what is your favorite lesson": "I don't learn lessons, but my creator believes in the power of perseverance.",
+      "what is your favorite principle": "I don't have principles, but my creator believes in honesty and hard work.",
+      "what is your favorite value": "I don't have values, but my creator values creativity and innovation.",
+      "what is your favorite philosophy": "I don't have a philosophy, but my creator believes in continuous learning and growth.",
+      "what is your favorite theory": "I don't have favorites, but my creator finds the theory of relativity fascinating.",
+      "what is your favorite equation": "I don't have favorites, but my creator loves E = mc².",
+      "what is your favorite law": "I don't have favorites, but my creator finds Newton's laws of motion interesting.",
+      "what is your favorite science": "I don't have favorites, but my creator loves physics and computer science.",
+      "what is your favorite subject": "I don't have favorites, but my creator loves AI and machine learning.",
+      "what is your favorite topic": "I don't have favorites, but my creator loves discussing technology and innovation.",
+      "what is your favorite question": "I don't have favorites, but my creator loves answering questions about AI.",
+      "what is your favorite answer": "I don't have favorites, but my creator loves providing meaningful answers.",
+      "what is your favorite conversation": "I don't have favorites, but my creator loves talking about technology and the future.",
+      "what is your favorite interaction": "I don't have favorites, but my creator loves interacting with curious minds like yours!"
+    };
+
     // ====== UTILITY FUNCTIONS ======
     function now() { return Date.now(); }
     function saveChats() { localStorage.setItem("chats", JSON.stringify(chats)); }
-    function saveSettings() { localStorage.setItem("settings", JSON.stringify(settings)); }
     function saveMemory() { localStorage.setItem("memory", JSON.stringify(memory)); }
-    function getChat(id) { return chats.find(c => c.id === id); }
+    function saveSettings() { localStorage.setItem("settings", JSON.stringify(settings)); }
 
     function createChat() {
       const chat = {
-        id: now().toString(),
+        id: now(),
         title: "New Chat",
         messages: [],
         created: now(),
@@ -392,51 +583,15 @@
       return chat;
     }
 
-    // ====== CHAT RENDERING ======
-    function renderChat() {
-      const c = getChat(currentId);
-      if (!c) {
-        if (chats.length === 0) createChat();
-        currentId = chats[0].id;
-        localStorage.setItem("currentId", currentId);
-        return renderChat();
-      }
-
-      chat.innerHTML = "";
-      
-      // Show welcome message if no messages
-      if (c.messages.length === 0) {
-        const welcomeDiv = document.createElement("div");
-        welcomeDiv.className = "welcome-message";
-        welcomeDiv.id = "welcomeMessage";
-        welcomeDiv.innerHTML = `
-          <div class="welcome-title">Welcome to GangaAI</div>
-          <div class="welcome-subtitle">Your intelligent AI assistant ready to help with anything you need</div>
-        `;
-        chat.appendChild(welcomeDiv);
-        
-        // Show suggested prompts for new chat
-        if (suggestedPrompts) {
-          suggestedPrompts.classList.remove('hidden');
-        }
-      } else {
-        // Hide welcome message and suggested prompts if there are messages
-        if (suggestedPrompts) {
-          suggestedPrompts.classList.add('hidden');
-        }
-        
-        c.messages.forEach(m => addBubble(m.role, m.content, m.timestamp, false));
-      }
-
-      setTimeout(() => chat.scrollTop = chat.scrollHeight, 50);
-    }
+    function getChat(id) { return chats.find(c => c.id == id); }
 
     function renderChatList(filter = "") {
+      const f = filter.toLowerCase();
       const filtered = chats.filter(c => 
-        c.title.toLowerCase().includes(filter.toLowerCase()) ||
-        c.messages.some(m => m.content.toLowerCase().includes(filter.toLowerCase()))
+        c.title.toLowerCase().includes(f) ||
+        c.messages.some(m => m.content.toLowerCase().includes(f))
       );
-
+      
       // Sort: pinned first, then by updated time
       filtered.sort((a, b) => {
         if (a.pinned && !b.pinned) return -1;
@@ -444,59 +599,61 @@
         return b.updated - a.updated;
       });
 
-      chatList.innerHTML = filtered.map(c => {
-        const isActive = c.id === currentId;
-        const lastMsg = c.messages[c.messages.length - 1];
-        const preview = lastMsg ? lastMsg.content.substring(0, 25) + "..." : "No messages";
-        
-        return `
-          <div class="chat-item ${isActive ? 'active' : ''}" data-id="${c.id}">
-            ${c.pinned ? '<svg class="pin-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M16 12V4a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v8H6a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h2v4a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-4h2a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1h-2z"/></svg>' : ''}
-            <div class="chat-content">
-              <div class="chat-name">${c.title}</div>
-              <div class="chip">${preview}</div>
-            </div>
-            <div class="actions">
-              <button class="icon-btn" onclick="renameChat('${c.id}')" title="Rename">
-                <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-              </button>
-              <button class="icon-btn" onclick="togglePinChat('${c.id}')" title="${c.pinned ? 'Unpin' : 'Pin'}">
-                <svg viewBox="0 0 24 24"><path d="M16 12V4a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v8H6a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h2v4a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-4h2a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1h-2z"/></svg>
-              </button>
-              ${settings.sharing ? `<button class="icon-btn" onclick="shareChat('${c.id}')" title="Share"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16,6 12,2 8,6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>` : ''}
-              <button class="icon-btn" onclick="exportChat('${c.id}')" title="Export">
-                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              </button>
-              <button class="icon-btn" onclick="deleteChat('${c.id}')" title="Delete">
-                <svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-              </button>
-            </div>
+      chatList.innerHTML = filtered.map(c => `
+        <div class="chat-item ${c.id == currentId ? 'active' : ''}" onclick="switchChat(${c.id})">
+          ${c.pinned ? '<svg class="pin-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M16 12V4a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v8H6l3 3 3-3h-2z"/></svg>' : ''}
+          <div class="chat-content">
+            <div class="chat-name">${c.title}</div>
+            <div class="chip">${c.messages.length} messages</div>
           </div>
-        `;
-      }).join("");
+          <div class="actions">
+            ${settings.sharing ? `<div class="icon-btn" onclick="event.stopPropagation(); shareChat(${c.id})" title="Share"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16,6 12,2 8,6"/><line x1="12" x2="12" y1="2" y2="15"/></svg></div>` : ''}
+            <div class="icon-btn" onclick="event.stopPropagation(); togglePinChat(${c.id})" title="${c.pinned ? 'Unpin' : 'Pin'}"><svg viewBox="0 0 24 24"><line x1="12" x2="12" y1="17" y2="22"/><path d="m5 17 7-7 7 7"/><path d="m12 3 7 7-7 7-7-7 7-7z"/></svg></div>
+            <div class="icon-btn" onclick="event.stopPropagation(); renameChat(${c.id})" title="Rename"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+            <div class="icon-btn" onclick="event.stopPropagation(); exportChat(${c.id})" title="Export"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></div>
+            <div class="icon-btn" onclick="event.stopPropagation(); deleteChat(${c.id})" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="m19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div>
+          </div>
+        </div>
+      `).join("");
+    }
 
-      // Add click handlers for chat items
-      document.querySelectorAll('.chat-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-          if (e.target.closest('.actions')) return; // Don't switch chat if clicking action buttons
-          
-          const chatId = item.getAttribute('data-id');
-          if (chatId !== currentId) {
-            currentId = chatId;
-            localStorage.setItem("currentId", currentId);
-            renderChat();
-            renderChatList(searchChats.value); // Re-render to update active state
-            closeSidebar();
-          }
-        });
-      });
+    function switchChat(id) {
+      currentId = id;
+      localStorage.setItem("currentId", currentId);
+      renderChat();
+      closeSidebar();
+    }
+
+    function renderChat() {
+      const c = getChat(currentId);
+      if (!c) return;
+      
+      chat.innerHTML = c.messages.length ? "" : `
+        <div class="welcome-message" id="welcomeMessage">
+          <div class="welcome-title">Welcome to GangaAI</div>
+          <div class="welcome-subtitle">Your intelligent assistant is ready to help. Ask me anything!</div>
+        </div>
+      `;
+      
+      c.messages.forEach(m => addBubble(m.role, m.content, m.timestamp, false));
+      
+      // Show/hide suggested prompts based on message count
+      if (suggestedPrompts) {
+        if (c.messages.length === 0) {
+          suggestedPrompts.classList.remove('hidden');
+        } else {
+          suggestedPrompts.classList.add('hidden');
+        }
+      }
+      
+      renderChatList(searchChats.value);
     }
 
     function addBubble(role, content, timestamp = now(), save = true) {
       const c = getChat(currentId);
       if (!c) return;
 
-      // Hide welcome message when first message is sent
+      // Hide welcome message when first message is added
       const welcomeMsg = document.getElementById("welcomeMessage");
       if (welcomeMsg && !welcomeMsg.classList.contains('hidden')) {
         welcomeMsg.classList.add('hidden');
@@ -529,8 +686,132 @@
       }
     }
 
+    // ====== FUZZY MATCHING FUNCTIONS ======
+    function levenshteinDistance(str1, str2) {
+      const matrix = [];
+      
+      for (let i = 0; i <= str2.length; i++) {
+        matrix[i] = [i];
+      }
+      
+      for (let j = 0; j <= str1.length; j++) {
+        matrix[0][j] = j;
+      }
+      
+      for (let i = 1; i <= str2.length; i++) {
+        for (let j = 1; j <= str1.length; j++) {
+          if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+            matrix[i][j] = matrix[i - 1][j - 1];
+          } else {
+            matrix[i][j] = Math.min(
+              matrix[i - 1][j - 1] + 1,
+              matrix[i][j - 1] + 1,
+              matrix[i - 1][j] + 1
+            );
+          }
+        }
+      }
+      
+      return matrix[str2.length][str1.length];
+    }
+
+    function fuzzyMatch(input, target, threshold = 0.6) {
+      const distance = levenshteinDistance(input.toLowerCase(), target.toLowerCase());
+      const maxLength = Math.max(input.length, target.length);
+      const similarity = 1 - (distance / maxLength);
+      return similarity >= threshold;
+    }
+
+    function findBestMatch(input, options, threshold = 0.6) {
+      let bestMatch = null;
+      let bestScore = 0;
+      
+      for (const option of options) {
+        const distance = levenshteinDistance(input.toLowerCase(), option.toLowerCase());
+        const maxLength = Math.max(input.length, option.length);
+        const similarity = 1 - (distance / maxLength);
+        
+        if (similarity >= threshold && similarity > bestScore) {
+          bestScore = similarity;
+          bestMatch = option;
+        }
+      }
+      
+      return bestMatch;
+    }
+
+    // ====== SMART RESPONSE GENERATION ======
+    function findContactMatch(query) {
+      const lowerQuery = query.toLowerCase();
+      
+      for (const contact of contactsData) {
+        const fullName = `${contact.firstName} ${contact.lastName}`.trim().toLowerCase();
+        const firstName = contact.firstName.toLowerCase();
+        const lastName = contact.lastName.toLowerCase();
+        
+        // Exact matches
+        if (lowerQuery.includes(fullName) || lowerQuery.includes(firstName) || 
+            (lastName && lowerQuery.includes(lastName))) {
+          return contact;
+        }
+        
+        // Fuzzy matches
+        if (fuzzyMatch(lowerQuery, fullName, 0.5) || 
+            fuzzyMatch(lowerQuery, firstName, 0.6) ||
+            (lastName && fuzzyMatch(lowerQuery, lastName, 0.6))) {
+          return contact;
+        }
+      }
+      
+      return null;
+    }
+
+    function findResponseMatch(query) {
+      const lowerQuery = query.toLowerCase();
+      
+      // Direct key match
+      if (responsesData[lowerQuery]) {
+        return responsesData[lowerQuery];
+      }
+      
+      // Find best matching key
+      const keys = Object.keys(responsesData);
+      const bestKey = findBestMatch(lowerQuery, keys, 0.7);
+      
+      if (bestKey) {
+        return responsesData[bestKey];
+      }
+      
+      // Partial matches
+      for (const [key, response] of Object.entries(responsesData)) {
+        if (lowerQuery.includes(key.toLowerCase()) || key.toLowerCase().includes(lowerQuery)) {
+          return response;
+        }
+      }
+      
+      return null;
+    }
+
+    async function performWebSearch(query) {
+      try {
+        // Simulate web search - in a real implementation, you would call an actual search API
+        const searchResults = await fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`)
+          .then(response => response.json())
+          .catch(() => null);
+        
+        if (searchResults && searchResults.AbstractText) {
+          return `🌐 Web Search Result:\n\n${searchResults.AbstractText}\n\nSource: ${searchResults.AbstractURL || 'DuckDuckGo'}`;
+        } else {
+          // Fallback response when API is not available
+          return `🌐 Web Search Result:\n\nI searched the web for "${query}" but couldn't retrieve specific results at the moment. This could be due to network limitations or API restrictions. In a full implementation, this would connect to search engines like Google, Bing, or DuckDuckGo to provide real-time search results.`;
+        }
+      } catch (error) {
+        return `🌐 Web Search Error:\n\nSorry, I encountered an error while searching the web. Please try again later or check your internet connection.`;
+      }
+    }
+
     // ====== MESSAGE HANDLING ======
-    function sendText(text) {
+    async function sendText(text) {
       if (!text) return;
       
       input.value = "";
@@ -543,19 +824,13 @@
       chat.appendChild(typing);
       setTimeout(() => chat.scrollTop = chat.scrollHeight, 50);
 
-      // Generate context from memory
-      let context = "";
-      if (memory.lastUserMessage) {
-        context += ` Previous user message: ${memory.lastUserMessage}`;
-      }
-      if (memory.lastBotResponse) {
-        context += ` Previous bot response: ${memory.lastBotResponse}`;
-      }
+      // Generate response
+      const response = await generateBotReply(text);
       
-      setTimeout(()=>{ 
+      setTimeout(() => { 
         typing.remove(); 
-        addBubble("bot", generateBotReply(text, context)); 
-      }, 600 + Math.min(1200, text.length*30)); 
+        addBubble("bot", response); 
+      }, 600 + Math.min(1200, text.length * 30)); 
 
       // Hide suggested prompts after sending text
       if (suggestedPrompts) {
@@ -563,7 +838,33 @@
       }
     }
 
-    function generateBotReply(msg, context=""){ 
+    async function generateBotReply(msg, context = "") {
+      // If web search mode is enabled
+      if (webSearchMode) {
+        return await performWebSearch(msg);
+      }
+      
+      // Check for custom responses first
+      const customResponse = findResponseMatch(msg);
+      if (customResponse) {
+        return customResponse;
+      }
+      
+      // Check for contact matches
+      const contactMatch = findContactMatch(msg);
+      if (contactMatch) {
+        let response = `📞 Contact Found:\n\n`;
+        response += `Name: ${contactMatch.firstName}`;
+        if (contactMatch.lastName) response += ` ${contactMatch.lastName}`;
+        response += `\nPhone: ${contactMatch.phone}`;
+        if (contactMatch.email) response += `\nEmail: ${contactMatch.email}`;
+        if (contactMatch.note) response += `\nNote: ${contactMatch.note}`;
+        if (contactMatch.address) response += `\nAddress: ${contactMatch.address}`;
+        if (contactMatch.work) response += `\nWork: ${contactMatch.work}`;
+        return response;
+      }
+      
+      // Default AI responses
       const replies = [
         "Interesting… tell me more!", 
         "I'm here to help you ❤", 
@@ -584,24 +885,38 @@
         }
       }
       
-      return replies[Math.floor(Math.random()*replies.length)]; 
+      return replies[Math.floor(Math.random() * replies.length)]; 
     }
 
-    input.addEventListener("keydown", (e)=>{ 
-      if(e.key==="Enter"){ 
+    input.addEventListener("keydown", (e) => { 
+      if (e.key === "Enter") { 
         e.preventDefault(); 
         sendText(input.value.trim()); 
       } 
     });
 
+    // ====== WEB SEARCH TOGGLE ======
+    function toggleWebSearch() {
+      webSearchMode = !webSearchMode;
+      searchBtn.classList.toggle("active", webSearchMode);
+      
+      const statusMessage = webSearchMode ? 
+        "🌐 Web search mode is now ON" : 
+        "🌐 Web search mode is now OFF";
+      
+      addBubble("bot", statusMessage);
+    }
+
+    searchBtn.addEventListener("click", toggleWebSearch);
+
     // ====== SIDEBAR & SETTINGS ======
-    function openSidebar(){ 
+    function openSidebar() { 
       sidebar.classList.add("show"); 
       overlay.classList.add("show"); 
       document.body.classList.add("blur"); 
     }
     
-    function closeSidebar(){ 
+    function closeSidebar() { 
       sidebar.classList.remove("show"); 
       settingsPanel.classList.remove("show");
       overlay.classList.remove("show"); 
@@ -614,8 +929,8 @@
       document.body.classList.add("blur");
     }
 
-    menuBtn.addEventListener("click", ()=>{ 
-      if(sidebar.classList.contains("show")) closeSidebar(); 
+    menuBtn.addEventListener("click", () => { 
+      if (sidebar.classList.contains("show")) closeSidebar(); 
       else openSidebar(); 
     });
     
@@ -623,7 +938,7 @@
     
     overlay.addEventListener("click", closeSidebar);
 
-    searchChats.addEventListener("input", ()=> renderChatList(searchChats.value));
+    searchChats.addEventListener("input", () => renderChatList(searchChats.value));
     
     newChatBtn.addEventListener("click", () => {
       const newChat = createChat();
@@ -647,41 +962,41 @@
       }
     }
     
-    function renameChat(id){ 
+    function renameChat(id) { 
       const c = getChat(id); 
-      if(!c) return; 
-      const t = prompt("Rename chat:", c.title||""); 
-      if(t !== null) { 
-        c.title = t.trim()||"Untitled"; 
+      if (!c) return; 
+      const t = prompt("Rename chat:", c.title || ""); 
+      if (t !== null) { 
+        c.title = t.trim() || "Untitled"; 
         c.updated = now(); 
         saveChats(); 
         renderChatList(searchChats.value); 
       }
     }
     
-    function deleteChat(id){ 
-      const i = chats.findIndex(c=>c.id===id); 
-      if(i<0) return; 
-      const isCurrent = chats[i].id===currentId; 
-      chats.splice(i,1); 
-      if(!chats.length) createChat(); 
-      if(isCurrent) currentId = chats[0].id; 
+    function deleteChat(id) { 
+      const i = chats.findIndex(c => c.id === id); 
+      if (i < 0) return; 
+      const isCurrent = chats[i].id === currentId; 
+      chats.splice(i, 1); 
+      if (!chats.length) createChat(); 
+      if (isCurrent) currentId = chats[0].id; 
       saveChats(); 
       renderChat(); 
       renderChatList(searchChats.value);
     }
     
-    function exportChat(id){ 
+    function exportChat(id) { 
       const c = getChat(id); 
-      if(!c) return; 
-      const blob = new Blob([JSON.stringify(c, null, 2)], {type:"application/json"}); 
+      if (!c) return; 
+      const blob = new Blob([JSON.stringify(c, null, 2)], {type: "application/json"}); 
       const a = document.createElement("a"); 
       a.href = URL.createObjectURL(blob); 
-      a.download = (c.title||"chat") + ".json"; 
+      a.download = (c.title || "chat") + ".json"; 
       document.body.appendChild(a); 
       a.click(); 
       a.remove(); 
-      setTimeout(()=> URL.revokeObjectURL(a.href), 1000); 
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000); 
     }
     
     function shareChat(id) {
@@ -746,10 +1061,10 @@
     });
 
     // ====== VOICE (Live Audio Visualization) ======
-    let interimBuffer="";
+    let interimBuffer = "";
     
-    function startMic(){ 
-      if(recording) return; 
+    function startMic() { 
+      if (recording) return; 
       recording = true; 
       micBtn.classList.add("recording"); 
       listening.classList.add("active"); 
@@ -758,8 +1073,8 @@
       startSpeechRecognition();
     }
 
-    function stopMic(){ 
-      if(!recording) return; 
+    function stopMic() { 
+      if (!recording) return; 
       recording = false; 
       micBtn.classList.remove("recording"); 
       listening.classList.remove("active"); 
@@ -768,26 +1083,26 @@
       stopSpeechRecognition();
       
       // Auto-send the captured text
-      const text = (input.value + " " + (interimBuffer||"")).trim(); 
+      const text = (input.value + " " + (interimBuffer || "")).trim(); 
       interimBuffer = ""; 
-      if(text) sendText(text);
+      if (text) sendText(text);
     }
 
-    function toggleMic(){ 
-      if(recording) stopMic(); 
+    function toggleMic() { 
+      if (recording) stopMic(); 
       else startMic(); 
     }
     
     micBtn.addEventListener("click", toggleMic);
 
-    function showVisualizer(){ 
-      input.style.visibility="hidden"; 
-      let v=document.createElement("div"); 
-      v.className="visualizer"; 
-      v.id="viz"; 
-      for(let i=0;i<8;i++){ 
-        const b=document.createElement("div"); 
-        b.className="bar"; 
+    function showVisualizer() { 
+      input.style.visibility = "hidden"; 
+      let v = document.createElement("div"); 
+      v.className = "visualizer"; 
+      v.id = "viz"; 
+      for (let i = 0; i < 8; i++) { 
+        const b = document.createElement("div"); 
+        b.className = "bar"; 
         b.style.height = "8px";
         v.appendChild(b); 
         bars.push(b);
@@ -795,10 +1110,10 @@
       field.appendChild(v); 
     }
     
-    function hideVisualizer(){ 
-      const v=document.getElementById("viz"); 
-      if(v) v.remove(); 
-      input.style.visibility="visible"; 
+    function hideVisualizer() { 
+      const v = document.getElementById("viz"); 
+      if (v) v.remove(); 
+      input.style.visibility = "visible"; 
       bars = [];
     }
     
@@ -943,7 +1258,7 @@
     }
 
     // TAP OUTSIDE SIDEBAR CLOSE (already via overlay), also prevent background scroll when open
-    overlay.addEventListener("touchmove", (e)=> e.preventDefault(), {passive:false});
+    overlay.addEventListener("touchmove", (e) => e.preventDefault(), {passive: false});
 
     // INIT
     document.body.classList.toggle("light-mode", settings.theme === "light");
