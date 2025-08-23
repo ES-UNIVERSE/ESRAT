@@ -827,13 +827,13 @@
           .catch(() => null);
         
         if (searchResults && searchResults.AbstractText) {
-          return `🌐 Web Search Result:\n\n${searchResults.AbstractText}\n\nSource: ${searchResults.AbstractURL || 'DuckDuckGo'}`;
+          return `${searchResults.AbstractText}`;
         } else {
           // Fallback response when API is not available
-          return `🌐 Web Search Result:\n\nI searched the web for "${query}" but couldn't retrieve specific results at the moment. This could be due to network limitations or API restrictions. In a full implementation, this would connect to search engines like Google, Bing, or DuckDuckGo to provide real-time search results.`;
+          return `I searched the web for "${query}" but couldn't retrieve specific results at the moment. This could be due to network limitations or API restrictions. In a full implementation, this would connect to search engines like Google, Bing, or DuckDuckGo to provide real-time search results.`;
         }
       } catch (error) {
-        return `🌐 Web Search Error:\n\nSorry, I encountered an error while searching the web. Please try again later or check your internet connection.`;
+        return `Sorry, I encountered an error while searching the web. Please try again later or check your internet connection.`;
       }
     }
 
@@ -928,8 +928,8 @@
       searchBtn.classList.toggle("active", webSearchMode);
       
       const statusMessage = webSearchMode ? 
-        "Now you can fetch from internet:" : 
-        "Internet fetching is now OFF.";
+        "Short reply mode enabled:" : 
+        "Ended.";
       
       addBubble("bot", statusMessage);
     }
