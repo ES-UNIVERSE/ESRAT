@@ -58,18 +58,20 @@
             position: fixed;
             top: 0;
             left: 0;
-            /* Deep Sea Gradient - Light at top, dark at bottom */
+            /* Darker Deep Sea Gradient - Much darker from middle to bottom */
             background: linear-gradient(180deg, 
                 #4A90E2 0%,     /* Light blue at top */
-                #357ABD 25%,    /* Medium blue */
-                #2C5F99 50%,    /* Deeper blue */
-                #1E3A5F 75%,    /* Dark blue */
-                #0B1426 100%    /* Deep dark at bottom */
+                #357ABD 20%,    /* Medium blue */
+                #2C5F99 35%,    /* Transition point - earlier */
+                #1E3A5F 50%,    /* Dark blue */
+                #0F1F3A 65%,    /* Darker */
+                #0B1426 80%,    /* Very dark */
+                #050A15 100%    /* Almost black at bottom */
             );
         }
 
-        /* Animated deep sea particles */
-        .deep-sea-particles {
+        /* Enhanced underwater ecosystem */
+        .underwater-world {
             position: absolute;
             top: 0;
             left: 0;
@@ -79,84 +81,251 @@
             z-index: 1;
         }
 
-        .sea-particle {
+        /* Bubbles */
+        .bubble {
             position: absolute;
-            background: rgba(255, 255, 255, 0.1);
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.3));
             border-radius: 50%;
-            animation: seaFloat 8s ease-in-out infinite;
+            animation: bubbleFloat 6s ease-in-out infinite;
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3);
         }
 
-        .sea-particle:nth-child(1) {
-            width: 4px;
-            height: 4px;
-            left: 15%;
-            animation-delay: 0s;
-        }
+        .bubble:nth-child(1) { width: 8px; height: 8px; left: 10%; animation-delay: 0s; animation-duration: 8s; }
+        .bubble:nth-child(2) { width: 12px; height: 12px; left: 20%; animation-delay: 1s; animation-duration: 7s; }
+        .bubble:nth-child(3) { width: 6px; height: 6px; left: 30%; animation-delay: 2s; animation-duration: 9s; }
+        .bubble:nth-child(4) { width: 10px; height: 10px; left: 40%; animation-delay: 0.5s; animation-duration: 6s; }
+        .bubble:nth-child(5) { width: 14px; height: 14px; left: 50%; animation-delay: 3s; animation-duration: 8s; }
+        .bubble:nth-child(6) { width: 7px; height: 7px; left: 60%; animation-delay: 1.5s; animation-duration: 7s; }
+        .bubble:nth-child(7) { width: 9px; height: 9px; left: 70%; animation-delay: 2.5s; animation-duration: 6s; }
+        .bubble:nth-child(8) { width: 11px; height: 11px; left: 80%; animation-delay: 4s; animation-duration: 9s; }
+        .bubble:nth-child(9) { width: 5px; height: 5px; left: 90%; animation-delay: 3.5s; animation-duration: 7s; }
+        .bubble:nth-child(10) { width: 13px; height: 13px; left: 15%; animation-delay: 5s; animation-duration: 8s; }
 
-        .sea-particle:nth-child(2) {
-            width: 6px;
-            height: 6px;
-            left: 35%;
-            animation-delay: 2s;
-        }
-
-        .sea-particle:nth-child(3) {
-            width: 3px;
-            height: 3px;
-            left: 65%;
-            animation-delay: 4s;
-        }
-
-        .sea-particle:nth-child(4) {
-            width: 5px;
-            height: 5px;
-            left: 85%;
-            animation-delay: 1s;
-        }
-
-        .sea-particle:nth-child(5) {
-            width: 2px;
-            height: 2px;
-            left: 25%;
-            animation-delay: 3s;
-        }
-
-        .sea-particle:nth-child(6) {
-            width: 4px;
-            height: 4px;
-            left: 75%;
-            animation-delay: 5s;
-        }
-
-        @keyframes seaFloat {
+        @keyframes bubbleFloat {
             0% {
-                transform: translateY(100vh) rotate(0deg);
+                transform: translateY(100vh) scale(0);
                 opacity: 0;
             }
             10% {
-                opacity: 0.8;
+                opacity: 1;
+                transform: translateY(90vh) scale(1);
             }
             90% {
-                opacity: 0.8;
+                opacity: 1;
             }
             100% {
-                transform: translateY(-10vh) rotate(360deg);
+                transform: translateY(-10vh) scale(0.8);
                 opacity: 0;
             }
         }
 
-        /* Navbar */
+        /* Randomized Fish with different directions and levels */
+        .fish {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.7;
+        }
+
+        .fish:nth-child(11) { 
+            top: 15%; 
+            animation: fishSwimRight1 18s linear infinite;
+            color: #FFD700;
+            animation-delay: 0s;
+        }
+        .fish:nth-child(12) { 
+            top: 35%; 
+            animation: fishSwimLeft1 22s linear infinite;
+            color: #FF6B6B;
+            animation-delay: 7s;
+        }
+        .fish:nth-child(13) { 
+            top: 55%; 
+            animation: fishSwimRight2 15s linear infinite;
+            color: #4ECDC4;
+            animation-delay: 12s;
+        }
+        .fish:nth-child(14) { 
+            top: 75%; 
+            animation: fishSwimLeft2 25s linear infinite;
+            color: #45B7D1;
+            animation-delay: 4s;
+        }
+
+        /* Fish swimming right with random vertical movement */
+        @keyframes fishSwimRight1 {
+            0% {
+                left: -50px;
+                transform: scaleX(1) translateY(0px);
+            }
+            25% {
+                transform: scaleX(1) translateY(-30px);
+            }
+            50% {
+                transform: scaleX(1) translateY(20px);
+            }
+            75% {
+                transform: scaleX(1) translateY(-15px);
+            }
+            100% {
+                left: 100vw;
+                transform: scaleX(1) translateY(10px);
+            }
+        }
+
+        @keyframes fishSwimRight2 {
+            0% {
+                left: -50px;
+                transform: scaleX(1) translateY(0px);
+            }
+            20% {
+                transform: scaleX(1) translateY(25px);
+            }
+            60% {
+                transform: scaleX(1) translateY(-20px);
+            }
+            80% {
+                transform: scaleX(1) translateY(15px);
+            }
+            100% {
+                left: 100vw;
+                transform: scaleX(1) translateY(-10px);
+            }
+        }
+
+        /* Fish swimming left (backwards) with random vertical movement */
+        @keyframes fishSwimLeft1 {
+            0% {
+                right: -50px;
+                transform: scaleX(-1) translateY(0px);
+            }
+            30% {
+                transform: scaleX(-1) translateY(-25px);
+            }
+            70% {
+                transform: scaleX(-1) translateY(30px);
+            }
+            100% {
+                right: 100vw;
+                transform: scaleX(-1) translateY(-5px);
+            }
+        }
+
+        @keyframes fishSwimLeft2 {
+            0% {
+                right: -50px;
+                transform: scaleX(-1) translateY(0px);
+            }
+            40% {
+                transform: scaleX(-1) translateY(20px);
+            }
+            80% {
+                transform: scaleX(-1) translateY(-35px);
+            }
+            100% {
+                right: 100vw;
+                transform: scaleX(-1) translateY(15px);
+            }
+        }
+
+        /* Plankton/Water plants */
+        .plankton {
+            position: absolute;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to top, #2E8B57, #90EE90);
+            animation: planktonSway 4s ease-in-out infinite;
+            border-radius: 2px;
+        }
+
+        .plankton:nth-child(15) { left: 5%; height: 60px; animation-delay: 0s; }
+        .plankton:nth-child(16) { left: 15%; height: 80px; animation-delay: 1s; }
+        .plankton:nth-child(17) { left: 25%; height: 45px; animation-delay: 2s; }
+        .plankton:nth-child(18) { left: 35%; height: 70px; animation-delay: 0.5s; }
+        .plankton:nth-child(19) { left: 45%; height: 55px; animation-delay: 1.5s; }
+        .plankton:nth-child(20) { left: 55%; height: 85px; animation-delay: 2.5s; }
+        .plankton:nth-child(21) { left: 65%; height: 40px; animation-delay: 3s; }
+        .plankton:nth-child(22) { left: 75%; height: 65px; animation-delay: 0.8s; }
+        .plankton:nth-child(23) { left: 85%; height: 50px; animation-delay: 1.8s; }
+        .plankton:nth-child(24) { left: 95%; height: 75px; animation-delay: 2.8s; }
+
+        @keyframes planktonSway {
+            0%, 100% {
+                transform: rotate(-5deg);
+            }
+            50% {
+                transform: rotate(5deg);
+            }
+        }
+
+        /* Diver */
+        .diver {
+            position: absolute;
+            bottom: 10%;
+            font-size: 24px;
+            color: #FFD700;
+            animation: diverSwim 25s linear infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes diverSwim {
+            0% {
+                left: -50px;
+                transform: scaleX(1) rotate(0deg);
+            }
+            25% {
+                transform: scaleX(1) rotate(-10deg) translateY(-30px);
+            }
+            50% {
+                transform: scaleX(1) rotate(5deg) translateY(-10px);
+            }
+            75% {
+                transform: scaleX(1) rotate(-5deg) translateY(-20px);
+            }
+            100% {
+                left: 100vw;
+                transform: scaleX(1) rotate(0deg) translateY(0px);
+            }
+        }
+
+        /* Water level effects */
+        .water-surface {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 10%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 40% 30%, rgba(255, 255, 255, 0.06) 0%, transparent 50%);
+            animation: waterMovement 8s ease-in-out infinite;
+        }
+
+        @keyframes waterMovement {
+            0%, 100% {
+                transform: translateX(0px) translateY(0px);
+            }
+            25% {
+                transform: translateX(10px) translateY(-5px);
+            }
+            50% {
+                transform: translateX(-5px) translateY(5px);
+            }
+            75% {
+                transform: translateX(-10px) translateY(-3px);
+            }
+        }
+
+        /* Seamless navbar integration with logo matching GANGA text size */
         .navbar {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 1000;
-            padding: 15px 20px;
-            backdrop-filter: blur(15px);
-            background: rgba(74, 144, 226, 0.2);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            height: 80px;
+            padding: 20px 20px;
+            background: transparent;
+            height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -173,9 +342,10 @@
             line-height: 0;
         }
 
+        /* Logo size matching GANGA text (2.8rem = ~45px) */
         .logo img {
-            height: 50px;
-            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+            height: 45px;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3)) brightness(1.1);
             transition: transform 0.3s ease;
         }
 
@@ -194,13 +364,14 @@
             padding: 20px;
             z-index: 10;
             position: relative;
-            padding-top: 80px;
+            padding-top: 100px;
         }
 
-        /* Dynamic title */
+        /* Random bouncing letters for GANGA title */
         .title-container {
             text-align: center;
             margin-bottom: 40px;
+            position: relative;
         }
 
         #dynamic-text {
@@ -209,13 +380,14 @@
             color: #ffffff;
             text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
             margin-bottom: 10px;
+            position: relative;
         }
 
         .letter {
             display: inline-block;
             opacity: 0;
             transform: translate3d(0px, 30px, 0px) scale(0.8);
-            animation: animateText 1s forwards, glowPulse 4s infinite;
+            animation: animateText 1s forwards, randomBounce 3s ease-in-out infinite;
         }
 
         @keyframes animateText {
@@ -229,26 +401,45 @@
             }
         }
 
-        @keyframes glowPulse {
+        /* Random bounce animations for each letter */
+        @keyframes randomBounce {
             0%, 100% {
+                transform: translateY(0px);
                 text-shadow: 
                     0 0 15px rgba(255, 255, 255, 0.8),
                     0 0 30px rgba(74, 144, 226, 0.6);
             }
             50% {
+                transform: translateY(-8px);
                 text-shadow: 
                     0 0 25px rgba(255, 255, 255, 1),
                     0 0 50px rgba(74, 144, 226, 0.8);
             }
         }
 
-        .letter:nth-child(1) { animation-delay: 0s, 0s; }
-        .letter:nth-child(2) { animation-delay: 0.15s, 0.15s; }
-        .letter:nth-child(3) { animation-delay: 0.3s, 0.3s; }
-        .letter:nth-child(4) { animation-delay: 0.45s, 0.45s; }
-        .letter:nth-child(5) { animation-delay: 0.6s, 0.6s; }
+        /* Different bounce timings and delays for randomness */
+        .letter:nth-child(1) { 
+            animation-delay: 0s, 0.2s; 
+            animation-duration: 1s, 2.8s;
+        }
+        .letter:nth-child(2) { 
+            animation-delay: 0.15s, 1.1s; 
+            animation-duration: 1s, 3.5s;
+        }
+        .letter:nth-child(3) { 
+            animation-delay: 0.3s, 0.7s; 
+            animation-duration: 1s, 2.2s;
+        }
+        .letter:nth-child(4) { 
+            animation-delay: 0.45s, 1.8s; 
+            animation-duration: 1s, 4.1s;
+        }
+        .letter:nth-child(5) { 
+            animation-delay: 0.6s, 0.4s; 
+            animation-duration: 1s, 3.2s;
+        }
 
-        /* Login container with professional glassmorphism */
+        /* Login container with enhanced underwater feel */
         .container {
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(25px);
@@ -280,7 +471,7 @@
             100% { left: 100%; }
         }
 
-        /* Input fields with better mobile visibility */
+        /* Input fields */
         .input-group {
             position: relative;
             margin-bottom: 25px;
@@ -316,7 +507,7 @@
             cursor: not-allowed;
         }
 
-        /* Enhanced visible icons for mobile */
+        /* Enhanced visible icons */
         .input-icon {
             position: absolute;
             right: 16px;
@@ -342,7 +533,7 @@
             transform: translateY(-50%) scale(1.1);
         }
 
-        /* Professional submit button */
+        /* Submit button */
         #submit {
             width: 100%;
             padding: 16px;
@@ -399,7 +590,33 @@
             visibility: hidden;
         }
 
-        /* Professional social links */
+        /* Inspirational text */
+        .inspiration-text {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 16px;
+            font-weight: 500;
+            text-align: center;
+            z-index: 1000;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            animation: inspirationGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes inspirationGlow {
+            0%, 100% {
+                opacity: 0.8;
+                text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            }
+            50% {
+                opacity: 1;
+                text-shadow: 0 2px 15px rgba(74, 144, 226, 0.4);
+            }
+        }
+
+        /* Social links */
         .social-container {
             position: fixed;
             bottom: 30px;
@@ -503,16 +720,17 @@
                 height: 100vh;
                 height: -webkit-fill-available;
                 padding: 15px;
-                padding-top: 70px;
+                padding-top: 85px;
             }
 
             .navbar {
-                height: 70px;
-                padding: 10px 15px;
+                height: 85px;
+                padding: 15px 15px;
             }
 
+            /* Logo size matching GANGA text on iPhone 12 (2.2rem = ~35px) */
             .logo img {
-                height: 45px;
+                height: 35px;
             }
 
             #dynamic-text {
@@ -551,6 +769,11 @@
                 margin-top: 10px;
             }
 
+            .inspiration-text {
+                bottom: 100px;
+                font-size: 14px;
+            }
+
             .social-container {
                 bottom: 25px;
                 gap: 12px;
@@ -566,12 +789,13 @@
         /* General mobile optimizations */
         @media (max-width: 480px) {
             .navbar {
-                padding: 12px 15px;
-                height: 75px;
+                padding: 18px 15px;
+                height: 90px;
             }
 
+            /* Logo size matching GANGA text on mobile (2.4rem = ~38px) */
             .logo img {
-                height: 48px;
+                height: 38px;
             }
 
             #dynamic-text {
@@ -594,6 +818,11 @@
                 right: 14px;
             }
 
+            .inspiration-text {
+                bottom: 110px;
+                font-size: 15px;
+            }
+
             .social-container {
                 bottom: 28px;
             }
@@ -607,6 +836,16 @@
 
         /* Tablet optimizations */
         @media (min-width: 481px) and (max-width: 768px) {
+            .navbar {
+                height: 95px;
+                padding: 20px 20px;
+            }
+
+            /* Logo size matching GANGA text on tablet (3.2rem = ~51px) */
+            .logo img {
+                height: 51px;
+            }
+
             #dynamic-text {
                 font-size: 3.2rem;
             }
@@ -614,6 +853,27 @@
             .container {
                 max-width: 380px;
                 padding: 40px 30px;
+            }
+
+            .inspiration-text {
+                font-size: 17px;
+            }
+        }
+
+        /* Desktop optimizations */
+        @media (min-width: 769px) {
+            .navbar {
+                height: 100px;
+                padding: 20px 20px;
+            }
+
+            /* Logo size matching GANGA text on desktop (2.8rem = ~45px) */
+            .logo img {
+                height: 45px;
+            }
+
+            .main-container {
+                padding-top: 100px;
             }
         }
 
@@ -643,28 +903,57 @@
     </style>
 </head>
 <body class="login-page">
-    <!-- Deep sea animated particles -->
-    <div class="deep-sea-particles">
-        <div class="sea-particle"></div>
-        <div class="sea-particle"></div>
-        <div class="sea-particle"></div>
-        <div class="sea-particle"></div>
-        <div class="sea-particle"></div>
-        <div class="sea-particle"></div>
+    <!-- Underwater world ecosystem -->
+    <div class="underwater-world">
+        <!-- Water surface effects -->
+        <div class="water-surface"></div>
+        
+        <!-- Bubbles -->
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        
+        <!-- Randomized Fish -->
+        <div class="fish">🐠</div>
+        <div class="fish">🐟</div>
+        <div class="fish">🐡</div>
+        <div class="fish">🦈</div>
+        
+        <!-- Plankton/Water plants -->
+        <div class="plankton"></div>
+        <div class="plankton"></div>
+        <div class="plankton"></div>
+        <div class="plankton"></div>
+        <div class="plankton"></div>
+        <div class="plankton"></div>
+        <div class="plankton"></div>
+        <div class="plankton"></div>
+        <div class="plankton"></div>
+        <div class="plankton"></div>
+        
+        <!-- Diver -->
+        <div class="diver">🤿</div>
     </div>
 
-    <!-- Navbar -->
+    <!-- Seamless navbar with logo matching GANGA text size -->
     <nav class="navbar">
         <h1 class="logo">
             <a href="index.html">
-                <img src="apks/logo.png" height="100px" alt="ES-UNIVERSE Logo">
+                <img src="https://es-universe.github.io/ESRAT/apks/logo.png" height="100px" alt="ES-UNIVERSE Logo">
             </a>
         </h1>
     </nav>
 
     <!-- Main container -->
     <div class="main-container">
-        <!-- Dynamic title -->
+        <!-- Dynamic title with random bouncing letters -->
         <div class="title-container">
             <div id="dynamic-text">
                 <span class="letter">G</span>
@@ -694,6 +983,9 @@
             <div id="message-ref" class="message"></div>
         </div>
     </div>
+
+    <!-- Inspirational text -->
+    <div class="inspiration-text">This is where it begins !</div>
 
     <!-- Social links -->
     <div class="social-container">
@@ -902,43 +1194,46 @@
         window.addEventListener('orientationchange', setViewportHeight);
         setViewportHeight();
 
-        // Add interactive click effects
+        // Add interactive click effects with underwater bubbles
         document.addEventListener('click', function(e) {
-            createClickEffect(e.clientX, e.clientY);
+            createUnderwaterClickEffect(e.clientX, e.clientY);
         });
 
-        function createClickEffect(x, y) {
-            const effect = document.createElement('div');
-            effect.style.position = 'fixed';
-            effect.style.left = x + 'px';
-            effect.style.top = y + 'px';
-            effect.style.width = '8px';
-            effect.style.height = '8px';
-            effect.style.background = 'rgba(74, 144, 226, 0.8)';
-            effect.style.borderRadius = '50%';
-            effect.style.pointerEvents = 'none';
-            effect.style.zIndex = '10000';
-            effect.style.animation = 'clickEffect 0.6s ease-out forwards';
-            
-            document.body.appendChild(effect);
-            
-            setTimeout(() => {
-                if (document.body.contains(effect)) {
-                    document.body.removeChild(effect);
-                }
-            }, 600);
+        function createUnderwaterClickEffect(x, y) {
+            // Create multiple small bubbles
+            for (let i = 0; i < 3; i++) {
+                const bubble = document.createElement('div');
+                bubble.style.position = 'fixed';
+                bubble.style.left = (x + (Math.random() - 0.5) * 20) + 'px';
+                bubble.style.top = (y + (Math.random() - 0.5) * 20) + 'px';
+                bubble.style.width = (4 + Math.random() * 6) + 'px';
+                bubble.style.height = bubble.style.width;
+                bubble.style.background = 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(74, 144, 226, 0.3))';
+                bubble.style.borderRadius = '50%';
+                bubble.style.pointerEvents = 'none';
+                bubble.style.zIndex = '10000';
+                bubble.style.animation = 'clickBubble 1s ease-out forwards';
+                
+                document.body.appendChild(bubble);
+                
+                setTimeout(() => {
+                    if (document.body.contains(bubble)) {
+                        document.body.removeChild(bubble);
+                    }
+                }, 1000);
+            }
         }
 
-        // Add click effect animation
+        // Add click bubble animation
         const style = document.createElement('style');
         style.textContent = `
-            @keyframes clickEffect {
+            @keyframes clickBubble {
                 0% {
                     transform: translate(-50%, -50%) scale(1);
                     opacity: 1;
                 }
                 100% {
-                    transform: translate(-50%, -50%) scale(4);
+                    transform: translate(-50%, -50%) translateY(-50px) scale(0.5);
                     opacity: 0;
                 }
             }
