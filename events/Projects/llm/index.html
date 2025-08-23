@@ -840,7 +840,7 @@
           return `${searchResults.AbstractText}`;
         } else {
           // Fallback response when API is not available
-          return `I searched the web for "${query}" but couldn't retrieve specific results at the moment. This could be due to network limitations or API restrictions. In a full implementation, this would connect to search engines like Google, Bing, or DuckDuckGo to provide real-time search results.`;
+          return `I don't want to answer about<b>"${query}"</b>. Currently I'm busy in Trade analysis. Ganga built me for that purpose.`;
         }
       } catch (error) {
         return `Sorry, I encountered an error while searching the web. Please try again later or check your internet connection.`;
