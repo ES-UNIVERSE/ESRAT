@@ -60,7 +60,7 @@
     .menu { position: absolute; left: 10px; top: 10px; width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); display: grid; place-items:center; cursor: pointer; transition: transform .15s ease; }
     .menu:active { transform: scale(0.95); }
     .menu svg { width: 22px; height: 22px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; }
-    .settings-btn { position: absolute; right: 10px; top: 10px; width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); display: grid; place-items:center; cursor: pointer; transition: transform .15s ease; }
+    .settings-btn { position: absolute; right: 10px; top: 10px; width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(0, 0, 0, 0.12); background: rgba(255,255,255,0.06); display: grid; place-items:center; cursor: pointer; transition: transform .15s ease; }
     .settings-btn:active { transform: scale(0.95); }
     .settings-btn svg { width: 22px; height: 22px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; }
 
@@ -72,8 +72,7 @@
     .chat-bubble { max-width: 75%; padding: 8px 12px; border-radius: 16px; font-size: 14px; line-height: 1.4; word-wrap: break-word; overflow-wrap: anywhere; white-space: pre-wrap; animation: pop .25s ease; position: relative; }
     .user { align-self: flex-end; background: linear-gradient(135deg, #007aff, #5ac8fa); color: #fff; border-bottom-right-radius: 4px; }
     .bot { align-self: flex-start; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.10); backdrop-filter: blur(10px); border-bottom-left-radius: 4px; }
-    .message-time { font-size: 9px; opacity: 0.7; margin-top: 3px; text-align: right; }
-    .bot .message-time { text-align: left; }
+    
     @keyframes pop { from{ opacity: 0; transform: translateY(8px) } to{ opacity:1; transform: translateY(0) } }
 
     /* TYPING INDICATOR */
@@ -102,13 +101,13 @@
     .bar { width: 3px; background: linear-gradient(180deg, #34c759, #30d158); border-radius: 2px; height: 8px; }
     
     /* MIC BUTTON */
-    .mic-btn { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #ff3b30, #ff2d55); display: grid; place-items: center; cursor: pointer; transition: transform .12s ease, filter .2s ease; }
+    .mic-btn { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #ffffff, #ff2d55); display: grid; place-items: center; cursor: pointer; transition: transform .12s ease, filter .2s ease; }
     .mic-btn:active { transform: scale(.95); }
     .mic-btn svg { width: 18px; height: 18px; fill: #fff; }
     .mic-btn.recording { background: linear-gradient(135deg, #ff453a, #ff375f); box-shadow: 0 0 0 6px rgba(255,56,95,0.15); }
 
     /* WEB SEARCH BUTTON */
-    .search-btn { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #34c759, #30d158); display: grid; place-items: center; cursor: pointer; transition: transform .12s ease, filter .2s ease; margin-left: 5px; }
+    .search-btn { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #ffffff, #30d158); display: grid; place-items: center; cursor: pointer; transition: transform .12s ease, filter .2s ease; margin-left: 5px; }
     .search-btn:active { transform: scale(.95); }
     .search-btn svg { width: 18px; height: 18px; fill: #fff; }
     .search-btn.active { background: linear-gradient(135deg, #ff9500, #ffb000); box-shadow: 0 0 0 6px rgba(255,149,0,0.15); }
@@ -242,9 +241,9 @@
   <div class="sidebar" id="sidebar">
     <div class="side-head">
       <div class="sidebar-brand">
-        <div class="side-title">GangaAI</div>
+        <div class="side-title">Conversations</div>
       </div>
-      <button class="new-chat-btn" id="newChatBtn" style="padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); color: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease;">
+      <button class="new-chat-btn" id="newChatBtn" style="padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(72, 57, 57, 0.12); background: rgba(255,255,255,0.06); color: #000000; font-size: 12px; cursor: pointer; transition: all 0.2s ease;">
         + New Chat
       </button>
     </div>
@@ -327,25 +326,35 @@
 
   <!-- SUGGESTED PROMPTS -->
   <div class="suggested-prompts" id="suggestedPrompts">
-    <div class="prompt-chip" data-prompt="Tell me about yourself">About you</div>
-    <div class="prompt-chip" data-prompt="What can you do?">Capabilities</div>
-    <div class="prompt-chip" data-prompt="Who created you?">Creator</div>
-    <div class="prompt-chip" data-prompt="Tell me a joke">Joke</div>
-    <div class="prompt-chip" data-prompt="What's your favorite movie?">Movies</div>
+    <div class="prompt-chip" data-prompt="Tell me about yourself">Tell me about youself</div>
+    <div class="prompt-chip" data-prompt="What can you do?">Your capabilities</div>
+    <div class="prompt-chip" data-prompt="Who created you?">Who is your Creator</div>
+    <div class="prompt-chip" data-prompt="Tell me a joke">Tell a Joke</div>
+    <div class="prompt-chip" data-prompt="What's your favorite movie?">Movies suggestions</div>
   </div>
 
   <!-- INPUT AREA -->
   <div class="input-area">
     <div class="field-wrap">
       <div class="field" id="field">
-        <input type="text" placeholder="Type your message..." id="messageInput" autocomplete="off" />
+        <input type="text" placeholder="Ask Anything . . ." id="messageInput" autocomplete="off" />
       </div>
     </div>
     <div class="mic-btn" id="micBtn" title="Voice input">
-      <svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" x2="12" y1="19" y2="23"/><line x1="8" x2="16" y1="23" y2="23"/></svg>
+      <svg viewBox="0 0 24 24" width="24" height="24" style="color: white;">
+    <path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" fill="currentColor"/>
+    <path d="M19 10v1a7 7 0 0 1-14 0v-1" stroke="currentColor" stroke-width="2" fill="none"/>
+    <line x1="12" x2="12" y1="19" y2="23" stroke="currentColor" stroke-width="2"/>
+    <line x1="8" x2="16" y1="23" y2="23" stroke="currentColor" stroke-width="2"/>
+</svg>
     </div>
     <div class="search-btn" id="searchBtn" title="Web search toggle">
-      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <svg viewBox="0 0 24 24" width="24" height="24" style="color: white;">
+    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/>
+    <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2"/>
+    <path d="M12 3c2.5 4 2.5 8 0 12M12 3c-2.5 4-2.5 8 0 12" stroke="currentColor" stroke-width="2" fill="none"/>
+    <circle cx="12" cy="12" r="1" fill="currentColor"/>
+</svg>
     </div>
   </div>
 
@@ -630,8 +639,26 @@
       
       chat.innerHTML = c.messages.length ? "" : `
         <div class="welcome-message" id="welcomeMessage">
-          <div class="welcome-title">Welcome to GangaAI</div>
-          <div class="welcome-subtitle">Your intelligent assistant is ready to help. Ask me anything!</div>
+          <div class="welcome-title">Welcome Learner !</div>
+          <div class="welcome-subtitle">
+  🎩 Well, well, well… <b>your “intelligent assistant”</b> has arrived.  
+  <br><br>
+  I’m here to <b>make studies easier</b>, drop <b>fresh ideas</b>,  
+  and give you <b>perspectives</b> you never thought of.  
+  <br><br>
+  Into markets? I’ll walk you through  
+  <span style="color:#7aa2ff;font-weight:600">BSE</span> &  
+  <span style="color:#7aa2ff;font-weight:600">NSE</span> <b>stock analysis</b>,  
+  share <b>trading suggestions</b> (but hey, no guarantees 😏),  
+  and decode those wild charts.  
+  <br><br>
+  Drowning in <span style="color:#25d0a6;font-weight:600">coding chaos</span>?  
+  I untangle <b>algorithms</b>, debug your mess,  
+  and maybe even show a smarter way next time.  
+  <br><br>
+  So… <b>how can I help you today?</b>
+</div>
+
         </div>
       `;
       
@@ -663,7 +690,7 @@
       bubble.className = `chat-bubble ${role}`;
       bubble.innerHTML = `
         ${content}
-        <div class="message-time">${new Date(timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+        
       `;
       
       chat.appendChild(bubble);
@@ -853,7 +880,7 @@
       // Check for contact matches
       const contactMatch = findContactMatch(msg);
       if (contactMatch) {
-        let response = `📞 Contact Found:\n\n`;
+        let response = `📞 Fuck your contactas:\n\n`;
         response += `Name: ${contactMatch.firstName}`;
         if (contactMatch.lastName) response += ` ${contactMatch.lastName}`;
         response += `\nPhone: ${contactMatch.phone}`;
@@ -901,8 +928,8 @@
       searchBtn.classList.toggle("active", webSearchMode);
       
       const statusMessage = webSearchMode ? 
-        "🌐 Web search mode is now ON" : 
-        "🌐 Web search mode is now OFF";
+        "Now you can fetch from internet:" : 
+        "Internet fetching is now OFF.";
       
       addBubble("bot", statusMessage);
     }
@@ -1278,4 +1305,3 @@
   </script>
 </body>
 </html>
-
