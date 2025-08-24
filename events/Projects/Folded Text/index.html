@@ -1,21 +1,638 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>3D tilted text</title>
-  <link rel="stylesheet" href="./style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mr. X - Anonymous Messaging</title>
+    <style>
+        /* Apple System Font Stack */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            overflow: hidden; /* Prevent page scroll */
+            background: linear-gradient(to bottom, #f0f4f8, #ffffff);
+            color: #333;
+            height: 100vh;
+            display: flex;
+        }
 
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            height: 100vh;
+            overflow-y: auto;
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(0);
+            position: relative;
+            z-index: 2;
+        }
+
+        .sidebar.closed {
+            transform: translateX(-250px);
+        }
+
+        .sidebar-toggle {
+            position: absolute;
+            top: 10px;
+            right: -30px;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar h2 {
+            padding: 20px;
+            margin: 0;
+            text-align: center;
+        }
+
+        .chat-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .chat-list li {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .chat-list li:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            transition: filter 0.3s ease-in-out;
+        }
+
+        .main-content.blurred {
+            filter: blur(5px);
+        }
+
+        /* Chat Container */
+        .chat-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto; /* Only chat container scrolls */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            border-radius: 15px;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            width: fit-content;
+            max-width: 70%;
+        }
+
+        .message .timestamp {
+            font-size: 0.8em;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .message img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+
+        .message audio {
+            width: 100%;
+        }
+
+        /* Input Area */
+        .input-area {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .input-area input[type="text"] {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.5);
+            outline: none;
+            font-size: 1em;
+            margin-right: 10px;
+        }
+
+        .input-area button {
+            background: #007aff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .input-area button:hover {
+            background: #0062cc;
+        }
+
+        .input-area input[type="file"] {
+            display: none; /* Hide the default file input */
+        }
+
+        .input-area .upload-button, .input-area .record-button {
+            background: none;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            font-size: 1.5em;
+            color: #555;
+            margin-right: 10px;
+        }
+
+        .input-area .upload-button:hover, .input-area .record-button:hover {
+            color: #007aff;
+        }
+
+        /* Settings Overlay */
+        .settings-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3;
+        }
+
+        .settings-overlay.open {
+            display: flex;
+        }
+
+        .settings-content {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+                transform: translateX(-200px); /* Initially hidden on mobile */
+            }
+
+            .sidebar.closed {
+                transform: translateX(-200px);
+            }
+
+            .sidebar-toggle {
+                right: 10px;
+            }
+
+            .input-area input[type="text"] {
+                font-size: 0.9em;
+            }
+        }
+
+        /* Like Button */
+        .like-button {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            font-size: 1.2em;
+            color: #888;
+            outline: none;
+        }
+
+        .like-button.liked {
+            color: #007aff;
+        }
+
+        @keyframes likeAnimation {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .like-button.liked {
+            animation: likeAnimation 0.3s ease-in-out;
+        }
+
+    </style>
 </head>
 <body>
 
-<div class="center">
-  <h1>
-    <span>RAM</span>
-    <span>RAM</span>
-    <span>RAM</span>
-  
-  </h1>
-</div>
- 
+    <div class="sidebar closed">
+        <button class="sidebar-toggle">&#9776;</button>
+        <h2>Past Chats</h2>
+        <ul class="chat-list" id="chat-list">
+            <!-- Chat list will be populated here -->
+        </ul>
+        <button id="settings-button">Settings</button>
+    </div>
+
+    <div class="main-content">
+        <div class="chat-container" id="chat-container">
+            <!-- Messages will be displayed here -->
+        </div>
+        <div class="input-area">
+            <label for="image-upload" class="upload-button">&#x1F4F7;</label>
+            <input type="file" id="image-upload" accept="image/*">
+            <input type="text" id="message-input" placeholder="Say something..." autocomplete="off">
+            <button id="send-button">Send</button>
+            <button id="record-button" class="record-button">&#x1F3A4;</button>
+        </div>
+    </div>
+
+    <div class="settings-overlay" id="settings-overlay">
+        <div class="settings-content">
+            <h2>Settings</h2>
+            <p>Future settings will go here (theme, profile, etc.)</p>
+            <button id="close-settings">Close</button>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@latest/dist/browser-image-compression.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDEAy2KXezICmuuQZnhNq12nqwwBouDjt4",
+            authDomain: "webcamera-es-universe-git.firebaseapp.com",
+            databaseURL: "https://webcamera-es-universe-git-default-rtdb.firebaseio.com",
+            projectId: "webcamera-es-universe-git",
+            storageBucket: "webcamera-es-universe-git.appspot.com",
+            messagingSenderId: "949054088643",
+            appId: "1:949054088643:web:039f79fcae7259f4358976"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const storage = firebase.storage();
+
+        // Get references to DOM elements
+        const chatContainer = document.getElementById('chat-container');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const imageUpload = document.getElementById('image-upload');
+        const recordButton = document.getElementById('record-button');
+        const chatList = document.getElementById('chat-list');
+        const sidebar = document.querySelector('.sidebar');
+        const sidebarToggle = document.querySelector('.sidebar-toggle');
+        const mainContent = document.querySelector('.main-content');
+        const settingsButton = document.getElementById('settings-button');
+        const settingsOverlay = document.getElementById('settings-overlay');
+        const closeSettings = document.getElementById('close-settings');
+
+        // Current chat room date (YYYY-MM-DD)
+        const today = new Date().toISOString().slice(0, 10);
+        let currentChatRoom = `chats/${today}`;
+
+        // User identifier (for likes) - using localStorage for simplicity
+        let userId = localStorage.getItem('userId');
+        if (!userId) {
+            userId = Math.random().toString(36).substring(2, 15); // Generate a random ID
+            localStorage.setItem('userId', userId);
+        }
+
+        // State for recording
+        let mediaRecorder;
+        let audioChunks = [];
+
+        // Function to format timestamp
+        function formatTimestamp(timestamp) {
+            const date = new Date(timestamp);
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            return `${hours}:${minutes}`;
+        }
+
+        // Function to add a message to the chat container
+        function addMessageToChat(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.innerHTML = `
+                ${message.content ? `<p>${message.content}</p>` : ''}
+                ${message.imageURL ? `<img src="${message.imageURL}" alt="Image">` : ''}
+                ${message.audioURL ? `<audio controls src="${message.audioURL}"></audio>` : ''}
+                <div class="timestamp">${formatTimestamp(message.timestamp)}</div>
+                <button class="like-button ${message.likes && message.likes[userId] ? 'liked' : ''}" data-message-key="${message.key}">
+                    &#x2665; <span class="like-count">${message.likes ? Object.keys(message.likes).length : 0}</span>
+                </button>
+            `;
+            chatContainer.appendChild(messageDiv);
+
+            // Add event listener for like button
+            const likeButton = messageDiv.querySelector('.like-button');
+            likeButton.addEventListener('click', () => {
+                toggleLike(message.key, likeButton);
+            });
+
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Function to toggle like
+        function toggleLike(messageKey, likeButton) {
+            const messageRef = database.ref(`${currentChatRoom}/${messageKey}`);
+
+            messageRef.transaction((message) => {
+                if (message) {
+                    if (message.likes && message.likes[userId]) {
+                        message.likes[userId] = null; // Unlike
+                    } else {
+                        if (!message.likes) {
+                            message.likes = {};
+                        }
+                        message.likes[userId] = true; // Like
+                    }
+                }
+                return message;
+            }).then(() => {
+                likeButton.classList.toggle('liked');
+                // Update like count locally for immediate feedback
+                const likeCountSpan = likeButton.querySelector('.like-count');
+                const isLiked = likeButton.classList.contains('liked');
+                let currentCount = parseInt(likeCountSpan.textContent);
+                likeCountSpan.textContent = isLiked ? currentCount + 1 : currentCount - 1;
+            }).catch(error => {
+                console.error("Error toggling like:", error);
+            });
+        }
+
+        // Function to load messages from Firebase
+        function loadMessages(chatRoom) {
+            chatContainer.innerHTML = ''; // Clear existing messages
+            database.ref(chatRoom).orderByChild('timestamp').on('child_added', (snapshot) => {
+                const message = snapshot.val();
+                message.key = snapshot.key; // Store the message key
+                addMessageToChat(message);
+            });
+        }
+
+        // Function to send a message to Firebase
+        function sendMessage(content, imageURL = null, audioURL = null) {
+            if (!content && !imageURL && !audioURL) return; // Don't send empty messages
+
+            const message = {
+                content: content,
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                imageURL: imageURL,
+                audioURL: audioURL
+            };
+
+            database.ref(currentChatRoom).push(message)
+                .catch(error => {
+                    console.error("Error sending message:", error);
+                });
+
+            messageInput.value = ''; // Clear the input field
+        }
+
+        // Function to compress and upload an image
+        async function handleImageUpload(file) {
+            const options = {
+                maxSizeMB: 0.5, // 500KB
+                maxWidthOrHeight: 1920,
+                useWebWorker: true
+            };
+
+            try {
+                const compressedFile = await browserImageCompression(file, options);
+                const storageRef = storage.ref(`images/${Date.now()}-${compressedFile.name}`);
+                const uploadTask = storageRef.put(compressedFile);
+
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        // Observe state change events such as progress, pause, and resume
+                        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('Upload is ' + progress + '% done');
+                    },
+                    (error) => {
+                        // Handle unsuccessful uploads
+                        console.error("Error uploading image:", error);
+                    },
+                    () => {
+                        // Handle successful uploads on complete
+                        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                            console.log('File available at', downloadURL);
+                            sendMessage(null, downloadURL); // Send message with image URL
+                        });
+                    }
+                );
+            } catch (error) {
+                console.error("Error compressing image:", error);
+            }
+        }
+
+        // Function to handle audio recording
+        async function handleRecordAudio() {
+            if (mediaRecorder && mediaRecorder.state === "recording") {
+                mediaRecorder.stop();
+                recordButton.textContent = 'Record';
+                return;
+            }
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    // Convert Blob to ArrayBuffer
+                    const arrayBuffer = await audioBlob.arrayBuffer();
+
+                    // Initialize LAME encoder
+                    const mp3Encoder = new lamejs.Mp3Encoder(1, 44100, 128); // Mono, 44.1kHz, 128kbps
+
+                    // Convert ArrayBuffer to Int16Array
+                    const samples = new Int16Array(arrayBuffer);
+
+                    // Encode audio
+                    const mp3Data = [];
+                    const blockSize = 1152; // LAME block size
+                    for (let i = 0; i < samples.length; i += blockSize) {
+                        const block = samples.slice(i, i + blockSize);
+                        const mp3buf = mp3Encoder.encodeBuffer(block);
+                        if (mp3buf.length > 0) {
+                            mp3Data.push(new Int8Array(mp3buf));
+                        }
+                    }
+
+                    // Flush LAME encoder
+                    const mp3Flush = mp3Encoder.flush();
+                    if (mp3Flush.length > 0) {
+                        mp3Data.push(new Int8Array(mp3Flush));
+                    }
+
+                    // Create MP3 Blob
+                    const mp3Blob = new Blob(mp3Data, { type: 'audio/mp3' });
+
+                    const audioURL = URL.createObjectURL(mp3Blob);
+                    const storageRef = storage.ref(`audio/${Date.now()}.mp3`);
+                    const uploadTask = storageRef.put(mp3Blob);
+
+                    uploadTask.on('state_changed',
+                        (snapshot) => {
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            console.log('Audio upload is ' + progress + '% done');
+                        },
+                        (error) => {
+                            console.error("Error uploading audio:", error);
+                        },
+                        () => {
+                            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                                console.log('Audio file available at', downloadURL);
+                                sendMessage(null, null, downloadURL); // Send message with audio URL
+                            });
+                        }
+                    );
+                };
+
+                mediaRecorder.start();
+                recordButton.textContent = 'Stop';
+            } catch (error) {
+                console.error("Error accessing microphone:", error);
+            }
+        }
+
+        // Function to load past chats
+        function loadPastChats() {
+            database.ref('chats').orderByKey().limitToLast(7).once('value', (snapshot) => {
+                const chats = snapshot.val();
+                chatList.innerHTML = ''; // Clear existing list
+                if (chats) {
+                    Object.keys(chats).forEach(chatDate => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = chatDate.replace('chats/', '');
+                        listItem.addEventListener('click', () => {
+                            currentChatRoom = `chats/${chatDate.replace('chats/', '')}`;
+                            loadMessages(currentChatRoom);
+                            // Close sidebar after selecting a chat on mobile
+                            if (window.innerWidth <= 768) {
+                                sidebar.classList.add('closed');
+                                mainContent.classList.remove('blurred');
+                            }
+                        });
+                        chatList.appendChild(listItem);
+                    });
+                }
+            });
+        }
+
+        // Event listeners
+        sendButton.addEventListener('click', () => {
+            sendMessage(messageInput.value);
+        });
+
+        messageInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage(messageInput.value);
+                event.preventDefault(); // Prevent newline in input
+            }
+        });
+
+        imageUpload.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                handleImageUpload(file);
+            }
+            event.target.value = ''; // Clear the input
+        });
+
+        recordButton.addEventListener('click', handleRecordAudio);
+
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('closed');
+            mainContent.classList.toggle('blurred');
+        });
+
+        settingsButton.addEventListener('click', () => {
+            settingsOverlay.classList.add('open');
+        });
+
+        closeSettings.addEventListener('click', () => {
+            settingsOverlay.classList.remove('open');
+        });
+
+        // Function to check and create new chatroom daily
+        function checkAndCreateNewChatroom() {
+            const now = new Date();
+            const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
+            const timeLeft = nextMidnight.getTime() - now.getTime();
+
+            setTimeout(() => {
+                const newToday = new Date().toISOString().slice(0, 10);
+                currentChatRoom = `chats/${newToday}`;
+                loadMessages(currentChatRoom);
+                loadPastChats();
+                checkAndCreateNewChatroom(); // Schedule the next check
+            }, timeLeft);
+        }
+
+        // Initial load
+        loadMessages(currentChatRoom);
+        loadPastChats();
+        checkAndCreateNewChatroom();
+
+    </script>
 </body>
 </html>
