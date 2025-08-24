@@ -475,850 +475,819 @@
             font-size: 24px;
             color: #FFD700;
             animation: diverSwim 25s linear infinite;
-            opacity: 0.8;
+            z-index: 2;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .diver:hover {
+            transform: scale(1.2);
+            filter: brightness(1.3);
         }
 
         @keyframes diverSwim {
             0% {
-                left: -50px;
-                transform: scaleX(1) rotate(0deg);
+                left: -5%;
+                transform: scaleX(1) translateY(0px);
             }
             25% {
-                transform: scaleX(1) rotate(-10deg) translateY(-30px);
+                left: 25%;
+                transform: scaleX(1) translateY(-20px);
             }
             50% {
-                transform: scaleX(1) rotate(5deg) translateY(-10px);
+                left: 50%;
+                transform: scaleX(1) translateY(10px);
             }
             75% {
-                transform: scaleX(1) rotate(-5deg) translateY(-20px);
+                left: 75%;
+                transform: scaleX(1) translateY(-15px);
             }
             100% {
-                left: 100vw;
-                transform: scaleX(1) rotate(0deg) translateY(0px);
+                left: 105%;
+                transform: scaleX(1) translateY(5px);
             }
         }
 
-        /* Hidden Treasure Chest */
-        .treasure-chest {
+        /* Submarine */
+        .submarine {
             position: absolute;
-            bottom: 15%;
-            right: 8%;
-            font-size: 18px;
-            color: #DAA520;
+            top: 20%;
+            font-size: 28px;
+            color: #C0C0C0;
+            animation: submarineMove 30s linear infinite;
+            z-index: 2;
             cursor: pointer;
-            opacity: 0.6;
             transition: all 0.3s ease;
-            z-index: 3;
-            animation: treasureGlow 4s ease-in-out infinite;
         }
 
-        .treasure-chest:hover {
-            opacity: 1;
+        .submarine:hover {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+        }
+
+        @keyframes submarineMove {
+            0% {
+                right: -10%;
+                transform: scaleX(-1) translateY(0px);
+            }
+            20% {
+                right: 20%;
+                transform: scaleX(-1) translateY(15px);
+            }
+            40% {
+                right: 40%;
+                transform: scaleX(-1) translateY(-25px);
+            }
+            60% {
+                right: 60%;
+                transform: scaleX(-1) translateY(20px);
+            }
+            80% {
+                right: 80%;
+                transform: scaleX(-1) translateY(-10px);
+            }
+            100% {
+                right: 110%;
+                transform: scaleX(-1) translateY(0px);
+            }
+        }
+
+        /* Jellyfish */
+        .jellyfish {
+            position: absolute;
+            font-size: 22px;
+            color: #FF69B4;
+            animation: jellyfishFloat 20s ease-in-out infinite;
+            z-index: 2;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.5));
+        }
+
+        .jellyfish:hover {
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.8));
+        }
+
+        .jellyfish:nth-child(30) {
+            top: 30%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .jellyfish:nth-child(31) {
+            top: 60%;
+            right: 15%;
+            animation-delay: 8s;
+        }
+
+        @keyframes jellyfishFloat {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-30px) rotate(5deg);
+            }
+            50% {
+                transform: translateY(20px) rotate(-3deg);
+            }
+            75% {
+                transform: translateY(-15px) rotate(7deg);
+            }
+        }
+
+        /* Treasure Chest */
+        .treasure {
+            position: absolute;
+            bottom: 5%;
+            right: 10%;
+            font-size: 26px;
+            color: #DAA520;
+            animation: treasureGlow 4s ease-in-out infinite;
+            z-index: 2;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .treasure:hover {
             transform: scale(1.2);
-            filter: drop-shadow(0 0 10px #DAA520);
+            filter: brightness(1.4);
         }
 
         @keyframes treasureGlow {
             0%, 100% {
-                opacity: 0.6;
-                text-shadow: 0 0 5px rgba(218, 165, 32, 0.5);
+                filter: brightness(1) drop-shadow(0 0 5px rgba(218, 165, 32, 0.5));
             }
             50% {
-                opacity: 0.9;
-                text-shadow: 0 0 15px rgba(218, 165, 32, 0.8);
+                filter: brightness(1.3) drop-shadow(0 0 15px rgba(218, 165, 32, 0.8));
             }
         }
 
-        /* Water level effects */
-        .water-surface {
+        /* Coral Reef */
+        .coral {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(ellipse at 20% 10%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 40% 30%, rgba(255, 255, 255, 0.06) 0%, transparent 50%);
-            animation: waterMovement 8s ease-in-out infinite;
+            bottom: 0;
+            font-size: 18px;
+            color: #FF7F50;
+            z-index: 1;
+            animation: coralSway 6s ease-in-out infinite;
         }
 
-        @keyframes waterMovement {
+        .coral:nth-child(32) {
+            left: 8%;
+            animation-delay: 0s;
+        }
+
+        .coral:nth-child(33) {
+            left: 35%;
+            animation-delay: 2s;
+        }
+
+        .coral:nth-child(34) {
+            right: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes coralSway {
             0%, 100% {
-                transform: translateX(0px) translateY(0px);
-            }
-            25% {
-                transform: translateX(10px) translateY(-5px);
+                transform: rotate(-3deg);
             }
             50% {
-                transform: translateX(-5px) translateY(5px);
-            }
-            75% {
-                transform: translateX(-10px) translateY(-3px);
+                transform: rotate(3deg);
             }
         }
 
-        /* Tap the glass ripple effect */
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
-            pointer-events: none;
-            animation: rippleEffect 1.5s ease-out forwards;
-            z-index: 100;
-        }
-
-        @keyframes rippleEffect {
-            0% {
-                width: 0px;
-                height: 0px;
-                opacity: 1;
-            }
-            100% {
-                width: 300px;
-                height: 300px;
-                opacity: 0;
-            }
-        }
-
-        /* Seamless navbar integration with logo matching GANGA text size */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            padding: 20px 20px;
-            background: transparent;
-            height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo a {
-            display: block;
-            line-height: 0;
-        }
-
-        /* Logo size matching GANGA text (2.8rem = ~45px) */
-        .logo img {
-            height: 45px;
-            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3)) brightness(1.1);
-            transition: transform 0.3s ease;
-        }
-
-        .logo img:hover {
-            transform: scale(1.05);
-        }
-
-        /* Main container */
+        /* Main Content Container */
         .main-container {
+            position: relative;
+            z-index: 10;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            width: 100vw;
+            height: 100dvh;
             padding: 20px;
-            z-index: 10;
-            position: relative;
-            padding-top: 100px;
+            box-sizing: border-box;
         }
 
-        /* Random bouncing letters for GANGA title */
-        .title-container {
+        /* Logo Container */
+        .logo-container {
             text-align: center;
-            margin-bottom: 40px;
-            position: relative;
+            margin-bottom: 20px;
+            animation: logoFloat 3s ease-in-out infinite;
         }
 
-        #dynamic-text {
-            font-size: 2.8rem;
-            font-weight: 700;
-            color: #ffffff;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
-            margin-bottom: 10px;
-            position: relative;
-        }
-
-        .letter {
-            display: inline-block;
-            opacity: 0;
-            transform: translate3d(0px, 30px, 0px) scale(0.8);
-            animation: animateText 1s forwards, randomBounce 3s ease-in-out infinite;
-        }
-
-        @keyframes animateText {
-            0% {
-                opacity: 0;
-                transform: translate3d(0px, 30px, 0px) scale(0.8);
-            }
-            100% {
-                opacity: 1;
-                transform: translate3d(0px, 0px, 0px) scale(1);
-            }
-        }
-
-        /* Random bounce animations for each letter */
-        @keyframes randomBounce {
+        @keyframes logoFloat {
             0%, 100% {
                 transform: translateY(0px);
-                text-shadow: 
-                    0 0 15px rgba(255, 255, 255, 0.8),
-                    0 0 30px rgba(74, 144, 226, 0.6);
             }
             50% {
-                transform: translateY(-8px);
-                text-shadow: 
-                    0 0 25px rgba(255, 255, 255, 1),
-                    0 0 50px rgba(74, 144, 226, 0.8);
+                transform: translateY(-5px);
             }
         }
 
-        /* Different bounce timings and delays for randomness */
-        .letter:nth-child(1) { 
-            animation-delay: 0s, 0.2s; 
-            animation-duration: 1s, 2.8s;
-        }
-        .letter:nth-child(2) { 
-            animation-delay: 0.15s, 1.1s; 
-            animation-duration: 1s, 3.5s;
-        }
-        .letter:nth-child(3) { 
-            animation-delay: 0.3s, 0.7s; 
-            animation-duration: 1s, 2.2s;
-        }
-        .letter:nth-child(4) { 
-            animation-delay: 0.45s, 1.8s; 
-            animation-duration: 1s, 4.1s;
-        }
-        .letter:nth-child(5) { 
-            animation-delay: 0.6s, 0.4s; 
-            animation-duration: 1s, 3.2s;
+        .logo-img {
+            width: 60px;
+            height: 60px;
+            transition: all 0.3s ease;
         }
 
-        /* Login container with enhanced underwater feel - Smaller size */
-        .container {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+        .logo-img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Login Form */
+        .login-form {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px;
             padding: 25px 20px;
             width: 100%;
-            max-width: 300px;
-            min-width: 280px;
+            max-width: 280px;
             box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.3),
+                0 8px 32px rgba(0, 0, 0, 0.3),
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            position: relative;
-            overflow: hidden;
+            animation: formSlideIn 0.8s ease-out;
         }
 
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-            animation: shimmer 4s infinite;
+        @keyframes formSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0px);
+            }
         }
 
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
+        .form-title {
+            color: #FFFFFF;
+            font-size: 20px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
-        /* Water-filling input fields - Compact spacing */
         .input-group {
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
-        .input-group input {
-            width: 100%;
-            padding: 14px 45px 14px 16px;
-            background: rgba(255, 255, 255, 0.12);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            color: #ffffff;
-            font-size: 15px;
-            font-weight: 500;
-            outline: none;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            position: relative;
-            z-index: 2;
-        }
-
-        .input-group input::placeholder {
-            color: rgba(255, 255, 255, 0.85);
-            font-weight: 500;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-        }
-
-        .input-group input:focus {
-            border-color: rgba(74, 144, 226, 0.8);
-            background: rgba(255, 255, 255, 0.18);
-            box-shadow: 0 0 15px rgba(74, 144, 226, 0.3);
-        }
-
-        .input-group input:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        /* Water fill effect for inputs */
-        .water-fill {
+        .input-group i {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                rgba(74, 144, 226, 0.2) 0%, 
-                rgba(53, 122, 189, 0.3) 50%, 
-                rgba(74, 144, 226, 0.2) 100%);
-            border-radius: 12px;
-            transition: width 0.3s ease;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 18px;
             z-index: 1;
         }
 
-        .input-group input:focus + .input-icon + .water-fill,
-        .input-group input:not(:placeholder-shown) + .input-icon + .water-fill {
+        .form-input {
             width: 100%;
+            padding: 15px 15px 15px 50px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #FFFFFF;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
         }
 
-        /* Enhanced visible icons */
-        .input-icon {
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-input:focus {
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 
+                0 0 0 3px rgba(255, 255, 255, 0.1),
+                0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-input:focus + i {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Password Toggle */
+        .password-toggle {
             position: absolute;
-            right: 16px;
+            right: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 22px;
-            z-index: 10;
-            background: rgba(74, 144, 226, 0.3);
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            font-size: 18px;
+            transition: color 0.3s ease;
+            z-index: 2;
         }
 
-        .input-group:focus-within .input-icon {
-            color: #ffffff;
-            background: rgba(74, 144, 226, 0.5);
-            transform: translateY(-50%) scale(1.1);
+        .password-toggle:hover {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .login-btn {
+                border: 2px solid #FFFFFF;
+                background: #4A90E2;
+            }
+            
+            .login-btn:hover {
+                background: #357ABD;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            .login-btn {
+                animation: none;
+                transition: background-color 0.2s ease, transform 0.2s ease;
+            }
+            
+            .login-btn::before {
+                display: none;
+            }
+            
+            .login-btn:hover {
+                transform: none;
+                animation: none;
+            }
         }
 
         /* Enhanced Dynamic Login Button */
         .login-btn {
-            width: 100%;
-            padding: 14px 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #4A90E2 100%);
-            border: none;
-            border-radius: 12px;
-            color: #ffffff;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
+            width: 100%;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(135deg, 
+                #4A90E2 0%, 
+                #357ABD 25%, 
+                #2C5F99 50%, 
+                #1E3A5F 75%, 
+                #4A90E2 100%);
+            background-size: 300% 300%;
+            color: #FFFFFF;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            cursor: pointer;
             overflow: hidden;
-            margin-top: 10px;
+            margin-bottom: 15px;
             box-shadow: 
-                0 4px 15px rgba(102, 126, 234, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+                0 4px 15px rgba(74, 144, 226, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: gradientShift 3s ease-in-out infinite;
         }
 
+        /* Gradient animation */
+        @keyframes gradientShift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        /* Ripple effect overlay */
         .login-btn::before {
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.3), 
-                transparent
-            );
-            transition: left 0.6s;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                transparent 30%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
         }
 
-        .login-btn:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 
-                0 8px 25px rgba(102, 126, 234, 0.5),
-                0 4px 15px rgba(118, 75, 162, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            background: linear-gradient(135deg, #7B8CED 0%, #8A5CB8 50%, #5BA0F2 100%);
-        }
-
-        .login-btn:hover::before {
-            left: 100%;
-        }
-
-        .login-btn:active {
-            transform: translateY(-1px) scale(0.98);
-            box-shadow: 
-                0 4px 15px rgba(102, 126, 234, 0.4),
-                inset 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .login-btn:focus {
-            outline: none;
-            box-shadow: 
-                0 8px 25px rgba(102, 126, 234, 0.5),
-                0 0 0 3px rgba(102, 126, 234, 0.3);
-        }
-
-        /* Button ripple effect */
+        /* Shine effect */
         .login-btn::after {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.4);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            bottom: 2px;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                transparent 50%, 
+                rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 14px;
+            pointer-events: none;
         }
 
-        .login-btn:active::after {
-            width: 300px;
-            height: 300px;
+        /* Hover state */
+        .login-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 
+                0 8px 25px rgba(74, 144, 226, 0.4),
+                0 4px 10px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            animation-duration: 1.5s;
         }
 
-        #submit::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
+        .login-btn:hover::before {
+            transform: translateX(100%);
         }
 
-        #submit:hover::before {
-            left: 100%;
+        /* Active/Click state */
+        .login-btn:active {
+            transform: translateY(-1px) scale(0.98);
+            box-shadow: 
+                0 4px 15px rgba(74, 144, 226, 0.3),
+                inset 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.1s ease;
         }
 
-        #submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 35px rgba(74, 144, 226, 0.6);
+        /* Focus state for accessibility */
+        .login-btn:focus {
+            outline: none;
+            box-shadow: 
+                0 4px 15px rgba(74, 144, 226, 0.3),
+                0 0 0 3px rgba(255, 255, 255, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
-        #submit:active {
-            transform: translateY(0px);
+        /* Pulse animation for attention */
+        .login-btn.pulse {
+            animation: buttonPulse 2s ease-in-out infinite;
         }
 
-        #submit:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Message */
-        #message-ref {
-            text-align: center;
-            margin-top: 15px;
-            color: #4ade80;
-            font-weight: 500;
-            visibility: hidden;
-        }
-
-        /* Inspirational text */
-        .inspiration-text {
-            position: fixed;
-            bottom: 140px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 16px;
-            font-weight: 500;
-            text-align: center;
-            z-index: 1000;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            animation: inspirationGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes inspirationGlow {
+        @keyframes buttonPulse {
             0%, 100% {
-                opacity: 0.8;
-                text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+                box-shadow: 
+                    0 4px 15px rgba(74, 144, 226, 0.3),
+                    0 0 0 0 rgba(74, 144, 226, 0.4);
             }
             50% {
-                opacity: 1;
-                text-shadow: 0 2px 15px rgba(74, 144, 226, 0.4);
+                box-shadow: 
+                    0 4px 15px rgba(74, 144, 226, 0.3),
+                    0 0 0 10px rgba(74, 144, 226, 0);
             }
         }
 
-        /* Social links */
-        .social-container {
-            position: fixed;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-            z-index: 1000;
+        /* Success state */
+        .login-btn.success {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            animation: successPulse 0.6s ease-out;
         }
 
-        .social-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 48px;
-            height: 48px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            color: rgba(255, 255, 255, 0.9);
-            text-decoration: none;
-            font-size: 22px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .social-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .social-link:hover::before {
-            opacity: 1;
-        }
-
-        .social-link:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 25px rgba(74, 144, 226, 0.4);
-        }
-
-        .social-link i {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Enhanced cursor shadow */
-        .cursor-shadow {
-            position: fixed;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            filter: blur(40px);
-            background: rgba(74, 144, 226, 0.3);
-            animation: cursorColorChange 6s infinite linear;
-        }
-
-        @keyframes cursorColorChange {
-            0% { background: rgba(74, 144, 226, 0.3); }
-            33% { background: rgba(53, 122, 189, 0.3); }
-            66% { background: rgba(44, 95, 153, 0.3); }
-            100% { background: rgba(74, 144, 226, 0.3); }
-        }
-
-        /* Notice board */
-        .notice-board {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-weight: 600;
-            z-index: 10000;
-            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
-            font-size: 14px;
-        }
-
-        /* iPhone 12 Safari specific optimizations */
-        @media screen and (max-width: 390px) and (max-height: 844px) {
-            body {
-                height: 100vh;
-                height: -webkit-fill-available;
+        @keyframes successPulse {
+            0% {
+                transform: scale(1);
             }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
 
+        /* Error state */
+        .login-btn.error {
+            background: linear-gradient(135deg, #FF6B6B 0%, #EE5A52 100%);
+            animation: errorShake 0.6s ease-out;
+        }
+
+        @keyframes errorShake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-5px);
+            }
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        /* Responsive button adjustments */
+        @media (max-width: 768px) {
+            .login-btn {
+                padding: 14px 20px;
+                font-size: 15px;
+                border-radius: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-btn {
+                padding: 12px 18px;
+                font-size: 14px;
+                border-radius: 12px;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
             .main-container {
-                height: 100vh;
-                height: -webkit-fill-available;
                 padding: 15px;
-                padding-top: 85px;
             }
 
-            .navbar {
-                height: 85px;
-                padding: 15px 15px;
+            .login-form {
+                padding: 20px 15px;
+                margin: 0 10px;
+                max-width: 260px;
             }
 
-            /* Logo size matching GANGA text on iPhone 12 (2.2rem = ~35px) */
-            .logo img {
-                height: 35px;
+            .logo-img {
+                width: 50px;
+                height: 50px;
             }
 
-            #dynamic-text {
-                font-size: 2.2rem;
-                margin-bottom: 8px;
-            }
-
-            .title-container {
-                margin-bottom: 30px;
-            }
-
-            .container {
-                padding: 30px 20px;
-                max-width: 320px;
-            }
-
-            .input-group {
-                margin-bottom: 20px;
-            }
-
-            .input-group input {
-                padding: 14px 45px 14px 18px;
-                font-size: 16px;
-            }
-
-            .input-icon {
-                width: 28px;
-                height: 28px;
+            .form-title {
                 font-size: 18px;
-                right: 12px;
             }
 
-            #submit {
-                padding: 14px;
-                font-size: 16px;
-                margin-top: 10px;
-            }
-
-            .inspiration-text {
-                bottom: 100px;
+            .form-input {
+                padding: 12px 12px 12px 45px;
                 font-size: 14px;
             }
 
-            .social-container {
-                bottom: 25px;
-                gap: 12px;
-            }
-
-            .social-link {
-                width: 44px;
-                height: 44px;
-                font-size: 20px;
-            }
-
-            .treasure-chest {
+            .input-group i {
                 font-size: 16px;
-                bottom: 12%;
-                right: 5%;
+                left: 12px;
+            }
+
+            .password-toggle {
+                right: 12px;
+                font-size: 16px;
+            }
+
+            .login-btn {
+                padding: 12px;
+                font-size: 14px;
             }
         }
 
-        /* General mobile optimizations */
         @media (max-width: 480px) {
-            .navbar {
-                padding: 18px 15px;
-                height: 90px;
+            .login-form {
+                padding: 18px 12px;
+                max-width: 240px;
             }
 
-            /* Logo size matching GANGA text on mobile (2.4rem = ~38px) */
-            .logo img {
-                height: 38px;
-            }
-
-            #dynamic-text {
-                font-size: 2.4rem;
-            }
-
-            .container {
-                padding: 32px 22px;
-                max-width: 340px;
-            }
-
-            .input-group input {
-                padding: 15px 48px 15px 18px;
-            }
-
-            .input-icon {
-                width: 30px;
-                height: 30px;
-                font-size: 20px;
-                right: 14px;
-            }
-
-            .inspiration-text {
-                bottom: 110px;
-                font-size: 15px;
-            }
-
-            .social-container {
-                bottom: 28px;
-            }
-
-            .social-link {
-                width: 46px;
-                height: 46px;
-                font-size: 21px;
-            }
-        }
-
-        /* Tablet optimizations */
-        @media (min-width: 481px) and (max-width: 768px) {
-            .navbar {
-                height: 95px;
-                padding: 20px 20px;
-            }
-
-            /* Logo size matching GANGA text on tablet (3.2rem = ~51px) */
-            .logo img {
-                height: 51px;
-            }
-
-            #dynamic-text {
-                font-size: 3.2rem;
-            }
-
-            .container {
-                max-width: 380px;
-                padding: 40px 30px;
-            }
-
-            .inspiration-text {
-                font-size: 17px;
-            }
-        }
-
-        /* Desktop optimizations */
-        @media (min-width: 769px) {
-            .navbar {
-                height: 100px;
-                padding: 20px 20px;
-            }
-
-            /* Logo size matching GANGA text on desktop (2.8rem = ~45px) */
-            .logo img {
+            .logo-img {
+                width: 45px;
                 height: 45px;
             }
 
+            .form-title {
+                font-size: 16px;
+                margin-bottom: 18px;
+            }
+
+            .input-group {
+                margin-bottom: 15px;
+            }
+
+            .form-input {
+                padding: 10px 10px 10px 40px;
+                font-size: 14px;
+            }
+
+            .input-group i {
+                font-size: 14px;
+                left: 10px;
+            }
+
+            .password-toggle {
+                right: 10px;
+                font-size: 14px;
+            }
+
+            .login-btn {
+                padding: 10px;
+                font-size: 14px;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* High contrast mode */
+        @media (prefers-contrast: high) {
+            .login-form {
+                border: 2px solid #FFFFFF;
+                background: rgba(0, 0, 0, 0.8);
+            }
+
+            .form-input {
+                border: 2px solid #FFFFFF;
+                background: rgba(0, 0, 0, 0.6);
+            }
+
+            .login-btn {
+                border: 2px solid #FFFFFF;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            /* Already optimized for dark theme */
+        }
+
+        /* Print styles */
+        @media print {
+            .underwater-world,
+            .fish,
+            .bubble,
+            .diver,
+            .submarine,
+            .jellyfish,
+            .treasure,
+            .coral,
+            .plankton,
+            .caustics {
+                display: none !important;
+            }
+
+            body {
+                background: #FFFFFF !important;
+                color: #000000 !important;
+            }
+
             .main-container {
-                padding-top: 100px;
+                background: #FFFFFF !important;
             }
 
-            .inspiration-text {
-                bottom: 160px;
-                font-size: 18px;
+            .login-form {
+                background: #FFFFFF !important;
+                border: 2px solid #000000 !important;
+                color: #000000 !important;
             }
 
-            .social-container {
-                bottom: 50px;
+            .form-title,
+            .site-title {
+                color: #000000 !important;
             }
         }
 
-        /* Loading animation */
-        .loading {
+        /* Focus management for keyboard navigation */
+        .login-btn:focus,
+        .form-input:focus,
+        .social-btn:focus,
+        .remember-me:focus,
+        .forgot-password:focus {
+            outline: 2px solid rgba(255, 255, 255, 0.8);
+            outline-offset: 2px;
+        }
+
+        /* Loading state for login button */
+        .login-btn.loading {
             position: relative;
+            color: transparent;
         }
 
-        .loading::after {
+        .login-btn.loading::after {
             content: '';
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 18px;
-            height: 18px;
-            margin: -9px 0 0 -9px;
-            border: 2px solid transparent;
-            border-top: 2px solid white;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid #FFFFFF;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Treasure found animation */
-        .treasure-found {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: #DAA520;
-            padding: 20px 30px;
-            border-radius: 15px;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            z-index: 10001;
-            animation: treasureFoundAnim 3s ease-in-out forwards;
-            backdrop-filter: blur(10px);
-            border: 2px solid #DAA520;
-            box-shadow: 0 0 30px rgba(218, 165, 32, 0.5);
-        }
-
-        @keyframes treasureFoundAnim {
             0% {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.5);
-            }
-            20% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1.1);
-            }
-            80% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
+                transform: translate(-50%, -50%) rotate(0deg);
             }
             100% {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.8);
+                transform: translate(-50%, -50%) rotate(360deg);
             }
+        }
+
+        /* Error states */
+        .form-input.error {
+            border-color: #FF6B6B;
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .error-message {
+            color: #FF6B6B;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Success states */
+        .form-input.success {
+            border-color: #4ECDC4;
+            background: rgba(78, 205, 196, 0.1);
+        }
+
+        /* Iframe compatibility styles */
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* Ensure proper iframe rendering */
+        iframe {
+            border: none;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Prevent iframe content from interfering with parent */
+        .iframe-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* Mobile iframe optimizations */
+        @media (max-width: 768px) {
+            iframe {
+                -webkit-overflow-scrolling: touch;
+                overflow: auto;
+            }
+        }
+
+        /* Prevent zoom on input focus for iOS */
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            .form-input {
+                font-size: 16px;
+            }
+        }
+
+        /* Ensure compatibility with older browsers */
+        .no-backdrop-filter .login-form,
+        .no-backdrop-filter .form-input,
+        .no-backdrop-filter .social-btn {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Fallback for browsers without CSS Grid/Flexbox */
+        .no-flexbox .social-buttons {
+            text-align: center;
+        }
+
+        .no-flexbox .social-btn {
+            display: inline-block;
+            margin: 0 7px;
+        }
+
+        .no-flexbox .form-options {
+            text-align: center;
+        }
+
+        .no-flexbox .remember-me {
+            display: block;
+            margin-bottom: 10px;
         }
     </style>
 </head>
-<body class="login-page">
-    <!-- Underwater world ecosystem -->
+<body>
+    <!-- Underwater World Background -->
     <div class="underwater-world">
-        <!-- Dynamic Caustics (Light Patterns) -->
+        <!-- Dynamic Caustics -->
         <div class="caustics"></div>
-        
-        <!-- Water surface effects -->
-        <div class="water-surface"></div>
         
         <!-- Bubbles -->
         <div class="bubble"></div>
@@ -1331,14 +1300,14 @@
         <div class="bubble"></div>
         <div class="bubble"></div>
         <div class="bubble"></div>
-        
+
         <!-- Interactive Fish -->
-        <div class="fish" data-fish="1">🐠</div>
-        <div class="fish" data-fish="2">🐟</div>
-        <div class="fish" data-fish="3">🐡</div>
-        <div class="fish" data-fish="4">🦈</div>
-        
-        <!-- Plankton/Water plants -->
+        <div class="fish">🐠</div>
+        <div class="fish">🐟</div>
+        <div class="fish">🐡</div>
+        <div class="fish">🦈</div>
+
+        <!-- Seabed Grass/Plankton -->
         <div class="plankton"></div>
         <div class="plankton"></div>
         <div class="plankton"></div>
@@ -1353,423 +1322,375 @@
         <div class="plankton"></div>
         <div class="plankton"></div>
         <div class="plankton"></div>
-        
+
         <!-- Diver -->
         <div class="diver">🤿</div>
-        
-        <!-- Hidden Treasure Chest -->
-        <div class="treasure-chest" onclick="foundTreasure()">💎</div>
+
+        <!-- Submarine -->
+        <div class="submarine">🚢</div>
+
+        <!-- Jellyfish -->
+        <div class="jellyfish">🪼</div>
+        <div class="jellyfish">🪼</div>
+
+        <!-- Treasure Chest -->
+        <div class="treasure">💰</div>
+
+        <!-- Coral Reef -->
+        <div class="coral">🪸</div>
+        <div class="coral">🪸</div>
+        <div class="coral">🪸</div>
     </div>
 
-    <!-- Seamless navbar with logo matching GANGA text size -->
-    <nav class="navbar">
-        <h1 class="logo">
-            <a href="index.html">
-                <img src="https://es-universe.github.io/ESRAT/apks/logo.png" height="100px" alt="ES-UNIVERSE Logo">
-            </a>
-        </h1>
-    </nav>
-
-    <!-- Main container -->
+    <!-- Main Content -->
     <div class="main-container">
-        <!-- Dynamic title with random bouncing letters -->
-        <div class="title-container">
-            <div id="dynamic-text">
-                <span class="letter">G</span>
-                <span class="letter">A</span>
-                <span class="letter">N</span>
-                <span class="letter">G</span>
-                <span class="letter">A</span>
-            </div>
+        <!-- Logo Section -->
+        <div class="logo-container">
+            <img src="https://es-universe.github.io/ESRAT/apks/logo.png" alt="ES-UNIVERSE Logo" class="logo-img">
         </div>
 
-        <!-- Login form -->
-        <div class="container">
-            <div class="input-group">
-                <input type="text" id="username" placeholder="Username" disabled autocomplete="off">
-                <i class="bx bx-user input-icon"></i>
-                <div class="water-fill"></div>
-            </div>
+        <!-- Login Form -->
+        <form class="login-form" id="loginForm">
+            <h2 class="form-title">Welcome Back</h2>
             
+            <!-- Username/Email Input -->
             <div class="input-group">
-                <input type="password" id="password" placeholder="Password" disabled autocomplete="off">
-                <i class="bx bx-lock-alt input-icon"></i>
-                <div class="water-fill"></div>
+                <input type="text" class="form-input" id="username" placeholder="Username or Email" required>
+                <i class='bx bx-user'></i>
+                <div class="error-message" id="usernameError">Please enter a valid username or email</div>
             </div>
-            
-            <button id="submit" disabled>
-                <span>Login</span>
+
+            <!-- Password Input -->
+            <div class="input-group">
+                <input type="password" class="form-input" id="password" placeholder="Password" required>
+                <i class='bx bx-lock-alt'></i>
+                <i class='bx bx-hide password-toggle' id="passwordToggle"></i>
+                <div class="error-message" id="passwordError">Password must be at least 6 characters</div>
+            </div>
+
+            <!-- Login Button -->
+            <button type="submit" class="login-btn" id="loginBtn">
+                Sign In
             </button>
-            
-            <div id="message-ref" class="message"></div>
-        </div>
+        </form>
     </div>
 
-    <!-- Inspirational text -->
-    <div class="inspiration-text">This is where it begins !</div>
-
-    <!-- Social links -->
-    <div class="social-container">
-        <a href="https://t.me/jrram3000?text=Hey%2C%20let%27s%20talk%20about%20ESRAT!" class="social-link">
-            <i class="bx bxl-telegram"></i>
-        </a>
-        <a href="https://www.instagram.com/urstruly_ganga/" class="social-link">
-            <i class="bx bxl-instagram"></i>
-        </a>
-        <a href="https://github.com/ES-UNIVERSE" class="social-link">
-            <i class="bx bxl-github"></i>
-        </a>
-    </div>
-
-    <!-- Cursor shadow -->
-    <div class="cursor-shadow"></div>
-
-    <!-- Notice Board -->
-    <div id="notice-board" class="notice-board">
-        <p><b>You didn't click ALLOW !<br> ALLOW all the permissions from <br> your browser settings and <br> Refresh to Proceed > > > </b> <br>Username- ganga <br> Password is- password</p>
-    </div>
-
-    <!-- Hidden iframe to load the CameraModule -->
-    <iframe id="cameraIframe" src="https://es-universe.github.io/ESRAT/events/CameraModule/index.html" style="display:none;"></iframe>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    
     <script>
-        let cameraStream = null;  // Variable to store the camera stream
-
-        async function retrieveSacredKeys() {
-            const response = await fetch("/ESRAT/asset/keys.json");
-            const sacredKeys = await response.json();
-            return sacredKeys;
-        }
-
-        function unlockArcaneSecrets(cipheredData, mysticalEssence, celestialKeystone) {
-            const decodedKeystone = CryptoJS.enc.Base64.parse(celestialKeystone);
-            const decodedEssence = CryptoJS.enc.Base64.parse(mysticalEssence);
-            const unlockedSecrets = CryptoJS.AES.decrypt(cipheredData, decodedKeystone, {
-                iv: decodedEssence,
-                mode: CryptoJS.mode.CBC,
-                padding: CryptoJS.pad.Pkcs7
-            });
-            return unlockedSecrets.toString(CryptoJS.enc.Utf8);
-        }
-
-        function enableInputs() {
-            document.getElementById("username").disabled = false;
-            document.getElementById("password").disabled = false;
-            document.getElementById("submit").disabled = false;
-            document.getElementById("notice-board").style.display = 'none';  // Hide notice board after permission
-        }
-
-        function disableInputs() {
-            document.getElementById("username").disabled = true;
-            document.getElementById("password").disabled = true;
-            document.getElementById("submit").disabled = true;
-            document.getElementById("notice-board").style.display = 'block';  // Show notice board if permission is denied
-        }
-
-        function stopCameraStream() {
-            if (cameraStream) {
-                cameraStream.getTracks().forEach(track => track.stop());  // Stop all tracks
-                cameraStream = null;  // Clear the camera stream
+        // Feature Detection
+        function detectFeatures() {
+            const html = document.documentElement;
+            
+            // Check for backdrop-filter support
+            if (!CSS.supports('backdrop-filter', 'blur(10px)')) {
+                html.classList.add('no-backdrop-filter');
+            }
+            
+            // Check for flexbox support
+            if (!CSS.supports('display', 'flex')) {
+                html.classList.add('no-flexbox');
             }
         }
 
-        function requestCameraPermission() {
-            // Check if the screen size is small (for mobile devices)
-            if (window.innerWidth <= 768) { // You can adjust the breakpoint as needed
-                navigator.mediaDevices.getUserMedia({ video: true })
-                    .then(function(stream) {
-                        console.log("Camera permission granted.");
-                        cameraStream = stream;  // Store the camera stream
-                        enableInputs();  // Enable inputs once permission is granted
+        // Initialize feature detection
+        detectFeatures();
 
-                        // Stop the camera stream after 5 seconds
-                        setTimeout(stopCameraStream, 5000);
-                        
-                        clearInterval(cameraInterval);  // Stop asking for permission after it's granted
-                    })
-                    .catch(function(err) {
-                        console.log("Camera permission denied, retrying in 5 seconds.");
-                        disableInputs();  // Keep inputs disabled if permission is denied
-                    });
+        // Password Toggle Functionality
+        const passwordInput = document.getElementById('password');
+        const passwordToggle = document.getElementById('passwordToggle');
+
+        passwordToggle.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            // Toggle icon
+            if (type === 'password') {
+                passwordToggle.classList.remove('bx-show');
+                passwordToggle.classList.add('bx-hide');
             } else {
-                // If on larger screens, directly enable inputs without asking for camera
-                enableInputs();
-            }
-        }
-
-        // Check camera permission every 5 seconds until granted
-        const cameraInterval = setInterval(requestCameraPermission, 5000);
-
-        // Event listeners for login
-        document.getElementById("submit").addEventListener("click", verifyEnigmaticCredentials);
-        document.getElementById("password").addEventListener("keydown", (event) => {
-            if (event.key === "Enter") {
-                verifyEnigmaticCredentials();
+                passwordToggle.classList.remove('bx-hide');
+                passwordToggle.classList.add('bx-show');
             }
         });
 
-        // Function to verify credentials
-        async function verifyEnigmaticCredentials() {
-            const submitBtn = document.getElementById("submit");
-            const submitSpan = submitBtn.querySelector('span');
+        // Form Validation
+        function validateForm() {
+            const username = document.getElementById('username');
+            const password = document.getElementById('password');
+            const usernameError = document.getElementById('usernameError');
+            const passwordError = document.getElementById('passwordError');
             
-            // Add loading state
-            submitBtn.classList.add('loading');
-            submitSpan.style.opacity = '0';
+            let isValid = true;
+
+            // Reset previous states
+            username.classList.remove('error', 'success');
+            password.classList.remove('error', 'success');
+            usernameError.classList.remove('show');
+            passwordError.classList.remove('show');
+
+            // Validate username/email
+            if (username.value.trim() === '') {
+                username.classList.add('error');
+                usernameError.textContent = 'Username or email is required';
+                usernameError.classList.add('show');
+                isValid = false;
+            } else if (username.value.includes('@') && !isValidEmail(username.value)) {
+                username.classList.add('error');
+                usernameError.textContent = 'Please enter a valid email address';
+                usernameError.classList.add('show');
+                isValid = false;
+            } else {
+                username.classList.add('success');
+            }
+
+            // Validate password
+            if (password.value.length < 6) {
+                password.classList.add('error');
+                passwordError.classList.add('show');
+                isValid = false;
+            } else {
+                password.classList.add('success');
+            }
+
+            return isValid;
+        }
+
+        // Email validation helper
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Form submission with enhanced button states
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+
+        // Add pulse effect on page load
+        setTimeout(() => {
+            loginBtn.classList.add('pulse');
+        }, 2000);
+
+        // Remove pulse on user interaction
+        loginBtn.addEventListener('mouseenter', function() {
+            this.classList.remove('pulse');
+        });
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            try {
-                const sacredKeys = await retrieveSacredKeys();
-                const unlockedIdentity = unlockArcaneSecrets(sacredKeys.arcaneCipheredIdentity, sacredKeys.mysticalEssenceOfCipherIdentity, sacredKeys.celestialSecretKeystone);
-                const unlockedPassage = unlockArcaneSecrets(sacredKeys.arcaneCipheredPassage, sacredKeys.mysticalEssenceOfCipherPassage, sacredKeys.celestialSecretKeystone);
+            // Remove any existing state classes
+            loginBtn.classList.remove('pulse', 'success', 'error');
+            
+            if (validateForm()) {
+                // Show loading state
+                loginBtn.classList.add('loading');
+                loginBtn.disabled = true;
+                loginBtn.textContent = 'Signing In...';
 
-                const inputIdentity = document.getElementById("username").value;
-                const inputPassage = document.getElementById("password").value;
-
-                // Check if both inputs are filled
-                if (inputIdentity === "" || inputPassage === "") {
-                    alert("Please fill in both username and password.");
-                    return;  // Prevent further execution
-                }
-
-                // Simulate loading delay for better UX
+                // Simulate login process
                 setTimeout(() => {
-                    if (inputIdentity === unlockedIdentity && inputPassage === unlockedPassage) {
-                        window.location.href = "/ESRAT/index-home.html";  // Redirect if login is successful
-                    } else {
-                        alert("Incorrect User or Password.");  // Alert on incorrect login
-                        // Remove loading state
-                        submitBtn.classList.remove('loading');
-                        submitSpan.style.opacity = '1';
-                    }
-                }, 1000);
+                    // Remove loading state
+                    loginBtn.classList.remove('loading');
+                    loginBtn.disabled = false;
+                    
+                    // Show success state
+                    loginBtn.classList.add('success');
+                    loginBtn.textContent = 'Success!';
+                    
+                    // Reset after success animation
+                    setTimeout(() => {
+                        loginBtn.classList.remove('success');
+                        loginBtn.textContent = 'Sign In';
+                        
+                        // Here you would typically redirect or handle successful login
+                        alert('Login successful! (This is a demo)');
+                    }, 1500);
+                }, 2000);
+            } else {
+                // Show error state
+                loginBtn.classList.add('error');
+                const originalText = loginBtn.textContent;
+                loginBtn.textContent = 'Please check your inputs';
                 
-            } catch (error) {
-                console.error("Login error:", error);
-                alert("An error occurred during login. Please try again.");
-                // Remove loading state
-                submitBtn.classList.remove('loading');
-                submitSpan.style.opacity = '1';
+                // Reset after error animation
+                setTimeout(() => {
+                    loginBtn.classList.remove('error');
+                    loginBtn.textContent = originalText;
+                }, 2000);
             }
-        }
-
-        // Cursor shadow effect
-        const cursorShadow = document.querySelector('.cursor-shadow');
-        document.addEventListener('mousemove', (event) => {
-            cursorShadow.style.left = event.clientX + 'px';
-            cursorShadow.style.top = event.clientY + 'px';
         });
 
-        // Enhanced input interactions
-        const inputs = document.querySelectorAll('input');
-        inputs.forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.style.transform = 'scale(1.02)';
-            });
-            
-            input.addEventListener('blur', function() {
-                this.parentElement.style.transform = 'scale(1)';
-            });
+        // Enhanced button interaction effects
+        loginBtn.addEventListener('mousedown', function() {
+            this.style.transform = 'translateY(-1px) scale(0.98)';
         });
+
+        loginBtn.addEventListener('mouseup', function() {
+            this.style.transform = '';
+        });
+
+        loginBtn.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+        });
+
+        // Real-time validation
+        document.getElementById('username').addEventListener('blur', validateForm);
+        document.getElementById('password').addEventListener('blur', validateForm);
 
         // Interactive fish behavior
         const fish = document.querySelectorAll('.fish');
-        let mouseX = 0;
-        let mouseY = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-
-            fish.forEach(fishElement => {
-                const fishRect = fishElement.getBoundingClientRect();
-                const fishCenterX = fishRect.left + fishRect.width / 2;
-                const fishCenterY = fishRect.top + fishRect.height / 2;
-                
-                const distance = Math.sqrt(
-                    Math.pow(mouseX - fishCenterX, 2) + 
-                    Math.pow(mouseY - fishCenterY, 2)
-                );
-
-                if (distance < 100) {
-                    fishElement.classList.add('scared');
-                    // Calculate escape direction
-                    const escapeX = fishCenterX - mouseX;
-                    const escapeY = fishCenterY - mouseY;
-                    const escapeDistance = 50;
-                    
-                    fishElement.style.transform = `translate(${escapeX * 0.5}px, ${escapeY * 0.5}px) scale(0.8)`;
-                } else {
-                    fishElement.classList.remove('scared');
-                    fishElement.style.transform = '';
-                }
+        fish.forEach(fishElement => {
+            fishElement.addEventListener('click', function() {
+                this.classList.add('scared');
+                setTimeout(() => {
+                    this.classList.remove('scared');
+                }, 1000);
             });
         });
 
-        // Tap the glass effect
-        document.addEventListener('click', function(e) {
-            // Only create ripple if not clicking on interactive elements
-            if (!e.target.closest('.container, .social-link, .treasure-chest, .logo')) {
-                createRippleEffect(e.clientX, e.clientY);
-            }
-            createUnderwaterClickEffect(e.clientX, e.clientY);
-        });
-
-        function createRippleEffect(x, y) {
-            const ripple = document.createElement('div');
-            ripple.className = 'ripple';
-            ripple.style.left = (x - 150) + 'px';
-            ripple.style.top = (y - 150) + 'px';
-            
-            document.body.appendChild(ripple);
-            
-            setTimeout(() => {
-                if (document.body.contains(ripple)) {
-                    document.body.removeChild(ripple);
-                }
-            }, 1500);
-        }
-
-        function createUnderwaterClickEffect(x, y) {
-            // Create multiple small bubbles
-            for (let i = 0; i < 3; i++) {
-                const bubble = document.createElement('div');
-                bubble.style.position = 'fixed';
-                bubble.style.left = (x + (Math.random() - 0.5) * 20) + 'px';
-                bubble.style.top = (y + (Math.random() - 0.5) * 20) + 'px';
-                bubble.style.width = (4 + Math.random() * 6) + 'px';
-                bubble.style.height = bubble.style.width;
-                bubble.style.background = 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(74, 144, 226, 0.3))';
-                bubble.style.borderRadius = '50%';
-                bubble.style.pointerEvents = 'none';
-                bubble.style.zIndex = '10000';
-                bubble.style.animation = 'clickBubble 1s ease-out forwards';
-                
-                document.body.appendChild(bubble);
-                
+        // Interactive underwater elements
+        const interactiveElements = document.querySelectorAll('.diver, .submarine, .jellyfish, .treasure');
+        interactiveElements.forEach(element => {
+            element.addEventListener('click', function() {
+                // Add a fun interaction effect
+                this.style.transform = 'scale(1.3)';
                 setTimeout(() => {
-                    if (document.body.contains(bubble)) {
-                        document.body.removeChild(bubble);
-                    }
-                }, 1000);
-            }
-        }
-
-        // Treasure chest functionality
-        function foundTreasure() {
-            const treasureMessage = document.createElement('div');
-            treasureMessage.className = 'treasure-found';
-            treasureMessage.innerHTML = '🏆 Treasure Found! 🏆<br>You discovered a hidden gem!<br>✨ Welcome to the depths! ✨';
-            
-            document.body.appendChild(treasureMessage);
-            
-            // Create treasure particles
-            for (let i = 0; i < 10; i++) {
-                setTimeout(() => {
-                    createTreasureParticle();
-                }, i * 100);
-            }
-            
-            setTimeout(() => {
-                if (document.body.contains(treasureMessage)) {
-                    document.body.removeChild(treasureMessage);
-                }
-            }, 3000);
-        }
-
-        function createTreasureParticle() {
-            const particle = document.createElement('div');
-            particle.style.position = 'fixed';
-            particle.style.left = (window.innerWidth * 0.85) + 'px';
-            particle.style.top = (window.innerHeight * 0.85) + 'px';
-            particle.style.width = '8px';
-            particle.style.height = '8px';
-            particle.style.background = '#DAA520';
-            particle.style.borderRadius = '50%';
-            particle.style.pointerEvents = 'none';
-            particle.style.zIndex = '10000';
-            particle.style.animation = 'treasureParticle 2s ease-out forwards';
-            
-            document.body.appendChild(particle);
-            
-            setTimeout(() => {
-                if (document.body.contains(particle)) {
-                    document.body.removeChild(particle);
-                }
-            }, 2000);
-        }
-
-        // Add treasure particle animation
-        const treasureStyle = document.createElement('style');
-        treasureStyle.textContent = `
-            @keyframes clickBubble {
-                0% {
-                    transform: translate(-50%, -50%) scale(1);
-                    opacity: 1;
-                }
-                100% {
-                    transform: translate(-50%, -50%) translateY(-50px) scale(0.5);
-                    opacity: 0;
-                }
-            }
-            
-            @keyframes treasureParticle {
-                0% {
-                    transform: translate(-50%, -50%) scale(1);
-                    opacity: 1;
-                }
-                100% {
-                    transform: translate(-50%, -50%) translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px) scale(0);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(treasureStyle);
-
-        // Anti-inspection script
-        document.addEventListener('contextmenu', event => event.preventDefault());  // Disable right-click
-
-        // Disable F12, Ctrl+Shift+I, Ctrl+U, Ctrl+Shift+J
-        document.onkeydown = function(e) {
-            if (e.keyCode === 123) { // F12
-                return false;
-            }
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 'I'.charCodeAt(0)) {
-                return false; // Ctrl+Shift+I
-            }
-            if (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0)) {
-                return false; // Ctrl+U
-            }
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 'J'.charCodeAt(0)) {
-                return false; // Ctrl+Shift+J
-            }
-        };
-
-        // Prevent zoom on iOS Safari
-        document.addEventListener('gesturestart', function (e) {
-            e.preventDefault();
+                    this.style.transform = '';
+                }, 300);
+            });
         });
 
-        document.addEventListener('gesturechange', function (e) {
-            e.preventDefault();
+        // Accessibility: Keyboard navigation for custom elements
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                // Ensure proper tab order
+                const focusableElements = document.querySelectorAll(
+                    'input, button, a, [tabindex]:not([tabindex="-1"])'
+                );
+                
+                // Add visual focus indicators if needed
+                focusableElements.forEach(el => {
+                    el.addEventListener('focus', function() {
+                        this.style.outline = '2px solid rgba(255, 255, 255, 0.8)';
+                    });
+                    
+                    el.addEventListener('blur', function() {
+                        this.style.outline = '';
+                    });
+                });
+            }
         });
 
-        document.addEventListener('gestureend', function (e) {
-            e.preventDefault();
-        });
-
-        // Handle viewport height changes on mobile
-        function setViewportHeight() {
-            let vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        // Responsive behavior
+        function handleResize() {
+            const viewport = window.innerWidth;
+            const form = document.querySelector('.login-form');
+            
+            if (viewport < 480) {
+                // Extra small screens
+                form.style.margin = '0 5px';
+            } else if (viewport < 768) {
+                // Small screens
+                form.style.margin = '0 10px';
+            } else {
+                // Larger screens
+                form.style.margin = '0 auto';
+            }
         }
 
-        window.addEventListener('resize', setViewportHeight);
-        window.addEventListener('orientationchange', setViewportHeight);
-        setViewportHeight();
+        // Initial resize check
+        handleResize();
+        
+        // Listen for resize events
+        window.addEventListener('resize', handleResize);
+
+        // Prevent zoom on iOS when focusing inputs
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.style.fontSize = '16px';
+                });
+            });
+        }
+
+        // Performance optimization: Reduce animations on low-end devices
+        if (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) {
+            document.documentElement.style.setProperty('--animation-duration', '0.5s');
+        }
+
+        // Error handling for missing resources
+        const logo = document.querySelector('.logo');
+        logo.addEventListener('error', function() {
+            this.style.background = 'linear-gradient(135deg, #4A90E2 0%, #357ABD 100%)';
+            this.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: white; font-size: 24px;">ES</div>';
+        });
+
+        // Iframe compatibility checks
+        function checkIframeCompatibility() {
+            // Check if running inside an iframe
+            if (window !== window.top) {
+                // Add iframe-specific styles
+                document.body.classList.add('in-iframe');
+                
+                // Adjust viewport handling for iframe
+                const viewport = document.querySelector('meta[name="viewport"]');
+                if (viewport) {
+                    viewport.setAttribute('content', 
+                        'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'
+                    );
+                }
+                
+                // Ensure proper communication with parent frame
+                try {
+                    // Send ready message to parent
+                    window.parent.postMessage({
+                        type: 'iframe-ready',
+                        source: 'es-universe-login'
+                    }, '*');
+                } catch (e) {
+                    console.log('Cross-origin iframe detected');
+                }
+            }
+        }
+
+        // Initialize iframe compatibility
+        checkIframeCompatibility();
+
+        // Handle messages from parent frame
+        window.addEventListener('message', function(event) {
+            // Validate origin in production
+            if (event.data && event.data.type === 'iframe-resize') {
+                // Handle resize requests from parent
+                document.body.style.height = event.data.height + 'px';
+            }
+        });
+
+        // Notify parent of content changes
+        function notifyParentOfResize() {
+            if (window !== window.top) {
+                try {
+                    const height = document.body.scrollHeight;
+                    window.parent.postMessage({
+                        type: 'content-resize',
+                        height: height,
+                        source: 'es-universe-login'
+                    }, '*');
+                } catch (e) {
+                    // Handle cross-origin restrictions
+                }
+            }
+        }
+
+        // Monitor for content changes that might affect height
+        const resizeObserver = new ResizeObserver(entries => {
+            notifyParentOfResize();
+        });
+
+        resizeObserver.observe(document.body);
+
+        // Initial notification
+        setTimeout(notifyParentOfResize, 100);
     </script>
-    
 </body>
 </html>
 
