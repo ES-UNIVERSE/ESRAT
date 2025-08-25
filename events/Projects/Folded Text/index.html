@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Mr. X</title>
+    <!-- Font Awesome for microphone icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
         /* Apple System Font Stack */
         * {
@@ -14,15 +16,23 @@
         }
 
         body {
-            height: 100vh;
-            height: 100dvh; /* Dynamic viewport height for mobile */
-            overflow: hidden;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
-            position: relative;
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile */
+    overflow: hidden;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+    position: relative;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    /* 🚫 Prevent text/image selection & dragging */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
 
         #app-container {
             height: 100vh;
@@ -187,15 +197,16 @@
             transform: scale(0.95);
         }
 
+        /* IMPROVED: Smaller main header */
         #main-header {
-            padding: 20px 25px;
+            padding: 8px 16px; /* Reduced from 12px 20px */
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
             border-bottom: 1px solid rgba(255, 154, 158, 0.2);
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 12px; /* Reduced from 15px */
             box-shadow: 0 2px 20px rgba(255, 154, 158, 0.1);
             flex-shrink: 0;
         }
@@ -203,16 +214,16 @@
         #open-sidebar-btn {
             background: rgba(255, 154, 158, 0.1);
             border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 22px;
+            width: 32px; /* Reduced from 36px */
+            height: 32px; /* Reduced from 36px */
+            border-radius: 16px; /* Adjusted for new size */
             color: #ff9a9e;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 14px; /* Reduced from 16px */
             font-weight: 600;
         }
 
@@ -222,7 +233,7 @@
         }
 
         #current-chat-date {
-            font-size: 20px;
+            font-size: 16px; /* Reduced from 18px */
             font-weight: 700;
             background: linear-gradient(135deg, #ff9a9e, #f093fb);
             -webkit-background-clip: text;
@@ -250,7 +261,7 @@
         #messages-container {
             flex: 1;
             overflow-y: auto;
-            padding: 25px;
+            padding: 20px; /* Reduced from 25px */
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
         }
@@ -391,17 +402,17 @@
             100% { transform: scale(1); }
         }
 
-        /* Perfect Pill-Shaped Message Input Area */
+        /* IMPROVED: Smaller message input area */
         #message-input-area {
-            padding: 20px 25px;
-            padding-bottom: calc(20px + env(safe-area-inset-bottom));
+            padding: 10px 16px; /* Reduced from 15px 20px */
+            padding-bottom: calc(10px + env(safe-area-inset-bottom)); /* Reduced base padding */
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
             border-top: 1px solid rgba(255, 154, 158, 0.2);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px; /* Reduced from 10px */
             box-shadow: 0 -2px 20px rgba(255, 154, 158, 0.1);
             flex-shrink: 0;
         }
@@ -412,7 +423,7 @@
             display: flex;
             align-items: center;
             background: rgba(255, 255, 255, 0.9);
-            border-radius: 25px;
+            border-radius: 20px; /* Reduced from 25px */
             border: 2px solid transparent;
             transition: all 0.3s ease;
             box-shadow: 0 4px 20px rgba(255, 154, 158, 0.1);
@@ -428,10 +439,10 @@
 
         #message-text-input {
             flex: 1;
-            padding: 14px 20px;
+            padding: 10px 16px; /* Reduced from 14px 20px */
             border: none;
             background: transparent;
-            font-size: 16px;
+            font-size: 15px; /* Reduced from 16px */
             outline: none;
             color: #333;
             font-weight: 500;
@@ -442,12 +453,12 @@
             font-weight: 500;
         }
 
-        /* Enhanced Apple-like Action Buttons */
+        /* Enhanced Apple-like Action Buttons - Smaller */
         .action-button {
-            width: 48px;
-            height: 48px;
+            width: 36px; /* Reduced from 42px */
+            height: 36px; /* Reduced from 42px */
             border: none;
-            border-radius: 24px;
+            border-radius: 18px; /* Adjusted for new size */
             background: linear-gradient(135deg, #ff9a9e 0%, #f093fb 100%);
             color: white;
             cursor: pointer;
@@ -458,6 +469,11 @@
             box-shadow: 0 6px 20px rgba(255, 154, 158, 0.3);
             position: relative;
             overflow: hidden;
+        }
+
+        .action-button .icon {
+            width: 20px; /* Reduced icon size */
+            height: 20px;
         }
 
         .action-button::before {
@@ -498,12 +514,12 @@
             100% { transform: scale(1); box-shadow: 0 6px 20px rgba(255, 65, 108, 0.3); }
         }
 
-        /* Send Button */
+        /* Send Button - Smaller */
         #send-btn {
-            width: 48px;
-            height: 48px;
+            width: 36px; /* Reduced from 42px */
+            height: 36px; /* Reduced from 42px */
             border: none;
-            border-radius: 24px;
+            border-radius: 18px; /* Adjusted for new size */
             background: linear-gradient(135deg, #ff9a9e 0%, #f093fb 100%);
             color: white;
             cursor: pointer;
@@ -515,6 +531,11 @@
             opacity: 0;
             transform: scale(0.8);
             pointer-events: none;
+        }
+
+        #send-btn .icon {
+            width: 18px; /* Reduced icon size */
+            height: 18px;
         }
 
         #send-btn.visible {
@@ -621,6 +642,61 @@
             font-weight: 500;
         }
 
+        /* NEW: Apple-style Toggle Switch */
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 154, 158, 0.1);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .setting-label {
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 30px;
+            background: rgba(255, 154, 158, 0.2);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            outline: none;
+        }
+
+        .toggle-switch.active {
+            background: linear-gradient(135deg, #ff9a9e, #f093fb);
+            box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 26px;
+            height: 26px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(20px);
+            box-shadow: 0 4px 12px rgba(255, 154, 158, 0.3);
+        }
+
         /* Enhanced Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
@@ -664,15 +740,15 @@
             }
 
             #main-header {
-                padding: 15px 20px;
+                padding: 10px 16px; /* Slightly larger on mobile */
             }
 
             #current-chat-date {
-                font-size: 18px;
+                font-size: 16px;
             }
 
             #messages-container {
-                padding: 20px;
+                padding: 16px; /* Reduced from 20px */
             }
 
             .message-bubble {
@@ -681,24 +757,24 @@
             }
 
             #message-input-area {
-                padding: 15px 20px;
-                padding-bottom: calc(15px + env(safe-area-inset-bottom));
-                gap: 10px;
+                padding: 12px 16px; /* Slightly larger on mobile */
+                padding-bottom: calc(12px + env(safe-area-inset-bottom));
+                gap: 8px;
             }
 
             .action-button {
-                width: 44px;
-                height: 44px;
+                width: 38px; /* Slightly larger on mobile */
+                height: 38px;
             }
 
             #send-btn {
-                width: 44px;
-                height: 44px;
+                width: 38px;
+                height: 38px;
             }
 
             #message-text-input {
-                font-size: 16px;
-                padding: 12px 18px;
+                font-size: 16px; /* Prevent zoom on iOS */
+                padding: 10px 16px;
             }
 
             .overlay-content {
@@ -714,7 +790,7 @@
             }
             
             #message-input-area {
-                padding-bottom: calc(15px + env(safe-area-inset-bottom, 20px));
+                padding-bottom: calc(12px + env(safe-area-inset-bottom, 20px));
             }
 
             .message-bubble {
@@ -726,7 +802,7 @@
         @supports (-webkit-appearance: none) {
             #message-text-input {
                 -webkit-appearance: none;
-                border-radius: 25px;
+                border-radius: 20px;
             }
             
             .input-container {
@@ -744,14 +820,33 @@
         button, input, .message-bubble, .chat-item, .input-container {
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
+
+        /* NEW: Sidebar overlay for outside click detection */
+        #sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 999;
+            display: none;
+        }
+
+        #sidebar-overlay.show {
+            display: block;
+        }
     </style>
 </head>
 <body>
     <div id="app-container">
+        <!-- NEW: Sidebar overlay for outside click detection -->
+        <div id="sidebar-overlay"></div>
+
         <!-- Enhanced Sidebar -->
         <aside id="sidebar">
             <div id="sidebar-header">
-                <h2>Past Chats</h2>
+                <h2>History</h2>
                 <button id="close-sidebar-btn">✕</button>
             </div>
             <ul id="past-chats-list">
@@ -794,15 +889,11 @@
                     <!-- Messages will be dynamically loaded here -->
                 </div>
                 <div id="message-input-area">
-                    <button id="image-upload-btn" class="action-button">
-                        <span class="icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                <polyline points="21,15 16,10 5,21"></polyline>
-                            </svg>
-                        </span>
-                    </button>
+                    <button id="image-upload-btn" class="action-button"> 
+    <span class="icon">
+        <i class="fa-solid fa-image"></i>
+    </span>
+</button>
                     <input type="file" id="image-input" accept="image/*" style="display: none;">
                     
                     <div class="input-container">
@@ -818,15 +909,11 @@
                     </div>
                     
                     <button id="voice-record-btn" class="action-button">
-                        <span class="icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="m12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0v-8a3 3 0 0 0-3-3z"></path>
-                                <path d="m19 10v2a7 7 0 0 1-14 0v-2"></path>
-                                <line x1="12" y1="19" x2="12" y2="23"></line>
-                                <line x1="8" y1="23" x2="16" y2="23"></line>
-                            </svg>
-                        </span>
-                    </button>
+    <span class="icon">
+        <i class="fa-solid fa-microphone"></i>
+    </span>
+</button>
+
                 </div>
             </section>
         </main>
@@ -836,11 +923,44 @@
             <div class="overlay-content">
                 <h2>Settings</h2>
                 <button id="close-settings-btn">✕</button>
-                <p><strong>Theme:</strong> Pink Gradient</p>
-                <p><strong>Profile:</strong> Anonymous</p>
-                <p><strong>Version:</strong> Mr. X v3.0</p>
-                <p><strong>Features:</strong> Real-time messaging, Image & Voice sharing</p>
-                <p><strong>Compatibility:</strong> Safari Optimized</p>
+                
+                <div class="setting-item">
+                    <span class="setting-label">Profile</span>
+                    <span style="color: #666; font-size: 14px;">Anonymous</span>
+                </div>
+
+                <div class="setting-item">
+                    <span class="setting-label">Encryption:</span>
+                    <span style="color: #666; font-size: 14px;">8 bit</span>
+                </div>
+                
+                <div class="setting-item">
+                    <span class="setting-label">Version</span>
+                    <span style="color: #666; font-size: 14px;">Mr. X v3.0</span>
+                </div>
+
+                <div class="setting-item">
+                    <span class="setting-label">Developer</span>
+                    <span style="color: #666; font-size: 14px;">Unknown</span>
+                </div>
+                
+                <div class="setting-item">
+                    <span class="setting-label">Features</span>
+                    <span style="color: #666; font-size: 14px;">Real-time Messaging</span>
+                </div>
+                
+                <div class="setting-item">
+                    <span class="setting-label">Compatibility</span>
+                    <span style="color: #666; font-size: 14px;">All Devices</span>
+                </div>
+                
+                <!-- NEW: Apple-style toggle -->
+                <div class="setting-item">
+                    <span class="setting-label">Auto-scroll to Latest</span>
+                    <button class="toggle-switch active" id="auto-scroll-toggle">
+                        <div class="toggle-slider"></div>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -871,6 +991,7 @@
         let currentChatDate = '';
         let deviceId = '';
         let messagesRef = null;
+        let autoScrollEnabled = true; // NEW: Auto-scroll setting
 
         // Generate or retrieve device ID for anonymous identification
         function getDeviceId() {
@@ -897,6 +1018,19 @@
                 hour: '2-digit', 
                 minute: '2-digit' 
             });
+        }
+
+        // NEW: Scroll to bottom function
+        function scrollToBottom() {
+            if (autoScrollEnabled) {
+                const messagesContainer = document.getElementById('messages-container');
+                setTimeout(() => {
+                    messagesContainer.scrollTo({
+                        top: messagesContainer.scrollHeight,
+                        behavior: 'smooth'
+                    });
+                }, 100);
+            }
         }
 
         // Add message to UI with compact bubble design
@@ -935,13 +1069,8 @@
             messageElement.appendChild(messageBubble);
             messagesContainer.appendChild(messageElement);
             
-            // Smooth scroll to bottom
-            setTimeout(() => {
-                messagesContainer.scrollTo({
-                    top: messagesContainer.scrollHeight,
-                    behavior: 'smooth'
-                });
-            }, 100);
+            // IMPROVED: Auto-scroll to bottom
+            scrollToBottom();
         }
 
         // Escape HTML to prevent XSS
@@ -959,24 +1088,15 @@
                 content: content,
                 timestamp: Date.now(),
                 type: type,
-                likes: {}
+                deviceId: deviceId
             };
-
-            const newMessageRef = messagesRef.push();
-            newMessageRef.set(messageData)
-                .then(() => {
-                    console.log('Message sent successfully');
-                })
-                .catch((error) => {
-                    console.error('Error sending message:', error);
-                    alert('Failed to send message. Please try again.');
-                });
+            
+            messagesRef.push(messageData);
         }
 
         // Toggle like on message
         function toggleLike(messageId, buttonElement) {
             const messageRef = database.ref(`chats/${currentChatDate}/messages/${messageId}/likes/${deviceId}`);
-            const likeCountSpan = buttonElement.querySelector('.like-count');
             const heart = buttonElement.querySelector('.heart');
             
             if (buttonElement.classList.contains('liked')) {
@@ -984,8 +1104,7 @@
                 messageRef.remove()
                     .then(() => {
                         buttonElement.classList.remove('liked');
-                        const currentCount = parseInt(likeCountSpan.textContent);
-                        likeCountSpan.textContent = Math.max(0, currentCount - 1);
+                        heart.style.animation = '';
                     })
                     .catch((error) => {
                         console.error('Error removing like:', error);
@@ -995,11 +1114,6 @@
                 messageRef.set(true)
                     .then(() => {
                         buttonElement.classList.add('liked');
-                        const currentCount = parseInt(likeCountSpan.textContent);
-                        likeCountSpan.textContent = currentCount + 1;
-                        
-                        // Animate heart
-                        heart.style.animation = 'none';
                         setTimeout(() => {
                             heart.style.animation = 'heartBeat 0.6s ease';
                         }, 10);
@@ -1063,6 +1177,20 @@
                 day: 'numeric' 
             });
             currentDateElement.textContent = dateString;
+            
+            // Set 'Today' button as active
+            document.querySelectorAll(".chat-item").forEach(item => {
+                item.classList.remove("active");
+            });
+            const todayItem = document.querySelector(`[data-date="${getCurrentDateString()}"]`);
+            if (todayItem) {
+                todayItem.classList.add("active");
+            }
+
+            // IMPROVED: Scroll to bottom after loading messages
+            setTimeout(() => {
+                scrollToBottom();
+            }, 500);
         }
 
         // Load past chats for sidebar
@@ -1073,10 +1201,18 @@
                 const pastChatsList = document.getElementById('past-chats-list');
                 pastChatsList.innerHTML = '';
                 
+                // Add 'Today' button
+                const todayListItem = document.createElement('li');
+                todayListItem.className = 'chat-item';
+                todayListItem.textContent = 'Today';
+                todayListItem.setAttribute('data-date', getCurrentDateString());
+                todayListItem.addEventListener('click', () => returnToCurrentChat());
+                pastChatsList.appendChild(todayListItem);
+
                 if (chats) {
                     const chatDates = Object.keys(chats).sort().reverse();
                     chatDates.forEach((dateString) => {
-                        if (dateString !== currentChatDate) {
+                        if (dateString !== getCurrentDateString()) { // Exclude current date from past chats
                             const listItem = document.createElement('li');
                             listItem.className = 'chat-item';
                             listItem.textContent = formatDateForSidebar(dateString);
@@ -1085,6 +1221,11 @@
                             pastChatsList.appendChild(listItem);
                         }
                     });
+                }
+
+                // Set 'Today' button as active if current chat is today
+                if (currentChatDate === getCurrentDateString()) {
+                    todayListItem.classList.add('active');
                 }
             });
         }
@@ -1131,6 +1272,10 @@
                         addMessageToUI(messages[messageId], messageId);
                     });
                 }
+                // IMPROVED: Scroll to bottom after loading past messages
+                setTimeout(() => {
+                    scrollToBottom();
+                }, 300);
             });
             
             // Update sidebar active state
@@ -1183,15 +1328,21 @@
         function openSidebar() {
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('main-content');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            
             sidebar.classList.add('open');
             mainContent.classList.add('blurred');
+            sidebarOverlay.classList.add('show'); // NEW: Show overlay
         }
 
         function closeSidebar() {
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('main-content');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            
             sidebar.classList.remove('open');
             mainContent.classList.remove('blurred');
+            sidebarOverlay.classList.remove('show'); // NEW: Hide overlay
         }
 
         // Compress and upload image
@@ -1292,12 +1443,11 @@
                     const voiceRecordBtn = document.getElementById('voice-record-btn');
                     voiceRecordBtn.classList.add('recording');
                     voiceRecordBtn.innerHTML = `
-                        <span class="icon">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <rect x="6" y="6" width="12" height="12" rx="2"></rect>
-                            </svg>
-                        </span>
-                    `;
+    <span class="icon">
+        <i class="fa-solid fa-stop"></i>
+    </span>
+`;
+
                     
                     // Auto-stop after 60 seconds
                     recordingTimeout = setTimeout(() => {
@@ -1340,15 +1490,11 @@
                 // Reset button
                 const voiceRecordBtn = document.getElementById('voice-record-btn');
                 voiceRecordBtn.innerHTML = `
-                    <span class="icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="m12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0v-8a3 3 0 0 0-3-3z"></path>
-                            <path d="m19 10v2a7 7 0 0 1-14 0v-2"></path>
-                            <line x1="12" y1="19" x2="12" y2="23"></line>
-                            <line x1="8" y1="23" x2="16" y2="23"></line>
-                        </svg>
-                    </span>
-                `;
+    <span class="icon">
+        <i class="fa-solid fa-microphone"></i>
+    </span>
+`;
+
                 voiceRecordBtn.disabled = false;
             }).catch((error) => {
                 console.error('Error uploading audio:', error);
@@ -1356,147 +1502,140 @@
                 // Reset button
                 const voiceRecordBtn = document.getElementById('voice-record-btn');
                 voiceRecordBtn.innerHTML = `
-                    <span class="icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="m12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0v-8a3 3 0 0 0-3-3z"></path>
-                            <path d="m19 10v2a7 7 0 0 1-14 0v-2"></path>
-                            <line x1="12" y1="19" x2="12" y2="23"></line>
-                            <line x1="8" y1="23" x2="16" y2="23"></line>
-                        </svg>
-                    </span>
-                `;
+    <span class="icon">
+        <i class="fa-solid fa-microphone"></i>
+    </span>
+`;
+
                 voiceRecordBtn.disabled = false;
             });
         }
 
-        // Make functions globally available
-        window.toggleLike = toggleLike;
-
+        // Initialize app when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Firebase and chat
+            // Load auto-scroll setting from localStorage
+            const savedAutoScroll = localStorage.getItem('mrx_auto_scroll');
+            if (savedAutoScroll !== null) {
+                autoScrollEnabled = savedAutoScroll === 'true';
+            }
+
+            // Initialize chat
             initializeChat();
             loadPastChats();
 
-            // Enhanced sidebar toggle functionality
-            const openSidebarBtn = document.getElementById('open-sidebar-btn');
-            const closeSidebarBtn = document.getElementById('close-sidebar-btn');
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('main-content');
-
-            openSidebarBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                openSidebar();
-            });
-
-            closeSidebarBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                closeSidebar();
-            });
-
-            // Enhanced settings overlay functionality
+            // Get DOM elements
+            const messageInput = document.getElementById('message-text-input');
+            const sendBtn = document.getElementById('send-btn');
+            const imageUploadBtn = document.getElementById('image-upload-btn');
+            const imageInput = document.getElementById('image-input');
+            const voiceRecordBtn = document.getElementById('voice-record-btn');
             const settingsBtn = document.getElementById('settings-btn');
             const settingsOverlay = document.getElementById('settings-overlay');
             const closeSettingsBtn = document.getElementById('close-settings-btn');
-
-            settingsBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                settingsOverlay.classList.add('show');
-                closeSidebar();
-            });
-
-            closeSettingsBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                settingsOverlay.classList.remove('show');
-                mainContent.classList.remove('blurred');
-            });
-
-            // Close overlay when clicking outside
-            settingsOverlay.addEventListener('click', function(e) {
-                if (e.target === settingsOverlay) {
-                    settingsOverlay.classList.remove('show');
-                    mainContent.classList.remove('blurred');
-                }
-            });
-
-            // Close sidebar when clicking outside on mobile
-            document.addEventListener('click', function(e) {
-                if (window.innerWidth <= 768 && 
-                    !sidebar.contains(e.target) && 
-                    !openSidebarBtn.contains(e.target) && 
-                    sidebar.classList.contains('open')) {
-                    closeSidebar();
-                }
-            });
-
-            // Enhanced image upload functionality
-            const imageUploadBtn = document.getElementById('image-upload-btn');
-            const imageInput = document.getElementById('image-input');
-
-            imageUploadBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (!imageUploadBtn.disabled) {
-                    imageInput.click();
-                }
-            });
-
-            imageInput.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    compressAndUploadImage(file);
-                }
-                // Reset input
-                imageInput.value = '';
-            });
-
-            // Enhanced voice recording functionality
-            const voiceRecordBtn = document.getElementById('voice-record-btn');
-
-            voiceRecordBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (!voiceRecordBtn.disabled) {
-                    if (!isRecording) {
-                        startRecording();
-                    } else {
-                        stopRecording();
-                    }
-                }
-            });
-
-            // Enhanced message input functionality
-            const messageInput = document.getElementById('message-text-input');
-            const sendBtn = document.getElementById('send-btn');
+            const currentDateElement = document.getElementById('current-chat-date');
+            const autoScrollToggle = document.getElementById('auto-scroll-toggle');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
             
+            // Sidebar event listeners
+            const openSidebarBtn = document.getElementById('open-sidebar-btn');
+            const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+            
+            // Open sidebar event listener
+            openSidebarBtn.addEventListener('click', openSidebar);
+            
+            // Close sidebar event listener
+            closeSidebarBtn.addEventListener('click', closeSidebar);
+
+            // NEW: Close sidebar when clicking outside (on overlay)
+            sidebarOverlay.addEventListener('click', closeSidebar);
+
+            // NEW: Auto-scroll toggle functionality
+            autoScrollToggle.addEventListener('click', function() {
+                autoScrollEnabled = !autoScrollEnabled;
+                localStorage.setItem('mrx_auto_scroll', autoScrollEnabled.toString());
+                
+                if (autoScrollEnabled) {
+                    autoScrollToggle.classList.add('active');
+                    scrollToBottom(); // Scroll to bottom when enabled
+                } else {
+                    autoScrollToggle.classList.remove('active');
+                }
+            });
+
+            // Set initial toggle state
+            if (autoScrollEnabled) {
+                autoScrollToggle.classList.add('active');
+            } else {
+                autoScrollToggle.classList.remove('active');
+            }
+
+            // Send message functionality
+            function handleSendMessage() {
+                const message = messageInput.value.trim();
+                if (message) {
+                    sendMessage(message);
+                    messageInput.value = '';
+                    sendBtn.classList.remove('visible');
+                }
+            }
+
+            // Send button click
+            sendBtn.addEventListener('click', handleSendMessage);
+
+            // Enter key to send message
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleSendMessage();
+                }
+            });
+
             // Show/hide send button based on input
             messageInput.addEventListener('input', function() {
-                if (messageInput.value.trim()) {
+                if (this.value.trim()) {
                     sendBtn.classList.add('visible');
                 } else {
                     sendBtn.classList.remove('visible');
                 }
             });
 
-            // Send message on Enter key
-            messageInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter' && messageInput.value.trim()) {
-                    e.preventDefault();
-                    sendMessage(messageInput.value.trim());
-                    messageInput.value = '';
-                    sendBtn.classList.remove('visible');
+            // Image upload functionality
+            imageUploadBtn.addEventListener('click', function() {
+                imageInput.click();
+            });
+
+            imageInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    compressAndUploadImage(file);
+                    e.target.value = ''; // Reset input
                 }
             });
 
-            // Send message on button click
-            sendBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (messageInput.value.trim()) {
-                    sendMessage(messageInput.value.trim());
-                    messageInput.value = '';
-                    sendBtn.classList.remove('visible');
+            // Voice recording functionality
+            voiceRecordBtn.addEventListener('click', function() {
+                if (isRecording) {
+                    stopRecording();
+                } else {
+                    startRecording();
                 }
             });
 
-            // Add click handler for current date to return to today's chat
-            const currentDateElement = document.getElementById('current-chat-date');
+            // Settings overlay functionality
+            settingsBtn.addEventListener('click', function() {
+                settingsOverlay.classList.add('show');
+            });
+
+            closeSettingsBtn.addEventListener('click', function() {
+                settingsOverlay.classList.remove('show');
+            });
+
+            settingsOverlay.addEventListener('click', function(e) {
+                if (e.target === settingsOverlay) {
+                    settingsOverlay.classList.remove('show');
+                }
+            });
+
+            // Current date click to return to today
             currentDateElement.addEventListener('click', function() {
                 if (currentDateElement.textContent.includes('Read Only')) {
                     returnToCurrentChat();
@@ -1529,6 +1668,25 @@
                 }
             });
         });
+        // Disable right-click
+document.addEventListener("contextmenu", function(e) {
+    e.preventDefault();
+});
+
+// Disable common inspect element shortcuts
+document.addEventListener("keydown", function(e) {
+    if (
+        e.keyCode == 123 || // F12
+        (e.ctrlKey && e.shiftKey && e.keyCode == 73) || // Ctrl+Shift+I
+        (e.ctrlKey && e.shiftKey && e.keyCode == 74) || // Ctrl+Shift+J
+        (e.ctrlKey && e.keyCode == 85) || // Ctrl+U (View Source)
+        (e.ctrlKey && e.keyCode == 83)    // Ctrl+S (Save Page)
+    ) {
+        e.preventDefault();
+        return false;
+    }
+});
+
     </script>
 </body>
 </html>
