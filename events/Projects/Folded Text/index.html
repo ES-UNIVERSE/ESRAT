@@ -20,6 +20,8 @@
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
             position: relative;
             padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         #app-container {
@@ -28,6 +30,22 @@
             display: flex;
             position: relative;
             overflow: hidden;
+        }
+
+        /* Enhanced Apple-like Icons using SVG */
+        .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+        }
+
+        .icon svg {
+            width: 100%;
+            height: 100%;
+            fill: currentColor;
+            transition: all 0.3s ease;
         }
 
         /* Sidebar Styles */
@@ -142,6 +160,10 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 8px 25px rgba(255, 154, 158, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         #settings-btn:hover {
@@ -233,17 +255,19 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Dynamic Message Bubbles */
+        /* Compact Message Bubbles - Fit to Content */
         .message {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             animation: messageSlideIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
+            display: flex;
+            justify-content: flex-start;
         }
 
         @keyframes messageSlideIn {
             from {
                 opacity: 0;
-                transform: translateY(30px) scale(0.9);
+                transform: translateY(20px) scale(0.95);
             }
             to {
                 opacity: 1;
@@ -253,19 +277,22 @@
 
         .message-bubble {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
-            border-radius: 24px;
-            padding: 20px 24px;
-            box-shadow: 0 8px 32px rgba(255, 154, 158, 0.15);
+            border-radius: 20px;
+            padding: 12px 16px;
+            box-shadow: 0 4px 20px rgba(255, 154, 158, 0.12);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.3);
             position: relative;
             transition: all 0.3s ease;
+            max-width: 85%;
+            width: fit-content;
+            min-width: 60px;
         }
 
         .message-bubble:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(255, 154, 158, 0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 30px rgba(255, 154, 158, 0.18);
         }
 
         .message-bubble::before {
@@ -275,8 +302,8 @@
             left: -1px;
             right: -1px;
             bottom: -1px;
-            background: linear-gradient(135deg, rgba(255, 154, 158, 0.3), rgba(240, 147, 251, 0.3));
-            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(255, 154, 158, 0.2), rgba(240, 147, 251, 0.2));
+            border-radius: 20px;
             z-index: -1;
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -287,36 +314,41 @@
         }
 
         .message-content {
-            margin-bottom: 12px;
             color: #333;
-            line-height: 1.6;
-            font-size: 16px;
+            line-height: 1.5;
+            font-size: 15px;
             font-weight: 500;
+            word-wrap: break-word;
+            margin-bottom: 8px;
         }
 
         .message-image {
             max-width: 100%;
-            border-radius: 16px;
-            margin-bottom: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            max-height: 300px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
         }
 
         .message-audio {
             width: 100%;
-            margin-bottom: 12px;
-            border-radius: 12px;
+            max-width: 300px;
+            margin-bottom: 8px;
+            border-radius: 8px;
         }
 
         .message-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 13px;
+            font-size: 12px;
             color: #666;
+            margin-top: 4px;
         }
 
         .message-timestamp {
-            font-size: 12px;
+            font-size: 11px;
             color: #999;
             font-weight: 500;
         }
@@ -327,11 +359,11 @@
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 8px 12px;
-            border-radius: 20px;
+            gap: 4px;
+            padding: 6px 10px;
+            border-radius: 16px;
             transition: all 0.3s ease;
-            font-size: 13px;
+            font-size: 12px;
             color: #666;
             font-weight: 600;
         }
@@ -344,7 +376,7 @@
         .like-btn.liked {
             background: linear-gradient(135deg, #ff9a9e, #f093fb);
             color: white;
-            box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3);
+            box-shadow: 0 2px 10px rgba(255, 154, 158, 0.3);
         }
 
         .like-btn.liked .heart {
@@ -353,13 +385,13 @@
 
         @keyframes heartBeat {
             0% { transform: scale(1); }
-            25% { transform: scale(1.3); }
-            50% { transform: scale(1.1); }
-            75% { transform: scale(1.25); }
+            25% { transform: scale(1.2); }
+            50% { transform: scale(1.05); }
+            75% { transform: scale(1.15); }
             100% { transform: scale(1); }
         }
 
-        /* Enhanced Message Input Area */
+        /* Perfect Pill-Shaped Message Input Area */
         #message-input-area {
             padding: 20px 25px;
             padding-bottom: calc(20px + env(safe-area-inset-bottom));
@@ -369,30 +401,66 @@
             border-top: 1px solid rgba(255, 154, 158, 0.2);
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             box-shadow: 0 -2px 20px rgba(255, 154, 158, 0.1);
             flex-shrink: 0;
         }
 
-        .input-button {
+        .input-container {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(255, 154, 158, 0.1);
+            overflow: hidden;
+        }
+
+        .input-container:focus-within {
+            background: rgba(255, 255, 255, 1);
+            border-color: rgba(255, 154, 158, 0.3);
+            box-shadow: 0 8px 30px rgba(255, 154, 158, 0.2);
+            transform: translateY(-1px);
+        }
+
+        #message-text-input {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            outline: none;
+            color: #333;
+            font-weight: 500;
+        }
+
+        #message-text-input::placeholder {
+            color: #999;
+            font-weight: 500;
+        }
+
+        /* Enhanced Apple-like Action Buttons */
+        .action-button {
             width: 48px;
             height: 48px;
             border: none;
             border-radius: 24px;
             background: linear-gradient(135deg, #ff9a9e 0%, #f093fb 100%);
             color: white;
-            font-size: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 25px rgba(255, 154, 158, 0.3);
+            box-shadow: 0 6px 20px rgba(255, 154, 158, 0.3);
             position: relative;
             overflow: hidden;
         }
 
-        .input-button::before {
+        .action-button::before {
             content: '';
             position: absolute;
             top: 50%;
@@ -405,17 +473,17 @@
             transform: translate(-50%, -50%);
         }
 
-        .input-button:hover::before {
+        .action-button:hover::before {
             width: 100%;
             height: 100%;
         }
 
-        .input-button:hover {
+        .action-button:hover {
             transform: scale(1.1);
-            box-shadow: 0 12px 35px rgba(255, 154, 158, 0.4);
+            box-shadow: 0 8px 25px rgba(255, 154, 158, 0.4);
         }
 
-        .input-button:active {
+        .action-button:active {
             transform: scale(0.95);
         }
 
@@ -425,34 +493,9 @@
         }
 
         @keyframes recordingPulse {
-            0% { transform: scale(1); box-shadow: 0 8px 25px rgba(255, 65, 108, 0.3); }
-            50% { transform: scale(1.1); box-shadow: 0 12px 35px rgba(255, 65, 108, 0.5); }
-            100% { transform: scale(1); box-shadow: 0 8px 25px rgba(255, 65, 108, 0.3); }
-        }
-
-        #message-text-input {
-            flex: 1;
-            padding: 16px 24px;
-            border: none;
-            border-radius: 28px;
-            background: rgba(255, 255, 255, 0.9);
-            font-size: 16px;
-            outline: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(255, 154, 158, 0.1);
-            border: 2px solid transparent;
-        }
-
-        #message-text-input:focus {
-            background: rgba(255, 255, 255, 1);
-            border-color: rgba(255, 154, 158, 0.3);
-            box-shadow: 0 8px 30px rgba(255, 154, 158, 0.2);
-            transform: translateY(-1px);
-        }
-
-        #message-text-input::placeholder {
-            color: #999;
-            font-weight: 500;
+            0% { transform: scale(1); box-shadow: 0 6px 20px rgba(255, 65, 108, 0.3); }
+            50% { transform: scale(1.1); box-shadow: 0 8px 30px rgba(255, 65, 108, 0.5); }
+            100% { transform: scale(1); box-shadow: 0 6px 20px rgba(255, 65, 108, 0.3); }
         }
 
         /* Send Button */
@@ -463,25 +506,26 @@
             border-radius: 24px;
             background: linear-gradient(135deg, #ff9a9e 0%, #f093fb 100%);
             color: white;
-            font-size: 18px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 25px rgba(255, 154, 158, 0.3);
+            box-shadow: 0 6px 20px rgba(255, 154, 158, 0.3);
             opacity: 0;
             transform: scale(0.8);
+            pointer-events: none;
         }
 
         #send-btn.visible {
             opacity: 1;
             transform: scale(1);
+            pointer-events: auto;
         }
 
         #send-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 12px 35px rgba(255, 154, 158, 0.4);
+            box-shadow: 0 8px 25px rgba(255, 154, 158, 0.4);
         }
 
         /* Settings Overlay */
@@ -579,17 +623,17 @@
 
         /* Enhanced Scrollbar */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
 
         ::-webkit-scrollbar-track {
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
+            border-radius: 3px;
         }
 
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(135deg, rgba(255, 154, 158, 0.5), rgba(240, 147, 251, 0.5));
-            border-radius: 4px;
+            border-radius: 3px;
             transition: all 0.3s ease;
         }
 
@@ -600,9 +644,9 @@
         /* Loading Animation */
         .loading {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 154, 158, 0.3);
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 154, 158, 0.3);
             border-radius: 50%;
             border-top-color: #ff9a9e;
             animation: spin 1s ease-in-out infinite;
@@ -632,19 +676,19 @@
             }
 
             .message-bubble {
-                padding: 16px 20px;
+                padding: 10px 14px;
+                max-width: 90%;
             }
 
             #message-input-area {
                 padding: 15px 20px;
                 padding-bottom: calc(15px + env(safe-area-inset-bottom));
-                gap: 12px;
+                gap: 10px;
             }
 
-            .input-button {
+            .action-button {
                 width: 44px;
                 height: 44px;
-                font-size: 18px;
             }
 
             #send-btn {
@@ -654,7 +698,7 @@
 
             #message-text-input {
                 font-size: 16px;
-                padding: 14px 20px;
+                padding: 12px 18px;
             }
 
             .overlay-content {
@@ -672,41 +716,32 @@
             #message-input-area {
                 padding-bottom: calc(15px + env(safe-area-inset-bottom, 20px));
             }
+
+            .message-bubble {
+                max-width: 95%;
+            }
         }
 
-        /* Dynamic Icons using CSS */
-        .icon-menu::before {
-            content: '☰';
-            font-size: 18px;
-        }
-
-        .icon-camera::before {
-            content: '📷';
-            font-size: 20px;
-        }
-
-        .icon-mic::before {
-            content: '🎤';
-            font-size: 20px;
-        }
-
-        .icon-send::before {
-            content: '➤';
-            font-size: 18px;
-        }
-
-        .icon-close::before {
-            content: '✕';
-            font-size: 16px;
-        }
-
-        .icon-heart::before {
-            content: '❤️';
-            font-size: 14px;
+        /* Safari-specific optimizations */
+        @supports (-webkit-appearance: none) {
+            #message-text-input {
+                -webkit-appearance: none;
+                border-radius: 25px;
+            }
+            
+            .input-container {
+                -webkit-transform: translateZ(0);
+                transform: translateZ(0);
+            }
+            
+            .message-bubble {
+                -webkit-transform: translateZ(0);
+                transform: translateZ(0);
+            }
         }
 
         /* Smooth transitions for all interactive elements */
-        button, input, .message-bubble, .chat-item {
+        button, input, .message-bubble, .chat-item, .input-container {
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
     </style>
@@ -717,13 +752,23 @@
         <aside id="sidebar">
             <div id="sidebar-header">
                 <h2>Past Chats</h2>
-                <button id="close-sidebar-btn" class="icon-close"></button>
+                <button id="close-sidebar-btn">✕</button>
             </div>
             <ul id="past-chats-list">
                 <!-- Past chat items will be dynamically loaded here -->
             </ul>
             <div id="sidebar-footer">
-                <button id="settings-btn">⚙️ Settings</button>
+                <button id="settings-btn">
+                    <span class="icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="m12 1 0 6m0 6 0 6"></path>
+                            <path d="m12 1 0 6m0 6 0 6" transform="rotate(60 12 12)"></path>
+                            <path d="m12 1 0 6m0 6 0 6" transform="rotate(120 12 12)"></path>
+                        </svg>
+                    </span>
+                    Settings
+                </button>
             </div>
         </aside>
 
@@ -731,7 +776,15 @@
         <main id="main-content">
             <!-- Enhanced Header -->
             <header id="main-header">
-                <button id="open-sidebar-btn" class="icon-menu"></button>
+                <button id="open-sidebar-btn">
+                    <span class="icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </span>
+                </button>
                 <h1 id="current-chat-date">Today</h1>
             </header>
 
@@ -741,11 +794,39 @@
                     <!-- Messages will be dynamically loaded here -->
                 </div>
                 <div id="message-input-area">
-                    <button id="image-upload-btn" class="input-button icon-camera"></button>
+                    <button id="image-upload-btn" class="action-button">
+                        <span class="icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <polyline points="21,15 16,10 5,21"></polyline>
+                            </svg>
+                        </span>
+                    </button>
                     <input type="file" id="image-input" accept="image/*" style="display: none;">
-                    <input type="text" id="message-text-input" placeholder="Say something...">
-                    <button id="send-btn" class="icon-send"></button>
-                    <button id="voice-record-btn" class="input-button icon-mic"></button>
+                    
+                    <div class="input-container">
+                        <input type="text" id="message-text-input" placeholder="Say something...">
+                        <button id="send-btn">
+                            <span class="icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                                    <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
+                                </svg>
+                            </span>
+                        </button>
+                    </div>
+                    
+                    <button id="voice-record-btn" class="action-button">
+                        <span class="icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="m12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0v-8a3 3 0 0 0-3-3z"></path>
+                                <path d="m19 10v2a7 7 0 0 1-14 0v-2"></path>
+                                <line x1="12" y1="19" x2="12" y2="23"></line>
+                                <line x1="8" y1="23" x2="16" y2="23"></line>
+                            </svg>
+                        </span>
+                    </button>
                 </div>
             </section>
         </main>
@@ -754,11 +835,12 @@
         <div id="settings-overlay" class="overlay">
             <div class="overlay-content">
                 <h2>Settings</h2>
-                <button id="close-settings-btn" class="icon-close"></button>
+                <button id="close-settings-btn">✕</button>
                 <p><strong>Theme:</strong> Pink Gradient</p>
                 <p><strong>Profile:</strong> Anonymous</p>
-                <p><strong>Version:</strong> Mr. X v2.0</p>
+                <p><strong>Version:</strong> Mr. X v3.0</p>
                 <p><strong>Features:</strong> Real-time messaging, Image & Voice sharing</p>
+                <p><strong>Compatibility:</strong> Safari Optimized</p>
             </div>
         </div>
     </div>
@@ -817,7 +899,7 @@
             });
         }
 
-        // Add message to UI with enhanced bubble design
+        // Add message to UI with compact bubble design
         function addMessageToUI(messageData, messageId) {
             const messagesContainer = document.getElementById('messages-container');
             const messageElement = document.createElement('div');
@@ -844,7 +926,7 @@
                 <div class="message-footer">
                     <span class="message-timestamp">${formatTimestamp(messageData.timestamp)}</span>
                     <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${messageId}', this)">
-                        <span class="heart icon-heart"></span>
+                        <span class="heart">❤️</span>
                         <span class="like-count">${likeCount}</span>
                     </button>
                 </div>
@@ -1116,6 +1198,7 @@
         function compressAndUploadImage(file) {
             // Show loading state
             const imageUploadBtn = document.getElementById('image-upload-btn');
+            const originalContent = imageUploadBtn.innerHTML;
             imageUploadBtn.innerHTML = '<div class="loading"></div>';
             imageUploadBtn.disabled = true;
 
@@ -1160,31 +1243,26 @@
             };
 
             img.src = URL.createObjectURL(file);
-        }
 
-        // Upload image to Firebase Storage
-        function uploadImageToStorage(blob) {
-            const fileName = `image_${Date.now()}_${Math.random().toString(36).substr(2, 9)}.jpg`;
-            const storageRef = storage.ref(`images/${currentChatDate}/${fileName}`);
-            
-            storageRef.put(blob).then((snapshot) => {
-                return snapshot.ref.getDownloadURL();
-            }).then((downloadURL) => {
-                sendMessage(downloadURL, 'image');
-                // Reset button
-                const imageUploadBtn = document.getElementById('image-upload-btn');
-                imageUploadBtn.innerHTML = '';
-                imageUploadBtn.classList.add('icon-camera');
-                imageUploadBtn.disabled = false;
-            }).catch((error) => {
-                console.error('Error uploading image:', error);
-                alert('Failed to upload image. Please try again.');
-                // Reset button
-                const imageUploadBtn = document.getElementById('image-upload-btn');
-                imageUploadBtn.innerHTML = '';
-                imageUploadBtn.classList.add('icon-camera');
-                imageUploadBtn.disabled = false;
-            });
+            function uploadImageToStorage(blob) {
+                const fileName = `image_${Date.now()}_${Math.random().toString(36).substr(2, 9)}.jpg`;
+                const storageRef = storage.ref(`images/${currentChatDate}/${fileName}`);
+                
+                storageRef.put(blob).then((snapshot) => {
+                    return snapshot.ref.getDownloadURL();
+                }).then((downloadURL) => {
+                    sendMessage(downloadURL, 'image');
+                    // Reset button
+                    imageUploadBtn.innerHTML = originalContent;
+                    imageUploadBtn.disabled = false;
+                }).catch((error) => {
+                    console.error('Error uploading image:', error);
+                    alert('Failed to upload image. Please try again.');
+                    // Reset button
+                    imageUploadBtn.innerHTML = originalContent;
+                    imageUploadBtn.disabled = false;
+                });
+            }
         }
 
         // Voice recording functions
@@ -1213,7 +1291,13 @@
                     isRecording = true;
                     const voiceRecordBtn = document.getElementById('voice-record-btn');
                     voiceRecordBtn.classList.add('recording');
-                    voiceRecordBtn.innerHTML = '⏹️';
+                    voiceRecordBtn.innerHTML = `
+                        <span class="icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <rect x="6" y="6" width="12" height="12" rx="2"></rect>
+                            </svg>
+                        </span>
+                    `;
                     
                     // Auto-stop after 60 seconds
                     recordingTimeout = setTimeout(() => {
@@ -1255,16 +1339,32 @@
                 sendMessage(downloadURL, 'audio');
                 // Reset button
                 const voiceRecordBtn = document.getElementById('voice-record-btn');
-                voiceRecordBtn.innerHTML = '';
-                voiceRecordBtn.classList.add('icon-mic');
+                voiceRecordBtn.innerHTML = `
+                    <span class="icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="m12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0v-8a3 3 0 0 0-3-3z"></path>
+                            <path d="m19 10v2a7 7 0 0 1-14 0v-2"></path>
+                            <line x1="12" y1="19" x2="12" y2="23"></line>
+                            <line x1="8" y1="23" x2="16" y2="23"></line>
+                        </svg>
+                    </span>
+                `;
                 voiceRecordBtn.disabled = false;
             }).catch((error) => {
                 console.error('Error uploading audio:', error);
                 alert('Failed to upload audio. Please try again.');
                 // Reset button
                 const voiceRecordBtn = document.getElementById('voice-record-btn');
-                voiceRecordBtn.innerHTML = '';
-                voiceRecordBtn.classList.add('icon-mic');
+                voiceRecordBtn.innerHTML = `
+                    <span class="icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="m12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0v-8a3 3 0 0 0-3-3z"></path>
+                            <path d="m19 10v2a7 7 0 0 1-14 0v-2"></path>
+                            <line x1="12" y1="19" x2="12" y2="23"></line>
+                            <line x1="8" y1="23" x2="16" y2="23"></line>
+                        </svg>
+                    </span>
+                `;
                 voiceRecordBtn.disabled = false;
             });
         }
