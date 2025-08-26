@@ -276,6 +276,11 @@
             justify-content: flex-start;
         }
 
+        /* NEW: User's own messages aligned to the right */
+        .message.own-message {
+            justify-content: flex-end;
+        }
+
         @keyframes messageSlideIn {
             from {
                 opacity: 0;
@@ -300,6 +305,12 @@
             max-width: 85%;
             width: fit-content;
             min-width: 60px;
+        }
+
+        /* NEW: User's own message bubble with light pink tint */
+        .message.own-message .message-bubble {
+            background: linear-gradient(135deg, rgba(255, 182, 193, 0.3) 0%, rgba(255, 192, 203, 0.2) 100%);
+            border: 1px solid rgba(255, 182, 193, 0.4);
         }
 
         .message-bubble:hover {
@@ -348,6 +359,43 @@
             max-width: 300px;
             margin-bottom: 8px;
             border-radius: 8px;
+        }
+
+        /* NEW: Media placeholder styles for Data Saver Mode */
+        .media-placeholder {
+            background: rgba(255, 154, 158, 0.1);
+            border: 2px dashed rgba(255, 154, 158, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 8px;
+            max-width: 300px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .media-placeholder:hover {
+            background: rgba(255, 154, 158, 0.15);
+            border-color: rgba(255, 154, 158, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .media-placeholder-icon {
+            font-size: 24px;
+            color: #ff9a9e;
+            margin-bottom: 4px;
+        }
+
+        .media-placeholder-text {
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
         }
 
         .message-footer {
@@ -510,9 +558,58 @@
         }
 
         @keyframes recordingPulse {
-            0% { transform: scale(1); box-shadow: 0 6px 20px rgba(255, 65, 108, 0.3); }
-            50% { transform: scale(1.1); box-shadow: 0 8px 30px rgba(255, 65, 108, 0.5); }
-            100% { transform: scale(1); box-shadow: 0 6px 20px rgba(255, 65, 108, 0.3); }
+            0% { 
+                transform: scale(1); 
+                box-shadow: 0 6px 20px rgba(255, 65, 108, 0.3);
+                background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            }
+            50% { 
+                transform: scale(1.1); 
+                box-shadow: 0 8px 30px rgba(255, 65, 108, 0.6);
+                background: linear-gradient(135deg, #ff2d55 0%, #ff3b30 100%);
+            }
+            100% { 
+                transform: scale(1); 
+                box-shadow: 0 6px 20px rgba(255, 65, 108, 0.3);
+                background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            }
+        }
+
+        /* NEW: Recording UI styles */
+        .recording-ui {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: #ff416c;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .recording-timer {
+            font-family: 'Courier New', monospace;
+            color: #ff416c;
+        }
+
+        .cancel-recording-btn {
+            background: rgba(255, 65, 108, 0.1);
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 12px;
+            color: #ff416c;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .cancel-recording-btn:hover {
+            background: rgba(255, 65, 108, 0.2);
+            transform: scale(1.1);
         }
 
         /* Send Button - Smaller */
@@ -962,6 +1059,14 @@
                         <div class="toggle-slider"></div>
                     </button>
                 </div>
+                
+                <!-- NEW: Data Saver Mode toggle -->
+                <div class="setting-item">
+                    <span class="setting-label">Data Saver Mode</span>
+                    <button class="toggle-switch" id="data-saver-toggle">
+                        <div class="toggle-slider"></div>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -993,6 +1098,9 @@
         let deviceId = '';
         let messagesRef = null;
         let autoScrollEnabled = true; // NEW: Auto-scroll setting
+        let dataSaverEnabled = false; // NEW: Data Saver Mode setting
+        let recordingTimer = null; // NEW: Recording timer
+        let recordingStartTime = 0; // NEW: Recording start time
 
         // Generate or retrieve device ID for anonymous identification
         function getDeviceId() {
@@ -1041,6 +1149,11 @@
             messageElement.className = 'message';
             messageElement.setAttribute('data-message-id', messageId);
             
+            // NEW: Add own-message class if this message is from the current user
+            if (messageData.deviceId === deviceId) {
+                messageElement.classList.add('own-message');
+            }
+            
             const messageBubble = document.createElement('div');
             messageBubble.className = 'message-bubble';
             
@@ -1048,9 +1161,27 @@
             if (messageData.type === 'text') {
                 contentHtml = `<div class="message-content">${escapeHtml(messageData.content)}</div>`;
             } else if (messageData.type === 'image') {
-                contentHtml = `<img src="${messageData.content}" alt="Shared image" class="message-image" loading="lazy">`;
+                if (dataSaverEnabled) {
+                    contentHtml = `
+                        <div class="media-placeholder" onclick="loadMedia(this, '${messageData.content}', 'image')">
+                            <div class="media-placeholder-icon">🖼️</div>
+                            <div class="media-placeholder-text">Tap to Load Image</div>
+                        </div>
+                    `;
+                } else {
+                    contentHtml = `<img src="${messageData.content}" alt="Shared image" class="message-image" loading="lazy">`;
+                }
             } else if (messageData.type === 'audio') {
-                contentHtml = `<audio controls class="message-audio"><source src="${messageData.content}" type="audio/wav"></audio>`;
+                if (dataSaverEnabled) {
+                    contentHtml = `
+                        <div class="media-placeholder" onclick="loadMedia(this, '${messageData.content}', 'audio')">
+                            <div class="media-placeholder-icon">🎵</div>
+                            <div class="media-placeholder-text">Tap to Load Audio</div>
+                        </div>
+                    `;
+                } else {
+                    contentHtml = `<audio controls class="message-audio"><source src="${messageData.content}" type="audio/wav"></audio>`;
+                }
             }
 
             const likeCount = messageData.likes ? Object.keys(messageData.likes).length : 0;
@@ -1079,6 +1210,54 @@
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
+        }
+
+        // NEW: Load media function for Data Saver Mode
+        function loadMedia(placeholderElement, mediaUrl, mediaType) {
+            // Show loading state
+            placeholderElement.innerHTML = `
+                <div class="loading"></div>
+                <div class="media-placeholder-text">Loading...</div>
+            `;
+            
+            if (mediaType === 'image') {
+                const img = document.createElement('img');
+                img.src = mediaUrl;
+                img.alt = 'Shared image';
+                img.className = 'message-image';
+                img.loading = 'lazy';
+                
+                img.onload = function() {
+                    placeholderElement.parentNode.replaceChild(img, placeholderElement);
+                };
+                
+                img.onerror = function() {
+                    placeholderElement.innerHTML = `
+                        <div class="media-placeholder-icon">❌</div>
+                        <div class="media-placeholder-text">Failed to load image</div>
+                    `;
+                };
+            } else if (mediaType === 'audio') {
+                const audio = document.createElement('audio');
+                audio.controls = true;
+                audio.className = 'message-audio';
+                
+                const source = document.createElement('source');
+                source.src = mediaUrl;
+                source.type = 'audio/wav';
+                audio.appendChild(source);
+                
+                audio.onloadeddata = function() {
+                    placeholderElement.parentNode.replaceChild(audio, placeholderElement);
+                };
+                
+                audio.onerror = function() {
+                    placeholderElement.innerHTML = `
+                        <div class="media-placeholder-icon">❌</div>
+                        <div class="media-placeholder-text">Failed to load audio</div>
+                    `;
+                };
+            }
         }
 
         // Send text message
@@ -1386,7 +1565,7 @@
                     if (blob.size <= 500000) { // 500KB limit
                         uploadImageToStorage(blob);
                     } else {
-                        // Further compression
+                        // Further compression needed
                         canvas.toBlob(function(compressedBlob) {
                             uploadImageToStorage(compressedBlob);
                         }, 'image/jpeg', 0.7);
@@ -1395,61 +1574,99 @@
             };
 
             img.src = URL.createObjectURL(file);
+        }
 
-            function uploadImageToStorage(blob) {
-                const fileName = `image_${Date.now()}_${Math.random().toString(36).substr(2, 9)}.jpg`;
-                const storageRef = storage.ref(`images/${currentChatDate}/${fileName}`);
+        // Upload image to Firebase Storage
+        function uploadImageToStorage(blob) {
+            const fileName = `image_${Date.now()}_${Math.random().toString(36).substr(2, 9)}.jpg`;
+            const storageRef = storage.ref(`images/${currentChatDate}/${fileName}`);
+            
+            storageRef.put(blob).then((snapshot) => {
+                return snapshot.ref.getDownloadURL();
+            }).then((downloadURL) => {
+                sendMessage(downloadURL, 'image');
                 
-                storageRef.put(blob).then((snapshot) => {
-                    return snapshot.ref.getDownloadURL();
-                }).then((downloadURL) => {
-                    sendMessage(downloadURL, 'image');
-                    // Reset button
-                    imageUploadBtn.innerHTML = originalContent;
-                    imageUploadBtn.disabled = false;
-                }).catch((error) => {
-                    console.error('Error uploading image:', error);
-                    alert('Failed to upload image. Please try again.');
-                    // Reset button
-                    imageUploadBtn.innerHTML = originalContent;
-                    imageUploadBtn.disabled = false;
-                });
-            }
+                // Reset button
+                const imageUploadBtn = document.getElementById('image-upload-btn');
+                imageUploadBtn.innerHTML = `
+    <span class="icon">
+        <i class="fa-solid fa-image"></i>
+    </span>
+`;
+                imageUploadBtn.disabled = false;
+            }).catch((error) => {
+                console.error('Error uploading image:', error);
+                alert('Failed to upload image. Please try again.');
+                
+                // Reset button
+                const imageUploadBtn = document.getElementById('image-upload-btn');
+                imageUploadBtn.innerHTML = `
+    <span class="icon">
+        <i class="fa-solid fa-image"></i>
+    </span>
+`;
+                imageUploadBtn.disabled = false;
+            });
         }
 
         // Voice recording functions
-        let mediaRecorder = null;
+        let mediaRecorder;
         let audioChunks = [];
         let isRecording = false;
-        let recordingTimeout = null;
+        let recordingTimeout;
 
+        // Start voice recording with enhanced UI
         function startRecording() {
             navigator.mediaDevices.getUserMedia({ audio: true })
                 .then(stream => {
                     mediaRecorder = new MediaRecorder(stream);
                     audioChunks = [];
+                    isRecording = true;
+                    recordingStartTime = Date.now();
+
+                    // Enhanced UI: Update input field to show recording status
+                    const messageInput = document.getElementById('message-text-input');
+                    const originalPlaceholder = messageInput.placeholder;
                     
+                    // Replace input content with recording UI
+                    messageInput.style.display = 'none';
+                    const inputContainer = messageInput.parentElement;
+                    
+                    const recordingUI = document.createElement('div');
+                    recordingUI.className = 'recording-ui';
+                    recordingUI.id = 'recording-ui';
+                    recordingUI.innerHTML = `
+                        <span>🎤 Recording </span>
+                        <span class="recording-timer" id="recording-timer">0.00 sec</span>
+                        <button class="cancel-recording-btn" onclick="cancelRecording()">❌</button>
+                    `;
+                    
+                    inputContainer.insertBefore(recordingUI, messageInput);
+
+                    // Start timer
+                    recordingTimer = setInterval(() => {
+                        const elapsed = (Date.now() - recordingStartTime) / 1000;
+                        document.getElementById('recording-timer').textContent = elapsed.toFixed(2) + ' sec';
+                    }, 10);
+
+                    // Update button appearance
+                    const voiceRecordBtn = document.getElementById('voice-record-btn');
+                    voiceRecordBtn.classList.add('recording');
+
                     mediaRecorder.ondataavailable = event => {
                         audioChunks.push(event.data);
                     };
-                    
+
                     mediaRecorder.onstop = () => {
                         const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                         uploadAudioToStorage(audioBlob);
+                        
+                        // Clean up stream
                         stream.getTracks().forEach(track => track.stop());
                     };
-                    
-                    mediaRecorder.start();
-                    isRecording = true;
-                    const voiceRecordBtn = document.getElementById('voice-record-btn');
-                    voiceRecordBtn.classList.add('recording');
-                    voiceRecordBtn.innerHTML = `
-    <span class="icon">
-        <i class="fa-solid fa-stop"></i>
-    </span>
-`;
 
-                    
+                    mediaRecorder.start();
+
                     // Auto-stop after 60 seconds
                     recordingTimeout = setTimeout(() => {
                         if (isRecording) {
@@ -1459,22 +1676,78 @@
                 })
                 .catch(error => {
                     console.error('Error accessing microphone:', error);
-                    alert('Unable to access microphone. Please check permissions.');
+                    alert('Could not access microphone. Please check permissions.');
                 });
         }
 
+        // Stop voice recording and clean up enhanced UI
         function stopRecording() {
             if (mediaRecorder && isRecording) {
                 mediaRecorder.stop();
                 isRecording = false;
+
+                // Clean up enhanced UI
+                const recordingUI = document.getElementById('recording-ui');
+                const messageInput = document.getElementById('message-text-input');
                 const voiceRecordBtn = document.getElementById('voice-record-btn');
-                voiceRecordBtn.classList.remove('recording');
-                voiceRecordBtn.innerHTML = '<div class="loading"></div>';
-                voiceRecordBtn.disabled = true;
+
+                if (recordingUI) {
+                    recordingUI.remove();
+                }
                 
+                messageInput.style.display = 'block';
+                voiceRecordBtn.classList.remove('recording');
+
+                // Clear timer
+                if (recordingTimer) {
+                    clearInterval(recordingTimer);
+                    recordingTimer = null;
+                }
+
+                // Clear timeout if exists
                 if (recordingTimeout) {
                     clearTimeout(recordingTimeout);
                     recordingTimeout = null;
+                }
+            }
+        }
+
+        // NEW: Cancel voice recording
+        function cancelRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                isRecording = false;
+
+                // Clean up enhanced UI
+                const recordingUI = document.getElementById('recording-ui');
+                const messageInput = document.getElementById('message-text-input');
+                const voiceRecordBtn = document.getElementById('voice-record-btn');
+
+                if (recordingUI) {
+                    recordingUI.remove();
+                }
+                
+                messageInput.style.display = 'block';
+                voiceRecordBtn.classList.remove('recording');
+
+                // Clear timer
+                if (recordingTimer) {
+                    clearInterval(recordingTimer);
+                    recordingTimer = null;
+                }
+
+                // Clear timeout if exists
+                if (recordingTimeout) {
+                    clearTimeout(recordingTimeout);
+                    recordingTimeout = null;
+                }
+
+                // Don't upload the audio - just discard it
+                audioChunks = [];
+                
+                // Stop all media tracks
+                if (mediaRecorder && mediaRecorder.stream) {
+                    mediaRecorder.stream.getTracks().forEach(track => track.stop());
                 }
             }
         }
@@ -1488,6 +1761,7 @@
                 return snapshot.ref.getDownloadURL();
             }).then((downloadURL) => {
                 sendMessage(downloadURL, 'audio');
+                
                 // Reset button
                 const voiceRecordBtn = document.getElementById('voice-record-btn');
                 voiceRecordBtn.innerHTML = `
@@ -1495,7 +1769,7 @@
         <i class="fa-solid fa-microphone"></i>
     </span>
 `;
-
+                voiceRecordBtn.classList.remove('recording');
                 voiceRecordBtn.disabled = false;
             }).catch((error) => {
                 console.error('Error uploading audio:', error);
@@ -1520,6 +1794,12 @@
                 autoScrollEnabled = savedAutoScroll === 'true';
             }
 
+            // NEW: Load data saver mode setting from Firebase
+            const savedDataSaver = localStorage.getItem('mrx_data_saver');
+            if (savedDataSaver !== null) {
+                dataSaverEnabled = savedDataSaver === 'true';
+            }
+
             // Initialize chat
             initializeChat();
             loadPastChats();
@@ -1535,6 +1815,7 @@
             const closeSettingsBtn = document.getElementById('close-settings-btn');
             const currentDateElement = document.getElementById('current-chat-date');
             const autoScrollToggle = document.getElementById('auto-scroll-toggle');
+            const dataSaverToggle = document.getElementById('data-saver-toggle'); // NEW
             const sidebarOverlay = document.getElementById('sidebar-overlay');
             
             // Sidebar event listeners
@@ -1563,11 +1844,47 @@
                 }
             });
 
-            // Set initial toggle state
+            // NEW: Data Saver Mode toggle functionality
+            dataSaverToggle.addEventListener('click', function() {
+                dataSaverEnabled = !dataSaverEnabled;
+                localStorage.setItem('mrx_data_saver', dataSaverEnabled.toString());
+                
+                // Store in Firebase for this device
+                const userSettingsRef = database.ref(`userSettings/${deviceId}/dataSaver`);
+                userSettingsRef.set(dataSaverEnabled);
+                
+                if (dataSaverEnabled) {
+                    dataSaverToggle.classList.add('active');
+                } else {
+                    dataSaverToggle.classList.remove('active');
+                }
+                
+                // Refresh current messages to apply data saver mode
+                const messagesContainer = document.getElementById('messages-container');
+                messagesContainer.innerHTML = '';
+                
+                // Reload messages with new data saver setting
+                messagesRef.once('value', (snapshot) => {
+                    const messages = snapshot.val();
+                    if (messages) {
+                        Object.keys(messages).forEach((messageId) => {
+                            addMessageToUI(messages[messageId], messageId);
+                        });
+                    }
+                });
+            });
+
+            // Set initial toggle states
             if (autoScrollEnabled) {
                 autoScrollToggle.classList.add('active');
             } else {
                 autoScrollToggle.classList.remove('active');
+            }
+
+            if (dataSaverEnabled) {
+                dataSaverToggle.classList.add('active');
+            } else {
+                dataSaverToggle.classList.remove('active');
             }
 
             // Send message functionality
