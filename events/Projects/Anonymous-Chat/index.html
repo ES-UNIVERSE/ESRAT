@@ -1566,6 +1566,9 @@
 
             // Add clear chat button to sidebar
             addClearChatButton();
+
+            // Load room-specific chat history in sidebar
+            loadPastChats();
         }
 
         function exitRoomMode() {
@@ -1588,6 +1591,9 @@
 
             // Return to normal chat
             initializeChat();
+
+            // Load public chat history in sidebar
+            loadPastChats();
         }
 
         function listenForRoomMessages() {
@@ -1620,6 +1626,32 @@
             });
         }
 
+        function initializeRoomChat() {
+            if (!isInRoom || !currentRoomId) return;
+            
+            const messagesContainer = document.getElementById('messages-container');
+            messagesContainer.innerHTML = '';
+            
+            // Re-establish room messages reference
+            roomMessagesRef = database.ref(`rooms/${currentRoomId}/messages`);
+            
+            // Listen for room messages
+            listenForRoomMessages();
+            
+            // Load existing room messages
+            roomMessagesRef.once('value', (snapshot) => {
+                const messages = snapshot.val();
+                if (messages) {
+                    Object.keys(messages).forEach((messageId) => {
+                        addMessageToUI(messages[messageId], messageId);
+                    });
+                }
+                setTimeout(() => {
+                    scrollToBottom();
+                }, 300);
+            });
+        }
+
         function sendRoomMessage(content, type = 'text') {
             if (!isInRoom || !roomMessagesRef) return;
             
@@ -1630,7 +1662,13 @@
                 deviceId: deviceId
             };
             
+            // Save to current room messages
             roomMessagesRef.push(messageData);
+            
+            // Also save to room chat history by date
+            const currentDate = getCurrentDateString();
+            const roomHistoryRef = database.ref(`rooms/${currentRoomId}/chatHistory/${currentDate}/messages`);
+            roomHistoryRef.push(messageData);
         }
 
         function addClearChatButton() {
@@ -1654,11 +1692,27 @@
         function clearRoomChat() {
             if (!isInRoom || !currentRoomId) return;
             
-            if (confirm('Are you sure you want to clear all messages in this room?')) {
-                database.ref(`rooms/${currentRoomId}/messages`).remove()
+            // Use a more reliable confirmation approach
+            const shouldClear = window.confirm('Are you sure you want to clear today\'s messages in this room?');
+            
+            if (shouldClear) {
+                const currentDate = getCurrentDateString();
+                
+                // Clear current room messages (today's messages)
+                const clearCurrentMessages = database.ref(`rooms/${currentRoomId}/messages`).remove();
+                
+                // Clear today's messages from room chat history
+                const clearHistoryMessages = database.ref(`rooms/${currentRoomId}/chatHistory/${currentDate}`).remove();
+                
+                Promise.all([clearCurrentMessages, clearHistoryMessages])
                     .then(() => {
                         const messagesContainer = document.getElementById('messages-container');
                         messagesContainer.innerHTML = '';
+                        
+                        // Refresh sidebar to update chat history
+                        loadPastChats();
+                        
+                        console.log('Room chat cleared successfully');
                     })
                     .catch((error) => {
                         console.error('Error clearing room chat:', error);
@@ -1906,6 +1960,15 @@
 
         // Load past chats for sidebar
         function loadPastChats() {
+            if (isInRoom) {
+                loadRoomPastChats();
+            } else {
+                loadPublicPastChats();
+            }
+        }
+
+        // Load public chat history
+        function loadPublicPastChats() {
             const pastChatsRef = database.ref('chats');
             pastChatsRef.once('value', (snapshot) => {
                 const chats = snapshot.val();
@@ -1938,6 +2001,43 @@
                 if (currentChatDate === getCurrentDateString()) {
                     todayListItem.classList.add('active');
                 }
+            });
+        }
+
+        // Load room-specific chat history
+        function loadRoomPastChats() {
+            if (!currentRoomId) return;
+            
+            const roomChatsRef = database.ref(`rooms/${currentRoomId}/chatHistory`);
+            roomChatsRef.once('value', (snapshot) => {
+                const roomChats = snapshot.val();
+                const pastChatsList = document.getElementById('past-chats-list');
+                pastChatsList.innerHTML = '';
+                
+                // Add 'Today' button for current room session
+                const todayListItem = document.createElement('li');
+                todayListItem.className = 'chat-item';
+                todayListItem.textContent = 'Today';
+                todayListItem.setAttribute('data-date', getCurrentDateString());
+                todayListItem.addEventListener('click', () => returnToCurrentRoomChat());
+                pastChatsList.appendChild(todayListItem);
+
+                if (roomChats) {
+                    const chatDates = Object.keys(roomChats).sort().reverse();
+                    chatDates.forEach((dateString) => {
+                        if (dateString !== getCurrentDateString()) {
+                            const listItem = document.createElement('li');
+                            listItem.className = 'chat-item';
+                            listItem.textContent = formatDateForSidebar(dateString);
+                            listItem.setAttribute('data-date', dateString);
+                            listItem.addEventListener('click', () => loadRoomPastChat(dateString));
+                            pastChatsList.appendChild(listItem);
+                        }
+                    });
+                }
+
+                // Set 'Today' button as active
+                todayListItem.classList.add('active');
             });
         }
 
@@ -2033,6 +2133,92 @@
             });
             
             initializeChat();
+        }
+
+        // Load room past chat for specific date
+        function loadRoomPastChat(dateString) {
+            if (!currentRoomId) return;
+            
+            currentChatDate = dateString;
+            const pastMessagesRef = database.ref(`rooms/${currentRoomId}/chatHistory/${dateString}`);
+            const messagesContainer = document.getElementById('messages-container');
+            
+            // Clear current messages
+            messagesContainer.innerHTML = '';
+            
+            // Update header
+            const currentDateElement = document.getElementById('current-chat-date');
+            currentDateElement.textContent = `Room: ${currentRoomId} - ${formatDateForSidebar(dateString)} (Read Only)`;
+            
+            // Load past room messages
+            pastMessagesRef.once('value', (snapshot) => {
+                const messages = snapshot.val();
+                if (messages) {
+                    Object.keys(messages).forEach((messageId) => {
+                        addMessageToUI(messages[messageId], messageId);
+                    });
+                }
+                // Scroll to bottom after loading past messages
+                setTimeout(() => {
+                    scrollToBottom();
+                }, 300);
+            });
+            
+            // Update sidebar active state
+            document.querySelectorAll('.chat-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            const activeItem = document.querySelector(`[data-date="${dateString}"]`);
+            if (activeItem) {
+                activeItem.classList.add('active');
+            }
+            
+            // Close sidebar
+            closeSidebar();
+            
+            // Disable message input for past chats
+            const messageInput = document.getElementById('message-text-input');
+            const imageUploadBtn = document.getElementById('image-upload-btn');
+            const voiceRecordBtn = document.getElementById('voice-record-btn');
+            const sendBtn = document.getElementById('send-btn');
+            
+            messageInput.disabled = true;
+            messageInput.placeholder = 'This chat is read-only';
+            imageUploadBtn.disabled = true;
+            voiceRecordBtn.disabled = true;
+            sendBtn.disabled = true;
+        }
+
+        // Return to current room chat
+        function returnToCurrentRoomChat() {
+            if (!currentRoomId) return;
+            
+            const messageInput = document.getElementById('message-text-input');
+            const imageUploadBtn = document.getElementById('image-upload-btn');
+            const voiceRecordBtn = document.getElementById('voice-record-btn');
+            const sendBtn = document.getElementById('send-btn');
+            
+            messageInput.disabled = false;
+            messageInput.placeholder = 'Say something...';
+            imageUploadBtn.disabled = false;
+            voiceRecordBtn.disabled = false;
+            sendBtn.disabled = false;
+            
+            // Clear active state from sidebar
+            document.querySelectorAll('.chat-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Reload current room chat
+            currentChatDate = getCurrentDateString();
+            const currentDateElement = document.getElementById('current-chat-date');
+            currentDateElement.textContent = `Room: ${currentRoomId}`;
+            
+            // Initialize room chat for today
+            initializeRoomChat();
+            
+            // Close sidebar
+            closeSidebar();
         }
 
         // Sidebar functions
