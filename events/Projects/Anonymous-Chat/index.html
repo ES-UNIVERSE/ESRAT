@@ -1246,6 +1246,105 @@
             background: rgba(255, 65, 108, 0.2);
             transform: translateY(-1px);
         }
+
+        /* Custom Confirmation Modal */
+        .custom-confirm-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .custom-confirm-modal.show {
+            display: flex;
+        }
+
+        .custom-confirm-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: 20px;
+            padding: 24px;
+            max-width: 320px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(255, 154, 158, 0.3);
+            border: 1px solid rgba(255, 154, 158, 0.2);
+            animation: slideUp 0.3s ease;
+        }
+
+        .custom-confirm-content h3 {
+            margin: 0 0 12px 0;
+            color: #333;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .custom-confirm-content p {
+            margin: 0 0 20px 0;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .custom-confirm-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .custom-confirm-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 80px;
+        }
+
+        .custom-confirm-btn.cancel {
+            background: rgba(108, 117, 125, 0.1);
+            color: #6c757d;
+            border: 1px solid rgba(108, 117, 125, 0.2);
+        }
+
+        .custom-confirm-btn.cancel:hover {
+            background: rgba(108, 117, 125, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .custom-confirm-btn.confirm {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.3);
+        }
+
+        .custom-confirm-btn.confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 65, 108, 0.4);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
     </style>
 </head>
 <body>
@@ -1415,6 +1514,18 @@
                 <div class="exit-room-buttons">
                     <button class="exit-room-btn stay-btn" id="stay-in-room-btn">STAY</button>
                     <button class="exit-room-btn exit-btn" id="confirm-exit-room-btn">EXIT</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Confirmation Modal -->
+        <div id="custom-confirm-modal" class="custom-confirm-modal">
+            <div class="custom-confirm-content">
+                <h3 id="custom-confirm-title">Confirm Action</h3>
+                <p id="custom-confirm-message">Are you sure you want to proceed?</p>
+                <div class="custom-confirm-buttons">
+                    <button class="custom-confirm-btn cancel" id="custom-confirm-cancel">Cancel</button>
+                    <button class="custom-confirm-btn confirm" id="custom-confirm-ok">Clear Chat</button>
                 </div>
             </div>
         </div>
@@ -1692,33 +1803,91 @@
         function clearRoomChat() {
             if (!isInRoom || !currentRoomId) return;
             
-            // Use a more reliable confirmation approach
-            const shouldClear = window.confirm('Are you sure you want to clear today\'s messages in this room?');
+            // Get the currently selected date (could be today or a past date)
+            const selectedDate = currentChatDate || getCurrentDateString();
+            const isToday = selectedDate === getCurrentDateString();
             
-            if (shouldClear) {
-                const currentDate = getCurrentDateString();
-                
-                // Clear current room messages (today's messages)
-                const clearCurrentMessages = database.ref(`rooms/${currentRoomId}/messages`).remove();
-                
-                // Clear today's messages from room chat history
-                const clearHistoryMessages = database.ref(`rooms/${currentRoomId}/chatHistory/${currentDate}`).remove();
-                
-                Promise.all([clearCurrentMessages, clearHistoryMessages])
-                    .then(() => {
-                        const messagesContainer = document.getElementById('messages-container');
-                        messagesContainer.innerHTML = '';
-                        
-                        // Refresh sidebar to update chat history
-                        loadPastChats();
-                        
-                        console.log('Room chat cleared successfully');
-                    })
-                    .catch((error) => {
-                        console.error('Error clearing room chat:', error);
-                        alert('Failed to clear chat. Please try again.');
-                    });
-            }
+            // Format the date for display
+            const displayDate = formatDateForSidebar(selectedDate);
+            
+            // Show custom confirmation modal
+            showCustomConfirm(
+                'Clear Chat',
+                `Are you sure you want to clear ${displayDate}'s messages in this room?`,
+                () => {
+                    // Confirmed - proceed with clearing
+                    let clearPromises = [];
+                    
+                    // If clearing today's messages, also clear current room session
+                    if (isToday) {
+                        clearPromises.push(database.ref(`rooms/${currentRoomId}/messages`).remove());
+                    }
+                    
+                    // Clear the selected date's messages from room chat history
+                    clearPromises.push(database.ref(`rooms/${currentRoomId}/chatHistory/${selectedDate}`).remove());
+                    
+                    Promise.all(clearPromises)
+                        .then(() => {
+                            const messagesContainer = document.getElementById('messages-container');
+                            messagesContainer.innerHTML = '';
+                            
+                            // Refresh sidebar to update chat history
+                            if (isInRoom) {
+                                loadRoomPastChats();
+                            } else {
+                                loadPastChats();
+                            }
+                            
+                            // If we cleared today's messages, return to current room chat
+                            if (isToday) {
+                                returnToCurrentRoomChat();
+                            }
+                            
+                            console.log(`Room chat cleared successfully for ${displayDate}`);
+                        })
+                        .catch((error) => {
+                            console.error('Error clearing room chat:', error);
+                            alert('Failed to clear chat. Please try again.');
+                        });
+                }
+            );
+        }
+
+        // Custom confirmation modal functions
+        function showCustomConfirm(title, message, onConfirm, onCancel = null) {
+            const modal = document.getElementById('custom-confirm-modal');
+            const titleElement = document.getElementById('custom-confirm-title');
+            const messageElement = document.getElementById('custom-confirm-message');
+            const confirmBtn = document.getElementById('custom-confirm-ok');
+            const cancelBtn = document.getElementById('custom-confirm-cancel');
+            
+            titleElement.textContent = title;
+            messageElement.textContent = message;
+            
+            // Remove any existing event listeners
+            const newConfirmBtn = confirmBtn.cloneNode(true);
+            const newCancelBtn = cancelBtn.cloneNode(true);
+            confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+            cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+            
+            // Add new event listeners
+            newConfirmBtn.addEventListener('click', () => {
+                hideCustomConfirm();
+                if (onConfirm) onConfirm();
+            });
+            
+            newCancelBtn.addEventListener('click', () => {
+                hideCustomConfirm();
+                if (onCancel) onCancel();
+            });
+            
+            // Show modal
+            modal.classList.add('show');
+        }
+
+        function hideCustomConfirm() {
+            const modal = document.getElementById('custom-confirm-modal');
+            modal.classList.remove('show');
         }
 
         // Add message to UI with compact bubble design
