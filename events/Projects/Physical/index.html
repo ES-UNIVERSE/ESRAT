@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Running Performance Tracker</title>
+    <title>Running Tracker</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -481,14 +481,14 @@
         </div>
         
         <div class="goal-progress">
-            <div class="stat-label">5K GOAL PROGRESS</div>
+            <div class="stat-label">5KM GOAL PROGRESS</div>
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill"></div>
             </div>
             <div class="progress-text">
                 <span>0K</span>
                 <span id="progressText">0%</span>
-                <span>5K</span>
+                <span>5KM</span>
             </div>
         </div>
         
@@ -674,7 +674,7 @@
             startTracking();
             
             // Announce start
-            speak("Starting your 5K run. Goal time is 24 minutes.");
+            speak("Starting your 5KM run. Goal time is 24 minutes.");
             
             showNotification('Run started! GPS tracking active.');
         }
