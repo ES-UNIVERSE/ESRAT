@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Running Tracker</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <meta name="theme-color" content="#0a84ff">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    :root {
+      --primary:#0a84ff;
+      --bg:#f9f9f9;
+      --text:#222;
+    }
+    body {
+      margin:0;
+      font-family:-apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+    header {
+      padding:1rem;
+      text-align:center;
+      background:var(--primary);
+      color:white;
+      font-size:1.4rem;
+      font-weight:600;
+      letter-spacing:0.5px;
+    }
+    #stats {
+      display:flex;
+      justify-content:space-around;
+      padding:0.8rem;
+      background:white;
+      box-shadow:0 2px 4px rgba(0,0,0,0.1);
+    }
+    #stats p { margin:0; font-size:1rem; }
+    #map {
+      flex:1;
+    }
+    #controls {
+      display:flex;
+      gap:1rem;
+      padding:1rem;
+      background:white;
+      box-shadow:0 -2px 4px rgba(0,0,0,0.1);
+    }
+    button {
+      flex:1;
+      padding:0.8rem;
+      border:none;
+      border-radius:8px;
+      font-size:1.1rem;
+      font-weight:600;
+      color:white;
+      background:var(--primary);
+    }
+    @media (max-width:600px){
+      header{font-size:1.2rem;}
+      #stats p{font-size:0.95rem;}
+    }
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+</head>
+<body>
+  <header>Running Tracker</header>
+
+  <div id="stats">
+    <p>Distance<br><span id="distance">0</span> km</p>
+    <p>Speed<br><span id="speed">0</span> km/h</p>
+    <p>Timer<br><span id="timer">24:00</span></p>
+  </div>
+
+  <div id="map"></div>
+
+  <div id="controls">
+    <button id="start">Start</button>
+    <button id="stop" style="background:#ff3b30;">Stop</button>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    let watchId, startTime, timerInt;
+    let distance=0, lastPos;
+
+    const map = L.map('map').setView([20.5937,78.9629], 15);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+      attribution:'&copy; OpenStreetMap'
+    }).addTo(map);
+    const route = L.polyline([], {color:'#0a84ff',weight:4}).addTo(map);
+
+    function startRun(){
+      distance=0; lastPos=null;
+      document.getElementById('distance').textContent='0';
+      document.getElementById('speed').textContent='0';
+      document.getElementById('timer').textContent='24:00';
+      startTime=Date.now();
+      watchId=navigator.geolocation.watchPosition(updatePos, console.error,
+        {enableHighAccuracy:true, maximumAge:0});
+      timerInt=setInterval(updateTimer,1000);
+    }
+
+    function updatePos(pos){
+      const latlng=[pos.coords.latitude,pos.coords.longitude];
+      route.addLatLng(latlng);
+      map.setView(latlng);
+      if(lastPos){
+        const d = map.distance(lastPos.latlng, latlng)/1000;
+        distance += d;
+        document.getElementById('distance').textContent=distance.toFixed(2);
+        const secs=(pos.timestamp-lastPos.time)/1000;
+        const spd=(d*3600)/secs;
+        document.getElementById('speed').textContent=spd.toFixed(1);
+      }
+      lastPos={latlng,time:pos.timestamp};
+    }
+
+    function updateTimer(){
+      const elapsed=Math.floor((Date.now()-startTime)/1000);
+      const remaining=Math.max(0,24*60 - elapsed);
+      const min=String(Math.floor(remaining/60)).padStart(2,'0');
+      const sec=String(remaining%60).padStart(2,'0');
+      document.getElementById('timer').textContent=`${min}:${sec}`;
+      if(remaining===0) stopRun();
+    }
+
+    function stopRun(){
+      navigator.geolocation.clearWatch(watchId);
+      clearInterval(timerInt);
+    }
+
+    document.getElementById('start').onclick=startRun;
+    document.getElementById('stop').onclick=stopRun;
+  </script>
+</body>
+</html>
