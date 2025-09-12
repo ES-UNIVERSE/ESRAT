@@ -1,139 +1,1117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Running Tracker</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-  <meta name="theme-color" content="#0a84ff">
-  <link rel="manifest" href="manifest.json">
-  <style>
-    :root {
-      --primary:#0a84ff;
-      --bg:#f9f9f9;
-      --text:#222;
-    }
-    body {
-      margin:0;
-      font-family:-apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      height:100vh;
-      display:flex;
-      flex-direction:column;
-    }
-    header {
-      padding:1rem;
-      text-align:center;
-      background:var(--primary);
-      color:white;
-      font-size:1.4rem;
-      font-weight:600;
-      letter-spacing:0.5px;
-    }
-    #stats {
-      display:flex;
-      justify-content:space-around;
-      padding:0.8rem;
-      background:white;
-      box-shadow:0 2px 4px rgba(0,0,0,0.1);
-    }
-    #stats p { margin:0; font-size:1rem; }
-    #map {
-      flex:1;
-    }
-    #controls {
-      display:flex;
-      gap:1rem;
-      padding:1rem;
-      background:white;
-      box-shadow:0 -2px 4px rgba(0,0,0,0.1);
-    }
-    button {
-      flex:1;
-      padding:0.8rem;
-      border:none;
-      border-radius:8px;
-      font-size:1.1rem;
-      font-weight:600;
-      color:white;
-      background:var(--primary);
-    }
-    @media (max-width:600px){
-      header{font-size:1.2rem;}
-      #stats p{font-size:0.95rem;}
-    }
-  </style>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Running Performance Tracker</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        :root {
+            --apple-blue: #0a84ff;
+            --apple-blue-rgb: 10, 132, 255;
+            --apple-red: #ff3b30;
+            --apple-green: #34c759;
+            --background: #f7f7f7;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+        }
+        
+        body {
+            background: var(--background);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .blur-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(10, 132, 255, 0.1) 0%, rgba(52, 199, 89, 0.1) 100%);
+            backdrop-filter: blur(10px);
+            z-index: -1;
+        }
+        
+        header {
+            background: var(--card-bg);
+            padding: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            z-index: 1000;
+            position: relative;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .app-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+        }
+        
+        h1 {
+            font-size: 1.2rem;
+            color: var(--apple-blue);
+            font-weight: 700;
+        }
+        
+        .view-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 10px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            margin: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .stat-box {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--apple-blue);
+        }
+        
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        
+        #map {
+            flex: 1;
+            width: 100%;
+            z-index: 1;
+            border-radius: 16px;
+            margin: 0 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .controls {
+            padding: 20px 20px 30px;
+            display: flex;
+            justify-content: center;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            margin-top: 10px;
+        }
+        
+        .main-button {
+            background-color: var(--apple-blue);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            min-width: 180px;
+            box-shadow: 0 4px 12px rgba(var(--apple-blue-rgb), 0.3);
+            transition: all 0.2s ease;
+        }
+        
+        .main-button:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 8px rgba(var(--apple-blue-rgb), 0.2);
+        }
+        
+        .main-button.stop {
+            background-color: var(--apple-red);
+        }
+        
+        .dashboard {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 2000;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(100%);
+            transition: transform 0.4s ease;
+            border-radius: 20px 20px 0 0;
+        }
+        
+        .dashboard.active {
+            transform: translateY(0);
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .dashboard-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--apple-blue);
+        }
+        
+        .close-dashboard {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+        
+        .run-summary {
+            background: rgba(var(--apple-blue-rgb), 0.1);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-title {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+        
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .summary-stat {
+            text-align: center;
+        }
+        
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--apple-blue);
+        }
+        
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .motivational-quote {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: auto;
+        }
+        
+        .action-button {
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .action-button.save {
+            background: var(--apple-blue);
+            color: white;
+        }
+        
+        .action-button.discard {
+            background: rgba(255, 255, 255, 0.6);
+            color: var(--text-secondary);
+        }
+        
+        .current-location-btn {
+            position: absolute;
+            bottom: 100px;
+            right: 20px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: none;
+            color: var(--apple-blue);
+            font-size: 1.2rem;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 3000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            text-align: center;
+        }
+        
+        .notification.show {
+            opacity: 1;
+        }
+        
+        .history-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 2000;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(-100%);
+            transition: transform 0.4s ease;
+        }
+        
+        .history-panel.active {
+            transform: translateX(0);
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .history-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--apple-blue);
+        }
+        
+        .close-history {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+        
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .history-item {
+            background: rgba(var(--apple-blue-rgb), 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .history-date {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+        
+        .history-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .history-stat {
+            text-align: center;
+        }
+        
+        .history-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--apple-blue);
+        }
+        
+        .history-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+        
+        .menu-button {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: none;
+            color: var(--apple-blue);
+            font-size: 1.2rem;
+        }
+        
+        .goal-progress {
+            margin: 10px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: rgba(var(--apple-blue-rgb), 0.2);
+            border-radius: 3px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--apple-blue);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
-  <header>Running Tracker</header>
+    <div class="blur-bg"></div>
+    
+    <header>
+        <div class="header-content">
+            <img src="https://es-universe.github.io/ESRAT/apks/logo.png" class="app-logo" alt="App Logo">
+            <h1>Running Performance Tracker</h1>
+        </div>
+    </header>
+    
+    <div class="view-container">
+        <div class="stats-bar">
+            <div class="stat-box">
+                <div class="stat-value" id="distance">0.00</div>
+                <div class="stat-label">KM</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="speed">0.0</div>
+                <div class="stat-label">KM/H</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="timer">24:00</div>
+                <div class="stat-label">REMAINING</div>
+            </div>
+        </div>
+        
+        <div class="goal-progress">
+            <div class="stat-label">5K GOAL PROGRESS</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text">
+                <span>0K</span>
+                <span id="progressText">0%</span>
+                <span>5K</span>
+            </div>
+        </div>
+        
+        <div id="map"></div>
+        
+        <button class="current-location-btn" id="currentLocationBtn">
+            <i class="fas fa-location-arrow"></i>
+        </button>
+        
+        <button class="menu-button" id="menuBtn">
+            <i class="fas fa-history"></i>
+        </button>
+    </div>
+    
+    <div class="controls">
+        <button class="main-button" id="actionBtn">Start Run</button>
+    </div>
+    
+    <div class="dashboard" id="dashboard">
+        <div class="dashboard-header">
+            <h2 class="dashboard-title">Run Summary</h2>
+            <button class="close-dashboard" id="closeDashboard">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="run-summary">
+            <div class="summary-title">TODAY'S RUN</div>
+            <div class="summary-stats">
+                <div class="summary-stat">
+                    <div class="summary-value" id="summaryDistance">0.00</div>
+                    <div class="summary-label">DISTANCE (KM)</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="summary-value" id="summaryPace">0:00</div>
+                    <div class="summary-label">AVG PACE (MIN/KM)</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="summary-value" id="summaryTime">00:00</div>
+                    <div class="summary-label">TIME</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="summary-value" id="summarySpeed">0.0</div>
+                    <div class="summary-label">AVG SPEED (KM/H)</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="motivational-quote" id="motivationalQuote">
+            "The only bad workout is the one that didn't happen."
+        </div>
+        
+        <div class="action-buttons">
+            <button class="action-button save" id="saveRunBtn">
+                <i class="fas fa-save"></i> Save Run
+            </button>
+            <button class="action-button discard" id="discardRunBtn">
+                <i class="fas fa-trash"></i> Discard
+            </button>
+        </div>
+    </div>
+    
+    <div class="history-panel" id="historyPanel">
+        <div class="history-header">
+            <h2 class="history-title">Run History</h2>
+            <button class="close-history" id="closeHistory">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="history-list" id="historyList">
+            <!-- History items will be added here dynamically -->
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">
+        <!-- Notification content will be added here dynamically -->
+    </div>
 
-  <div id="stats">
-    <p>Distance<br><span id="distance">0</span> km</p>
-    <p>Speed<br><span id="speed">0</span> km/h</p>
-    <p>Timer<br><span id="timer">24:00</span></p>
-  </div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // App state
+        const state = {
+            running: false,
+            startTime: null,
+            timerInterval: null,
+            watchId: null,
+            positions: [],
+            currentDistance: 0,
+            lastAnnouncedDistance: 0,
+            map: null,
+            polyline: null,
+            currentMarker: null,
+            runHistory: []
+        };
 
-  <div id="map"></div>
+        // DOM elements
+        const elements = {
+            distance: document.getElementById('distance'),
+            speed: document.getElementById('speed'),
+            timer: document.getElementById('timer'),
+            actionBtn: document.getElementById('actionBtn'),
+            map: document.getElementById('map'),
+            currentLocationBtn: document.getElementById('currentLocationBtn'),
+            dashboard: document.getElementById('dashboard'),
+            closeDashboard: document.getElementById('closeDashboard'),
+            summaryDistance: document.getElementById('summaryDistance'),
+            summaryPace: document.getElementById('summaryPace'),
+            summaryTime: document.getElementById('summaryTime'),
+            summarySpeed: document.getElementById('summarySpeed'),
+            saveRunBtn: document.getElementById('saveRunBtn'),
+            discardRunBtn: document.getElementById('discardRunBtn'),
+            motivationalQuote: document.getElementById('motivationalQuote'),
+            notification: document.getElementById('notification'),
+            menuBtn: document.getElementById('menuBtn'),
+            historyPanel: document.getElementById('historyPanel'),
+            closeHistory: document.getElementById('closeHistory'),
+            historyList: document.getElementById('historyList'),
+            progressFill: document.getElementById('progressFill'),
+            progressText: document.getElementById('progressText')
+        };
 
-  <div id="controls">
-    <button id="start">Start</button>
-    <button id="stop" style="background:#ff3b30;">Stop</button>
-  </div>
+        // Motivational quotes
+        const motivationalQuotes = [
+            "The only bad workout is the one that didn't happen.",
+            "It never gets easier, you just get stronger.",
+            "Don't stop when you're tired. Stop when you're done.",
+            "Your body can stand almost anything. It's your mind that you have to convince.",
+            "The pain you feel today will be the strength you feel tomorrow.",
+            "Run often. Run long. But never outrun your joy of running.",
+            "Every mile is a gift.",
+            "You are one run away from a good mood.",
+            "Run the mile you are in.",
+            "Sweat is magic. Cover yourself in it daily to grant your wishes."
+        ];
 
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script>
-    let watchId, startTime, timerInt;
-    let distance=0, lastPos;
+        // Initialize the map
+        function initMap() {
+            state.map = L.map('map').setView([0, 0], 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(state.map);
+            
+            // Try to get user's current location for initial map view
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        const { latitude, longitude } = pos.coords;
+                        state.map.setView([latitude, longitude], 15);
+                        
+                        // Add current location marker
+                        state.currentMarker = L.marker([latitude, longitude])
+                            .addTo(state.map)
+                            .bindPopup('Your current location')
+                            .openPopup();
+                    },
+                    (err) => {
+                        console.log('Could not get initial location:', err);
+                        showNotification('Unable to get your location. Please check location permissions.');
+                    }
+                );
+            }
+        }
 
-    const map = L.map('map').setView([20.5937,78.9629], 15);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-      attribution:'&copy; OpenStreetMap'
-    }).addTo(map);
-    const route = L.polyline([], {color:'#0a84ff',weight:4}).addTo(map);
+        // Start the run
+        function startRun() {
+            if (state.running) return;
+            
+            state.running = true;
+            state.startTime = new Date();
+            state.positions = [];
+            state.currentDistance = 0;
+            state.lastAnnouncedDistance = 0;
+            
+            // Update UI
+            elements.actionBtn.textContent = 'Stop Run';
+            elements.actionBtn.classList.add('stop');
+            
+            // Start timer
+            startTimer();
+            
+            // Start tracking position
+            startTracking();
+            
+            // Announce start
+            speak("Starting your 5K run. Goal time is 24 minutes.");
+            
+            showNotification('Run started! GPS tracking active.');
+        }
 
-    function startRun(){
-      distance=0; lastPos=null;
-      document.getElementById('distance').textContent='0';
-      document.getElementById('speed').textContent='0';
-      document.getElementById('timer').textContent='24:00';
-      startTime=Date.now();
-      watchId=navigator.geolocation.watchPosition(updatePos, console.error,
-        {enableHighAccuracy:true, maximumAge:0});
-      timerInt=setInterval(updateTimer,1000);
-    }
+        // Stop the run
+        function stopRun() {
+            if (!state.running) return;
+            
+            state.running = false;
+            
+            // Update UI
+            elements.actionBtn.textContent = 'Start Run';
+            elements.actionBtn.classList.remove('stop');
+            
+            // Stop timer and tracking
+            clearInterval(state.timerInterval);
+            if (state.watchId) {
+                navigator.geolocation.clearWatch(state.watchId);
+            }
+            
+            // Calculate run statistics
+            const endTime = new Date();
+            const duration = (endTime - state.startTime) / 1000; // in seconds
+            const minutes = Math.floor(duration / 60);
+            const seconds = Math.floor(duration % 60);
+            const avgPace = duration / state.currentDistance / 60; // min/km
+            const avgSpeed = state.currentDistance / (duration / 3600); // km/h
+            
+            // Update summary
+            elements.summaryDistance.textContent = state.currentDistance.toFixed(2);
+            elements.summaryTime.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            elements.summaryPace.textContent = `${Math.floor(avgPace)}:${Math.floor((avgPace % 1) * 60).toString().padStart(2, '0')}`;
+            elements.summarySpeed.textContent = avgSpeed.toFixed(1);
+            
+            // Show random motivational quote
+            const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+            elements.motivationalQuote.textContent = `"${randomQuote}"`;
+            
+            // Show dashboard
+            elements.dashboard.classList.add('active');
+            
+            // Announce stop
+            speak(`Run completed. You ran ${state.currentDistance.toFixed(2)} kilometers in ${minutes} minutes and ${seconds} seconds.`);
+        }
 
-    function updatePos(pos){
-      const latlng=[pos.coords.latitude,pos.coords.longitude];
-      route.addLatLng(latlng);
-      map.setView(latlng);
-      if(lastPos){
-        const d = map.distance(lastPos.latlng, latlng)/1000;
-        distance += d;
-        document.getElementById('distance').textContent=distance.toFixed(2);
-        const secs=(pos.timestamp-lastPos.time)/1000;
-        const spd=(d*3600)/secs;
-        document.getElementById('speed').textContent=spd.toFixed(1);
-      }
-      lastPos={latlng,time:pos.timestamp};
-    }
+        // Start the countdown timer
+        function startTimer() {
+            const endTime = new Date(state.startTime.getTime() + 24 * 60 * 1000);
+            
+            clearInterval(state.timerInterval);
+            state.timerInterval = setInterval(() => {
+                const now = new Date();
+                const remaining = endTime - now;
+                
+                if (remaining <= 0) {
+                    clearInterval(state.timerInterval);
+                    elements.timer.textContent = '00:00';
+                    stopRun();
+                    speak("Time's up! You've completed the 24 minute run.");
+                    return;
+                }
+                
+                const minutes = Math.floor(remaining / 60000);
+                const seconds = Math.floor((remaining % 60000) / 1000);
+                elements.timer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Announce time remaining at specific intervals
+                if (minutes === 10 && seconds === 0) {
+                    speak("10 minutes remaining.");
+                } else if (minutes === 5 && seconds === 0) {
+                    speak("5 minutes remaining.");
+                } else if (minutes === 1 && seconds === 0) {
+                    speak("1 minute remaining.");
+                }
+            }, 1000);
+        }
 
-    function updateTimer(){
-      const elapsed=Math.floor((Date.now()-startTime)/1000);
-      const remaining=Math.max(0,24*60 - elapsed);
-      const min=String(Math.floor(remaining/60)).padStart(2,'0');
-      const sec=String(remaining%60).padStart(2,'0');
-      document.getElementById('timer').textContent=`${min}:${sec}`;
-      if(remaining===0) stopRun();
-    }
+        // Start tracking position
+        function startTracking() {
+            if (!navigator.geolocation) {
+                alert("Geolocation is not supported by your browser");
+                return;
+            }
+            
+            // Clear previous positions from map
+            if (state.polyline) {
+                state.map.removeLayer(state.polyline);
+            }
+            
+            // Watch position with high accuracy
+            state.watchId = navigator.geolocation.watchPosition(
+                position => {
+                    const { latitude, longitude, accuracy, speed } = position.coords;
+                    const timestamp = position.timestamp;
+                    
+                    // Add new position to history
+                    const newPos = {
+                        lat: latitude,
+                        lng: longitude,
+                        accuracy: accuracy,
+                        timestamp: timestamp,
+                        speed: speed || 0
+                    };
+                    
+                    state.positions.push(newPos);
+                    
+                    // Update distance
+                    if (state.positions.length > 1) {
+                        const lastPos = state.positions[state.positions.length - 2];
+                        const distanceSegment = calculateDistance(
+                            lastPos.lat, lastPos.lng,
+                            newPos.lat, newPos.lng
+                        );
+                        state.currentDistance += distanceSegment;
+                    }
+                    
+                    // Update stats display
+                    elements.distance.textContent = state.currentDistance.toFixed(2);
+                    elements.speed.textContent = ((speed || 0) * 3.6).toFixed(1); // m/s to km/h
+                    
+                    // Update progress
+                    const progress = (state.currentDistance / 5) * 100;
+                    elements.progressFill.style.width = `${Math.min(progress, 100)}%`;
+                    elements.progressText.textContent = `${Math.min(progress, 100).toFixed(0)}%`;
+                    
+                    // Update map
+                    updateMap(newPos);
+                    
+                    // Announce distance milestones
+                    announceMilestones();
+                },
+                error => {
+                    console.error('Geolocation error:', error);
+                    speak("GPS signal lost.");
+                    showNotification('GPS signal lost. Please check your location settings.');
+                },
+                {
+                    enableHighAccuracy: true,
+                    maximumAge: 1000,
+                    timeout: 5000
+                }
+            );
+        }
 
-    function stopRun(){
-      navigator.geolocation.clearWatch(watchId);
-      clearInterval(timerInt);
-    }
+        // Calculate distance between two coordinates (Haversine formula)
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371e3; // Earth radius in meters
+            const φ1 = lat1 * Math.PI / 180;
+            const φ2 = lat2 * Math.PI / 180;
+            const Δφ = (lat2 - lat1) * Math.PI / 180;
+            const Δλ = (lon2 - lon1) * Math.PI / 180;
+            
+            const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+                    Math.cos(φ1) * Math.cos(φ2) *
+                    Math.sin(Δλ/2) * Math.sin(Δλ/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            
+            return R * c / 1000; // Distance in kilometers
+        }
 
-    document.getElementById('start').onclick=startRun;
-    document.getElementById('stop').onclick=stopRun;
-  </script>
+        // Update the map with current position and path
+        function updateMap(currentPos) {
+            // Create polyline if it doesn't exist
+            if (!state.polyline) {
+                state.polyline = L.polyline([], { 
+                    color: '#0a84ff', 
+                    weight: 4,
+                    lineJoin: 'round'
+                }).addTo(state.map);
+            }
+            
+            // Update polyline
+            const latLngs = state.positions.map(pos => [pos.lat, pos.lng]);
+            state.polyline.setLatLngs(latLngs);
+            
+            // Update current position marker
+            if (state.currentMarker) {
+                state.map.removeLayer(state.currentMarker);
+            }
+            
+            state.currentMarker = L.marker([currentPos.lat, currentPos.lng], {
+                icon: L.divIcon({
+                    className: 'current-location-marker',
+                    html: '<div class="pulse-dot"></div>',
+                    iconSize: [20, 20],
+                    iconAnchor: [10, 10]
+                })
+            }).addTo(state.map);
+            
+            // Adjust map view to show the entire route
+            if (state.positions.length > 1) {
+                state.map.fitBounds(state.polyline.getBounds(), { padding: [50, 50] });
+            } else {
+                state.map.setView([currentPos.lat, currentPos.lng], 15);
+            }
+        }
+
+        // Center map on current location
+        function centerMapOnLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        const { latitude, longitude } = pos.coords;
+                        state.map.setView([latitude, longitude], 15);
+                        showNotification('Map centered on your current location');
+                    },
+                    (err) => {
+                        console.log('Could not get location:', err);
+                        showNotification('Unable to get your current location');
+                    }
+                );
+            }
+        }
+
+        // Announce distance milestones
+        function announceMilestones() {
+            if (state.currentDistance - state.lastAnnouncedDistance >= 0.5) {
+                const nextMilestone = Math.floor(state.currentDistance / 0.5) * 0.5 + 0.5;
+                
+                if (nextMilestone <= 5) {
+                    speak(`You have run ${state.currentDistance.toFixed(1)} kilometers.`);
+                    state.lastAnnouncedDistance = nextMilestone - 0.5;
+                }
+            }
+        }
+
+        // Text-to-speech function
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 0.9;
+                utterance.pitch = 1.0;
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Save run to localStorage
+        function saveRun() {
+            const endTime = new Date();
+            const duration = (endTime - state.startTime) / 1000; // in seconds
+            const minutes = Math.floor(duration / 60);
+            const seconds = Math.floor(duration % 60);
+            const avgPace = duration / state.currentDistance / 60; // min/km
+            const avgSpeed = state.currentDistance / (duration / 3600); // km/h
+            
+            const run = {
+                date: new Date().toISOString(),
+                distance: state.currentDistance,
+                duration: duration,
+                formattedDuration: `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`,
+                avgPace: avgPace,
+                formattedPace: `${Math.floor(avgPace)}:${Math.floor((avgPace % 1) * 60).toString().padStart(2, '0')}`,
+                avgSpeed: avgSpeed,
+                positions: state.positions
+            };
+            
+            let runs = JSON.parse(localStorage.getItem('runningPerformanceRuns') || '[]');
+            runs.push(run);
+            localStorage.setItem('runningPerformanceRuns', JSON.stringify(runs));
+            
+            showNotification('Run saved successfully!');
+            loadRunHistory();
+        }
+
+        // Load and display run history
+        function loadRunHistory() {
+            const runs = JSON.parse(localStorage.getItem('runningPerformanceRuns') || '[]');
+            elements.historyList.innerHTML = '';
+            
+            if (runs.length === 0) {
+                elements.historyList.innerHTML = '<div class="history-item"><div class="history-date">No past runs recorded yet.</div></div>';
+                return;
+            }
+            
+            runs.reverse().forEach(run => {
+                const runDate = new Date(run.date);
+                const runEl = document.createElement('div');
+                runEl.className = 'history-item';
+                
+                runEl.innerHTML = `
+                    <div class="history-date">${runDate.toLocaleDateString()} ${runDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                    <div class="history-stats">
+                        <div class="history-stat">
+                            <div class="history-value">${run.distance.toFixed(2)}</div>
+                            <div class="history-label">KM</div>
+                        </div>
+                        <div class="history-stat">
+                            <div class="history-value">${run.formattedPace}</div>
+                            <div class="history-label">PACE</div>
+                        </div>
+                        <div class="history-stat">
+                            <div class="history-value">${run.formattedDuration}</div>
+                            <div class="history-label">TIME</div>
+                        </div>
+                    </div>
+                `;
+                
+                elements.historyList.appendChild(runEl);
+            });
+        }
+
+        // Show notification
+        function showNotification(message) {
+            elements.notification.textContent = message;
+            elements.notification.classList.add('show');
+            
+            setTimeout(() => {
+                elements.notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize the app
+        function init() {
+            initMap();
+            loadRunHistory();
+            
+            // Event listeners
+            elements.actionBtn.addEventListener('click', () => {
+                if (state.running) {
+                    stopRun();
+                } else {
+                    startRun();
+                }
+            });
+            
+            elements.currentLocationBtn.addEventListener('click', centerMapOnLocation);
+            
+            elements.closeDashboard.addEventListener('click', () => {
+                elements.dashboard.classList.remove('active');
+            });
+            
+            elements.saveRunBtn.addEventListener('click', () => {
+                saveRun();
+                elements.dashboard.classList.remove('active');
+            });
+            
+            elements.discardRunBtn.addEventListener('click', () => {
+                elements.dashboard.classList.remove('active');
+                showNotification('Run discarded');
+            });
+            
+            elements.menuBtn.addEventListener('click', () => {
+                elements.historyPanel.classList.add('active');
+            });
+            
+            elements.closeHistory.addEventListener('click', () => {
+                elements.historyPanel.classList.remove('active');
+            });
+            
+            // Add custom CSS for pulse animation
+            const style = document.createElement('style');
+            style.textContent = `
+                .current-location-marker {
+                    background: rgba(10, 132, 255, 0.7);
+                    border: 3px solid white;
+                    border-radius: 50%;
+                    box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.3);
+                    animation: pulse 1.5s infinite;
+                }
+                
+                @keyframes pulse {
+                    0% {
+                        box-shadow: 0 0 0 0 rgba(10, 132, 255, 0.7);
+                    }
+                    70% {
+                        box-shadow: 0 0 0 10px rgba(10, 132, 255, 0);
+                    }
+                    100% {
+                        box-shadow: 0 0 0 0 rgba(10, 132, 255, 0);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Start the app when the page loads
+        window.addEventListener('load', init);
+    </script>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" id="manifest">
+    <script>
+        // Generate manifest dynamically
+        const manifest = {
+            "name": "Running Performance Tracker",
+            "short_name": "Run Tracker",
+            "description": "Track your running performance for SSC GD 5km test",
+            "start_url": "/",
+            "display": "standalone",
+            "theme_color": "#0a84ff",
+            "background_color": "#ffffff",
+            "icons": [
+                {
+                    "src": "https://es-universe.github.io/ESRAT/apks/logo.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
+                },
+                {
+                    "src": "https://es-universe.github.io/ESRAT/apks/logo.png",
+                    "sizes": "512x512",
+                    "type": "image/png"
+                }
+            ]
+        };
+        
+        const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+        const manifestURL = URL.createObjectURL(manifestBlob);
+        document.getElementById('manifest').href = manifestURL;
+        
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('data:text/javascript;base64,' + btoa(`
+                    self.addEventListener('install', (event) => {
+                        event.waitUntil(
+                            caches.open('running-tracker-v2').then((cache) => {
+                                return cache.addAll([
+                                    '/',
+                                    'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css',
+                                    'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js',
+                                    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+                                    'https://es-universe.github.io/ESRAT/apks/logo.png'
+                                ]);
+                            })
+                        );
+                    });
+                    
+                    self.addEventListener('fetch', (event) => {
+                        event.respondWith(
+                            caches.match(event.request).then((response) => {
+                                return response || fetch(event.request);
+                            })
+                        );
+                    });
+                `));
+            });
+        }
+    </script>
 </body>
 </html>
