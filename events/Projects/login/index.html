@@ -1383,24 +1383,28 @@
             
             // Convert to image and add to container
             const qrImage = new Image();
-            qrImage.src = canvas.toDataURL('img/payment.PNG');
+            qrImage.src = canvas.toDataURL('https://raw.githubusercontent.com/ES-UNIVERSE/ESRAT/0bfa918a72cb888287859532dd6cef2dd5c6f957/img/payment.PNG');
             qrContainer.appendChild(qrImage);
         }
 
         // Download QR code
         downloadQr.addEventListener('click', () => {
-            const qrContainer = document.querySelector('.qr-code');
-            const canvas = document.createElement('canvas');
-            canvas.width = 180;
-            canvas.height = 180;
-            const ctx = canvas.getContext('2d');
+    const imageUrl = 'https://raw.githubusercontent.com/ES-UNIVERSE/ESRAT/0bfa918a72cb888287859532dd6cef2dd5c6f957/img/payment.PNG';
 
-            // Create download link
+    fetch(imageUrl)
+        .then(response => response.blob())
+        .then(blob => {
             const link = document.createElement('a');
-            link.download = 'qr-payment-binance.PNG';
-            link.href = 'https://raw.githubusercontent.com/ES-UNIVERSE/ESRAT/0bfa918a72cb888287859532dd6cef2dd5c6f957/img/payment.PNG'
+            link.href = URL.createObjectURL(blob);
+            link.download = 'qr-payment-binance.PNG'; // custom filename
+            document.body.appendChild(link);
             link.click();
-        });
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href); // cleanup
+        })
+        .catch(err => console.error('Download failed:', err));
+});
+
 
         // Initialize QR code on load
         window.addEventListener('load', generateQRCode);
