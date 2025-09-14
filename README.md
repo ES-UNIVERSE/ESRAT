@@ -22,7 +22,6 @@ To learn more about our cutting-edge RAT solutions and how they can empower your
 ## Contact
 - **Email**: esplaysbgmi@gmail.com
 - **Telegram**: [DM](https://t.me/jrram3000)
-- **Instagram**: [Profile](https://www.instagram.com/urstruly_ganga/)
 
 
 Transform your digital capabilities with our Super Advanced God Mode RATs – because true control is in the data.
