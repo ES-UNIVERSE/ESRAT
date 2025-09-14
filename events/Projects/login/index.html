@@ -734,21 +734,7 @@
             margin: 20px 0;
         }
 
-        .qr-code {
-            width: 180px;
-            height: 180px;
-            background: #fff;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            margin-bottom: 15px;
-        }
 
-        .qr-code img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
 
         .download-qr {
             padding: 10px 20px;
@@ -1163,10 +1149,9 @@
                 
                 <div class="payment-info">
                     <h3>Payment Details</h3>
-                    <p>Send <strong id="payment-amount">$29.00</strong> USDT to the address below:</p>
-                    <p>Wallet Address: <strong id="wallet-address">TQr9N2kXJho7pFs8b1GvF6E2jX3nKt8LmM</strong></p>
-                    <p>Network: <strong>TRC20</strong></p>
+                    <p>Send <strong id="payment-amount">$29.00</strong> USDT to the QR below:</p>
                     <p>Plan: <strong id="selected-plan">Premium</strong></p>
+                    <p>Validity: <strong id="selected-plan">99 Days Only</strong></p>
                 </div>
                 
                 <div class="qr-container">
@@ -1394,8 +1379,6 @@
             
             // Create a canvas for QR code
             const canvas = document.createElement('canvas');
-            canvas.width = 180;
-            canvas.height = 180;
             const ctx = canvas.getContext('2d');
             
             // Convert to image and add to container
@@ -1411,9 +1394,6 @@
             canvas.width = 180;
             canvas.height = 180;
             const ctx = canvas.getContext('2d');
-
-            // Draw QR content
-            ctx.fillStyle = '#000000';
 
             // Create download link
             const link = document.createElement('a');
