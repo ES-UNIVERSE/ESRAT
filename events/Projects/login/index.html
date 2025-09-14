@@ -1398,33 +1398,9 @@
             canvas.height = 180;
             const ctx = canvas.getContext('2d');
             
-            // Draw a simple QR-like pattern (in a real app, use a QR library)
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, 180, 180);
-            
-            ctx.fillStyle = '#000000';
-            
-            // Outer squares
-            ctx.fillRect(10, 10, 40, 40);
-            ctx.fillRect(130, 10, 40, 40);
-            ctx.fillRect(10, 130, 40, 40);
-            
-            // Inner pattern
-            for (let i = 0; i < 9; i++) {
-                for (let j = 0; j < 9; j++) {
-                    if ((i + j) % 3 === 0) {
-                        ctx.fillRect(50 + i * 10, 50 + j * 10, 8, 8);
-                    }
-                }
-            }
-            
-            // Add text
-            ctx.font = '8px Arial';
-            ctx.fillText('USDT Payment', 50, 170);
-            
             // Convert to image and add to container
             const qrImage = new Image();
-            qrImage.src = canvas.toDataURL('image/png');
+            qrImage.src = canvas.toDataURL('img/payment.PNG');
             qrContainer.appendChild(qrImage);
         }
 
@@ -1435,32 +1411,10 @@
             canvas.width = 180;
             canvas.height = 180;
             const ctx = canvas.getContext('2d');
-            
-            // Draw white background
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, 180, 180);
-            
+
             // Draw QR content
             ctx.fillStyle = '#000000';
-            
-            // Outer squares
-            ctx.fillRect(10, 10, 40, 40);
-            ctx.fillRect(130, 10, 40, 40);
-            ctx.fillRect(10, 130, 40, 40);
-            
-            // Inner pattern
-            for (let i = 0; i < 9; i++) {
-                for (let j = 0; j < 9; j++) {
-                    if ((i + j) % 3 === 0) {
-                        ctx.fillRect(50 + i * 10, 50 + j * 10, 8, 8);
-                    }
-                }
-            }
-            
-            // Add text
-            ctx.font = '8px Arial';
-            ctx.fillText('USDT Payment', 50, 170);
-            
+
             // Create download link
             const link = document.createElement('a');
             link.download = 'usdt-payment-qr.png';
