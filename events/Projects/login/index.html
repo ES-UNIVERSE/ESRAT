@@ -126,8 +126,8 @@
         #dynamic-text {
             font-size: clamp(2.5rem, 8vw, 5rem);
             font-weight: 700;
-            color: #2c3e50;
-            text-shadow: 0 0 20px rgba(44, 62, 80, 0.3);
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
             letter-spacing: 0.1em;
             position: relative;
         }
@@ -376,12 +376,28 @@
             margin-bottom: 40px;
             z-index: 10;
         }
+        terms {
+            margin-bottom: 40px;
+            z-index: 10;
+        }
         .pricing-title {
             text-align: center;
             font-size: 1.5rem;
             font-weight: 600;
             color: #2c3e50;
             margin-bottom: 30px;
+            letter-spacing: -0.02em;
+        }
+        .term {
+            margin-bottom: 10px;
+            z-index: 10;
+        }
+        .terms {
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 400;
+            color: #2c3e50;
+            margin-bottom: 15px;
             letter-spacing: -0.02em;
         }
         .pricing-cards {
@@ -560,8 +576,8 @@
             }
             .pricing-details {
                 text-align: center;
-                margin-top: 20px;
-                padding: 20px;
+                margin-top: 30px;
+                padding: 100px;
                 background: rgba(255, 255, 255, 0.95);
                 backdrop-filter: blur(20px);
                 -webkit-backdrop-filter: blur(20px);
@@ -903,7 +919,7 @@
             }
             .logo-container {
                 top: 20px;
-                padding: 10px 16px;
+                padding: 7px 20px;
             }
             .logo-img {
                 height: 50px;
@@ -1039,20 +1055,17 @@
                 <span class="letter">A</span>
             </span>
         </div>
-        <!-- Notice Board (hidden by default) -->
+        <!-- Notice Board (hidden by default) 
         <div id="notice-board" class="notice-board">
             <div class="notice-content">
                 <h3>Camera Permission Required</h3>
-                <p><strong>You didn't click ALLOW!</strong><br>
-                ALLOW all the permissions from<br>
-                your browser settings and<br>
-                Refresh to Proceed ➤</p>
                 <div class="notice-credentials">
-                    <p>Username: <span>ganga</span></p>
-                    <p>Password: <span>password</span></p>
+                    <p><span>Buy any of the plans below and get access to the Admin Dash where you can get RATs and many more.</span></p>
                 </div>
+                <p><br>
+                Refresh to Proceed ➤</p>
             </div>
-        </div>
+        </div> -->
         <!-- Login Container -->
         <div class="container">
             <div class="login-card">
@@ -1088,9 +1101,9 @@
                     </div>
                     <div class="card-features">
                         <ul>
-                            <li>✓ Full Access to Tools</li>
-                            <li>✓ Regular Updates</li>
-                            <li>✓ Community Support</li>
+                            <li>Full Access to Tools</li>
+                            <li>Regular Updates</li>
+                            <li>Community Support</li>
                         </ul>
                     </div>
                     <button class="pricing-button" data-plan="premium" data-amount="29">Get Started</button>
@@ -1107,10 +1120,9 @@
                     </div>
                     <div class="card-features">
                         <ul>
-                            <li>✓ Everything in Premium</li>
-                            <li>✓ Priority Support</li>
-                            <li>✓ Exclusive Features</li>
-                            <li>✓ No Renewal Needed</li>
+                            <li>Everything in Premium</li>
+                            <li>Priority Support</li>
+                            <li>No Renewal Needed</li>
                         </ul>
                     </div>
                     <button class="pricing-button featured-button" data-plan="lifetime" data-amount="49">Choose Lifetime</button>
@@ -1132,13 +1144,16 @@
                 <p class="plan-duration-mobile">99 Days Access</p>
                 <div class="card-features-mobile">
                     <ul>
-                        <li>✓ Full Access to Tools</li>
-                        <li>✓ Regular Updates</li>
-                        <li>✓ Community Support</li>
+                        <li>Full Access to Tools</li>
+                        <li>Regular Updates</li>
+                        <li>Community Support</li>
                     </ul>
                 </div>
                 <button class="pricing-button-mobile">Get Started</button>
             </div>
+        </div>
+        <div class="term">
+            <h3 class="terms">Feel free to reach out to me</h3>
         </div>
     </main>
     <!-- Social Links -->
@@ -1177,9 +1192,9 @@
                 </div>
                 <div class="payment-info">
                     <h3>Payment Details</h3>
-                    <p>Send <strong id="payment-amount">$29.00</strong> USDT to the address below:</p>
-                    <p>Wallet Address: <strong id="wallet-address">TQr9N2kXJho7pFs8b1GvF6E2jX3nKt8LmM</strong></p>
-                    <p>Network: <strong>TRC20</strong></p>
+                    <p>Send <strong id="payment-amount">$29.00</strong> USDT to the Address or QR below:</p>
+                    <p>Wallet Address: <strong id="wallet-address">N/A</strong></p>
+                    <p>Network: <strong>N/A</strong></p>
                     <p>Plan: <strong id="selected-plan">Premium</strong></p>
                 </div>
                 <div class="qr-container">
@@ -1428,8 +1443,8 @@
             amountMobile.textContent = isPremium ? '29' : '49';
             planDurationMobile.textContent = isPremium ? '99 Days Access' : 'Lifetime Access';
             cardFeaturesMobile.innerHTML = isPremium ?
-                '<ul><li>✓ Full Access to Tools</li><li>✓ Regular Updates</li><li>✓ Community Support</li></ul>' :
-                '<ul><li>✓ Everything in Premium</li><li>✓ Priority Support</li><li>✓ Exclusive Features</li><li>✓ No Renewal Needed</li></ul>';
+                '<ul><li>Full Access to Tools</li><li>Regular Updates</li><li>Community Support</li></ul>' :
+                '<ul><li>Everything in Premium</li><li>Priority Support</li><li>No Renewal Needed</li></ul>';
             pricingButtonMobile.textContent = isPremium ? 'Get Started' : 'Choose Lifetime';
             pricingButtonMobile.className = 'pricing-button-mobile';
             if (!isPremium) pricingButtonMobile.classList.add('featured-button');
