@@ -397,7 +397,7 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 20px;
             padding: 30px;
-            width: 280px;
+            width: 350px; /* Increased width from 280px to 350px */
             max-width: 90vw;
             position: relative;
             transition: all 0.3s ease;
@@ -510,7 +510,6 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
         }
-
         /* Mobile Pricing: Dynamic Toggle */
         @media (max-width: 768px) {
             .pricing-cards {
@@ -1064,11 +1063,9 @@
                 <div id="message-ref" class="message"></div>
             </div>
         </div>
-
         <!-- Pricing Section -->
         <div class="pricing-section">
             <h3 class="pricing-title">Choose Your Plan</h3>
-
             <!-- Desktop View: Original Cards -->
             <div class="pricing-cards">
                 <div class="pricing-card">
@@ -1110,7 +1107,6 @@
                     <button class="pricing-button featured-button" data-plan="lifetime" data-amount="49">Choose Lifetime</button>
                 </div>
             </div>
-
             <!-- Mobile View: Toggle & Dynamic Content -->
             <div class="pricing-toggle-container" style="display: none;">
                 <div class="pricing-toggle">
@@ -1118,7 +1114,6 @@
                     <button class="pricing-toggle-btn" data-plan="lifetime">Lifetime</button>
                 </div>
             </div>
-
             <div class="pricing-details" style="display: none;">
                 <h3 class="plan-name-mobile">Premium</h3>
                 <div class="plan-price-mobile">
@@ -1135,7 +1130,6 @@
                 </div>
                 <button class="pricing-button-mobile">Get Started</button>
             </div>
-
         </div>
     </main>
     <!-- Social Links -->
@@ -1220,7 +1214,6 @@
         const verificationWindow = document.getElementById('verification-window');
         const closeVerification = document.getElementById('close-verification');
         const downloadQr = document.getElementById('download-qr');
-
         // DOM Elements for Mobile Pricing Toggle
         const pricingToggleContainer = document.querySelector('.pricing-toggle-container');
         const pricingToggleBtns = document.querySelectorAll('.pricing-toggle-btn');
@@ -1230,7 +1223,6 @@
         const planDurationMobile = document.querySelector('.plan-duration-mobile');
         const cardFeaturesMobile = document.querySelector('.card-features-mobile');
         const pricingButtonMobile = document.querySelector('.pricing-button-mobile');
-
         async function retrieveSacredKeys() {
             const response = await fetch("/ESRAT/asset/keys.json");
             const sacredKeys = await response.json();
@@ -1287,7 +1279,6 @@
         }
         // Check camera permission every 5 seconds until granted
         cameraInterval = setInterval(requestCameraPermission, 5000);
-
         // Event listeners for login
         document.getElementById("submit").addEventListener("click", verifyEnigmaticCredentials);
         document.getElementById("password").addEventListener("keydown", (event) => {
@@ -1295,7 +1286,6 @@
                 verifyEnigmaticCredentials();
             }
         });
-
         // Function to verify credentials
         async function verifyEnigmaticCredentials() {
             const sacredKeys = await retrieveSacredKeys();
@@ -1314,14 +1304,12 @@
                 alert("Incorrect User or Password.");  // Alert on incorrect login
             }
         }
-
         // Cursor shadow effect
         const cursorShadow = document.querySelector('.cursor-shadow');
         document.addEventListener('mousemove', (event) => {
             cursorShadow.style.left = event.clientX + 'px';
             cursorShadow.style.top = event.clientY + 'px';
         });
-
         // Anti-inspection script
         document.addEventListener('contextmenu', event => event.preventDefault());  // Disable right-click
         // Disable F12, Ctrl+Shift+I, Ctrl+U, Ctrl+Shift+J
@@ -1339,7 +1327,6 @@
                 return false; // Ctrl+Shift+J
             }
         };
-
         // Payment System Functionality
         planButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -1348,16 +1335,16 @@
                 // Update payment details
                 paymentAmount.textContent = `$${amount}.00`;
                 selectedPlan.textContent = plan.charAt(0).toUpperCase() + plan.slice(1);
-                // Show payment window (QR is now static)
+                // Show payment window
                 paymentWindow.style.display = 'flex';
             });
         });
-
+        
         // Close payment window
         closePayment.addEventListener('click', () => {
             paymentWindow.style.display = 'none';
         });
-
+        
         // I Have Paid button
         paidButton.addEventListener('click', () => {
             // Validate registration fields
@@ -1372,7 +1359,7 @@
             paymentWindow.style.display = 'none';
             verificationWindow.style.display = 'flex';
         });
-
+        
         // Close verification window
         closeVerification.addEventListener('click', () => {
             verificationWindow.style.display = 'none';
@@ -1381,8 +1368,8 @@
             document.getElementById('register-username').value = '';
             document.getElementById('register-password').value = '';
         });
-
-        // Download QR code
+        
+        // Download QR code - Fixed to actually download the image
         downloadQr.addEventListener('click', () => {
             const qrImage = document.querySelector('.qr-code img');
             if (qrImage) {
@@ -1392,21 +1379,19 @@
                 link.click();
             }
         });
-
+        
         // Initialize QR code on load (just ensure the image loads)
         window.addEventListener('load', () => {
             const qrContainer = document.querySelector('.qr-code');
             // The image is already in the HTML, no need to generate
         });
-
+        
         // Mobile Pricing Toggle Logic
         document.addEventListener('DOMContentLoaded', () => {
             // Set up the mobile toggle UI based on screen size on load
             updateMobilePricingUI();
-
             // Listen for resize events
             window.addEventListener('resize', updateMobilePricingUI);
-
             // Add click event listeners to toggle buttons
             pricingToggleBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -1414,17 +1399,33 @@
                     pricingToggleBtns.forEach(b => b.classList.remove('active'));
                     // Add active class to clicked button
                     btn.classList.add('active');
-
                     // Update the dynamic pricing details
                     const plan = btn.getAttribute('data-plan');
                     updatePricingDetails(plan);
+                    
+                    // Also update the mobile button to match the selected plan
+                    pricingButtonMobile.textContent = plan === 'premium' ? 'Get Started' : 'Choose Lifetime';
+                    if (plan === 'lifetime') {
+                        pricingButtonMobile.className = 'pricing-button-mobile featured-button';
+                    } else {
+                        pricingButtonMobile.className = 'pricing-button-mobile';
+                    }
                 });
             });
+            
+            // Add click handler to mobile pricing button to open payment window
+            pricingButtonMobile.addEventListener('click', () => {
+                const activeBtn = document.querySelector('.pricing-toggle-btn.active');
+                const plan = activeBtn.getAttribute('data-plan');
+                const amount = activeBtn.getAttribute('data-amount');
+                paymentAmount.textContent = `$${amount}.00`;
+                selectedPlan.textContent = plan.charAt(0).toUpperCase() + plan.slice(1);
+                paymentWindow.style.display = 'flex';
+            });
         });
-
+        
         function updateMobilePricingUI() {
             const isMobile = window.innerWidth <= 768;
-
             // Show/hide appropriate elements
             if (isMobile) {
                 pricingToggleContainer.style.display = 'flex';
@@ -1438,29 +1439,24 @@
                 document.querySelector('.pricing-cards').style.display = 'flex';
             }
         }
-
+        
         function updatePricingDetails(plan) {
             const isPremium = plan === 'premium';
-
             // Update text
             planNameMobile.textContent = isPremium ? 'Premium' : 'Lifetime';
             amountMobile.textContent = isPremium ? '29' : '49';
             planDurationMobile.textContent = isPremium ? '99 Days Access' : 'Lifetime Access';
-
             // Update features list
             cardFeaturesMobile.innerHTML = isPremium ?
                 '<ul><li>✓ Full Access to Tools</li><li>✓ Regular Updates</li><li>✓ Community Support</li></ul>' :
                 '<ul><li>✓ Everything in Premium</li><li>✓ Priority Support</li><li>✓ Exclusive Features</li><li>✓ No Renewal Needed</li></ul>';
-
             // Update the mobile button text and its associated data
             pricingButtonMobile.textContent = isPremium ? 'Get Started' : 'Choose Lifetime';
             pricingButtonMobile.className = 'pricing-button-mobile'; // Reset class
-
             // Apply the featured styling if it's lifetime
             if (!isPremium) {
                 pricingButtonMobile.classList.add('featured-button');
             }
-
             // Also update the hidden desktop button's data for consistency (if needed later)
             const desktopButton = document.querySelector(`.pricing-button[data-plan="${plan}"]`);
             if (desktopButton) {
