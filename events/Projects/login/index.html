@@ -63,45 +63,47 @@
             flex-direction: column;
             overflow: hidden;
         }
-        /* Navbar Styles */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 80px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        /* Removed Navbar — now only logo remains */
+        
+        /* Logo Container — Floating Glass Effect */
+        .logo-container {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
             align-items: center;
             justify-content: center;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            background: rgba(255, 255, 255, 0.75);
+            padding: 12px 20px;
+            border-radius: 24px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
             z-index: 1000;
             transition: all 0.3s ease;
-            background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 100%); /* Unified gradient */
         }
-        .logo-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        
         .logo-link {
             display: block;
             transition: transform 0.3s ease;
         }
+        
         .logo-link:hover {
             transform: scale(1.05);
         }
+        
         .logo-img {
             height: 60px;
             width: auto;
             filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
             transition: filter 0.3s ease;
         }
+        
         .logo-link:hover .logo-img {
             filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
         }
+
         /* Main Content */
         .main-content {
             flex: 1;
@@ -109,12 +111,13 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            padding: 120px 20px 100px;
+            padding: 160px 20px 100px; /* Adjusted top padding to accommodate logo */
             min-height: 100vh;
             overflow-y: auto;
             overflow-x: hidden;
             background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 100%); /* Unified gradient */
         }
+        
         /* Animated GANGA Text */
         .info {
             text-align: center;
@@ -666,6 +669,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.08), 0 0 12px rgba(52, 152, 219, 0.2);
         }
         .social-link::before {
             content: '';
@@ -686,7 +690,7 @@
         .social-link:hover {
             color: white;
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1), 0 0 16px rgba(52, 152, 219, 0.3);
         }
         .social-link.telegram:hover::before {
             background: linear-gradient(135deg, #0088cc, #00aaff);
@@ -896,14 +900,15 @@
         }
         /* Responsive Design */
         @media (max-width: 768px) {
-            .navbar {
-                height: 70px;
+            .main-content {
+                padding: 120px 15px 90px; /* Adjusted for smaller screens */
+            }
+            .logo-container {
+                top: 20px;
+                padding: 10px 16px;
             }
             .logo-img {
                 height: 50px;
-            }
-            .main-content {
-                padding: 70px 15px 90px;
             }
             #dynamic-text {
                 font-size: clamp(2rem, 10vw, 3.5rem);
@@ -931,7 +936,7 @@
         }
         @media (max-width: 480px) {
             .main-content {
-                padding: 70px 10px 80px;
+                padding: 110px 10px 80px;
             }
             .login-card {
                 padding: 25px 20px;
@@ -945,7 +950,7 @@
         /* Landscape orientation for mobile */
         @media (max-height: 600px) and (orientation: landscape) {
             .main-content {
-                padding: 60px 15px 70px;
+                padding: 90px 15px 70px;
                 justify-content: flex-start;
                 overflow-y: auto;
             }
@@ -962,6 +967,13 @@
             }
             .home-sci2 {
                 bottom: 15px;
+            }
+            .logo-container {
+                top: 15px;
+                padding: 8px 14px;
+            }
+            .logo-img {
+                height: 45px;
             }
         }
         /* High DPI displays */
@@ -1010,14 +1022,13 @@
     </style>
 </head>
 <body class="login-page">
-    <!-- Sticky iOS-style Navbar -->
-    <nav class="navbar">
-        <div class="logo-container">
-            <a href="index.html" class="logo-link">
-                <img src="https://es-universe.github.io/ESRAT/apks/logo.png" alt="ES-UNIVERSE Logo" class="logo-img">
-            </a>
-        </div>
-    </nav>
+    <!-- Logo Container — Floating Glass Above Everything -->
+    <div class="logo-container">
+        <a href="index.html" class="logo-link">
+            <img src="https://es-universe.github.io/ESRAT/apks/logo.png" alt="ES-UNIVERSE Logo" class="logo-img">
+        </a>
+    </div>
+
     <!-- Main Content Container -->
     <main class="main-content">
         <!-- Animated GANGA Text -->
@@ -1412,52 +1423,4 @@
             pricingButtonMobile.addEventListener('click', () => {
                 const activeBtn = document.querySelector('.pricing-toggle-btn.active');
                 const plan = activeBtn.getAttribute('data-plan');
-                const amount = activeBtn.getAttribute('data-amount');
-                // Update payment window with correct details before showing
-                paymentAmount.textContent = `$${amount}.00`;
-                selectedPlan.textContent = plan.charAt(0).toUpperCase() + plan.slice(1);
-                paymentWindow.style.display = 'flex';
-            });
-        });
-        function updateMobilePricingUI() {
-            const isMobile = window.innerWidth <= 768;
-            // Show/hide appropriate elements
-            if (isMobile) {
-                pricingToggleContainer.style.display = 'flex';
-                pricingDetails.style.display = 'block';
-                document.querySelector('.pricing-cards').style.display = 'none';
-                // Initialize with premium
-                updatePricingDetails('premium');
-            } else {
-                pricingToggleContainer.style.display = 'none';
-                pricingDetails.style.display = 'none';
-                document.querySelector('.pricing-cards').style.display = 'flex';
-            }
-        }
-        function updatePricingDetails(plan) {
-            const isPremium = plan === 'premium';
-            // Update text
-            planNameMobile.textContent = isPremium ? 'Premium' : 'Lifetime';
-            amountMobile.textContent = isPremium ? '29' : '49';
-            planDurationMobile.textContent = isPremium ? '99 Days Access' : 'Lifetime Access';
-            // Update features list
-            cardFeaturesMobile.innerHTML = isPremium ?
-                '<ul><li>✓ Full Access to Tools</li><li>✓ Regular Updates</li><li>✓ Community Support</li></ul>' :
-                '<ul><li>✓ Everything in Premium</li><li>✓ Priority Support</li><li>✓ Exclusive Features</li><li>✓ No Renewal Needed</li></ul>';
-            // Update the mobile button text and its associated data
-            pricingButtonMobile.textContent = isPremium ? 'Get Started' : 'Choose Lifetime';
-            pricingButtonMobile.className = 'pricing-button-mobile'; // Reset class
-            // Apply the featured styling if it's lifetime
-            if (!isPremium) {
-                pricingButtonMobile.classList.add('featured-button');
-            }
-            // Also update the hidden desktop button's data for consistency (if needed later)
-            const desktopButton = document.querySelector(`.pricing-button[data-plan="${plan}"]`);
-            if (desktopButton) {
-                // This ensures the underlying data is correct even though it's hidden
-                // The actual click handler will still work if someone somehow accesses it
-            }
-        }
-    </script>
-</body>
-</html>
+                const amount = activeBtn.getA
