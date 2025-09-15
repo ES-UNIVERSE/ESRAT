@@ -397,7 +397,7 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 20px;
             padding: 30px;
-            width: 350px; /* Increased width from 280px to 350px */
+            width: 280px;
             max-width: 90vw;
             position: relative;
             transition: all 0.3s ease;
@@ -1110,8 +1110,8 @@
             <!-- Mobile View: Toggle & Dynamic Content -->
             <div class="pricing-toggle-container" style="display: none;">
                 <div class="pricing-toggle">
-                    <button class="pricing-toggle-btn active" data-plan="premium">Premium</button>
-                    <button class="pricing-toggle-btn" data-plan="lifetime">Lifetime</button>
+                    <button class="pricing-toggle-btn active" data-plan="premium" data-amount="29">Premium</button>
+                    <button class="pricing-toggle-btn" data-plan="lifetime" data-amount="49">Lifetime</button>
                 </div>
             </div>
             <div class="pricing-details" style="display: none;">
@@ -1190,7 +1190,7 @@
             <div class="verification-icon">
                 <i class='bx bx-check-circle'></i>
             </div>
-            <h2 class="verification-title">Verifying Your Payment</h2>
+            <h2 class="verification-title">Verifying Your Payment . . .</h2>
             <p class="verification-message">
                 We are verifying your payment. This may take a few minutes.<br>
                 Once verified, your account will be activated and you will receive a confirmation email.
@@ -1335,16 +1335,14 @@
                 // Update payment details
                 paymentAmount.textContent = `$${amount}.00`;
                 selectedPlan.textContent = plan.charAt(0).toUpperCase() + plan.slice(1);
-                // Show payment window
+                // Show payment window (QR is now static)
                 paymentWindow.style.display = 'flex';
             });
         });
-        
         // Close payment window
         closePayment.addEventListener('click', () => {
             paymentWindow.style.display = 'none';
         });
-        
         // I Have Paid button
         paidButton.addEventListener('click', () => {
             // Validate registration fields
@@ -1359,7 +1357,6 @@
             paymentWindow.style.display = 'none';
             verificationWindow.style.display = 'flex';
         });
-        
         // Close verification window
         closeVerification.addEventListener('click', () => {
             verificationWindow.style.display = 'none';
@@ -1368,8 +1365,7 @@
             document.getElementById('register-username').value = '';
             document.getElementById('register-password').value = '';
         });
-        
-        // Download QR code - Fixed to actually download the image
+        // Download QR code
         downloadQr.addEventListener('click', () => {
             const qrImage = document.querySelector('.qr-code img');
             if (qrImage) {
@@ -1379,13 +1375,11 @@
                 link.click();
             }
         });
-        
         // Initialize QR code on load (just ensure the image loads)
         window.addEventListener('load', () => {
             const qrContainer = document.querySelector('.qr-code');
             // The image is already in the HTML, no need to generate
         });
-        
         // Mobile Pricing Toggle Logic
         document.addEventListener('DOMContentLoaded', () => {
             // Set up the mobile toggle UI based on screen size on load
@@ -1402,28 +1396,19 @@
                     // Update the dynamic pricing details
                     const plan = btn.getAttribute('data-plan');
                     updatePricingDetails(plan);
-                    
-                    // Also update the mobile button to match the selected plan
-                    pricingButtonMobile.textContent = plan === 'premium' ? 'Get Started' : 'Choose Lifetime';
-                    if (plan === 'lifetime') {
-                        pricingButtonMobile.className = 'pricing-button-mobile featured-button';
-                    } else {
-                        pricingButtonMobile.className = 'pricing-button-mobile';
-                    }
                 });
             });
-            
-            // Add click handler to mobile pricing button to open payment window
+            // CRITICAL FIX: Add click handler to mobile pricing button to open payment window with correct data
             pricingButtonMobile.addEventListener('click', () => {
                 const activeBtn = document.querySelector('.pricing-toggle-btn.active');
                 const plan = activeBtn.getAttribute('data-plan');
-                const amount = activeBtn.getAttribute('data-amount');
-                paymentAmount.textContent = `$${amount}.00`;
+                const amount = activeBtn.getAttribute('data-amount'); // <-- THIS WAS MISSING!
+                // Update payment window with correct details before showing
+                paymentAmount.textContent = `$${amount}.00`; // <-- NOW WE SET THE AMOUNT CORRECTLY
                 selectedPlan.textContent = plan.charAt(0).toUpperCase() + plan.slice(1);
                 paymentWindow.style.display = 'flex';
             });
         });
-        
         function updateMobilePricingUI() {
             const isMobile = window.innerWidth <= 768;
             // Show/hide appropriate elements
@@ -1439,7 +1424,6 @@
                 document.querySelector('.pricing-cards').style.display = 'flex';
             }
         }
-        
         function updatePricingDetails(plan) {
             const isPremium = plan === 'premium';
             // Update text
