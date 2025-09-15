@@ -396,8 +396,8 @@
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 20px;
-            padding: 30px;
-            width: 280px;
+            padding: 35px; /* Increased padding for fuller look */
+            width: 320px; /* Increased width from 280px */
             max-width: 90vw;
             position: relative;
             transition: all 0.3s ease;
@@ -409,10 +409,10 @@
         }
         .pricing-card.featured {
             border: 2px solid #3498db;
-            transform: scale(1.05);
+            transform: scale(1.06); /* Slightly larger scale for prominence */
         }
         .pricing-card.featured:hover {
-            transform: scale(1.05) translateY(-8px);
+            transform: scale(1.06) translateY(-8px);
         }
         .featured-badge {
             position: absolute;
@@ -1176,7 +1176,7 @@
                 <div class="qr-container">
                     <div class="qr-code">
                         <!-- QR code using your provided image -->
-                        <img src="https://raw.githubusercontent.com/ES-UNIVERSE/ESRAT/0bfa918a72cb888287859532dd6cef2dd5c6f957/img/payment.PNG" alt="QR Code for Payment">
+                        <img src="https://raw.githubusercontent.com/ES-UNIVERSE/ESRAT/0bfa918a72cb888287859532dd6cef2dd5c6f957/img/payment.PNG" alt="QR Code for Payment" id="qr-image">
                     </div>
                     <button class="download-qr" id="download-qr">Download QR Code</button>
                 </div>
@@ -1214,6 +1214,7 @@
         const verificationWindow = document.getElementById('verification-window');
         const closeVerification = document.getElementById('close-verification');
         const downloadQr = document.getElementById('download-qr');
+        const qrImage = document.getElementById('qr-image');
         // DOM Elements for Mobile Pricing Toggle
         const pricingToggleContainer = document.querySelector('.pricing-toggle-container');
         const pricingToggleBtns = document.querySelectorAll('.pricing-toggle-btn');
@@ -1365,14 +1366,23 @@
             document.getElementById('register-username').value = '';
             document.getElementById('register-password').value = '';
         });
-        // Download QR code
-        downloadQr.addEventListener('click', () => {
-            const qrImage = document.querySelector('.qr-code img');
-            if (qrImage) {
+        // DOWNLOAD QR CODE FIX: Now properly downloads the image
+        downloadQr.addEventListener('click', async () => {
+            const qrUrl = qrImage.src;
+            try {
+                const response = await fetch(qrUrl);
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
+                link.href = url;
                 link.download = 'usdt-payment-qr.png';
-                link.href = qrImage.src;
+                document.body.appendChild(link);
                 link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error("Failed to download QR code:", error);
+                alert("Failed to download QR code. Please try again.");
             }
         });
         // Initialize QR code on load (just ensure the image loads)
@@ -1402,9 +1412,9 @@
             pricingButtonMobile.addEventListener('click', () => {
                 const activeBtn = document.querySelector('.pricing-toggle-btn.active');
                 const plan = activeBtn.getAttribute('data-plan');
-                const amount = activeBtn.getAttribute('data-amount'); // <-- THIS WAS MISSING!
+                const amount = activeBtn.getAttribute('data-amount');
                 // Update payment window with correct details before showing
-                paymentAmount.textContent = `$${amount}.00`; // <-- NOW WE SET THE AMOUNT CORRECTLY
+                paymentAmount.textContent = `$${amount}.00`;
                 selectedPlan.textContent = plan.charAt(0).toUpperCase() + plan.slice(1);
                 paymentWindow.style.display = 'flex';
             });
