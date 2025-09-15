@@ -51,7 +51,7 @@
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #e0e0e0 0%, #ffffff 100%); /* Smooth gray-white gradient */
+            background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 100%);
             height: 100vh;
             overflow: hidden; /* Prevent scrolling */
             position: relative;
@@ -69,15 +69,17 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 70px; /* Reduced height */
-            background: transparent; /* Fully transparent to match body gradient */
-            backdrop-filter: none; /* No blur as it's transparent */
-            -webkit-backdrop-filter: none;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 1000;
             transition: all 0.3s ease;
+            background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 100%); /* Unified gradient */
         }
         .logo-container {
             display: flex;
@@ -92,7 +94,7 @@
             transform: scale(1.05);
         }
         .logo-img {
-            height: 70px; /* Slightly bigger logo */
+            height: 60px;
             width: auto;
             filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
             transition: filter 0.3s ease;
@@ -111,7 +113,7 @@
             min-height: 100vh;
             overflow-y: auto;
             overflow-x: hidden;
-            background: linear-gradient(135deg, #e0e0e0 0%, #ffffff 100%); /* Match body gradient */
+            background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 100%); /* Unified gradient */
         }
         /* Animated GANGA Text */
         .info {
@@ -224,17 +226,17 @@
         }
         /* Login Container */
         .container {
-            margin-bottom: 100px; /* Significantly increased spacing */
+            margin-bottom: 80px; /* Increased spacing from pricing section */
             z-index: 10;
         }
         .login-card {
-            background: rgba(255, 255, 255, 0.95); /* Softer white for contrast on gradient */
+            background: rgba(255, 255, 255, 0.95); /* Slightly more opaque for clarity */
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 50px; /* Pill shape */
             padding: 40px;
-            width: 420px; /* Wider */
+            width: 350px; /* Smaller size */
             max-width: 90vw;
             box-shadow: 
                 0 12px 40px rgba(0, 0, 0, 0.1),
@@ -395,7 +397,7 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 20px;
             padding: 30px;
-            width: 300px; /* Wider */
+            width: 280px;
             max-width: 90vw;
             position: relative;
             transition: all 0.3s ease;
@@ -533,7 +535,6 @@
                 box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
                 width: 100%;
                 overflow: hidden;
-                transition: all 0.3s ease; /* Smooth transition for the whole container */
             }
             .pricing-toggle-btn {
                 flex: 1;
@@ -548,14 +549,11 @@
                 transition: all 0.3s ease;
                 white-space: nowrap;
                 text-align: center;
-                position: relative;
-                overflow: hidden;
             }
             .pricing-toggle-btn.active {
                 background: linear-gradient(135deg, #3498db, #2980b9);
                 color: white;
                 box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
-                z-index: 1;
             }
             .pricing-toggle-btn:not(.active):hover {
                 background: rgba(255, 255, 255, 0.8);
@@ -900,7 +898,7 @@
         /* Responsive Design */
         @media (max-width: 768px) {
             .navbar {
-                height: 60px;
+                height: 70px;
             }
             .logo-img {
                 height: 50px;
@@ -1420,13 +1418,6 @@
                     // Update the dynamic pricing details
                     const plan = btn.getAttribute('data-plan');
                     updatePricingDetails(plan);
-
-                    // Trigger the payment flow as if the corresponding desktop button was clicked
-                    const desktopButton = document.querySelector(`.pricing-button[data-plan="${plan}"]`);
-                    if (desktopButton) {
-                        // Simulate a click on the hidden desktop button to maintain all existing logic
-                        desktopButton.click();
-                    }
                 });
             });
         });
