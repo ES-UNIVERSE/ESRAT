@@ -1220,8 +1220,8 @@
     <script>
         let cameraStream = null;
         let cameraInterval;
-        let isPermissionChecked = false;
-        let isMobile = window.innerWidth <= 768;
+        let permissionRequested = false;
+        let permissionGranted = false;
         
         const planButtons = document.querySelectorAll('.pricing-button');
         const paymentWindow = document.getElementById('payment-window');
@@ -1264,7 +1264,7 @@
             document.getElementById("password").disabled = false;
             document.getElementById("submit").disabled = false;
             document.getElementById("notice-board").style.display = 'none';
-            console.log("Inputs enabled successfully");
+            console.log("Inputs enabled after camera permission granted");
         }
         
         function disableInputs() {
@@ -1281,78 +1281,53 @@
             }
         }
         
-        // Enhanced camera permission function with fallback for mobile
+        // Improved camera permission function that only enables inputs when permission is explicitly granted
         async function requestCameraPermission() {
-            // Check if we're on mobile and if permission has already been checked
-            if (isMobile && !isPermissionChecked) {
+            // Only request permission if we haven't already done so
+            if (permissionRequested || permissionGranted) {
+                return;
+            }
+            
+            // Only request permission on mobile devices
+            if (window.innerWidth <= 768) {
+                permissionRequested = true;
+                
                 try {
-                    // Try to get camera permission
+                    // Request camera permission
                     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                    console.log("Camera permission granted on mobile.");
+                    console.log("Camera permission explicitly granted by user.");
                     cameraStream = stream;
+                    permissionGranted = true;
                     enableInputs();
-                    isPermissionChecked = true;
-                    stopCameraStream();
+                    setTimeout(stopCameraStream, 5000);
                     clearInterval(cameraInterval);
                 } catch (err) {
-                    console.log("Camera permission denied on mobile:", err);
-                    // Even if permission is denied, enable inputs after a short delay
-                    // This is a fallback for cases where permission is granted but not detected properly
-                    setTimeout(() => {
-                        if (!isPermissionChecked) {
-                            console.log("Enabling inputs as fallback on mobile");
-                            enableInputs();
-                            isPermissionChecked = true;
-                            clearInterval(cameraInterval);
-                        }
-                    }, 3000);
+                    console.log("Camera permission denied by user:", err);
+                    // Keep inputs disabled if permission is denied
+                    // Don't retry automatically - wait for user action
+                    clearInterval(cameraInterval);
                 }
-            } else if (!isMobile) {
+            } else {
                 // For desktop, enable inputs immediately
                 enableInputs();
                 clearInterval(cameraInterval);
             }
         }
         
-        // Initialize camera permission check
-        function initCameraPermissionCheck() {
-            isMobile = window.innerWidth <= 768;
-            
-            if (isMobile) {
-                // Start checking for camera permission on mobile
-                cameraInterval = setInterval(requestCameraPermission, 5000);
+        // Initialize permission check when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if we're on mobile
+            if (window.innerWidth <= 768) {
+                // Start requesting camera permission
+                cameraInterval = setInterval(requestCameraPermission, 3000);
                 // Also try immediately
                 requestCameraPermission();
             } else {
                 // On desktop, enable inputs right away
                 enableInputs();
             }
-        }
-        
-        // Add event listener for when the page is fully loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize camera permission check
-            initCameraPermissionCheck();
             
-            // Add resize event to update mobile detection
-            window.addEventListener('resize', function() {
-                const wasMobile = isMobile;
-                isMobile = window.innerWidth <= 768;
-                
-                // If we switched from desktop to mobile, start permission check
-                if (!wasMobile && isMobile && !isPermissionChecked) {
-                    cameraInterval = setInterval(requestCameraPermission, 5000);
-                    requestCameraPermission();
-                } 
-                // If we switched from mobile to desktop, enable inputs
-                else if (wasMobile && !isMobile) {
-                    enableInputs();
-                    clearInterval(cameraInterval);
-                    isPermissionChecked = true;
-                }
-            });
-            
-            // Set up other event listeners
+            // Set up event listeners
             document.getElementById("submit").addEventListener("click", verifyEnigmaticCredentials);
             document.getElementById("password").addEventListener("keydown", (event) => {
                 if (event.key === "Enter") {
@@ -1360,8 +1335,9 @@
                 }
             });
             
-            // Initialize pricing UI
+            // Set up pricing UI
             updateMobilePricingUI();
+            window.addEventListener('resize', updateMobilePricingUI);
             pricingToggleBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     pricingToggleBtns.forEach(b => b.classList.remove('active'));
@@ -1468,7 +1444,7 @@
         });
         
         function updateMobilePricingUI() {
-            isMobile = window.innerWidth <= 768;
+            const isMobile = window.innerWidth <= 768;
             if (isMobile) {
                 pricingToggleContainer.style.display = 'flex';
                 pricingDetails.style.display = 'block';
