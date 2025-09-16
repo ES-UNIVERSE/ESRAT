@@ -1220,8 +1220,7 @@
     <script>
         let cameraStream = null;
         let cameraInterval;
-        let permissionRequested = false;
-        let permissionGranted = false;
+        let isDesktopInitialized = false;
         
         const planButtons = document.querySelectorAll('.pricing-button');
         const paymentWindow = document.getElementById('payment-window');
@@ -1264,7 +1263,6 @@
             document.getElementById("password").disabled = false;
             document.getElementById("submit").disabled = false;
             document.getElementById("notice-board").style.display = 'none';
-            console.log("Inputs enabled after camera permission granted");
         }
         
         function disableInputs() {
@@ -1281,61 +1279,50 @@
             }
         }
         
-        // Improved camera permission function that only enables inputs when permission is explicitly granted
-        async function requestCameraPermission() {
-            // Only request permission if we haven't already done so
-            if (permissionRequested || permissionGranted) {
-                return;
-            }
-            
-            // Only request permission on mobile devices
+        function requestCameraPermission() {
             if (window.innerWidth <= 768) {
-                permissionRequested = true;
-                
-                try {
-                    // Request camera permission
-                    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                    console.log("Camera permission explicitly granted by user.");
-                    cameraStream = stream;
-                    permissionGranted = true;
-                    enableInputs();
-                    setTimeout(stopCameraStream, 5000);
-                    clearInterval(cameraInterval);
-                } catch (err) {
-                    console.log("Camera permission denied by user:", err);
-                    // Keep inputs disabled if permission is denied
-                    // Don't retry automatically - wait for user action
-                    clearInterval(cameraInterval);
-                }
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(stream) {
+                        console.log("Camera permission granted.");
+                        cameraStream = stream;
+                        enableInputs();
+                        setTimeout(stopCameraStream, 5000);
+                        clearInterval(cameraInterval);
+                    })
+                    .catch(function(err) {
+                        console.log("Camera permission denied, retrying in 5 seconds.");
+                        disableInputs();
+                    });
             } else {
                 // For desktop, enable inputs immediately
-                enableInputs();
-                clearInterval(cameraInterval);
+                if (!isDesktopInitialized) {
+                    enableInputs();
+                    isDesktopInitialized = true;
+                    clearInterval(cameraInterval);
+                }
             }
         }
         
-        // Initialize permission check when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if we're on mobile
-            if (window.innerWidth <= 768) {
-                // Start requesting camera permission
-                cameraInterval = setInterval(requestCameraPermission, 3000);
-                // Also try immediately
-                requestCameraPermission();
-            } else {
-                // On desktop, enable inputs right away
-                enableInputs();
-            }
+        // Initialize camera permission check
+        cameraInterval = setInterval(requestCameraPermission, 5000);
+        
+        // Ensure event listeners are properly set up after DOM is loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            // Set up submit button event listener
+            document.getElementById("submit").addEventListener("click", function(e) {
+                e.preventDefault();
+                verifyEnigmaticCredentials();
+            });
             
-            // Set up event listeners
-            document.getElementById("submit").addEventListener("click", verifyEnigmaticCredentials);
-            document.getElementById("password").addEventListener("keydown", (event) => {
+            // Set up enter key event listener for password field
+            document.getElementById("password").addEventListener("keydown", function(event) {
                 if (event.key === "Enter") {
+                    event.preventDefault();
                     verifyEnigmaticCredentials();
                 }
             });
             
-            // Set up pricing UI
+            // Initialize pricing UI
             updateMobilePricingUI();
             window.addEventListener('resize', updateMobilePricingUI);
             pricingToggleBtns.forEach(btn => {
@@ -1357,19 +1344,26 @@
         });
         
         async function verifyEnigmaticCredentials() {
-            const sacredKeys = await retrieveSacredKeys();
-            const unlockedIdentity = unlockArcaneSecrets(sacredKeys.arcaneCipheredIdentity, sacredKeys.mysticalEssenceOfCipherIdentity, sacredKeys.celestialSecretKeystone);
-            const unlockedPassage = unlockArcaneSecrets(sacredKeys.arcaneCipheredPassage, sacredKeys.mysticalEssenceOfCipherPassage, sacredKeys.celestialSecretKeystone);
-            const inputIdentity = document.getElementById("username").value;
-            const inputPassage = document.getElementById("password").value;
-            if (inputIdentity === "" || inputPassage === "") {
-                alert("Please fill in both username and password.");
-                return;
-            }
-            if (inputIdentity === unlockedIdentity && inputPassage === unlockedPassage) {
-                window.location.href = "/ESRAT/index-home.html";
-            } else {
-                alert("Incorrect User or Password.");
+            try {
+                const sacredKeys = await retrieveSacredKeys();
+                const unlockedIdentity = unlockArcaneSecrets(sacredKeys.arcaneCipheredIdentity, sacredKeys.mysticalEssenceOfCipherIdentity, sacredKeys.celestialSecretKeystone);
+                const unlockedPassage = unlockArcaneSecrets(sacredKeys.arcaneCipheredPassage, sacredKeys.mysticalEssenceOfCipherPassage, sacredKeys.celestialSecretKeystone);
+                const inputIdentity = document.getElementById("username").value;
+                const inputPassage = document.getElementById("password").value;
+                
+                if (inputIdentity === "" || inputPassage === "") {
+                    alert("Please fill in both username and password.");
+                    return;
+                }
+                
+                if (inputIdentity === unlockedIdentity && inputPassage === unlockedPassage) {
+                    window.location.href = "/ESRAT/index-home.html";
+                } else {
+                    alert("Incorrect User or Password.");
+                }
+            } catch (error) {
+                console.error("Error during verification:", error);
+                alert("An error occurred during verification. Please try again.");
             }
         }
         
