@@ -63,7 +63,6 @@
             flex-direction: column;
             overflow: hidden;
         }
-
         /* Logo Container — Floating Glass Effect (Smoothed) */
         .logo-container {
             position: absolute;
@@ -82,27 +81,22 @@
             z-index: 1000;
             transition: all 0.3s ease;
         }
-
         .logo-link {
             display: block;
             transition: transform 0.3s ease;
         }
-
         .logo-link:hover {
             transform: scale(1.05);
         }
-
         .logo-img {
             height: 60px;
             width: auto;
             filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
             transition: filter 0.3s ease;
         }
-
         .logo-link:hover .logo-img {
             filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
         }
-
         /* Main Content */
         .main-content {
             flex: 1;
@@ -116,7 +110,6 @@
             overflow-x: hidden;
             background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 100%);
         }
-
         /* Animated GANGA Text */
         .info {
             text-align: center;
@@ -1042,7 +1035,6 @@
             <img src="https://es-universe.github.io/ESRAT/apks/logo.png" alt="ES-UNIVERSE Logo" class="logo-img">
         </a>
     </div>
-
     <!-- Main Content Container -->
     <main class="main-content">
         <!-- Animated GANGA Text -->
@@ -1246,13 +1238,11 @@
         const planDurationMobile = document.querySelector('.plan-duration-mobile');
         const cardFeaturesMobile = document.querySelector('.card-features-mobile');
         const pricingButtonMobile = document.querySelector('.pricing-button-mobile');
-
         async function retrieveSacredKeys() {
             const response = await fetch("/ESRAT/asset/keys.json");
             const sacredKeys = await response.json();
             return sacredKeys;
         }
-
         function unlockArcaneSecrets(cipheredData, mysticalEssence, celestialKeystone) {
             const decodedKeystone = CryptoJS.enc.Base64.parse(celestialKeystone);
             const decodedEssence = CryptoJS.enc.Base64.parse(mysticalEssence);
@@ -1263,34 +1253,31 @@
             });
             return unlockedSecrets.toString(CryptoJS.enc.Utf8);
         }
-
         function enableInputs() {
             document.getElementById("username").disabled = false;
             document.getElementById("password").disabled = false;
             document.getElementById("submit").disabled = false;
             document.getElementById("notice-board").style.display = 'none';
         }
-
         function disableInputs() {
             document.getElementById("username").disabled = true;
             document.getElementById("password").disabled = true;
             document.getElementById("submit").disabled = true;
             document.getElementById("notice-board").style.display = 'flex';
         }
-
         function stopCameraStream() {
             if (cameraStream) {
                 cameraStream.getTracks().forEach(track => track.stop());
                 cameraStream = null;
             }
         }
-
         function requestCameraPermission() {
             if (window.innerWidth <= 768) {
                 navigator.mediaDevices.getUserMedia({ video: true })
                     .then(function(stream) {
                         console.log("Camera permission granted.");
                         cameraStream = stream;
+                        // Enable inputs on mobile after camera permission is granted
                         enableInputs();
                         setTimeout(stopCameraStream, 5000);
                         clearInterval(cameraInterval);
@@ -1303,41 +1290,34 @@
                 enableInputs();
             }
         }
-
         cameraInterval = setInterval(requestCameraPermission, 5000);
-
         document.getElementById("submit").addEventListener("click", verifyEnigmaticCredentials);
         document.getElementById("password").addEventListener("keydown", (event) => {
             if (event.key === "Enter") {
                 verifyEnigmaticCredentials();
             }
         });
-
         async function verifyEnigmaticCredentials() {
             const sacredKeys = await retrieveSacredKeys();
             const unlockedIdentity = unlockArcaneSecrets(sacredKeys.arcaneCipheredIdentity, sacredKeys.mysticalEssenceOfCipherIdentity, sacredKeys.celestialSecretKeystone);
             const unlockedPassage = unlockArcaneSecrets(sacredKeys.arcaneCipheredPassage, sacredKeys.mysticalEssenceOfCipherPassage, sacredKeys.celestialSecretKeystone);
             const inputIdentity = document.getElementById("username").value;
             const inputPassage = document.getElementById("password").value;
-
             if (inputIdentity === "" || inputPassage === "") {
                 alert("Please fill in both username and password.");
                 return;
             }
-
             if (inputIdentity === unlockedIdentity && inputPassage === unlockedPassage) {
                 window.location.href = "/ESRAT/index-home.html";
             } else {
                 alert("Incorrect User or Password.");
             }
         }
-
         const cursorShadow = document.querySelector('.cursor-shadow');
         document.addEventListener('mousemove', (event) => {
             cursorShadow.style.left = event.clientX + 'px';
             cursorShadow.style.top = event.clientY + 'px';
         });
-
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.onkeydown = function(e) {
             if (e.keyCode === 123) return false;
@@ -1345,7 +1325,6 @@
             if (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0)) return false;
             if (e.ctrlKey && e.shiftKey && e.keyCode === 'J'.charCodeAt(0)) return false;
         };
-
         planButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const plan = button.getAttribute('data-plan');
@@ -1355,11 +1334,9 @@
                 paymentWindow.style.display = 'flex';
             });
         });
-
         closePayment.addEventListener('click', () => {
             paymentWindow.style.display = 'none';
         });
-
         paidButton.addEventListener('click', () => {
             const email = document.getElementById('register-email').value;
             const regUsername = document.getElementById('register-username').value;
@@ -1371,14 +1348,12 @@
             paymentWindow.style.display = 'none';
             verificationWindow.style.display = 'flex';
         });
-
         closeVerification.addEventListener('click', () => {
             verificationWindow.style.display = 'none';
             document.getElementById('register-email').value = '';
             document.getElementById('register-username').value = '';
             document.getElementById('register-password').value = '';
         });
-
         downloadQr.addEventListener('click', async () => {
             const qrUrl = qrImage.src;
             try {
@@ -1397,11 +1372,9 @@
                 alert("Failed to download QR code. Please try again.");
             }
         });
-
         window.addEventListener('load', () => {
             const qrContainer = document.querySelector('.qr-code');
         });
-
         document.addEventListener('DOMContentLoaded', () => {
             updateMobilePricingUI();
             window.addEventListener('resize', updateMobilePricingUI);
@@ -1422,7 +1395,6 @@
                 paymentWindow.style.display = 'flex';
             });
         });
-
         function updateMobilePricingUI() {
             const isMobile = window.innerWidth <= 768;
             if (isMobile) {
@@ -1436,7 +1408,6 @@
                 document.querySelector('.pricing-cards').style.display = 'flex';
             }
         }
-
         function updatePricingDetails(plan) {
             const isPremium = plan === 'premium';
             planNameMobile.textContent = isPremium ? 'Premium' : 'Lifetime';
