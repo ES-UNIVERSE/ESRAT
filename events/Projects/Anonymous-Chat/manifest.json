@@ -1,0 +1,28 @@
+{
+  "name": "Mr. X",
+  "short_name": "Mr. X",
+  "description": "Anonymous messaging platform.",
+  "start_url": "/ESRAT/events/Projects/Anonymous-Chat/index.html",
+  "display": "standalone",
+  "background_color": "#fecfef",
+  "theme_color": "#ff9a9e",
+  "icons": [
+    {
+      "src": "apks/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "apks/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "apks/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "orientation": "portrait",
+  "lang": "en"
+}
