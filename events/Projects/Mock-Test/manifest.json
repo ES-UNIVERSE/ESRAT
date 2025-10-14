@@ -1,0 +1,31 @@
+{
+  "name": "SSC GD Mock Test",
+  "short_name": "SSC GD",
+  "description": "Practice SSC GD mock tests and view reports offline.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f5f7ff",
+  "theme_color": "#4361ee",
+  "icons": [
+    {
+      "src": "icons/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
