@@ -20,7 +20,7 @@ self.addEventListener('fetch', e => {
   );
 });
 
-// Activate
+// Activates
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys => Promise.all(keys.map(k => {
