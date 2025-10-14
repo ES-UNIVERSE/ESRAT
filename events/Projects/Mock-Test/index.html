@@ -301,6 +301,11 @@ document.getElementById('viewReportsBtn').onclick=()=>{loadHistory();show('dashb
 document.getElementById('viewReportsFromResult').onclick=()=>{loadHistory();show('dashboard');};
 document.getElementById('newMockBtn').onclick=()=>show('start');
 document.getElementById('backToStartBtn').onclick=()=>show('start');
+  if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+  .then(() => console.log("✅ Service Worker registered"))
+  .catch(err => console.log("SW registration failed:", err));
+}
 </script>
 </body>
 </html>
