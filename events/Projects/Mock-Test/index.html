@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mock Test Results</title>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui;}
+body{background:#f5f7ff;color:#212529;padding:1rem;}
+.container{max-width:950px;margin:0 auto;}
+header{text-align:center;margin-bottom:1.5rem;padding:1rem;background:white;border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+.timer{font-size:1.3rem;color:#ef476f;font-weight:bold;}
+.section{display:none;}
+.active{display:block;}
+.btn{padding:0.7rem 1.5rem;background:#4361ee;color:white;border:none;border-radius:8px;
+  cursor:pointer;font-weight:bold;margin:0.5rem;width:100%;transition:0.2s;}
+.btn:hover{opacity:0.9;}
+.btn-outline{background:transparent;color:#4361ee;border:2px solid #4361ee;}
+.btn-danger{background:#ef476f;}
+.btn:disabled{opacity:0.6;cursor:not-allowed;}
+.start-screen{background:white;padding:2rem;border-radius:12px;text-align:center;
+  box-shadow:0 4px 12px rgba(0,0,0,0.06);max-width:500px;margin:2rem auto;}
+.start-screen input{width:100%;padding:0.8rem;margin:1rem 0;border:1px solid #ddd;border-radius:8px;font-size:1rem;}
+.question{background:white;padding:1rem;margin-bottom:1rem;border-radius:10px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.05);}
+.question-number{font-weight:bold;margin-bottom:0.6rem;color:#4361ee;}
+.options{display:flex;gap:0.6rem;}
+.option-btn{flex:1;padding:0.6rem;border:2px solid #ddd;border-radius:6px;background:white;
+  text-align:center;cursor:pointer;font-weight:bold;}
+.option-btn.selected{border-color:#4361ee;background:#eef2ff;color:#4361ee;}
+.review-item{background:white;padding:1rem;margin-bottom:0.8rem;border-radius:8px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.04);}
+.review-btns{display:flex;gap:0.5rem;margin-top:0.5rem;}
+.review-btn{padding:0.4rem 0.6rem;border:none;border-radius:4px;font-size:0.9rem;cursor:pointer;flex:1;}
+.btn-correct{background:#d1f0e0;color:#069e4a;}
+.btn-incorrect{background:#ffe0e0;color:#d32f2f;}
+.btn-unattempted{background:#f0f0f0;color:#6c757d;}
+.review-btn.selected{box-shadow:0 0 0 2px #4361ee;}
+.result-card{background:white;padding:1.5rem;border-radius:12px;text-align:center;
+  margin:1.5rem 0;box-shadow:0 4px 10px rgba(0,0,0,0.06);}
+.score{font-size:2rem;font-weight:bold;color:#4361ee;margin:1rem 0;}
+/* ===== DASHBOARD ===== */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:1rem;margin:1.5rem 0;}
+.stat-card{background:linear-gradient(145deg,#ffffff,#f2f4ff);border-radius:14px;text-align:center;
+  padding:1.2rem 1rem;box-shadow:0 4px 10px rgba(67,97,238,0.1);transition:transform 0.2s;}
+.stat-card:hover{transform:translateY(-4px);}
+.stat-card h3{font-size:1rem;color:#6c757d;margin-bottom:0.4rem;}
+.stat-card p{font-size:1.5rem;font-weight:700;color:#4361ee;}
+.chart-card{background:white;padding:1rem;border-radius:14px;box-shadow:0 4px 12px rgba(0,0,0,0.06);
+  margin-bottom:2rem;}
+.recent-section{background:white;padding:1.2rem;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.05);}
+.recent-section h3{margin-bottom:1rem;color:#4361ee;}
+.recent-table{width:100%;border-collapse:collapse;font-size:0.9rem;}
+.recent-table th,.recent-table td{padding:0.6rem;border-bottom:1px solid #eee;text-align:center;}
+.recent-table th{background:#f5f7ff;color:#6c757d;font-weight:600;}
+.recent-table td button{padding:0.3rem 0.6rem;background:#ef476f;color:white;border:none;
+  border-radius:5px;cursor:pointer;}
+@media(max-width:600px){.options{flex-direction:column}.review-btns{flex-direction:column}
+  .recent-table{font-size:0.8rem}.recent-table th,.recent-table td{padding:0.4rem;}}
+</style>
+</head>
+
+<body>
+<div class="container">
+  <!-- START -->
+  <div id="startSection" class="section active">
+    <div class="start-screen">
+      <h2>SSC GD Mock Test</h2>
+      <input type="text" id="candidateName" placeholder="Enter your full name" />
+      <button class="btn" id="startBtn">START TEST</button>
+      <button class="btn btn-outline" id="viewReportsBtn">View My Reports</button>
+    </div>
+  </div>
+
+  <!-- TEST -->
+  <div id="testSection" class="section">
+    <header>
+      <h2>CAPF AC & SSC GD Mocks</h2>
+      <div class="timer" id="timer">60:00</div>
+    </header>
+    <div id="questionsContainer"></div>
+    <div style="text-align:center;margin-top:1.5rem;">
+      <button class="btn" id="submitBtn">Submit Test</button>
+    </div>
+  </div>
+
+  <!-- REVIEW -->
+  <div id="reviewSection" class="section">
+    <h2 style="text-align:center;margin-bottom:1.2rem;">Review Each Question</h2>
+    <p style="text-align:center;color:#6c757d;margin-bottom:1rem;">Mark as Correct (+2), Incorrect (–0.25), or Unattempted (0)</p>
+    <div id="reviewContainer"></div>
+    <div style="text-align:center;margin-top:1.5rem;">
+      <button class="btn" id="calculateBtn">Calculate Final Score</button>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="resultSection" class="section">
+    <div class="result-card">
+      <h2>Test Completed!</h2>
+      <div class="score" id="finalScore">0 / 160</div>
+      <p id="percentage">0%</p>
+      <p>Correct: <span id="correctCount">0</span> | Incorrect: <span id="incorrectCount">0</span> | Unattempted: <span id="unattemptedCount">0</span></p>
+    </div>
+    <div style="text-align:center;">
+      <button class="btn" id="newMockBtn">Take New Mock</button>
+      <button class="btn btn-outline" id="viewReportsFromResult">View All Reports</button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboardSection" class="section">
+    <h2 style="text-align:center;margin:1.5rem 0;">📊 My Mock Test Reports</h2>
+
+    <div class="stats-grid">
+      <div class="stat-card"><h3>Highest Score</h3><p id="highestScore">--</p></div>
+      <div class="stat-card"><h3>Average Score</h3><p id="averageScore">--</p></div>
+      <div class="stat-card"><h3>Lowest Score</h3><p id="lowestScore">--</p></div>
+      <div class="stat-card"><h3>Total Mocks</h3><p id="totalMocks">--</p></div>
+    </div>
+
+    <div class="chart-card"><canvas id="scoreChart"></canvas></div>
+
+    <div class="recent-section">
+      <h3>Recent Attempts</h3>
+      <table class="recent-table">
+        <thead>
+          <tr><th>Date</th><th>Score</th><th>Accuracy (%)</th><th>Correct</th><th>Incorrect</th><th>Unattempted</th><th></th></tr>
+        </thead>
+        <tbody id="historyTableBody"></tbody>
+      </table>
+    </div>
+
+    <div style="text-align:center;margin-top:1.5rem;">
+      <button class="btn" id="backToStartBtn">Take New Mock</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const firebaseConfig={
+  apiKey:"AIzaSyBgIg7tbnGtSoeo0nHMn6IkeuvMp30ar9w",
+  authDomain:"esrat-4e28f.firebaseapp.com",
+  databaseURL:"https://esrat-4e28f-default-rtdb.firebaseio.com",
+  projectId:"esrat-4e28f",
+  storageBucket:"esrat-4e28f.appspot.com",
+  messagingSenderId:"712315598095",
+  appId:"1:712315598095:android:ed0f042ee1d5410dfb7a7a"
+};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
+
+let userAnswers=Array(80).fill(null);
+let reviewStatus=Array(80).fill('unattempted');
+let candidateName='',timer,timeLeft=3600;
+const sections={start:document.getElementById('startSection'),
+  test:document.getElementById('testSection'),
+  review:document.getElementById('reviewSection'),
+  result:document.getElementById('resultSection'),
+  dashboard:document.getElementById('dashboardSection')};
+const show=id=>{Object.values(sections).forEach(s=>s.classList.remove('active'));sections[id].classList.add('active');};
+
+document.getElementById('startBtn').onclick=()=>{
+  const n=document.getElementById('candidateName').value.trim();
+  if(!n)return alert("Enter your name");
+  candidateName=n;userAnswers.fill(null);reviewStatus.fill('unattempted');
+  timeLeft=3600;document.getElementById('timer').textContent='60:00';
+  renderQuestions();startTimer();show('test');
+};
+
+function renderQuestions(){
+  const c=document.getElementById('questionsContainer');c.innerHTML='';
+  for(let i=1;i<=80;i++){
+    const q=document.createElement('div');
+    q.className='question';
+    q.innerHTML=`<div class="question-number">Q${i}</div>
+      <div class="options">${['A','B','C','D'].map(o=>`<div class="option-btn" data-q="${i}" data-opt="${o}">${o}</div>`).join('')}</div>`;
+    c.appendChild(q);
+  }
+  document.querySelectorAll('.option-btn').forEach(btn=>{
+    btn.onclick=function(){
+      const q=parseInt(this.dataset.q);
+      document.querySelectorAll('.option-btn[data-q="'+q+'"]').forEach(b=>b.classList.remove('selected'));
+      this.classList.add('selected');userAnswers[q-1]=this.dataset.opt;
+    };
+  });
+}
+
+function startTimer(){
+  clearInterval(timer);
+  timer=setInterval(()=>{
+    if(timeLeft<=0){clearInterval(timer);handleSubmit();return;}
+    timeLeft--;
+    const m=String(Math.floor(timeLeft/60)).padStart(2,'0');
+    const s=String(timeLeft%60).padStart(2,'0');
+    document.getElementById('timer').textContent=`${m}:${s}`;
+  },1000);
+}
+
+document.getElementById('submitBtn').onclick=handleSubmit;
+function handleSubmit(){clearInterval(timer);renderReview();show('review');}
+
+function renderReview(){
+  const c=document.getElementById('reviewContainer');c.innerHTML='';
+  for(let i=0;i<80;i++){
+    const ans=userAnswers[i]||'Unattempted';
+    const div=document.createElement('div');
+    div.className='review-item';
+    div.innerHTML=`<div><strong>Q${i+1}</strong> — Your Answer: <strong>${ans}</strong></div>
+      <div class="review-btns" data-q="${i}">
+        <button class="review-btn btn-correct" data-status="correct">Correct (+2)</button>
+        <button class="review-btn btn-incorrect" data-status="incorrect">Incorrect (–0.25)</button>
+        <button class="review-btn btn-unattempted" data-status="unattempted">Unattempted (0)</button>
+      </div>`;
+    c.appendChild(div);
+  }
+  document.querySelectorAll('.review-btn').forEach(btn=>{
+    btn.onclick=function(){
+      const p=this.parentElement;
+      p.querySelectorAll('.review-btn').forEach(b=>b.classList.remove('selected'));
+      this.classList.add('selected');
+      reviewStatus[parseInt(p.dataset.q)]=this.dataset.status;
+    };
+  });
+}
+
+document.getElementById('calculateBtn').onclick=async()=>{
+  let correct=0,incorrect=0,un=0,score=0;
+  reviewStatus.forEach(s=>{
+    if(s==='correct'){correct++;score+=2;}
+    else if(s==='incorrect'){incorrect++;score-=0.25;}
+    else un++;
+  });
+  score=Math.max(0,parseFloat(score.toFixed(2)));
+  const pct=((score/160)*100).toFixed(2);
+  document.getElementById('finalScore').textContent=`${score} / 160`;
+  document.getElementById('percentage').textContent=`${pct}%`;
+  document.getElementById('correctCount').textContent=correct;
+  document.getElementById('incorrectCount').textContent=incorrect;
+  document.getElementById('unattemptedCount').textContent=un;
+  const data={name:candidateName,date:new Date().toISOString().split('T')[0],
+    time:new Date().toLocaleTimeString(),score,correct,incorrect,unattempted:un,percentage:parseFloat(pct)};
+  await db.ref('attempts').push(data);
+  show('result');
+};
+
+window.deleteAttempt=async id=>{
+  if(confirm("Delete this report permanently?")){await db.ref('attempts/'+id).remove();loadHistory();}
+};
+
+async function loadHistory(){
+  const table=document.getElementById('historyTableBody');
+  const hi=document.getElementById('highestScore'),av=document.getElementById('averageScore'),
+        lo=document.getElementById('lowestScore'),to=document.getElementById('totalMocks');
+  const snap=await db.ref('attempts').once('value');
+  table.innerHTML='';
+  if(!snap.exists()){table.innerHTML='<tr><td colspan="7">No reports yet.</td></tr>';
+    hi.textContent=av.textContent=lo.textContent=to.textContent='--';return;}
+  const data=Object.entries(snap.val()).map(([id,v])=>({id,...v})).reverse();
+  const scores=data.map(d=>d.score);
+  hi.textContent=Math.max(...scores);
+  lo.textContent=Math.min(...scores);
+  av.textContent=(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(2);
+  to.textContent=scores.length;
+  data.slice(0,10).forEach(v=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${v.date}</td><td>${v.score}</td><td>${v.percentage}%</td>
+      <td>${v.correct}</td><td>${v.incorrect}</td><td>${v.unattempted}</td>
+      <td><button onclick="deleteAttempt('${v.id}')">Delete</button></td>`;
+    table.appendChild(tr);
+  });
+  const ctx=document.getElementById('scoreChart');
+  if(window.scoreChart)window.scoreChart.destroy();
+  window.scoreChart=new Chart(ctx,{
+    type:'line',
+    data:{labels:data.map(d=>d.date+' '+d.time),
+      datasets:[{label:'Score Trend',data:data.map(d=>d.score),
+        borderColor:'#4361ee',backgroundColor:'rgba(67,97,238,0.1)',tension:0.3,fill:true,pointRadius:3}]},
+    options:{responsive:true,plugins:{legend:{display:false}},
+      scales:{y:{beginAtZero:true,max:160,title:{display:true,text:'Score'}},
+              x:{ticks:{display:false}}}}
+  });
+}
+
+document.getElementById('viewReportsBtn').onclick=()=>{loadHistory();show('dashboard');};
+document.getElementById('viewReportsFromResult').onclick=()=>{loadHistory();show('dashboard');};
+document.getElementById('newMockBtn').onclick=()=>show('start');
+document.getElementById('backToStartBtn').onclick=()=>show('start');
+</script>
+</body>
+</html>
