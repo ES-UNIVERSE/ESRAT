@@ -1,42 +1,85 @@
-# ESRAT by Ganga 🎮
-🔥Advanced GOD mode RATs and Payloads are here !🔥
+# ESRAT by Ganga 🎮  
+**Advanced Remote Administration Toolkit (RAT) – For Authorized Security Research Only**
 
-Unlock the ultimate in remote access technology with my Super Advanced God Mode RATs. Designed for professionals who demand superior control and precision, our Remote Access Trojans (RATs) provide unparalleled capabilities for monitoring, managing, and securing your digital environment. 🙊
+> 🔒 **Disclaimer**: This project is intended **strictly for educational purposes, ethical hacking, and authorized penetration testing**. Unauthorized use of remote access tools may violate local, national, and international laws. The author assumes no responsibility for misuse.
 
-## Key Features:-
-- **Real-Time Monitoring📲**: Live screen preview, keylogger, camera access, VNC control, Password stealer for comprehensive oversight.
-- **Advanced Command Execution🛜**: Execute commands remotely with precision and efficiency.
-- **Data Exfiltration📊**: Securely transfer files and data from target devices.
-- **Stealth Mode🕵️‍♂️**: Undetectable operation ensures continuous, discreet access.
-- **Anti-Delete❌**: Even a hacker can't delete our RATs. The Victim has to hard reset the device in order to remove the H@ck, but Admin has access to Remove/uninstall remotely.
-- **Multi-Platform Support🤖**: Compatible with Windows, Android and iOS devices.
-- **Customizable Payloads🚨**: Tailor the RAT to fit your specific needs and requirements.
-- **Robust Security🔐**: End-to-end encryption to protect your connection and data.
-- **User-Friendly Interface📱**: Intuitive control panel for seamless management (GUI Admin Panel).
+---
 
-## WEB-GUI Terminal Preview:
+## Overview
+
+**ESRAT** is a modular, cross-platform Remote Administration Toolkit designed to assist **security professionals**, **red teams**, and **penetration testers** in simulating advanced threat scenarios under controlled, legal environments.
+
+Built with stealth, resilience, and usability in mind, ESRAT enables authorized operators to assess endpoint security, test detection capabilities, and validate incident response protocols.
+
+---
+
+## 🔑 Core Capabilities
+
+- **Real-Time Monitoring** 📲  
+  Live screen capture, keystroke logging (for authorized sessions), webcam access, VNC-style remote control, and credential harvesting (in lab environments).
+  
+- **Remote Command Execution** 🛜  
+  Execute shell commands or scripts with elevated privileges on compromised endpoints.
+
+- **Secure Data Exfiltration** 📊  
+  Encrypted file transfer from target systems for forensic analysis during authorized engagements.
+
+- **Evasion & Persistence** 🕵️‍♂️  
+  Designed to bypass common AV/EDR solutions in testing scenarios. Includes anti-termination mechanisms to maintain session integrity during assessments.
+
+- **Remote Management** ❌  
+  Admin-controlled uninstallation—ensuring clean removal post-engagement without requiring physical access.
+
+- **Multi-Platform Support** 🤖  
+  Compatible with **Windows**, **Android**, and **iOS** (jailbroken/test devices only).
+
+- **Modular Payloads** 🚨  
+  Generate custom payloads tailored to specific engagement requirements (e.g., bind/reverse shells, staged loaders).
+
+- **End-to-End Encryption** 🔐  
+  All C2 communications are encrypted using modern cryptographic protocols.
+
+- **Intuitive Web-Based GUI** 📱  
+  Clean, responsive admin panel for real-time interaction and session management.
+
+---
+
+## 🖼️ Interface Previews
+
+### Web GUI Dashboard  
 [![Web-GUI-Terminal Home Preview](/img/guipreview.PNG)](https://es-universe.github.io/ESRAT/)
 
-## GALLERY:
-[![Web-GUI-Terminal Gallery Preview](/img/ui2.jpg)](https://es-universe.github.io/ESRAT/)
+### Feature Gallery  
+[![UI Preview](/img/ui2.jpg)](https://es-universe.github.io/ESRAT/)
 
-## RAT Types:
-[![Web-GUI-Terminal Gallery Preview](/img/ui3.jpg)](https://es-universe.github.io/ESRAT/)
+### Payload Types  
+[![Payload Types](/img/ui3.jpg)](https://es-universe.github.io/ESRAT/)
 
-To learn more about our cutting-edge RAT solutions and how they can empower your operations, please reach out to me directly.
+---
 
-## Contact
-- **Email**: esplaysbgmi@gmail.com
-- **Telegram**: [DM](https://t.me/jrram3000)
+## ⚠️ Legal & Ethical Notice
 
+- **Do not deploy** this toolkit on systems you do not own or lack explicit written authorization to test.
+- Use only in **isolated lab environments** or during **contracted security assessments**.
+- Distribution or use in malicious contexts is **strictly prohibited**.
 
-Transform your digital capabilities with our Super Advanced God Mode RATs – because true control is in the data.
+---
 
-Happy Hacking🕊️ !
+## 📬 Contact (For Collaboration & Research)
 
+- **Email**: esplaysbgmi@gmail.com  
+- **Telegram**: [@jrram3000](https://t.me/jrram3000) *(for professional inquiries only)*
 
+> 🔍 Open to collaboration with certified security researchers, bug bounty hunters, and red teamers.
 
+---
 
-Views counter Implemented on- `19th Oct. 2024 (Sat)`
--
-[![Easy Spark profile views](https://u8views.com/api/v1/github/profiles/150267024/views/day-week-month-total-count.svg)](https://u8views.com/github/ES-UNIVERSE)
+## 📊 Profile Views
+
+*Tracking engagement since October 19, 2024*  
+[![ES-UNIVERSE Profile Views](https://u8views.com/api/v1/github/profiles/150267024/views/day-week-month-total-count.svg)](https://u8views.com/github/ES-UNIVERSE)
+
+---
+
+> 💡 **Remember**: With great power comes great responsibility.  
+> Use ESRAT ethically. Stay legal. Stay sharp. 🕊️
