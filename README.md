@@ -20,6 +20,9 @@ Unlock the ultimate in remote access technology with my Super Advanced God Mode 
 ## GALLERY:
 [![Web-GUI-Terminal Gallery Preview](/img/ui2.jpg)](https://es-universe.github.io/ESRAT/)
 
+## DASHBOARD:
+[![Web-GUI-Terminal Gallery Preview](/img/addImageHere.jpg)](https://es-universe.github.io/ESRAT/)
+
 To learn more about our cutting-edge RAT solutions and how they can empower your operations, please reach out to me directly.
 
 ## Contact
