@@ -68,7 +68,7 @@ Built with stealth, resilience, and usability in mind, ESRAT enables authorized 
 ## 📬 Contact (For Collaboration & Research)
 
 - **Email**: esplaysbgmi@gmail.com  
-- **Telegram**: [@jrram3000](https://t.me/jrram3000) *(for professional inquiries only)*
+- **Telegram**: [@jrram3000](https://t.me/jrram3000) *(Feel free to reach out)*
 
 > 🔍 Open to collaboration with certified security researchers, bug bounty hunters, and red teamers.
 
